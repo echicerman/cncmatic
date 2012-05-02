@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CNCMatic", "CNCMatic\CNCMatic.csproj", "{82640008-6199-49DE-8924-F0449C5FA89E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DXF", "DXF\DXF.csproj", "{49C08920-9410-4246-8128-F7A3D6D7A8AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "G", "G\G.csproj", "{EEF74515-40E9-4FD5-8CF1-D1026A706F79}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{82640008-6199-49DE-8924-F0449C5FA89E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82640008-6199-49DE-8924-F0449C5FA89E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82640008-6199-49DE-8924-F0449C5FA89E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82640008-6199-49DE-8924-F0449C5FA89E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49C08920-9410-4246-8128-F7A3D6D7A8AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49C08920-9410-4246-8128-F7A3D6D7A8AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49C08920-9410-4246-8128-F7A3D6D7A8AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49C08920-9410-4246-8128-F7A3D6D7A8AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEF74515-40E9-4FD5-8CF1-D1026A706F79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEF74515-40E9-4FD5-8CF1-D1026A706F79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEF74515-40E9-4FD5-8CF1-D1026A706F79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEF74515-40E9-4FD5-8CF1-D1026A706F79}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

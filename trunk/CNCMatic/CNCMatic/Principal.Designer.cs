@@ -52,14 +52,15 @@
             this.importaDXF.DefaultExt = "*.dxf";
             this.importaDXF.FileName = "*.dxf";
             this.importaDXF.Filter = "Archivos DXF (*.dxf)|*.dxf";
-             // 
+            // 
             // grpImportacion
             // 
+            this.grpImportacion.BackColor = System.Drawing.Color.Transparent;
             this.grpImportacion.Controls.Add(this.rdbG);
             this.grpImportacion.Controls.Add(this.rdbDXF);
             this.grpImportacion.Controls.Add(this.pnlImportG);
             this.grpImportacion.Controls.Add(this.pnlImportDXF);
-            this.grpImportacion.Location = new System.Drawing.Point(12, 37);
+            this.grpImportacion.Location = new System.Drawing.Point(12, 26);
             this.grpImportacion.Name = "grpImportacion";
             this.grpImportacion.Size = new System.Drawing.Size(348, 218);
             this.grpImportacion.TabIndex = 3;
@@ -175,20 +176,22 @@
             // 
             // txtGpreview
             // 
-            this.txtGpreview.Location = new System.Drawing.Point(431, 56);
+            this.txtGpreview.Location = new System.Drawing.Point(468, 38);
             this.txtGpreview.Multiline = true;
             this.txtGpreview.Name = "txtGpreview";
             this.txtGpreview.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtGpreview.Size = new System.Drawing.Size(275, 174);
+            this.txtGpreview.Size = new System.Drawing.Size(210, 199);
             this.txtGpreview.TabIndex = 4;
             // 
             // Principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(772, 285);
-            this.Controls.Add(this.txtGpreview);
+            this.BackgroundImage = global::CNCMatic.Properties.Resources.logo_teCNoC;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.ClientSize = new System.Drawing.Size(704, 256);
             this.Controls.Add(this.grpImportacion);
+            this.Controls.Add(this.txtGpreview);
             this.Name = "Principal";
             this.Text = "CNC Matic";
             this.grpImportacion.ResumeLayout(false);

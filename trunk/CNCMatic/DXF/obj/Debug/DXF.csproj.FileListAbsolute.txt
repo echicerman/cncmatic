@@ -1,0 +1,14 @@
+C:\Users\Hernan\Dropbox\Proyecto\05 - CNCMatic\CNCMatic\CNCMatic\DXF\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Hernan\Dropbox\Proyecto\05 - CNCMatic\CNCMatic\CNCMatic\DXF\obj\Debug\DXF.Properties.Resources.resources
+C:\Users\Hernan\Dropbox\Proyecto\05 - CNCMatic\CNCMatic\CNCMatic\DXF\obj\Debug\DXF.csproj.GenerateResource.Cache
+C:\Users\Hernan\Dropbox\Proyecto\05 - CNCMatic\CNCMatic\CNCMatic\DXF\bin\Debug\DXF.dll
+C:\Users\Hernan\Dropbox\Proyecto\05 - CNCMatic\CNCMatic\CNCMatic\DXF\bin\Debug\DXF.pdb
+C:\Users\Hernan\Dropbox\Proyecto\05 - CNCMatic\CNCMatic\CNCMatic\DXF\obj\Debug\DXF.dll
+C:\Users\Hernan\Dropbox\Proyecto\05 - CNCMatic\CNCMatic\CNCMatic\DXF\obj\Debug\DXF.pdb
+C:\Users\Hernan\Dropbox\Proyecto\06 - CNCMatic\CNCMatic\CNCMatic\DXF\bin\Debug\DXF.dll
+C:\Users\Hernan\Dropbox\Proyecto\06 - CNCMatic\CNCMatic\CNCMatic\DXF\bin\Debug\DXF.pdb
+C:\Users\Hernan\Dropbox\Proyecto\06 - CNCMatic\CNCMatic\CNCMatic\DXF\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Hernan\Dropbox\Proyecto\06 - CNCMatic\CNCMatic\CNCMatic\DXF\obj\Debug\DXF.Properties.Resources.resources
+C:\Users\Hernan\Dropbox\Proyecto\06 - CNCMatic\CNCMatic\CNCMatic\DXF\obj\Debug\DXF.csproj.GenerateResource.Cache
+C:\Users\Hernan\Dropbox\Proyecto\06 - CNCMatic\CNCMatic\CNCMatic\DXF\obj\Debug\DXF.dll
+C:\Users\Hernan\Dropbox\Proyecto\06 - CNCMatic\CNCMatic\CNCMatic\DXF\obj\Debug\DXF.pdb

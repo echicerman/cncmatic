@@ -1,0 +1,12 @@
+C:\Users\Hernan\Dropbox\Proyecto\05 - CNCMatic\CNCMatic\CNCMatic\G\bin\Debug\G.dll
+C:\Users\Hernan\Dropbox\Proyecto\05 - CNCMatic\CNCMatic\CNCMatic\G\bin\Debug\G.pdb
+C:\Users\Hernan\Dropbox\Proyecto\05 - CNCMatic\CNCMatic\CNCMatic\G\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Hernan\Dropbox\Proyecto\05 - CNCMatic\CNCMatic\CNCMatic\G\obj\Debug\G.dll
+C:\Users\Hernan\Dropbox\Proyecto\05 - CNCMatic\CNCMatic\CNCMatic\G\obj\Debug\G.pdb
+C:\Users\Hernan\Dropbox\Proyecto\06 - CNCMatic\CNCMatic\CNCMatic\G\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Hernan\Dropbox\Proyecto\06 - CNCMatic\CNCMatic\CNCMatic\G\obj\Debug\G.dll
+C:\Users\Hernan\Dropbox\Proyecto\06 - CNCMatic\CNCMatic\CNCMatic\G\bin\Debug\G.dll
+C:\Users\Hernan\Dropbox\Proyecto\06 - CNCMatic\CNCMatic\CNCMatic\G\bin\Debug\G.pdb
+C:\Users\Hernan\Dropbox\Proyecto\06 - CNCMatic\CNCMatic\CNCMatic\G\bin\Debug\DXF.dll
+C:\Users\Hernan\Dropbox\Proyecto\06 - CNCMatic\CNCMatic\CNCMatic\G\bin\Debug\DXF.pdb
+C:\Users\Hernan\Dropbox\Proyecto\06 - CNCMatic\CNCMatic\CNCMatic\G\obj\Debug\G.pdb

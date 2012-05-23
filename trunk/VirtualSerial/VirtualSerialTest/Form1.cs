@@ -38,10 +38,10 @@ namespace VirtualSerialTest
         {
             try
             {
+                VirtualSerial.Port.DataReceivedCallback = new VirtualSerial.Port.DataReceivedCallbackDelegate(DataReceivedCallback);
                 VirtualSerial.Port.Connect(portComboBox.Items[portComboBox.SelectedIndex].ToString());
                 connectButton.Enabled = false;
                 disconnectButton.Enabled = true;
-                VirtualSerial.Port.DataReceivedCallback = new VirtualSerial.Port.DataReceivedCallbackDelegate(DataReceivedCallback);
             }
             catch (Exception ex)
             {

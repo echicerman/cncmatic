@@ -71,19 +71,27 @@ namespace G.Objetos
         /// <returns>El string en G a generar o vacio si no corresponde</returns>
         public override string ToString()
         {
-            string s = "" ;
-            
-            //revisamos cada uno de los parametros del movimiento
-            if (this.x != 0)
+            string s = "";
+
+            if (this.x + this.y + this.z == 0)
+            {
                 s += " X" + x.ToString("F4");
-            if (this.y!=0)
                 s += " Y" + y.ToString("F4");
-            if (this.z != 0)
                 s += " Z" + z.ToString("F4");
-            
+            }
+            else
+            {
+                //revisamos cada uno de los parametros del movimiento
+                if (this.x != 0)
+                    s += " X" + x.ToString("F4");
+                if (this.y != 0)
+                    s += " Y" + y.ToString("F4");
+                if (this.z != 0)
+                    s += " Z" + z.ToString("F4");
+            }
             //si se va a generar la linea sumamos el codigo del movimiento
             if (s != "")
-                s=this.MoveCode + s;
+                s = this.MoveCode + s;
 
             return s;
         }

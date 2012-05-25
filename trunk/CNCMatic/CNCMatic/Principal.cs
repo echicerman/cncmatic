@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using DXF;
 using G.Traducciones;
 using G.Servicios;
+using G.Objetos;
 
 namespace CNCMatic
 {
@@ -125,6 +126,8 @@ namespace CNCMatic
             this.txtPosX.Text = "0"; 
             this.txtPosY.Text = "0";
             this.txtPosZ.Text = "0";
+
+            this.txtPreviewManual.Text += Metodos.IrA(0, 0, 0) + Environment.NewLine; 
         }
 
 
@@ -173,6 +176,11 @@ namespace CNCMatic
         private void btnMovXY_Aba_Click(object sender, EventArgs e)
         {
             this.Mov_Menos(this.txtPosY);
+        }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+           this.txtPreviewManual.Text += Metodos.Stop() + Environment.NewLine ; 
         }
 
                 

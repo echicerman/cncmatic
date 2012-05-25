@@ -45,6 +45,7 @@
             this.txtFilePathD = new System.Windows.Forms.TextBox();
             this.txtGpreview = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.txtPreviewManual = new System.Windows.Forms.TextBox();
             this.gbStop = new System.Windows.Forms.GroupBox();
             this.btnStop = new System.Windows.Forms.Button();
             this.gbInicio = new System.Windows.Forms.GroupBox();
@@ -58,14 +59,14 @@
             this.txtPosX = new System.Windows.Forms.TextBox();
             this.gbMovZ = new System.Windows.Forms.GroupBox();
             this.gbMovXY = new System.Windows.Forms.GroupBox();
-            this.txtPreviewManual = new System.Windows.Forms.TextBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.btnMovZ_Aba = new CNCMatic.Principal.RepeatButton();
             this.btnMovZ_Arr = new CNCMatic.Principal.RepeatButton();
             this.btnMovXY_Der = new CNCMatic.Principal.RepeatButton();
             this.btnMovXY_Izq = new CNCMatic.Principal.RepeatButton();
             this.btnMovXY_Aba = new CNCMatic.Principal.RepeatButton();
             this.btnMovXY_Arr = new CNCMatic.Principal.RepeatButton();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.btnLimpiar = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.grpImportacion.SuspendLayout();
@@ -241,6 +242,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.btnLimpiar);
             this.tabPage2.Controls.Add(this.txtPreviewManual);
             this.tabPage2.Controls.Add(this.gbStop);
             this.tabPage2.Controls.Add(this.gbInicio);
@@ -254,6 +256,15 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Operacion Manual";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // txtPreviewManual
+            // 
+            this.txtPreviewManual.Location = new System.Drawing.Point(411, 7);
+            this.txtPreviewManual.Multiline = true;
+            this.txtPreviewManual.Name = "txtPreviewManual";
+            this.txtPreviewManual.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtPreviewManual.Size = new System.Drawing.Size(271, 263);
+            this.txtPreviewManual.TabIndex = 6;
             // 
             // gbStop
             // 
@@ -389,14 +400,15 @@
             this.gbMovXY.Text = "Mov-XY";
             this.gbMovXY.Enter += new System.EventHandler(this.gbMovXY_Enter);
             // 
-            // txtPreviewManual
+            // tabPage3
             // 
-            this.txtPreviewManual.Location = new System.Drawing.Point(409, 25);
-            this.txtPreviewManual.Multiline = true;
-            this.txtPreviewManual.Name = "txtPreviewManual";
-            this.txtPreviewManual.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtPreviewManual.Size = new System.Drawing.Size(271, 271);
-            this.txtPreviewManual.TabIndex = 6;
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(722, 370);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Configuracion";
+            this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // btnMovZ_Aba
             // 
@@ -427,6 +439,7 @@
             this.btnMovXY_Der.TabIndex = 10;
             this.btnMovXY_Der.UseVisualStyleBackColor = true;
             this.btnMovXY_Der.Click += new System.EventHandler(this.btnMovXY_Der_Click);
+            this.btnMovXY_Der.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Der_MouseUp);
             // 
             // btnMovXY_Izq
             // 
@@ -458,15 +471,15 @@
             this.btnMovXY_Arr.UseVisualStyleBackColor = true;
             this.btnMovXY_Arr.Click += new System.EventHandler(this.btnMovXY_Arr_Click);
             // 
-            // tabPage3
+            // btnLimpiar
             // 
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(722, 370);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Configuracion";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.btnLimpiar.Location = new System.Drawing.Point(411, 276);
+            this.btnLimpiar.Name = "btnLimpiar";
+            this.btnLimpiar.Size = new System.Drawing.Size(75, 23);
+            this.btnLimpiar.TabIndex = 7;
+            this.btnLimpiar.Text = "Limpiar";
+            this.btnLimpiar.UseVisualStyleBackColor = true;
+            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
             // 
             // Principal
             // 
@@ -539,6 +552,7 @@
         private RepeatButton btnMovXY_Arr;
         private System.Windows.Forms.TextBox txtPreviewManual;
         private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.Button btnLimpiar;
     }
 }
 

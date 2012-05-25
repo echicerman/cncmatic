@@ -14,7 +14,8 @@ using G.Objetos;
 namespace CNCMatic
 {
     public partial class Principal : Form
-    {//codigo del control que al mantener apretado hace algo
+    {
+        Boolean flag=true;
         public class RepeatButton : System.Windows.Forms.Button
         {
             protected override void OnMouseDown(MouseEventArgs e)
@@ -165,7 +166,13 @@ namespace CNCMatic
 
         private void btnMovXY_Der_Click(object sender, EventArgs e)
         {
-            this.Mov_Mas(this.txtPosX); 
+            this.Mov_Mas(this.txtPosX);
+
+            if (flag == true)
+            {
+                this.txtPreviewManual.Text += Metodos.IrA(Configuracion.X_MAX, 0, 0) + Environment.NewLine;
+                flag = false;
+            }
         }
 
         private void btnMovXY_Arr_Click(object sender, EventArgs e)
@@ -183,6 +190,16 @@ namespace CNCMatic
            this.txtPreviewManual.Text += Metodos.Stop() + Environment.NewLine ; 
         }
 
+        private void btnMovXY_Der_MouseUp(object sender, MouseEventArgs e)
+        {
+            this.txtPreviewManual.Text += Metodos.Stop() + Environment.NewLine;
+            flag = true;
+        }
+
+        private void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            this.txtPreviewManual.Text = "";
+        }
                 
     }
 }

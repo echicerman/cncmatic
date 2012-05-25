@@ -90,7 +90,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="img\flecha_IZQ.jpg" />
+    <Content Include="img\flecha_ABA.jpg" />
+    <Content Include="img\flecha_ARR.jpg" />
+    <Content Include="img\flecha_DER.jpg" />
+    <None Include="img\HomeButton.png" />
     <Content Include="img\logo teCNoC.jpg" />
+    <Content Include="img\stop.png" />
+    <None Include="img\stop.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

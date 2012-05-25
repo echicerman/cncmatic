@@ -8,17 +8,12 @@ using System.Text;
 using System.Windows.Forms;
 using DXF;
 using G.Traducciones;
+using G.Servicios;
 
 namespace CNCMatic
 {
     public partial class Principal : Form
-    {
-        public Principal()
-        {
-            InitializeComponent();
-        }
-
-        //codigo del control que al mantener apretado hace algo
+    {//codigo del control que al mantener apretado hace algo
         public class RepeatButton : System.Windows.Forms.Button
         {
             protected override void OnMouseDown(MouseEventArgs e)
@@ -60,6 +55,12 @@ namespace CNCMatic
             }
             private static System.Windows.Forms.Timer repeatButtonTimer = new Timer();
         }
+        public Principal()
+        {
+            InitializeComponent();
+        }
+
+        
 
 
         private void btnBuscarDXF_Click(object sender, EventArgs e)
@@ -107,7 +108,11 @@ namespace CNCMatic
 
         private void btnImportarG_Click(object sender, EventArgs e)
         {
+            Importacion imp = new Importacion();
+            List<string> lineas = imp.leeGfile(this.txtFilePathG.Text);
 
+            foreach (string s in lineas)
+                this.txtGpreview.Text += (s + Environment.NewLine);
         }
 
         private void gbMovXY_Enter(object sender, EventArgs e)

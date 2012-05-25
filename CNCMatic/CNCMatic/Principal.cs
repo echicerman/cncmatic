@@ -62,6 +62,11 @@ namespace CNCMatic
             this.pnlImportG.Enabled = this.rdbG.Checked;
         }
 
+        private void btnImportarG_Click(object sender, EventArgs e)
+        {
+
+        }
+
         
     }
 }

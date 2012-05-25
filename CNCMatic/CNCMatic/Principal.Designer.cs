@@ -110,6 +110,7 @@
             this.btnImportarG.TabIndex = 8;
             this.btnImportarG.Text = "Importar G";
             this.btnImportarG.UseVisualStyleBackColor = true;
+            this.btnImportarG.Click += new System.EventHandler(this.btnImportarG_Click);
             // 
             // btnBuscarG
             // 

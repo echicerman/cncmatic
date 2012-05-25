@@ -108,7 +108,7 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(722, 370);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.Text = "Importacion";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // grpImportacion
@@ -135,6 +135,7 @@
             this.rdbG.TabStop = true;
             this.rdbG.Text = "G";
             this.rdbG.UseVisualStyleBackColor = true;
+            this.rdbG.CheckedChanged += new System.EventHandler(this.rdbG_CheckedChanged);
             // 
             // rdbDXF
             // 
@@ -146,6 +147,7 @@
             this.rdbDXF.TabStop = true;
             this.rdbDXF.Text = "DXF";
             this.rdbDXF.UseVisualStyleBackColor = true;
+            this.rdbDXF.CheckedChanged += new System.EventHandler(this.rdbDXF_CheckedChanged);
             // 
             // pnlImportG
             // 
@@ -166,6 +168,7 @@
             this.btnImportarG.TabIndex = 8;
             this.btnImportarG.Text = "Importar G";
             this.btnImportarG.UseVisualStyleBackColor = true;
+            this.btnImportarG.Click += new System.EventHandler(this.btnImportarG_Click);
             // 
             // btnBuscarG
             // 
@@ -175,6 +178,7 @@
             this.btnBuscarG.TabIndex = 7;
             this.btnBuscarG.Text = "...";
             this.btnBuscarG.UseVisualStyleBackColor = true;
+            this.btnBuscarG.Click += new System.EventHandler(this.btnBuscarG_Click);
             // 
             // txtFilePathG
             // 
@@ -203,6 +207,7 @@
             this.btnImportarDXF.TabIndex = 8;
             this.btnImportarDXF.Text = "Importar DXF";
             this.btnImportarDXF.UseVisualStyleBackColor = true;
+            this.btnImportarDXF.Click += new System.EventHandler(this.btnImportarDXF_Click);
             // 
             // btnBuscarDXF
             // 
@@ -212,6 +217,7 @@
             this.btnBuscarDXF.TabIndex = 7;
             this.btnBuscarDXF.Text = "...";
             this.btnBuscarDXF.UseVisualStyleBackColor = true;
+            this.btnBuscarDXF.Click += new System.EventHandler(this.btnBuscarDXF_Click);
             // 
             // txtFilePathD
             // 
@@ -223,11 +229,11 @@
             // 
             // txtGpreview
             // 
-            this.txtGpreview.Location = new System.Drawing.Point(484, 88);
+            this.txtGpreview.Location = new System.Drawing.Point(448, 30);
             this.txtGpreview.Multiline = true;
             this.txtGpreview.Name = "txtGpreview";
             this.txtGpreview.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtGpreview.Size = new System.Drawing.Size(210, 199);
+            this.txtGpreview.Size = new System.Drawing.Size(256, 282);
             this.txtGpreview.TabIndex = 6;
             // 
             // tabPage2
@@ -242,7 +248,7 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(722, 370);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.Text = "Operacion Manual";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // gbStop
@@ -446,6 +452,7 @@
             this.ClientSize = new System.Drawing.Size(754, 420);
             this.Controls.Add(this.tabControl);
             this.Name = "Principal";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CNC Matic";
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -500,11 +507,11 @@
         private System.Windows.Forms.GroupBox gbStop;
         private System.Windows.Forms.Button btnStop;
         private RepeatButton btnMovZ_Arr;
-        private Principal.RepeatButton btnMovZ_Aba;
-        private Principal.RepeatButton btnMovXY_Der;
-        private Principal.RepeatButton btnMovXY_Izq;
-        private Principal.RepeatButton btnMovXY_Aba;
-        private Principal.RepeatButton btnMovXY_Arr;
+        private RepeatButton btnMovZ_Aba;
+        private RepeatButton btnMovXY_Der;
+        private RepeatButton btnMovXY_Izq;
+        private RepeatButton btnMovXY_Aba;
+        private RepeatButton btnMovXY_Arr;
     }
 }
 

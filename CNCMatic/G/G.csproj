@@ -49,7 +49,10 @@
     <Compile Include="Objetos\G01-Lineal.cs" />
     <Compile Include="Objetos\G02-CirculoH.cs" />
     <Compile Include="Objetos\G03-CirculoA.cs" />
+    <Compile Include="Objetos\G04-Espera.cs" />
     <Compile Include="Objetos\Gcode.cs" />
+    <Compile Include="Objetos\M00-Parada.cs" />
+    <Compile Include="Objetos\M02-Fin.cs" />
     <Compile Include="Objetos\MovesCodes.cs" />
     <Compile Include="Objetos\Varios.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

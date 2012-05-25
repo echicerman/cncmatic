@@ -57,6 +57,7 @@
     <Compile Include="Objetos\Varios.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Servicios\Importacion.cs" />
+    <Compile Include="Servicios\Metodos.cs" />
     <Compile Include="Traducciones\Traduce.cs" />
   </ItemGroup>
   <ItemGroup>

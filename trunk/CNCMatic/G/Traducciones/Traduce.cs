@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using DXF.Entidades;
 using G.Objetos;
+using G.Servicios;
 
 namespace G.Traducciones
 {
@@ -27,7 +28,7 @@ namespace G.Traducciones
                 mov.Fin.Y = l.PuntoFinal.Y;
                 mov.Fin.Z = l.PuntoFinal.Z;
 
-                movs.Add(IrA(mov.Inicio.X, mov.Inicio.Y, mov.Inicio.Z));
+                movs.Add(Metodos.IrA(mov.Inicio.X, mov.Inicio.Y, mov.Inicio.Z));
                 movs.Add(mov.ToString());
 
             }
@@ -54,7 +55,7 @@ namespace G.Traducciones
 
                 mov.Radio = a.Radio;
 
-                movs.Add(IrA(mov.Inicio.X, mov.Inicio.Y, mov.Inicio.Z));
+                movs.Add(Metodos.IrA(mov.Inicio.X, mov.Inicio.Y, mov.Inicio.Z));
                 movs.Add(mov.ToString());
 
             }
@@ -62,39 +63,7 @@ namespace G.Traducciones
             return movs;
         }
 
-        private  static string LevantaPunta()
-        {
-            G00_Avance mov=new G00_Avance();
-            mov.Z = 0.1000f;
-            return mov.ToString();
-        }
-
-        private static string BajaPunta()
-        {
-            G01_Lineal mov = new G01_Lineal();
-            mov.Fin.Z = 0.0000f;
-            return mov.ToString();
-        }
-
-        private static string IrA(float x, float y, float z)
-        {
-            string s = "";
-            //levantar la punta
-            s += (LevantaPunta() + Environment.NewLine) ;
-
-            //crear el mov de avance
-            G00_Avance mov = new G00_Avance();
-            mov.X = x;
-            mov.Y = y;
-            mov.Z = z;
-
-            s += (mov.ToString()+ Environment.NewLine);
-            
-            //bajamos la punta
-            s += BajaPunta();
-
-            return s;
-        }
+        
 
     }
 }

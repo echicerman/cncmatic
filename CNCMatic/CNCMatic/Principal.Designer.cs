@@ -57,13 +57,15 @@
             this.lblPosX = new System.Windows.Forms.Label();
             this.txtPosX = new System.Windows.Forms.TextBox();
             this.gbMovZ = new System.Windows.Forms.GroupBox();
+            this.gbMovXY = new System.Windows.Forms.GroupBox();
+            this.txtPreviewManual = new System.Windows.Forms.TextBox();
             this.btnMovZ_Aba = new CNCMatic.Principal.RepeatButton();
             this.btnMovZ_Arr = new CNCMatic.Principal.RepeatButton();
-            this.gbMovXY = new System.Windows.Forms.GroupBox();
             this.btnMovXY_Der = new CNCMatic.Principal.RepeatButton();
             this.btnMovXY_Izq = new CNCMatic.Principal.RepeatButton();
             this.btnMovXY_Aba = new CNCMatic.Principal.RepeatButton();
             this.btnMovXY_Arr = new CNCMatic.Principal.RepeatButton();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.grpImportacion.SuspendLayout();
@@ -93,6 +95,7 @@
             // 
             this.tabControl.Controls.Add(this.tabPage1);
             this.tabControl.Controls.Add(this.tabPage2);
+            this.tabControl.Controls.Add(this.tabPage3);
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
@@ -238,6 +241,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.txtPreviewManual);
             this.tabPage2.Controls.Add(this.gbStop);
             this.tabPage2.Controls.Add(this.gbInicio);
             this.tabPage2.Controls.Add(this.gbPosicionActual);
@@ -269,6 +273,7 @@
             this.btnStop.Size = new System.Drawing.Size(54, 55);
             this.btnStop.TabIndex = 2;
             this.btnStop.UseVisualStyleBackColor = true;
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
             // gbInicio
             // 
@@ -370,6 +375,29 @@
             this.gbMovZ.TabStop = false;
             this.gbMovZ.Text = "Mov-Z";
             // 
+            // gbMovXY
+            // 
+            this.gbMovXY.Controls.Add(this.btnMovXY_Der);
+            this.gbMovXY.Controls.Add(this.btnMovXY_Izq);
+            this.gbMovXY.Controls.Add(this.btnMovXY_Aba);
+            this.gbMovXY.Controls.Add(this.btnMovXY_Arr);
+            this.gbMovXY.Location = new System.Drawing.Point(101, 134);
+            this.gbMovXY.Name = "gbMovXY";
+            this.gbMovXY.Size = new System.Drawing.Size(200, 162);
+            this.gbMovXY.TabIndex = 0;
+            this.gbMovXY.TabStop = false;
+            this.gbMovXY.Text = "Mov-XY";
+            this.gbMovXY.Enter += new System.EventHandler(this.gbMovXY_Enter);
+            // 
+            // txtPreviewManual
+            // 
+            this.txtPreviewManual.Location = new System.Drawing.Point(409, 25);
+            this.txtPreviewManual.Multiline = true;
+            this.txtPreviewManual.Name = "txtPreviewManual";
+            this.txtPreviewManual.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtPreviewManual.Size = new System.Drawing.Size(271, 271);
+            this.txtPreviewManual.TabIndex = 6;
+            // 
             // btnMovZ_Aba
             // 
             this.btnMovZ_Aba.Image = global::CNCMatic.Properties.Resources.flecha_ABA;
@@ -389,20 +417,6 @@
             this.btnMovZ_Arr.TabIndex = 6;
             this.btnMovZ_Arr.UseVisualStyleBackColor = true;
             this.btnMovZ_Arr.Click += new System.EventHandler(this.btnMovZ_Arr_Click);
-            // 
-            // gbMovXY
-            // 
-            this.gbMovXY.Controls.Add(this.btnMovXY_Der);
-            this.gbMovXY.Controls.Add(this.btnMovXY_Izq);
-            this.gbMovXY.Controls.Add(this.btnMovXY_Aba);
-            this.gbMovXY.Controls.Add(this.btnMovXY_Arr);
-            this.gbMovXY.Location = new System.Drawing.Point(101, 134);
-            this.gbMovXY.Name = "gbMovXY";
-            this.gbMovXY.Size = new System.Drawing.Size(200, 162);
-            this.gbMovXY.TabIndex = 0;
-            this.gbMovXY.TabStop = false;
-            this.gbMovXY.Text = "Mov-XY";
-            this.gbMovXY.Enter += new System.EventHandler(this.gbMovXY_Enter);
             // 
             // btnMovXY_Der
             // 
@@ -444,6 +458,16 @@
             this.btnMovXY_Arr.UseVisualStyleBackColor = true;
             this.btnMovXY_Arr.Click += new System.EventHandler(this.btnMovXY_Arr_Click);
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(722, 370);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Configuracion";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
             // Principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -464,6 +488,7 @@
             this.pnlImportDXF.ResumeLayout(false);
             this.pnlImportDXF.PerformLayout();
             this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.gbStop.ResumeLayout(false);
             this.gbInicio.ResumeLayout(false);
             this.gbPosicionActual.ResumeLayout(false);
@@ -512,6 +537,8 @@
         private RepeatButton btnMovXY_Izq;
         private RepeatButton btnMovXY_Aba;
         private RepeatButton btnMovXY_Arr;
+        private System.Windows.Forms.TextBox txtPreviewManual;
+        private System.Windows.Forms.TabPage tabPage3;
     }
 }
 

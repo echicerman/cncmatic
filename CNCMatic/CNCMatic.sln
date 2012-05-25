@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DXF", "DXF\DXF.csproj", "{4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "G", "G\G.csproj", "{EEF74515-40E9-4FD5-8CF1-D1026A706F79}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualSerial", "..\VirtualSerial\VirtualSerial\VirtualSerial.csproj", "{0ADE2784-D0C2-49F2-95CF-DE67C97C8BE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{EEF74515-40E9-4FD5-8CF1-D1026A706F79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEF74515-40E9-4FD5-8CF1-D1026A706F79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEF74515-40E9-4FD5-8CF1-D1026A706F79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ADE2784-D0C2-49F2-95CF-DE67C97C8BE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ADE2784-D0C2-49F2-95CF-DE67C97C8BE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ADE2784-D0C2-49F2-95CF-DE67C97C8BE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ADE2784-D0C2-49F2-95CF-DE67C97C8BE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

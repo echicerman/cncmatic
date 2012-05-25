@@ -10,12 +10,15 @@ using DXF;
 using G.Traducciones;
 using G.Servicios;
 using G.Objetos;
+using VirtualSerial;
+using System.IO.Ports;
 
 namespace CNCMatic
 {
     public partial class Principal : Form
     {
         Boolean flag=true;
+        int i = 0;
         public class RepeatButton : System.Windows.Forms.Button
         {
             protected override void OnMouseDown(MouseEventArgs e)
@@ -60,6 +63,10 @@ namespace CNCMatic
         public Principal()
         {
             InitializeComponent();
+            foreach (string s in SerialPort.GetPortNames())
+            {
+                portComboBox.Items.Add(s);
+            }
         }
 
         
@@ -199,6 +206,58 @@ namespace CNCMatic
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             this.txtPreviewManual.Text = "";
+        }
+        private void DataReceivedCallback(string text)
+        {
+            if (receivedTextBox.InvokeRequired)
+            {
+                Port.DataReceivedCallbackDelegate d = new Port.DataReceivedCallbackDelegate(DataReceivedCallback);
+                Invoke(d, new object[] { text });
+            }
+            else
+            {
+                receivedTextBox.AppendText("\n" + text);
+            }
+        }
+
+        private void connectButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Port.DataReceivedCallback = new Port.DataReceivedCallbackDelegate(DataReceivedCallback);
+                Port.Connect(portComboBox.Items[portComboBox.SelectedIndex].ToString());
+                connectButton.Enabled = false;
+                disconnectButton.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private void disconnectButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Port.CloseConnection();
+                disconnectButton.Enabled = false;
+                connectButton.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private void sendButton_Click(object sender, EventArgs e)
+        {
+            string[] comandos;
+
+            comandos = this.txtGpreview.Lines;
+
+            //Port.Write(sendTextBox.Text);
+            Port.Write(comandos[i]);
+            i++;
         }
                 
     }

@@ -81,6 +81,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\VirtualSerial\VirtualSerial\VirtualSerial.csproj">
+      <Project>{0ADE2784-D0C2-49F2-95CF-DE67C97C8BE2}</Project>
+      <Name>VirtualSerial</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DXF\DXF.csproj">
       <Project>{49C08920-9410-4246-8128-F7A3D6D7A8AC}</Project>
       <Name>DXF</Name>

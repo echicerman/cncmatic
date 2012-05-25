@@ -45,6 +45,7 @@
             this.txtFilePathD = new System.Windows.Forms.TextBox();
             this.txtGpreview = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btnLimpiar = new System.Windows.Forms.Button();
             this.txtPreviewManual = new System.Windows.Forms.TextBox();
             this.gbStop = new System.Windows.Forms.GroupBox();
             this.btnStop = new System.Windows.Forms.Button();
@@ -58,15 +59,22 @@
             this.lblPosX = new System.Windows.Forms.Label();
             this.txtPosX = new System.Windows.Forms.TextBox();
             this.gbMovZ = new System.Windows.Forms.GroupBox();
-            this.gbMovXY = new System.Windows.Forms.GroupBox();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.btnMovZ_Aba = new CNCMatic.Principal.RepeatButton();
             this.btnMovZ_Arr = new CNCMatic.Principal.RepeatButton();
+            this.gbMovXY = new System.Windows.Forms.GroupBox();
             this.btnMovXY_Der = new CNCMatic.Principal.RepeatButton();
             this.btnMovXY_Izq = new CNCMatic.Principal.RepeatButton();
             this.btnMovXY_Aba = new CNCMatic.Principal.RepeatButton();
             this.btnMovXY_Arr = new CNCMatic.Principal.RepeatButton();
-            this.btnLimpiar = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.disconnectButton = new System.Windows.Forms.Button();
+            this.sendButton = new System.Windows.Forms.Button();
+            this.sendTextBox = new System.Windows.Forms.TextBox();
+            this.receivedTextBox = new System.Windows.Forms.TextBox();
+            this.connectButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.portComboBox = new System.Windows.Forms.ComboBox();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.grpImportacion.SuspendLayout();
@@ -78,6 +86,7 @@
             this.gbPosicionActual.SuspendLayout();
             this.gbMovZ.SuspendLayout();
             this.gbMovXY.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
             // importaDXF
@@ -97,6 +106,7 @@
             this.tabControl.Controls.Add(this.tabPage1);
             this.tabControl.Controls.Add(this.tabPage2);
             this.tabControl.Controls.Add(this.tabPage3);
+            this.tabControl.Controls.Add(this.tabPage4);
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
@@ -257,6 +267,16 @@
             this.tabPage2.Text = "Operacion Manual";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // btnLimpiar
+            // 
+            this.btnLimpiar.Location = new System.Drawing.Point(411, 276);
+            this.btnLimpiar.Name = "btnLimpiar";
+            this.btnLimpiar.Size = new System.Drawing.Size(75, 23);
+            this.btnLimpiar.TabIndex = 7;
+            this.btnLimpiar.Text = "Limpiar";
+            this.btnLimpiar.UseVisualStyleBackColor = true;
+            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
+            // 
             // txtPreviewManual
             // 
             this.txtPreviewManual.Location = new System.Drawing.Point(411, 7);
@@ -386,30 +406,6 @@
             this.gbMovZ.TabStop = false;
             this.gbMovZ.Text = "Mov-Z";
             // 
-            // gbMovXY
-            // 
-            this.gbMovXY.Controls.Add(this.btnMovXY_Der);
-            this.gbMovXY.Controls.Add(this.btnMovXY_Izq);
-            this.gbMovXY.Controls.Add(this.btnMovXY_Aba);
-            this.gbMovXY.Controls.Add(this.btnMovXY_Arr);
-            this.gbMovXY.Location = new System.Drawing.Point(101, 134);
-            this.gbMovXY.Name = "gbMovXY";
-            this.gbMovXY.Size = new System.Drawing.Size(200, 162);
-            this.gbMovXY.TabIndex = 0;
-            this.gbMovXY.TabStop = false;
-            this.gbMovXY.Text = "Mov-XY";
-            this.gbMovXY.Enter += new System.EventHandler(this.gbMovXY_Enter);
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(722, 370);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Configuracion";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            // 
             // btnMovZ_Aba
             // 
             this.btnMovZ_Aba.Image = global::CNCMatic.Properties.Resources.flecha_ABA;
@@ -429,6 +425,20 @@
             this.btnMovZ_Arr.TabIndex = 6;
             this.btnMovZ_Arr.UseVisualStyleBackColor = true;
             this.btnMovZ_Arr.Click += new System.EventHandler(this.btnMovZ_Arr_Click);
+            // 
+            // gbMovXY
+            // 
+            this.gbMovXY.Controls.Add(this.btnMovXY_Der);
+            this.gbMovXY.Controls.Add(this.btnMovXY_Izq);
+            this.gbMovXY.Controls.Add(this.btnMovXY_Aba);
+            this.gbMovXY.Controls.Add(this.btnMovXY_Arr);
+            this.gbMovXY.Location = new System.Drawing.Point(101, 134);
+            this.gbMovXY.Name = "gbMovXY";
+            this.gbMovXY.Size = new System.Drawing.Size(200, 162);
+            this.gbMovXY.TabIndex = 0;
+            this.gbMovXY.TabStop = false;
+            this.gbMovXY.Text = "Mov-XY";
+            this.gbMovXY.Enter += new System.EventHandler(this.gbMovXY_Enter);
             // 
             // btnMovXY_Der
             // 
@@ -471,15 +481,94 @@
             this.btnMovXY_Arr.UseVisualStyleBackColor = true;
             this.btnMovXY_Arr.Click += new System.EventHandler(this.btnMovXY_Arr_Click);
             // 
-            // btnLimpiar
+            // tabPage3
             // 
-            this.btnLimpiar.Location = new System.Drawing.Point(411, 276);
-            this.btnLimpiar.Name = "btnLimpiar";
-            this.btnLimpiar.Size = new System.Drawing.Size(75, 23);
-            this.btnLimpiar.TabIndex = 7;
-            this.btnLimpiar.Text = "Limpiar";
-            this.btnLimpiar.UseVisualStyleBackColor = true;
-            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(722, 370);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Configuracion";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.disconnectButton);
+            this.tabPage4.Controls.Add(this.sendButton);
+            this.tabPage4.Controls.Add(this.sendTextBox);
+            this.tabPage4.Controls.Add(this.receivedTextBox);
+            this.tabPage4.Controls.Add(this.connectButton);
+            this.tabPage4.Controls.Add(this.label1);
+            this.tabPage4.Controls.Add(this.portComboBox);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(722, 370);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Comunicacion";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // disconnectButton
+            // 
+            this.disconnectButton.Location = new System.Drawing.Point(453, 65);
+            this.disconnectButton.Name = "disconnectButton";
+            this.disconnectButton.Size = new System.Drawing.Size(88, 23);
+            this.disconnectButton.TabIndex = 20;
+            this.disconnectButton.Text = "Desconectar";
+            this.disconnectButton.UseVisualStyleBackColor = true;
+            this.disconnectButton.Click += new System.EventHandler(this.disconnectButton_Click);
+            // 
+            // sendButton
+            // 
+            this.sendButton.Location = new System.Drawing.Point(466, 132);
+            this.sendButton.Name = "sendButton";
+            this.sendButton.Size = new System.Drawing.Size(75, 23);
+            this.sendButton.TabIndex = 19;
+            this.sendButton.Text = "Enviar";
+            this.sendButton.UseVisualStyleBackColor = true;
+            this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
+            // 
+            // sendTextBox
+            // 
+            this.sendTextBox.Location = new System.Drawing.Point(184, 134);
+            this.sendTextBox.Name = "sendTextBox";
+            this.sendTextBox.Size = new System.Drawing.Size(276, 20);
+            this.sendTextBox.TabIndex = 18;
+            // 
+            // receivedTextBox
+            // 
+            this.receivedTextBox.Location = new System.Drawing.Point(184, 167);
+            this.receivedTextBox.Multiline = true;
+            this.receivedTextBox.Name = "receivedTextBox";
+            this.receivedTextBox.Size = new System.Drawing.Size(357, 138);
+            this.receivedTextBox.TabIndex = 17;
+            // 
+            // connectButton
+            // 
+            this.connectButton.Location = new System.Drawing.Point(366, 65);
+            this.connectButton.Name = "connectButton";
+            this.connectButton.Size = new System.Drawing.Size(75, 23);
+            this.connectButton.TabIndex = 16;
+            this.connectButton.Text = "Conectar";
+            this.connectButton.UseVisualStyleBackColor = true;
+            this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(181, 69);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(38, 13);
+            this.label1.TabIndex = 15;
+            this.label1.Text = "Puerto";
+            // 
+            // portComboBox
+            // 
+            this.portComboBox.FormattingEnabled = true;
+            this.portComboBox.Location = new System.Drawing.Point(227, 66);
+            this.portComboBox.Name = "portComboBox";
+            this.portComboBox.Size = new System.Drawing.Size(121, 21);
+            this.portComboBox.TabIndex = 14;
             // 
             // Principal
             // 
@@ -508,6 +597,8 @@
             this.gbPosicionActual.PerformLayout();
             this.gbMovZ.ResumeLayout(false);
             this.gbMovXY.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -553,6 +644,14 @@
         private System.Windows.Forms.TextBox txtPreviewManual;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Button btnLimpiar;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.Button disconnectButton;
+        private System.Windows.Forms.Button sendButton;
+        private System.Windows.Forms.TextBox sendTextBox;
+        private System.Windows.Forms.TextBox receivedTextBox;
+        private System.Windows.Forms.Button connectButton;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox portComboBox;
     }
 }
 

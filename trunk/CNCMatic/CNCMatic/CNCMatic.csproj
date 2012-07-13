@@ -95,6 +95,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="img\flecha_IZQ.jpg" />
     <Content Include="img\flecha_ABA.jpg" />
     <Content Include="img\flecha_ARR.jpg" />

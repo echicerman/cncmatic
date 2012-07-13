@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DXF.DxfDoc">
+    <Position X="30.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAACAgABIAIAAUEAAAIBIAAAACAAAAAEAAAABAAAA=</HashCode>
+      <FileName>DxfDoc.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.DxfException" Collapsed="true">
+    <Position X="10" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAA=</HashCode>
+      <FileName>DxfException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.DxfHeaderVariableException" Collapsed="true">
+    <Position X="10" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DxfException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.DxfSectionException" Collapsed="true">
+    <Position X="14.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>DxfException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.InvalidDxfSectionException">
+    <Position X="14.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DxfException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.OpenDxfSectionException">
+    <Position X="16.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DxfException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.ClosedDxfSectionException">
+    <Position X="12.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DxfException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.DxfTableException" Collapsed="true">
+    <Position X="5.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DxfException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.InvalidDxfTableException" Collapsed="true">
+    <Position X="3.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DxfException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.OpenDxfTableException" Collapsed="true">
+    <Position X="5.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DxfException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.ClosedDxfTableException" Collapsed="true">
+    <Position X="7.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DxfException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.DxfEntityException" Collapsed="true">
+    <Position X="19" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DxfException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.DxfInvalidCodeValueEntityException">
+    <Position X="1" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAIAAAACAAAAAgAAAAAAA=</HashCode>
+      <FileName>DxfException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.DxfReader" Collapsed="true">
+    <Position X="25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IABAADAgAJkCICCSEARAAFKgAABCAEAAAABAAACQAAA=</HashCode>
+      <FileName>Reader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.Entidades.Arco" Collapsed="true">
+    <Position X="5.25" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAKAgQACAAAAAkAAABKEgAAAAIACAACAAgAAAAAAQ=</HashCode>
+      <FileName>Entidades\Arco.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DXF.Entidades.Circulo" Collapsed="true">
+    <Position X="7.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAQAAAAAAAEAAAAAEgAAAAIACAAABAgAAAAAAQ=</HashCode>
+      <FileName>Entidades\Circulo.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DXF.Entidades.Linea" Collapsed="true">
+    <Position X="0.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAACAAAAAkAAAAAEgAAAAIAAAAAAAAAIAAAAQ=</HashCode>
+      <FileName>Entidades\Linea.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DXF.Entidades.Punto" Collapsed="true">
+    <Position X="3" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEgAAAAMgAAAAIAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Entidades\Punto.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DXF.Header.HeaderVariable" Collapsed="true">
+    <Position X="26.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACEIAAAgAAEAACABAAQAEAAEAAAAAA=</HashCode>
+      <FileName>Header\HeaderVariable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.Header.SystemVariable" Collapsed="true">
+    <Position X="25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAgAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Header\SystemVariable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.Objetos.DxfCodigoObjeto" Collapsed="true">
+    <Position X="21.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAMAEAyABEDAAIAQAACAgAAAAAFREAMAAIASIQMBAA=</HashCode>
+      <FileName>Objetos\DxfCodigoObjeto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.Objetos.DxfObjeto">
+    <Position X="4" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAACAAAAIAAAACAAAAAEA=</HashCode>
+      <FileName>Objetos\DxfObjeto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.Objetos.StringCode" Collapsed="true">
+    <Position X="26.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAgEAAADIAAQKBEYAE4AAAIFAAAAEgAAAAYABA=</HashCode>
+      <FileName>Objetos\StringCode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.Properties.Resources" Collapsed="true">
+    <Position X="23.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.Properties.Settings" Collapsed="true">
+    <Position X="25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.Utils.MathHelper" Collapsed="true">
+    <Position X="21.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAwQABAgAAAABAAAAAAAAAAAAAACAAAAAAAAAAACA=</HashCode>
+      <FileName>Utils\MathHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.Utils.StringEnum" Collapsed="true">
+    <Position X="21.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAgAAAAIgAgAAAAAAAAAiAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utils\StringEnum.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DXF.Utils.StringValueAttribute" Collapsed="true">
+    <Position X="23.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utils\StringEnum.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="DXF.ParCodigoValor" Collapsed="true">
+    <Position X="21.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAACAAAAAAAAAAQAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ParCodigoValor.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DXF.Objetos.Vector2f" Collapsed="true">
+    <Position X="23.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAYCIAAAAAAAAE+AUAQAAQASAAAIBEAABgAEJAYmA=</HashCode>
+      <FileName>Objetos\Vector2f.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DXF.Objetos.Vector3d" Collapsed="true">
+    <Position X="25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQCIAAAQAAAAE+AUAAAAQACAAgIBAABBgAUJAYmE=</HashCode>
+      <FileName>Objetos\Vector3d.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DXF.Objetos.Vector3f">
+    <Position X="26.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQCIAAAQAAAAE+AUAAgAQACAAAIBAABBgAUJAYmE=</HashCode>
+      <FileName>Objetos\Vector3f.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="DXF.Entidades.IEntidadObjeto">
+    <Position X="19.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Entidades\IEntidadObjeto.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="DXF.Entidades.EntidadTipo">
+    <Position X="23.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgABAAAAAAIAAAAgAAAACAQAAAAAAAQgAAAAA=</HashCode>
+      <FileName>Entidades\IEntidadObjeto.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="DXF.Header.DxfVersion">
+    <Position X="32.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAABgAAAAAAAAAAAIAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>Header\DxfVersion.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

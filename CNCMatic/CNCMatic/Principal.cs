@@ -17,7 +17,7 @@ namespace CNCMatic
 {
     public partial class Principal : Form
     {
-        Boolean flag=true;
+        Boolean flag = true;
         int i = 0;
         public class RepeatButton : System.Windows.Forms.Button
         {
@@ -69,60 +69,7 @@ namespace CNCMatic
             }
         }
 
-        
 
-
-        private void btnBuscarDXF_Click(object sender, EventArgs e)
-        {
-            if (importaDXF.ShowDialog() == DialogResult.OK)
-            {
-                txtFilePathD.Text = importaDXF.FileName;
-                
-            }
-        }
-
-        private void btnImportarDXF_Click(object sender, EventArgs e)
-        {
-            DxfDoc doc = new DxfDoc();
-            doc.Cargar(this.txtFilePathD .Text);
-
-            List<string> sl=Traduce.Lineas(doc.Lineas);
-            List<string> sa = Traduce.Arcos(doc.Arcos);
-
-            foreach (string s in sl)
-                this.txtGpreview.Text += (s+Environment.NewLine);
-            foreach (string s in sa)
-                this.txtGpreview.Text += (s + Environment.NewLine);
-        }
-
-        private void rdbDXF_CheckedChanged(object sender, EventArgs e)
-        {
-            this.pnlImportDXF.Enabled = this.rdbDXF.Checked;
-            
-        }
-
-        private void btnBuscarG_Click(object sender, EventArgs e)
-        {
-            if (importaG.ShowDialog() == DialogResult.OK)
-            {
-                txtFilePathG.Text = importaG.FileName;
-
-            }
-        }
-
-        private void rdbG_CheckedChanged(object sender, EventArgs e)
-        {
-            this.pnlImportG.Enabled = this.rdbG.Checked;
-        }
-
-        private void btnImportarG_Click(object sender, EventArgs e)
-        {
-            Importacion imp = new Importacion();
-            List<string> lineas = imp.leeGfile(this.txtFilePathG.Text);
-
-            foreach (string s in lineas)
-                this.txtGpreview.Text += (s + Environment.NewLine);
-        }
 
         private void gbMovXY_Enter(object sender, EventArgs e)
         {
@@ -131,15 +78,13 @@ namespace CNCMatic
 
         private void btnInicio_Click(object sender, EventArgs e)
         {
-            this.txtPosX.Text = "0"; 
+            this.txtPosX.Text = "0";
             this.txtPosY.Text = "0";
             this.txtPosZ.Text = "0";
 
-            this.txtPreviewManual.Text += Metodos.IrA(0, 0, 0) + Environment.NewLine; 
+            AgregaTextoEditor(false, Metodos.IrA(0, 0, 0));
         }
 
-
-        
         public void Mov_Menos(System.Windows.Forms.TextBox txt)
         {
             if (Convert.ToInt32(txt.Text) > 0)
@@ -149,16 +94,13 @@ namespace CNCMatic
         }
 
         public void Mov_Mas(System.Windows.Forms.TextBox txt)
-        {            
-            txt.Text = (Convert.ToInt32(txt.Text) + 1).ToString();             
+        {
+            txt.Text = (Convert.ToInt32(txt.Text) + 1).ToString();
         }
 
-
-
-       
         private void btnMovZ_Arr_Click(object sender, EventArgs e)
         {
-            this.Mov_Mas(this.txtPosZ);             
+            this.Mov_Mas(this.txtPosZ);
         }
 
         private void btnMovZ_Aba_Click(object sender, EventArgs e)
@@ -177,7 +119,7 @@ namespace CNCMatic
 
             if (flag == true)
             {
-                this.txtPreviewManual.Text += Metodos.IrA(Configuracion.X_MAX, 0, 0) + Environment.NewLine;
+                AgregaTextoEditor(false, Metodos.IrA(Configuracion.X_MAX, 0, 0));
                 flag = false;
             }
         }
@@ -192,20 +134,15 @@ namespace CNCMatic
             this.Mov_Menos(this.txtPosY);
         }
 
-        private void btnStop_Click(object sender, EventArgs e)
-        {
-           this.txtPreviewManual.Text += Metodos.Stop() + Environment.NewLine ; 
-        }
-
         private void btnMovXY_Der_MouseUp(object sender, MouseEventArgs e)
         {
-            this.txtPreviewManual.Text += Metodos.Stop() + Environment.NewLine;
+            AgregaTextoEditor(false, Metodos.Stop());
             flag = true;
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
-            this.txtPreviewManual.Text = "";
+            AgregaTextoEditor(true, "");
         }
         private void DataReceivedCallback(string text)
         {
@@ -253,12 +190,96 @@ namespace CNCMatic
         {
             string[] comandos;
 
-            comandos = this.txtGpreview.Lines;
+            comandos = this.txtPreview.Lines;
 
             //Port.Write(sendTextBox.Text);
             Port.Write(comandos[i]);
             i++;
         }
-                
+
+        private void btnStop2_Click(object sender, EventArgs e)
+        {
+            AgregaTextoEditor(false, Metodos.Stop());
+        }
+
+        /// <summary>
+        /// Funcion que agrega una nueva linea de texto al editor visual
+        /// </summary>
+        /// <param name="limpia">Establece si se debe vaciar el editor previamente</param>
+        /// <param name="text">Texto a agregar en el editor</param>
+        private void AgregaTextoEditor(bool limpia, string text)
+        {
+            //si no se se limpia sumamos el texto
+            if (!limpia)
+                this.txtPreview.Text += text;
+            else
+                this.txtPreview.Text = text;
+
+            //si el texto no es blanco, sumamos una nueva linea
+            if (text != "")
+                this.txtPreview.Text += Environment.NewLine;
+        }
+
+        private void dXFFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //realizamos la busqueda del archivo
+            if (importaDXF.ShowDialog() == DialogResult.OK)
+            {
+                //realizamos la importacion del DXF
+                DxfDoc doc = new DxfDoc();
+                doc.Cargar(importaDXF.FileName);
+
+                List<string> sl = Traduce.Lineas(doc.Lineas);
+                List<string> sa = Traduce.Arcos(doc.Arcos);
+
+
+                foreach (string s in sl)
+                    AgregaTextoEditor(false, s);
+                foreach (string s in sa)
+                    AgregaTextoEditor(false, s);
+            }
+
+
+        }
+
+        private void gCodeFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //realizamos la busqueda del archivo
+            if (importaG.ShowDialog() == DialogResult.OK)
+            {
+                //importacion de codigo G
+                Importacion imp = new Importacion();
+                List<string> lineas = imp.leeGfile(importaG.FileName);
+
+                foreach (string s in lineas)
+                    this.txtPreview.Text += (s + Environment.NewLine);
+
+                string mensaje = "¿Desea que el sistema intente optimizar el código G importado? Atención: esta operación podría variar el orden de fresado preestablecido.";
+
+                DialogResult r = MessageBox.Show(mensaje, "Optimización de código G", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+
+                if (r == DialogResult.Yes)
+                {
+                    //lanzamos optimizacion de código G
+                }
+
+            }
+
+
+
+
+        }
+
+        private void txtLineaManual_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //si la tecla presionada es Enter, agregamos la linea al editor
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                AgregaTextoEditor(false, this.txtLineaManual.Text.Trim());
+                this.txtLineaManual.Text = "";
+            }
+        }
+
+
     }
 }

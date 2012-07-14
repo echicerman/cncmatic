@@ -31,10 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Janus.Windows.ButtonBar.v2, Version=2.0.1123.0, Culture=neutral, PublicKeyToken=21d5517571b185bf" />
+    <Reference Include="Janus.Windows.Common.v2, Version=2.0.1123.0, Culture=neutral, PublicKeyToken=21d5517571b185bf" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Design" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -60,6 +63,7 @@
     <EmbeddedResource Include="Principal.resx">
       <DependentUpon>Principal.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -103,6 +107,15 @@
     <None Include="img\HomeButton.png" />
     <Content Include="img\logo teCNoC.jpg" />
     <Content Include="img\stop.png" />
+    <None Include="Resources\brush-icon.png" />
+    <None Include="Resources\Play-1-Normal-icon %281%29.png" />
+    <None Include="Resources\Stop-Normal-Red-icon %281%29.png" />
+    <None Include="Resources\Pause-Normal-Red-icon %281%29.png" />
+    <None Include="Resources\Stop-Normal-Red-icon.png" />
+    <None Include="Resources\square-icon.png" />
+    <None Include="Resources\Play-1-Normal-icon.png" />
+    <None Include="Resources\Pause-Normal-Red-icon.png" />
+    <None Include="Resources\circle-icon.png" />
     <None Include="img\stop.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

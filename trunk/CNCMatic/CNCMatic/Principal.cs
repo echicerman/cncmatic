@@ -67,6 +67,12 @@ namespace CNCMatic
             {
                 portComboBox.Items.Add(s);
             }
+
+            //cargamos informacion en la barra de estado
+            this.lblUserName.Text = "User: " + Environment.UserName;
+            this.lblOsVersion.Text = "OS Version: " + Environment.OSVersion;
+            this.lblMachName.Text = "PC: " + Environment.MachineName;
+
         }
 
 
@@ -279,6 +285,52 @@ namespace CNCMatic
                 this.txtLineaManual.Text = "";
             }
         }
+
+        private void acercaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Acerca a = new Acerca();
+            a.ShowDialog();
+        }
+
+        private void btnLinea_Click(object sender, EventArgs e)
+        {
+            G01_Lineal g;
+
+            FrmDibujoParams dibujoParams = new FrmDibujoParams(out g);
+            dibujoParams.ShowDialog();
+
+            AgregaTextoEditor(false, g.ToString());
+
+        }
+
+        private void btnArco_Click(object sender, EventArgs e)
+        {
+            G02_CirculoH  g;
+
+            FrmDibujoParams dibujoParams = new FrmDibujoParams(out g);
+            dibujoParams.ShowDialog();
+
+            AgregaTextoEditor(false, g.ToString());
+        }
+
+        private void btnCirculo_Click(object sender, EventArgs e)
+        {
+            G02_CirculoH g;
+
+            FrmDibujoParams dibujoParams = new FrmDibujoParams(out g);
+            dibujoParams.ShowDialog();
+
+            AgregaTextoEditor(false, g.ToString());
+        }
+
+        private void btnEsfera_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+
 
 
     }

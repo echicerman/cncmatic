@@ -17,5 +17,7 @@ namespace G.Objetos
             get { return this._moveCode; }
             set { this._moveCode = value; }
         }
+
+       
     }
 }

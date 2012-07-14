@@ -60,6 +60,20 @@ namespace CNCMatic.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Actions_layer_visible_on_icon {
+            get {
+                object obj = ResourceManager.GetObject("Actions-layer-visible-on-icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Actions_layer_visible_on_icon2 {
+            get {
+                object obj = ResourceManager.GetObject("Actions-layer-visible-on-icon2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap brush_icon {
             get {
                 object obj = ResourceManager.GetObject("brush-icon", resourceCulture);
@@ -70,6 +84,20 @@ namespace CNCMatic.Properties {
         internal static System.Drawing.Bitmap circle_icon {
             get {
                 object obj = ResourceManager.GetObject("circle-icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap draw_circle_icon {
+            get {
+                object obj = ResourceManager.GetObject("draw-circle-icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap draw_line_icon {
+            get {
+                object obj = ResourceManager.GetObject("draw-line-icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -40,6 +40,7 @@ namespace G.Objetos
             set { this.inicio = value; }
         }
 
+        
         /// <summary>
         /// Punto de fin
         /// </summary>
@@ -47,6 +48,42 @@ namespace G.Objetos
         {
             get { return this.fin; }
             set { this.fin = value; }
+        }
+
+        public float Inicio_X
+        {
+            get { return this.Inicio.X; }
+            set { this.Inicio.X = value; }
+        }
+
+        public float Inicio_Y
+        {
+            get { return this.Inicio.Y; }
+            set { this.Inicio.Y = value; }
+        }
+
+        public float Inicio_Z
+        {
+            get { return this.Inicio.Z; }
+            set { this.Inicio.Z = value; }
+        }
+
+        public float Fin_X
+        {
+            get { return this.Fin.X; }
+            set { this.Fin.X = value; }
+        }
+
+        public float Fin_Y
+        {
+            get { return this.Fin.Y; }
+            set { this.Fin.Y = value; }
+        }
+
+        public float Fin_Z
+        {
+            get { return this.Fin.Z; }
+            set { this.Fin.Z = value; }
         }
 
         #endregion

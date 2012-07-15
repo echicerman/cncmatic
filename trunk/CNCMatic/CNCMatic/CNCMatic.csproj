@@ -58,6 +58,12 @@
       <DependentUpon>Acerca.cs</DependentUpon>
     </Compile>
     <Compile Include="Configuracion.cs" />
+    <Compile Include="FrmConfiguracion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmConfiguracion.Designer.cs">
+      <DependentUpon>FrmConfiguracion.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmDibujoParams.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,6 +80,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Acerca.resx">
       <DependentUpon>Acerca.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmConfiguracion.resx">
+      <DependentUpon>FrmConfiguracion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmDibujoParams.resx">
       <DependentUpon>FrmDibujoParams.cs</DependentUpon>
@@ -125,6 +134,9 @@
     <None Include="img\HomeButton.png" />
     <Content Include="img\logo teCNoC.jpg" />
     <Content Include="img\stop.png" />
+    <Content Include="xmlDB.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Resources\Actions-layer-visible-on-icon2.png" />
     <None Include="Resources\Actions-layer-visible-on-icon.png" />
     <None Include="Resources\draw-circle-icon.png" />

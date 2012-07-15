@@ -411,6 +411,7 @@
             this.configuracionToolStripMenuItem.Name = "configuracionToolStripMenuItem";
             this.configuracionToolStripMenuItem.Size = new System.Drawing.Size(95, 20);
             this.configuracionToolStripMenuItem.Text = "Configuración";
+            this.configuracionToolStripMenuItem.Click += new System.EventHandler(this.configuracionToolStripMenuItem_Click);
             // 
             // ayudaToolStripMenuItem
             // 
@@ -421,8 +422,8 @@
             // acercaToolStripMenuItem
             // 
             this.acercaToolStripMenuItem.Name = "acercaToolStripMenuItem";
-            this.acercaToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
-            this.acercaToolStripMenuItem.Text = "Acerca";
+            this.acercaToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
+            this.acercaToolStripMenuItem.Text = "Acerca De";
             this.acercaToolStripMenuItem.Click += new System.EventHandler(this.acercaToolStripMenuItem_Click);
             // 
             // toolStrip1
@@ -474,14 +475,14 @@
             // btnCirculo
             // 
             this.btnCirculo.Name = "btnCirculo";
-            this.btnCirculo.Size = new System.Drawing.Size(152, 22);
+            this.btnCirculo.Size = new System.Drawing.Size(131, 22);
             this.btnCirculo.Text = "2D-Circulo";
             this.btnCirculo.Click += new System.EventHandler(this.btnCirculo_Click);
             // 
             // btnEsfera
             // 
             this.btnEsfera.Name = "btnEsfera";
-            this.btnEsfera.Size = new System.Drawing.Size(152, 22);
+            this.btnEsfera.Size = new System.Drawing.Size(131, 22);
             this.btnEsfera.Text = "3D-Esfera";
             this.btnEsfera.Click += new System.EventHandler(this.btnEsfera_Click);
             // 
@@ -723,6 +724,7 @@
             this.Name = "Principal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CNC Matic";
+            this.Load += new System.EventHandler(this.Principal_Load);
             this.gbPosicionActual.ResumeLayout(false);
             this.gbPosicionActual.PerformLayout();
             this.gbMovZ.ResumeLayout(false);

@@ -328,6 +328,17 @@ namespace CNCMatic
 
         }
 
+        private void configuracionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            (new FrmConfiguracion()).ShowDialog();
+            
+        }
+
+        private void Principal_Load(object sender, EventArgs e)
+        {
+
+        }
+
 
 
 

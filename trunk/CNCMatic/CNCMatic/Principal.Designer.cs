@@ -475,15 +475,15 @@
             // btnCirculo
             // 
             this.btnCirculo.Name = "btnCirculo";
-            this.btnCirculo.Size = new System.Drawing.Size(131, 22);
-            this.btnCirculo.Text = "2D-Circulo";
+            this.btnCirculo.Size = new System.Drawing.Size(152, 22);
+            this.btnCirculo.Text = "2D - Circulo";
             this.btnCirculo.Click += new System.EventHandler(this.btnCirculo_Click);
             // 
             // btnEsfera
             // 
             this.btnEsfera.Name = "btnEsfera";
-            this.btnEsfera.Size = new System.Drawing.Size(131, 22);
-            this.btnEsfera.Text = "3D-Esfera";
+            this.btnEsfera.Size = new System.Drawing.Size(152, 22);
+            this.btnEsfera.Text = "3D - Esfera";
             this.btnEsfera.Click += new System.EventHandler(this.btnEsfera_Click);
             // 
             // toolStripSeparator1
@@ -502,18 +502,19 @@
             this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
             this.toolStripDropDownButton2.Size = new System.Drawing.Size(75, 68);
             this.toolStripDropDownButton2.Text = "toolStripDropDownButton2";
+            this.toolStripDropDownButton2.ToolTipText = "Cuadrado/Cubo";
             // 
             // dToolStripMenuItem2
             // 
             this.dToolStripMenuItem2.Name = "dToolStripMenuItem2";
-            this.dToolStripMenuItem2.Size = new System.Drawing.Size(88, 22);
-            this.dToolStripMenuItem2.Text = "2D";
+            this.dToolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
+            this.dToolStripMenuItem2.Text = "2D - Cuadrado";
             // 
             // dToolStripMenuItem3
             // 
             this.dToolStripMenuItem3.Name = "dToolStripMenuItem3";
-            this.dToolStripMenuItem3.Size = new System.Drawing.Size(88, 22);
-            this.dToolStripMenuItem3.Text = "3D";
+            this.dToolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
+            this.dToolStripMenuItem3.Text = "3D - Cubo";
             // 
             // toolStripSeparator3
             // 
@@ -685,7 +686,7 @@
             this.groupBox1.Controls.Add(this.disconnectButton);
             this.groupBox1.Controls.Add(this.sendButton);
             this.groupBox1.Controls.Add(this.receivedTextBox);
-            this.groupBox1.Location = new System.Drawing.Point(145, 428);
+            this.groupBox1.Location = new System.Drawing.Point(150, 428);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(389, 221);
             this.groupBox1.TabIndex = 30;

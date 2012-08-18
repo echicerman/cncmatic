@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.IO.Ports;
+using CNCMatic.XML;
 
 namespace CNCMatic
 {
@@ -29,6 +30,10 @@ namespace CNCMatic
             {
                 portComboBox.Items.Add(s);
             }
+
+            //cargar configuraciones
+            XMLdb x=new XMLdb();
+            x.LeeConfiguracion();
         }
 
         private void CargaMateriales()

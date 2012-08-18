@@ -1,6 +1,68 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Configuracion>
-  
-  
-</Configuracion>
+<cncDb>
+  <Configuraciones ultConfig="1">
+    <Configuracion>
+      <idConfig>1</idConfig>
+      <descripcion>DefaultConfig</descripcion>
+      <!-- Puerto: establece el ultimo puerto guardado-->
+      <puerto>COM1</puerto>
+      <!--UnidadMedida:
+          mm: milimetros
+          pulg: pulgadas
+    -->
+      <UnidadMedida>mm</UnidadMedida>
+      <!--TipoProgramacion:
+          abs: Absoluta
+          rel: Relativa
+    -->
+      <TipoProgramacion>abs</TipoProgramacion>
+      <!--ConfigsMatMot: contiene todas las configuraciones de material/motor
+      -->
+      <ConfigsMatMot>
+        <!--ConfigMatMot: contiene una configuracion para un material/motor especificos
+      -->
+        <ConfigMatMot>
+          <idMaterial>1</idMaterial>
+          <idMotor>1</idMotor>
+          <tamVueltaRosca>1.2</tamVueltaRosca>
+          <gradosPorPaso>2.5</gradosPorPaso>
+        </ConfigMatMot>
+        <ConfigMatMot>
+          <idMaterial>2</idMaterial>
+          <idMotor>1</idMotor>
+          <tamVueltaRosca>0.5</tamVueltaRosca>
+          <gradosPorPaso>2.0</gradosPorPaso>
+        </ConfigMatMot>
+      </ConfigsMatMot>
+    </Configuracion>
+  </Configuraciones>
 
+  <!--Motores: guarda los motores configuradas-->
+  <Motores>
+    <Motor>
+      <idMotor>1</idMotor>
+      <descripcion>Motor1</descripcion>
+    </Motor>
+    <Motor>
+      <idMotor>2</idMotor>
+      <descripcion>Motor2</descripcion>
+    </Motor>
+  </Motores>
+  <!--Materiales: guarda los materiales configuradas-->
+  <Materiales>
+    <Material>
+      <idMaterial>1</idMaterial>
+      <descripcion>Material1</descripcion>
+      <espesor>1.2</espesor>
+      <ancho>1.5</ancho>
+      <largo>10.2</largo>
+    </Material>
+    <Material>
+      <idMaterial>2</idMaterial>
+      <descripcion>Material2</descripcion>
+      <espesor>1.25</espesor>
+      <ancho>1.3</ancho>
+      <largo>11.5</largo>
+    </Material>
+  </Materiales>
+</cncDb>

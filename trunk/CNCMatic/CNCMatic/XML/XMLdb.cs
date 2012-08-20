@@ -8,22 +8,31 @@ namespace CNCMatic.XML
 {
     public class XMLdb
     {
-        public void LeeConfiguracion()
+        public string filePath;
+        private XmlReaderSettings settings;
+        public int ultConfigId;
+
+        public XMLdb(string filePath)
         {
-            XmlReaderSettings settings = new XmlReaderSettings();
-
-            settings.IgnoreWhitespace = true;
-            settings.IgnoreComments = true;
-            settings.IgnoreProcessingInstructions = true;
-            settings.ProhibitDtd = true;
-            settings.CloseInput = true;
+            this.filePath = filePath;
             
+            this.settings = new XmlReaderSettings();
 
-            XmlReader reader = XmlReader.Create("xmlDB.xml", settings);
+            this.settings.IgnoreWhitespace = true;
+            this.settings.IgnoreComments = true;
+            this.settings.IgnoreProcessingInstructions = true;
+            this.settings.ProhibitDtd = true;
+            this.settings.CloseInput = true;
+        }
+        
+        public List<XML_Config> LeeConfiguracion()
+        {
+
+            XmlReader reader = XmlReader.Create(this.filePath, this.settings);
             reader.MoveToContent();
             reader.ReadToDescendant("Configuraciones");
             reader.MoveToFirstAttribute();
-            int ultConfigId = Convert.ToInt32(reader.Value);
+            this.ultConfigId = Convert.ToInt32(reader.Value);
 
             XML_Config c;
             List<XML_Config> cs = new List<XML_Config>();
@@ -55,30 +64,20 @@ namespace CNCMatic.XML
                     configMatMot.GradosPaso = reader.ReadElementContentAsDecimal();
 
                     c.ConfigMatMot.Add(configMatMot);
-                   
+
                 }
 
                 cs.Add(c);
             }
-            //return cs;
 
+            reader.Close();
 
-            LeerMotores();
-            LeerMateriales();
-
-
+            return cs;
         }
+
         public List<XML_Material> LeerMateriales()
         {
-            XmlReaderSettings settings = new XmlReaderSettings();
-
-            settings.IgnoreWhitespace = true;
-            settings.IgnoreComments = true;
-            settings.IgnoreProcessingInstructions = true;
-            settings.ProhibitDtd = true;
-            settings.CloseInput = true;
-
-            XmlReader reader = XmlReader.Create("xmlDB.xml", settings);
+            XmlReader reader = XmlReader.Create(this.filePath, this.settings);
             reader.MoveToContent();
             reader.ReadToDescendant("Materiales");
 
@@ -92,32 +91,26 @@ namespace CNCMatic.XML
 
                 reader.ReadToFollowing("idMaterial");
                 m.Id = reader.ReadElementContentAsInt();
-                m.Descripcion = reader.ReadString();
+                m.Descripcion = reader.ReadElementContentAsString();
                 m.Espesor = reader.ReadElementContentAsDecimal();
                 m.Ancho = reader.ReadElementContentAsDecimal();
                 m.Largo = reader.ReadElementContentAsDecimal();
                 ms.Add(m);
             }
+            reader.Close();
             return ms;
+            
         }
 
         public List<XML_Motor> LeerMotores()
         {
-             XmlReaderSettings settings = new XmlReaderSettings();
-        
-            settings.IgnoreWhitespace = true;
-            settings.IgnoreComments = true;
-            settings.IgnoreProcessingInstructions = true;
-            settings.ProhibitDtd = true;
-            settings.CloseInput = true;
-                   
-            XmlReader reader = XmlReader.Create("xmlDB.xml",settings );
+            XmlReader reader = XmlReader.Create(this.filePath, this.settings);
             reader.MoveToContent();
             reader.ReadToDescendant("Motores");
 
             XML_Motor m;
             List<XML_Motor> ms = new List<XML_Motor>();
-            
+
             while (reader.ReadToFollowing("Motor"))
             {
                 //XmlReader motor=motores.ReadSubtree();
@@ -125,10 +118,13 @@ namespace CNCMatic.XML
 
                 reader.ReadToFollowing("idMotor");
                 m.Id = reader.ReadElementContentAsInt();
-                m.Descripcion = reader.ReadString();
+                m.Descripcion = reader.ReadElementContentAsString();
                 ms.Add(m);
             }
+            reader.Close();
             return ms;
+
+
         }
     }
 

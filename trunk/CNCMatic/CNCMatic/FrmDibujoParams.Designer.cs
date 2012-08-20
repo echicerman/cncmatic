@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDibujoParams));
             this.propiedades = new System.Windows.Forms.PropertyGrid();
             this.btnOK = new System.Windows.Forms.Button();
             this.lblMensaje = new System.Windows.Forms.Label();
@@ -70,8 +71,12 @@
             this.Controls.Add(this.lblMensaje);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.propiedades);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "FrmDibujoParams";
-            this.Text = "Parametros";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Parámetros";
             this.ResumeLayout(false);
             this.PerformLayout();
 

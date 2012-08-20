@@ -127,6 +127,9 @@
   <data name="flecha_DER" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\flecha_DER.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Pause-Normal-Red-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pause-Normal-Red-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="brush-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\brush-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -166,22 +169,22 @@
   <data name="draw-circle-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\draw-circle-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="HomeButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\HomeButton.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="square-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\square-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Play-1-Normal-icon (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Play-1-Normal-icon (1).png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Actions-layer-visible-on-icon2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Actions-layer-visible-on-icon2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="draw-line-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\draw-line-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Pause-Normal-Red-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Pause-Normal-Red-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="HomeButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\HomeButton.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Actions-layer-visible-on-icon2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Actions-layer-visible-on-icon2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Refresh-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Refresh-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

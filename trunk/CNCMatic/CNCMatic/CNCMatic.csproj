@@ -140,8 +140,10 @@
     <Content Include="img\flecha_ARR.jpg" />
     <Content Include="img\flecha_DER.jpg" />
     <None Include="img\HomeButton.png" />
+    <Content Include="img\gear.ico" />
     <Content Include="img\logo teCNoC.jpg" />
     <Content Include="img\stop.png" />
+    <None Include="Resources\Refresh-icon.png" />
     <Content Include="xmlDB.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

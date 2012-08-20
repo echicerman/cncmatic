@@ -10,8 +10,7 @@ using DXF;
 using G.Traducciones;
 using G.Servicios;
 using G.Objetos;
-using VirtualSerial;
-using System.IO.Ports;
+
 
 namespace CNCMatic
 {
@@ -63,10 +62,6 @@ namespace CNCMatic
         public Principal()
         {
             InitializeComponent();
-            foreach (string s in SerialPort.GetPortNames())
-            {
-                portComboBox.Items.Add(s);
-            }
 
             //cargamos informacion en la barra de estado
             this.lblUserName.Text = "User: " + Environment.UserName;
@@ -149,58 +144,6 @@ namespace CNCMatic
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             AgregaTextoEditor(true, "");
-        }
-        private void DataReceivedCallback(string text)
-        {
-            if (receivedTextBox.InvokeRequired)
-            {
-                Port.DataReceivedCallbackDelegate d = new Port.DataReceivedCallbackDelegate(DataReceivedCallback);
-                Invoke(d, new object[] { text });
-            }
-            else
-            {
-                receivedTextBox.AppendText("\n" + text);
-            }
-        }
-
-        private void connectButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Port.DataReceivedCallback = new Port.DataReceivedCallbackDelegate(DataReceivedCallback);
-                Port.Connect(portComboBox.Items[portComboBox.SelectedIndex].ToString());
-                connectButton.Enabled = false;
-                disconnectButton.Enabled = true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        private void disconnectButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Port.CloseConnection();
-                disconnectButton.Enabled = false;
-                connectButton.Enabled = true;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        private void sendButton_Click(object sender, EventArgs e)
-        {
-            string[] comandos;
-
-            comandos = this.txtPreview.Lines;
-
-            //Port.Write(sendTextBox.Text);
-            Port.Write(comandos[i]);
-            i++;
         }
 
         private void btnStop2_Click(object sender, EventArgs e)
@@ -339,12 +282,10 @@ namespace CNCMatic
 
         }
 
-
-
-
-
-
-
+        private void comunicaciónToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            (new FrmComunicacion()).ShowDialog();
+        }
 
     }
 }

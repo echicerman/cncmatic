@@ -179,6 +179,13 @@ namespace CNCMatic.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Refresh_icon {
+            get {
+                object obj = ResourceManager.GetObject("Refresh-icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap square_icon {
             get {
                 object obj = ResourceManager.GetObject("square-icon", resourceCulture);

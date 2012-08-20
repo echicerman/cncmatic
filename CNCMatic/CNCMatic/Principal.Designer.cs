@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Principal));
             this.importaDXF = new System.Windows.Forms.OpenFileDialog();
             this.importaG = new System.Windows.Forms.OpenFileDialog();
             this.txtPreview = new System.Windows.Forms.TextBox();
@@ -46,13 +47,6 @@
             this.btnMovXY_Izq = new CNCMatic.Principal.RepeatButton();
             this.btnMovXY_Aba = new CNCMatic.Principal.RepeatButton();
             this.btnMovXY_Arr = new CNCMatic.Principal.RepeatButton();
-            this.disconnectButton = new System.Windows.Forms.Button();
-            this.sendButton = new System.Windows.Forms.Button();
-            this.sendTextBox = new System.Windows.Forms.TextBox();
-            this.receivedTextBox = new System.Windows.Forms.TextBox();
-            this.connectButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.portComboBox = new System.Windows.Forms.ComboBox();
             this.menu = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.importaciónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,8 +85,8 @@
             this.pnlPrevisualizacion = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.txtLineaManual = new System.Windows.Forms.TextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnLimpiar = new System.Windows.Forms.Button();
+            this.comunicaciónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gbPosicionActual.SuspendLayout();
             this.gbMovZ.SuspendLayout();
             this.gbMovXY.SuspendLayout();
@@ -101,7 +95,6 @@
             this.grpOperacion.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.pnlPrevisualizacion.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // importaDXF
@@ -286,73 +279,12 @@
             this.btnMovXY_Arr.UseVisualStyleBackColor = false;
             this.btnMovXY_Arr.Click += new System.EventHandler(this.btnMovXY_Arr_Click);
             // 
-            // disconnectButton
-            // 
-            this.disconnectButton.Location = new System.Drawing.Point(277, 20);
-            this.disconnectButton.Name = "disconnectButton";
-            this.disconnectButton.Size = new System.Drawing.Size(88, 23);
-            this.disconnectButton.TabIndex = 20;
-            this.disconnectButton.Text = "Desconectar";
-            this.disconnectButton.UseVisualStyleBackColor = true;
-            this.disconnectButton.Click += new System.EventHandler(this.disconnectButton_Click);
-            // 
-            // sendButton
-            // 
-            this.sendButton.Location = new System.Drawing.Point(291, 49);
-            this.sendButton.Name = "sendButton";
-            this.sendButton.Size = new System.Drawing.Size(75, 23);
-            this.sendButton.TabIndex = 19;
-            this.sendButton.Text = "Enviar";
-            this.sendButton.UseVisualStyleBackColor = true;
-            this.sendButton.Click += new System.EventHandler(this.sendButton_Click);
-            // 
-            // sendTextBox
-            // 
-            this.sendTextBox.Location = new System.Drawing.Point(9, 48);
-            this.sendTextBox.Name = "sendTextBox";
-            this.sendTextBox.Size = new System.Drawing.Size(276, 20);
-            this.sendTextBox.TabIndex = 18;
-            // 
-            // receivedTextBox
-            // 
-            this.receivedTextBox.Location = new System.Drawing.Point(9, 78);
-            this.receivedTextBox.Multiline = true;
-            this.receivedTextBox.Name = "receivedTextBox";
-            this.receivedTextBox.Size = new System.Drawing.Size(357, 138);
-            this.receivedTextBox.TabIndex = 17;
-            // 
-            // connectButton
-            // 
-            this.connectButton.Location = new System.Drawing.Point(196, 19);
-            this.connectButton.Name = "connectButton";
-            this.connectButton.Size = new System.Drawing.Size(75, 23);
-            this.connectButton.TabIndex = 16;
-            this.connectButton.Text = "Conectar";
-            this.connectButton.UseVisualStyleBackColor = true;
-            this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 24);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 13);
-            this.label1.TabIndex = 15;
-            this.label1.Text = "Puerto";
-            // 
-            // portComboBox
-            // 
-            this.portComboBox.FormattingEnabled = true;
-            this.portComboBox.Location = new System.Drawing.Point(50, 19);
-            this.portComboBox.Name = "portComboBox";
-            this.portComboBox.Size = new System.Drawing.Size(121, 21);
-            this.portComboBox.TabIndex = 14;
-            // 
             // menu
             // 
             this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1,
             this.verToolStripMenuItem,
+            this.comunicaciónToolStripMenuItem,
             this.configuracionToolStripMenuItem,
             this.ayudaToolStripMenuItem,
             this.acercaToolStripMenuItem});
@@ -475,14 +407,14 @@
             // btnCirculo
             // 
             this.btnCirculo.Name = "btnCirculo";
-            this.btnCirculo.Size = new System.Drawing.Size(152, 22);
+            this.btnCirculo.Size = new System.Drawing.Size(137, 22);
             this.btnCirculo.Text = "2D - Circulo";
             this.btnCirculo.Click += new System.EventHandler(this.btnCirculo_Click);
             // 
             // btnEsfera
             // 
             this.btnEsfera.Name = "btnEsfera";
-            this.btnEsfera.Size = new System.Drawing.Size(152, 22);
+            this.btnEsfera.Size = new System.Drawing.Size(137, 22);
             this.btnEsfera.Text = "3D - Esfera";
             this.btnEsfera.Click += new System.EventHandler(this.btnEsfera_Click);
             // 
@@ -507,13 +439,13 @@
             // dToolStripMenuItem2
             // 
             this.dToolStripMenuItem2.Name = "dToolStripMenuItem2";
-            this.dToolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
+            this.dToolStripMenuItem2.Size = new System.Drawing.Size(151, 22);
             this.dToolStripMenuItem2.Text = "2D - Cuadrado";
             // 
             // dToolStripMenuItem3
             // 
             this.dToolStripMenuItem3.Name = "dToolStripMenuItem3";
-            this.dToolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
+            this.dToolStripMenuItem3.Size = new System.Drawing.Size(151, 22);
             this.dToolStripMenuItem3.Text = "3D - Cubo";
             // 
             // toolStripSeparator3
@@ -677,22 +609,6 @@
             this.txtLineaManual.TabIndex = 29;
             this.txtLineaManual.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtLineaManual_KeyPress);
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.portComboBox);
-            this.groupBox1.Controls.Add(this.connectButton);
-            this.groupBox1.Controls.Add(this.sendTextBox);
-            this.groupBox1.Controls.Add(this.disconnectButton);
-            this.groupBox1.Controls.Add(this.sendButton);
-            this.groupBox1.Controls.Add(this.receivedTextBox);
-            this.groupBox1.Location = new System.Drawing.Point(150, 428);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(389, 221);
-            this.groupBox1.TabIndex = 30;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Comunicacion";
-            // 
             // btnLimpiar
             // 
             this.btnLimpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -707,13 +623,19 @@
             this.btnLimpiar.UseVisualStyleBackColor = true;
             this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
             // 
+            // comunicaciónToolStripMenuItem
+            // 
+            this.comunicaciónToolStripMenuItem.Name = "comunicaciónToolStripMenuItem";
+            this.comunicaciónToolStripMenuItem.Size = new System.Drawing.Size(97, 20);
+            this.comunicaciónToolStripMenuItem.Text = "Comunicación";
+            this.comunicaciónToolStripMenuItem.Click += new System.EventHandler(this.comunicaciónToolStripMenuItem_Click);
+            // 
             // Principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(1162, 684);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.txtLineaManual);
             this.Controls.Add(this.pnlPrevisualizacion);
             this.Controls.Add(this.statusStrip1);
@@ -722,6 +644,7 @@
             this.Controls.Add(this.btnLimpiar);
             this.Controls.Add(this.txtPreview);
             this.Controls.Add(this.menu);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Principal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CNC Matic";
@@ -739,8 +662,6 @@
             this.statusStrip1.PerformLayout();
             this.pnlPrevisualizacion.ResumeLayout(false);
             this.pnlPrevisualizacion.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -768,13 +689,6 @@
         private RepeatButton btnMovXY_Aba;
         private RepeatButton btnMovXY_Arr;
         private System.Windows.Forms.Button btnLimpiar;
-        private System.Windows.Forms.Button disconnectButton;
-        private System.Windows.Forms.Button sendButton;
-        private System.Windows.Forms.TextBox sendTextBox;
-        private System.Windows.Forms.TextBox receivedTextBox;
-        private System.Windows.Forms.Button connectButton;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox portComboBox;
         private System.Windows.Forms.MenuStrip menu;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem verToolStripMenuItem;
@@ -812,7 +726,7 @@
         private System.Windows.Forms.ToolStripButton btnArco;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem guardarComoToolStripMenuItem;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.ToolStripMenuItem comunicaciónToolStripMenuItem;
     }
 }
 

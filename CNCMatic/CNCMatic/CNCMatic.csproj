@@ -124,10 +124,6 @@
       <Project>{0ADE2784-D0C2-49F2-95CF-DE67C97C8BE2}</Project>
       <Name>VirtualSerial</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CSharpBasicViewerControl\CSharpBasicViewerControl.csproj">
-      <Project>{DF3CE024-D6B5-433F-9DF2-70AB8BA66F92}</Project>
-      <Name>CSharpBasicViewerControl</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DXF\DXF.csproj">
       <Project>{49C08920-9410-4246-8128-F7A3D6D7A8AC}</Project>
       <Name>DXF</Name>
@@ -136,10 +132,25 @@
       <Project>{EEF74515-40E9-4FD5-8CF1-D1026A706F79}</Project>
       <Name>G</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PrevisualizadorControl\PrevisualizadorControl.csproj">
+      <Project>{DF3CE024-D6B5-433F-9DF2-70AB8BA66F92}</Project>
+      <Name>PrevisualizadorControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Previsualizador\Previsualizador.csproj">
+      <Project>{25F48779-BEB2-416E-A1DE-4E906BFC2420}</Project>
+      <Name>Previsualizador</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="ClassDiagram1.cd" />
     <None Include="img\flecha_IZQ.jpg" />
+    <Content Include="Data\Lathe.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Mill.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="img\flecha_ABA.jpg" />
     <Content Include="img\flecha_ARR.jpg" />
     <Content Include="img\flecha_DER.jpg" />

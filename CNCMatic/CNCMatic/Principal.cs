@@ -11,6 +11,7 @@ using G.Traducciones;
 using G.Servicios;
 using G.Objetos;
 using System.IO;
+using MacGen;
 
 namespace CNCMatic
 {
@@ -18,6 +19,11 @@ namespace CNCMatic
     {
         Boolean flag = true;
         int i = 0;
+        private string mCncFile;
+        private clsProcessor mProcessor = clsProcessor.Instance();
+        private clsSettings mSetup = clsSettings.Instance();
+        private MG_CS_BasicViewer mViewer;
+
         public class RepeatButton : System.Windows.Forms.Button
         {
             protected override void OnMouseDown(MouseEventArgs e)
@@ -67,6 +73,18 @@ namespace CNCMatic
             this.lblUserName.Text = "User: " + Environment.UserName;
             this.lblOsVersion.Text = "OS Version: " + Environment.OSVersion;
             this.lblMachName.Text = "PC: " + Environment.MachineName;
+
+            mViewer = this.MG_Viewer1;
+            mProcessor.OnAddBlock += new clsProcessor.OnAddBlockEventHandler(mProcessor_OnAddBlock);
+
+            MG_CS_BasicViewer.OnSelection += new MG_CS_BasicViewer.OnSelectionEventHandler(mViewer_OnSelection);
+            MG_CS_BasicViewer.MouseLocation += new MG_CS_BasicViewer.MouseLocationEventHandler(mViewer_MouseLocation);
+            MG_CS_BasicViewer.OnStatus += new MG_CS_BasicViewer.OnStatusEventHandler(mViewer_OnStatus);
+
+            mSetup.MachineActivated += new clsSettings.MachineActivatedEventHandler(mSetup_MachineActivated);
+
+            mSetup.LoadAllMachines(System.IO.Directory.GetCurrentDirectory() + "\\Data");
+            mProcessor.Init(mSetup.Machine);
 
         }
 
@@ -279,7 +297,19 @@ namespace CNCMatic
 
         private void Principal_Load(object sender, EventArgs e)
         {
+            if (Properties.Settings.Default.Virgin == true)
+            {
+                this.StartPosition = FormStartPosition.CenterScreen;
+            }
+            else
+            {
+                this.Location = Properties.Settings.Default.ViewFormLocation;
+                this.Size = Properties.Settings.Default.ViewFormSize;
+            }
 
+            OpenFile(System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Mill.cnc"); 
+            SetDefaultViews();
+            Properties.Settings.Default.Virgin = false;
         }
 
         private void comunicaciónToolStripMenuItem_Click(object sender, EventArgs e)
@@ -291,11 +321,12 @@ namespace CNCMatic
         {
             try
             {
-                if (txtPreview.Text.Trim() == "") {
-                    MessageBox.Show("No hay información para guardar","Guardar como...",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                if (txtPreview.Text.Trim() == "")
+                {
+                    MessageBox.Show("No hay información para guardar", "Guardar como...", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                
+
                 SaveFileDialog save = new SaveFileDialog();
                 save.Filter = "Codigo G(*.gcode)|*.gcode";
                 save.DefaultExt = "*.gcode";
@@ -311,13 +342,13 @@ namespace CNCMatic
                 }
 
                 //guardamos el contenido del txtPreview en un archivo .gcode
-                if(guardaGfile(filename))
+                if (guardaGfile(filename))
                     MessageBox.Show("Se ha guardado el archivo correctamente", "Guardar como...", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                
+
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Se ha producido un error: " + ex.Message,"Guardar como...",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show("Se ha producido un error: " + ex.Message, "Guardar como...", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -325,7 +356,7 @@ namespace CNCMatic
         {
             try
             {
-                
+
                 StreamWriter sr = new StreamWriter(path);
 
                 foreach (string linea in txtPreview.Lines)
@@ -343,11 +374,261 @@ namespace CNCMatic
             catch (Exception e)
             {
                 throw new Exception(e.Message);
-                
+
             }
 
 
         }
 
+        private void Principal_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                if (this.WindowState == FormWindowState.Normal)
+                {
+                    Properties.Settings.Default.ViewFormLocation = this.Location;
+                    Properties.Settings.Default.ViewFormSize = this.Size;
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        private void mProcessor_OnAddBlock(int idx, int ct)
+        {
+            try
+            {
+                this.prgBar.Maximum = ct;
+                this.prgBar.Value = idx;
+                if (ct > 10000)
+                {
+                    //Refresh every 1000 blocks 
+                    if (1000 % idx == 0)
+                    {
+                        mViewer.FindExtents();
+                        mViewer.Redraw(true);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("mProcessor_OnAddBlock: " + ex.Message, ex);
+            }
+        }
+
+        private void mViewer_MouseLocation(float x, float y)
+        {
+            Coordinates.Text = "X=" + x.ToString("0.000") + " Y=" + y.ToString("0.000");
+        }
+
+        private void ViewportActivated(object sender, System.EventArgs e)
+        {
+
+        }
+
+        private void SetDefaultViews()
+        {
+            //Case "Top" 
+            MG_Viewer1.Pitch = 0f;
+            MG_Viewer1.Roll = 0f;
+            MG_Viewer1.Yaw = 0f;
+            MG_Viewer1.FindExtents();
+            mViewer.Redraw(true);
+        }
+
+        private void mViewer_OnSelection(System.Collections.Generic.List<clsMotionRecord> hits)
+        {
+            lblStatus.Text = hits[0].Codestring;
+            string[] tipString = new string[hits.Count];
+            for (int r = 0; r <= hits.Count - 1; r++)
+            {
+                tipString[r] = hits[r].Codestring;
+            }
+            this.CodeTip.SetToolTip(mViewer, string.Join(Environment.NewLine, tipString));
+        }
+
+        private void mViewer_OnStatus(string msg, int index, int max)
+        {
+            lblStatus.Text = msg;
+            prgBar.Maximum = max;
+            prgBar.Value = index;
+            toolStrip2.Refresh();
+        }
+
+        private void mSetup_MachineActivated(clsMachine m)
+        {
+            {
+                MG_Viewer1.RotaryDirection = (RotaryDirection)m.RotaryDir;
+                MG_Viewer1.RotaryPlane = (Axis)m.RotaryAxis;
+                MG_Viewer1.RotaryType = (RotaryMotionType)m.RotaryType;
+                MG_Viewer1.ViewManipMode = MG_CS_BasicViewer.ManipMode.SELECTION;
+
+                MG_Viewer1.FindExtents();
+                mViewer.Redraw(true);
+
+            }
+        }
+
+        private void ViewButtonClicked(object sender, EventArgs e)
+        {
+            string tag = sender.GetType().GetProperty("Tag").GetValue(sender, null).ToString();
+            switch (tag)
+            {
+                case "Fit":
+                    if (Control.ModifierKeys == Keys.Shift)
+                    {
+                        MG_Viewer1.FindExtents();
+                    }
+                    else
+                    {
+                        mViewer.FindExtents();
+                    }
+
+                    break;
+                case "Pan":
+                    mViewer.ViewManipMode = MG_CS_BasicViewer.ManipMode.PAN;
+                    tsbPan.Checked = true;
+                    tsbRotate.Checked = false;
+                    tsbZoom.Checked = false;
+                    tsbFence.Checked = false;
+                    tsbSelect.Checked = false;
+                    break;
+                case "Fence":
+                    mViewer.ViewManipMode = MG_CS_BasicViewer.ManipMode.FENCE;
+                    tsbFence.Checked = true;
+                    tsbRotate.Checked = false;
+                    tsbZoom.Checked = false;
+                    tsbPan.Checked = false;
+                    tsbSelect.Checked = false;
+                    break;
+                case "Zoom":
+                    mViewer.ViewManipMode = MG_CS_BasicViewer.ManipMode.ZOOM;
+                    tsbZoom.Checked = true;
+                    tsbRotate.Checked = false;
+                    tsbFence.Checked = false;
+                    tsbPan.Checked = false;
+                    tsbSelect.Checked = false;
+                    break;
+                case "Rotate":
+                    mViewer.ViewManipMode = MG_CS_BasicViewer.ManipMode.ROTATE;
+                    tsbRotate.Checked = true;
+                    tsbZoom.Checked = false;
+                    tsbFence.Checked = false;
+                    tsbPan.Checked = false;
+                    tsbSelect.Checked = false;
+                    break;
+                case "Select":
+                    mViewer.ViewManipMode = MG_CS_BasicViewer.ManipMode.SELECTION;
+                    tsbRotate.Checked = false;
+                    tsbZoom.Checked = false;
+                    tsbFence.Checked = false;
+                    tsbPan.Checked = false;
+                    tsbSelect.Checked = true;
+                    break;
+            }
+
+        }
+        private void mnuViewOrient_Click(object sender, System.EventArgs e)
+        {
+            switch (((System.Windows.Forms.ToolStripMenuItem)sender).Tag.ToString())
+            {
+                case "Superior":
+                    mViewer.Pitch = 0;
+                    mViewer.Roll = 0;
+                    mViewer.Yaw = 0;
+                    break;
+                case "Frontal":
+                    mViewer.Pitch = 270;
+                    mViewer.Roll = 0;
+                    mViewer.Yaw = 360;
+                    break;
+                case "Lateral":
+                    mViewer.Pitch = 270;
+                    mViewer.Roll = 0;
+                    mViewer.Yaw = 270;
+                    break;
+                case "Isometrica":
+                    mViewer.Pitch = 315;
+                    mViewer.Roll = 0;
+                    mViewer.Yaw = 315;
+                    break;
+            }
+            mViewer.FindExtents();
+            mViewer.Redraw(true);
+        } 
+        private void Principal_ResizeEnd(object sender, EventArgs e)
+        {
+            MG_Viewer1.FindExtents();
+            mViewer.Redraw(true);
+        }
+
+        private void DisplayCheckChanged(object sender, EventArgs e)
+        {
+            if (mViewer == null) return;
+
+            mViewer.DrawRapidLines = mnuRapidLines.Checked;
+            mViewer.DrawRapidPoints = mnuRapidPoints.Checked;
+            mViewer.DrawAxisLines = mnuAxisLines.Checked;
+            mViewer.DrawAxisIndicator = mnuAxisindicator.Checked;
+            mViewer.Redraw(true);
+        }
+
+        private void ProcessFile(string fileName)
+        {
+            if (fileName == null)
+            {
+                return;
+            }
+            if (!System.IO.File.Exists(fileName))
+            {
+                lblStatus.Text = "File does not exist!";
+                return;
+            }
+            lblStatus.Text = "Processing...";
+            MG_CS_BasicViewer.MotionBlocks.Clear();
+            mProcessor.Init(mSetup.Machine);
+            mProcessor.ProcessFile(fileName, MG_CS_BasicViewer.MotionBlocks);
+
+            BreakPointSlider.Maximum = MG_CS_BasicViewer.MotionBlocks.Count - 1;
+            if (mViewer.BreakPoint > MG_CS_BasicViewer.MotionBlocks.Count - 1)
+            {
+                mViewer.BreakPoint = MG_CS_BasicViewer.MotionBlocks.Count - 1;
+            }
+            mViewer.GatherTools();
+            lblStatus.Text = "Done";
+            prgBar.Value = 0;
+
+        }
+
+        private void BreakPointSlider_ValueChanged(object sender, EventArgs e)
+        {
+            mViewer.BreakPoint = BreakPointSlider.Value;
+            mViewer.Redraw(true);
+        }
+
+
+
+        private void OpenFile(string fileName)
+        {
+            long[] ticks = new long[2];
+            mCncFile = fileName;
+            mSetup.MatchMachineToFile(mCncFile);
+
+            ProcessFile(mCncFile);
+            mViewer.BreakPoint = MG_CS_BasicViewer.MotionBlocks.Count - 1;
+
+            mViewer.Pitch = mSetup.Machine.ViewAngles[0];
+            mViewer.Roll = mSetup.Machine.ViewAngles[1];
+            mViewer.Yaw = mSetup.Machine.ViewAngles[2];
+            mViewer.Init();
+
+            ticks[0] = DateTime.Now.Ticks;
+            MG_Viewer1.FindExtents();
+            ticks[1] = DateTime.Now.Ticks;
+            MG_Viewer1.DynamicViewManipulation = (ticks[1] - ticks[0]) < 2000000;
+            mViewer.Redraw(true);
+        } 
     }
+
 }

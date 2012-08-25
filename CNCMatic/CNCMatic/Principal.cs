@@ -10,7 +10,7 @@ using DXF;
 using G.Traducciones;
 using G.Servicios;
 using G.Objetos;
-
+using System.IO;
 
 namespace CNCMatic
 {
@@ -248,7 +248,7 @@ namespace CNCMatic
 
         private void btnArco_Click(object sender, EventArgs e)
         {
-            G02_CirculoH  g;
+            G02_CirculoH g;
 
             FrmDibujoParams dibujoParams = new FrmDibujoParams(out g);
             dibujoParams.ShowDialog();
@@ -274,7 +274,7 @@ namespace CNCMatic
         private void configuracionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             (new FrmConfiguracion()).ShowDialog();
-            
+
         }
 
         private void Principal_Load(object sender, EventArgs e)
@@ -287,7 +287,67 @@ namespace CNCMatic
             (new FrmComunicacion()).ShowDialog();
         }
 
-        
+        private void guardarComoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (txtPreview.Text.Trim() == "") {
+                    MessageBox.Show("No hay información para guardar","Guardar como...",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                    return;
+                }
+                
+                SaveFileDialog save = new SaveFileDialog();
+                save.Filter = "Codigo G(*.gcode)|*.gcode";
+                save.DefaultExt = "*.gcode";
+                save.FileName = "*.gcode";
+                save.ShowDialog();
+
+                string filename = save.FileName;
+
+                if (filename == "*.gcode" || filename == "")
+                {
+                    MessageBox.Show("Error: no se ha especificado un nombre de archivo valido", "Guardar como...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                //guardamos el contenido del txtPreview en un archivo .gcode
+                if(guardaGfile(filename))
+                    MessageBox.Show("Se ha guardado el archivo correctamente", "Guardar como...", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Se ha producido un error: " + ex.Message,"Guardar como...",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
+        }
+
+        private bool guardaGfile(string path)
+        {
+            try
+            {
+                
+                StreamWriter sr = new StreamWriter(path);
+
+                foreach (string linea in txtPreview.Lines)
+                {
+                    if (linea.Trim() != "")
+                    {
+                        sr.WriteLine(linea);
+                    }
+                }
+
+                sr.Close();
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+                
+            }
+
+
+        }
 
     }
 }

@@ -69,6 +69,7 @@
             this.grpPrev = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.mG_CS_BasicViewer1 = new MacGen.MG_CS_BasicViewer();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.tsbOpen = new System.Windows.Forms.ToolStripButton();
             this.tscboMachines = new System.Windows.Forms.ToolStripComboBox();
@@ -86,14 +87,13 @@
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbPan = new System.Windows.Forms.ToolStripButton();
             this.tsbZoom = new System.Windows.Forms.ToolStripButton();
+            this.tsbRotate = new System.Windows.Forms.ToolStripButton();
             this.tsbFence = new System.Windows.Forms.ToolStripButton();
             this.tsbFit = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.grpPrevisualizacion = new System.Windows.Forms.GroupBox();
             this.tblScreens = new System.Windows.Forms.TableLayoutPanel();
-            this.mG_CS_BasicViewer1 = new MacGen.MG_CS_BasicViewer();
             this.MG_Viewer1 = new MacGen.MG_CS_BasicViewer();
-            this.tsbRotate = new System.Windows.Forms.ToolStripButton();
             this.tsbView = new System.Windows.Forms.ToolStripDropDownButton();
             this.mnuTop = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuFront = new System.Windows.Forms.ToolStripMenuItem();
@@ -161,7 +161,7 @@
             this.gbPosicionActual.Controls.Add(this.txtPosY);
             this.gbPosicionActual.Controls.Add(this.lblPosX);
             this.gbPosicionActual.Controls.Add(this.txtPosX);
-            this.gbPosicionActual.Location = new System.Drawing.Point(267, 103);
+            this.gbPosicionActual.Location = new System.Drawing.Point(275, 103);
             this.gbPosicionActual.Name = "gbPosicionActual";
             this.gbPosicionActual.Size = new System.Drawing.Size(103, 128);
             this.gbPosicionActual.TabIndex = 3;
@@ -239,7 +239,7 @@
             this.gbMovXY.Controls.Add(this.btnMovXY_Izq);
             this.gbMovXY.Controls.Add(this.btnMovXY_Aba);
             this.gbMovXY.Controls.Add(this.btnMovXY_Arr);
-            this.gbMovXY.Location = new System.Drawing.Point(24, 102);
+            this.gbMovXY.Location = new System.Drawing.Point(16, 102);
             this.gbMovXY.Name = "gbMovXY";
             this.gbMovXY.Size = new System.Drawing.Size(163, 128);
             this.gbMovXY.TabIndex = 0;
@@ -299,6 +299,7 @@
             this.guardarComoToolStripMenuItem.Name = "guardarComoToolStripMenuItem";
             this.guardarComoToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.guardarComoToolStripMenuItem.Text = "Guardar como...";
+            this.guardarComoToolStripMenuItem.Click += new System.EventHandler(this.guardarComoToolStripMenuItem_Click);
             // 
             // verToolStripMenuItem
             // 
@@ -446,7 +447,7 @@
             // 
             this.txtLineaManual.Location = new System.Drawing.Point(110, 385);
             this.txtLineaManual.Name = "txtLineaManual";
-            this.txtLineaManual.Size = new System.Drawing.Size(295, 20);
+            this.txtLineaManual.Size = new System.Drawing.Size(328, 20);
             this.txtLineaManual.TabIndex = 29;
             this.txtLineaManual.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtLineaManual_KeyPress);
             // 
@@ -485,6 +486,26 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(600, 568);
             this.tableLayoutPanel1.TabIndex = 9;
+            // 
+            // mG_CS_BasicViewer1
+            // 
+            this.mG_CS_BasicViewer1.AxisIndicatorScale = 0.75F;
+            this.mG_CS_BasicViewer1.BackColor = System.Drawing.Color.Black;
+            this.mG_CS_BasicViewer1.BreakPoint = -1;
+            this.mG_CS_BasicViewer1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.mG_CS_BasicViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mG_CS_BasicViewer1.DynamicViewManipulation = true;
+            this.mG_CS_BasicViewer1.FourthAxis = 0F;
+            this.mG_CS_BasicViewer1.Location = new System.Drawing.Point(1, 1);
+            this.mG_CS_BasicViewer1.Margin = new System.Windows.Forms.Padding(0);
+            this.mG_CS_BasicViewer1.Name = "mG_CS_BasicViewer1";
+            this.mG_CS_BasicViewer1.Pitch = 0F;
+            this.mG_CS_BasicViewer1.Roll = 0F;
+            this.mG_CS_BasicViewer1.RotaryType = MacGen.RotaryMotionType.BMC;
+            this.mG_CS_BasicViewer1.Size = new System.Drawing.Size(598, 566);
+            this.mG_CS_BasicViewer1.TabIndex = 1;
+            this.mG_CS_BasicViewer1.ViewManipMode = MacGen.MG_CS_BasicViewer.ManipMode.SELECTION;
+            this.mG_CS_BasicViewer1.Yaw = 0F;
             // 
             // toolStrip2
             // 
@@ -660,6 +681,18 @@
             this.tsbZoom.Tag = "Zoom";
             this.tsbZoom.Text = "Zoom";
             // 
+            // tsbRotate
+            // 
+            this.tsbRotate.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.tsbRotate.CheckOnClick = true;
+            this.tsbRotate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbRotate.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tsbRotate.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.tsbRotate.Name = "tsbRotate";
+            this.tsbRotate.Size = new System.Drawing.Size(23, 22);
+            this.tsbRotate.Tag = "Rotate";
+            this.tsbRotate.Text = "Rotate";
+            // 
             // tsbFence
             // 
             this.tsbFence.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
@@ -713,26 +746,6 @@
             this.tblScreens.Size = new System.Drawing.Size(200, 100);
             this.tblScreens.TabIndex = 0;
             // 
-            // mG_CS_BasicViewer1
-            // 
-            this.mG_CS_BasicViewer1.AxisIndicatorScale = 0.75F;
-            this.mG_CS_BasicViewer1.BackColor = System.Drawing.Color.Black;
-            this.mG_CS_BasicViewer1.BreakPoint = -1;
-            this.mG_CS_BasicViewer1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.mG_CS_BasicViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mG_CS_BasicViewer1.DynamicViewManipulation = true;
-            this.mG_CS_BasicViewer1.FourthAxis = 0F;
-            this.mG_CS_BasicViewer1.Location = new System.Drawing.Point(1, 1);
-            this.mG_CS_BasicViewer1.Margin = new System.Windows.Forms.Padding(0);
-            this.mG_CS_BasicViewer1.Name = "mG_CS_BasicViewer1";
-            this.mG_CS_BasicViewer1.Pitch = 0F;
-            this.mG_CS_BasicViewer1.Roll = 0F;
-            this.mG_CS_BasicViewer1.RotaryType = MacGen.RotaryMotionType.BMC;
-            this.mG_CS_BasicViewer1.Size = new System.Drawing.Size(598, 566);
-            this.mG_CS_BasicViewer1.TabIndex = 1;
-            this.mG_CS_BasicViewer1.ViewManipMode = MacGen.MG_CS_BasicViewer.ManipMode.SELECTION;
-            this.mG_CS_BasicViewer1.Yaw = 0F;
-            // 
             // MG_Viewer1
             // 
             this.MG_Viewer1.AxisIndicatorScale = 0.75F;
@@ -752,18 +765,6 @@
             this.MG_Viewer1.TabIndex = 1;
             this.MG_Viewer1.ViewManipMode = MacGen.MG_CS_BasicViewer.ManipMode.SELECTION;
             this.MG_Viewer1.Yaw = 0F;
-            // 
-            // tsbRotate
-            // 
-            this.tsbRotate.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.tsbRotate.CheckOnClick = true;
-            this.tsbRotate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbRotate.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tsbRotate.ImageTransparentColor = System.Drawing.Color.Transparent;
-            this.tsbRotate.Name = "tsbRotate";
-            this.tsbRotate.Size = new System.Drawing.Size(23, 22);
-            this.tsbRotate.Tag = "Rotate";
-            this.tsbRotate.Text = "Rotate";
             // 
             // tsbView
             // 
@@ -838,7 +839,7 @@
             // 
             this.btnInicio.BackColor = System.Drawing.Color.White;
             this.btnInicio.Image = global::CNCMatic.Properties.Resources.HomeButton;
-            this.btnInicio.Location = new System.Drawing.Point(24, 20);
+            this.btnInicio.Location = new System.Drawing.Point(10, 20);
             this.btnInicio.Name = "btnInicio";
             this.btnInicio.Size = new System.Drawing.Size(71, 76);
             this.btnInicio.TabIndex = 2;
@@ -850,7 +851,7 @@
             this.btnStop2.BackColor = System.Drawing.Color.White;
             this.btnStop2.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnStop2.Image = global::CNCMatic.Properties.Resources.Stop_Normal_Red_icon;
-            this.btnStop2.Location = new System.Drawing.Point(101, 20);
+            this.btnStop2.Location = new System.Drawing.Point(111, 20);
             this.btnStop2.Name = "btnStop2";
             this.btnStop2.Size = new System.Drawing.Size(71, 76);
             this.btnStop2.TabIndex = 25;
@@ -862,7 +863,7 @@
             this.btnPlay.BackColor = System.Drawing.Color.White;
             this.btnPlay.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnPlay.Image = global::CNCMatic.Properties.Resources.Play_1_Normal_icon__1_;
-            this.btnPlay.Location = new System.Drawing.Point(257, 20);
+            this.btnPlay.Location = new System.Drawing.Point(315, 20);
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(71, 76);
             this.btnPlay.TabIndex = 23;
@@ -873,7 +874,7 @@
             this.btnPause.BackColor = System.Drawing.Color.White;
             this.btnPause.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnPause.Image = global::CNCMatic.Properties.Resources.Pause_Normal_Red_icon;
-            this.btnPause.Location = new System.Drawing.Point(180, 20);
+            this.btnPause.Location = new System.Drawing.Point(214, 20);
             this.btnPause.Name = "btnPause";
             this.btnPause.Size = new System.Drawing.Size(71, 76);
             this.btnPause.TabIndex = 24;
@@ -1020,11 +1021,11 @@
             // btnLimpiar
             // 
             this.btnLimpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLimpiar.Image = global::CNCMatic.Properties.Resources.brush_icon;
-            this.btnLimpiar.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.btnLimpiar.Location = new System.Drawing.Point(411, 366);
+            this.btnLimpiar.Image = global::CNCMatic.Properties.Resources.brush_icon__1_;
+            this.btnLimpiar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnLimpiar.Location = new System.Drawing.Point(432, 375);
             this.btnLimpiar.Name = "btnLimpiar";
-            this.btnLimpiar.Size = new System.Drawing.Size(100, 56);
+            this.btnLimpiar.Size = new System.Drawing.Size(79, 39);
             this.btnLimpiar.TabIndex = 7;
             this.btnLimpiar.Text = "Limpiar";
             this.btnLimpiar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1037,12 +1038,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(1162, 697);
+            this.Controls.Add(this.btnLimpiar);
             this.Controls.Add(this.grpPrev);
             this.Controls.Add(this.txtLineaManual);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.grpOperacion);
             this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.btnLimpiar);
             this.Controls.Add(this.txtPreview);
             this.Controls.Add(this.menu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

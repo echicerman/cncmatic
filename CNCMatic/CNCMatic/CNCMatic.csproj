@@ -124,6 +124,10 @@
       <Project>{0ADE2784-D0C2-49F2-95CF-DE67C97C8BE2}</Project>
       <Name>VirtualSerial</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CSharpBasicViewerControl\CSharpBasicViewerControl.csproj">
+      <Project>{DF3CE024-D6B5-433F-9DF2-70AB8BA66F92}</Project>
+      <Name>CSharpBasicViewerControl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DXF\DXF.csproj">
       <Project>{49C08920-9410-4246-8128-F7A3D6D7A8AC}</Project>
       <Name>DXF</Name>
@@ -144,6 +148,26 @@
     <Content Include="img\logo teCNoC.jpg" />
     <Content Include="img\stop.png" />
     <None Include="Resources\Refresh-icon.png" />
+    <Content Include="Resources\Color.bmp" />
+    <Content Include="Resources\DisplayOpts.bmp" />
+    <Content Include="Resources\EditInformation.bmp" />
+    <Content Include="Resources\OpenFolder.bmp" />
+    <Content Include="Resources\Refresh.png" />
+    <Content Include="Resources\screens1.bmp" />
+    <Content Include="Resources\screens2.bmp" />
+    <Content Include="Resources\screens4.bmp" />
+    <Content Include="Resources\Select.png" />
+    <Content Include="Resources\ToolLayers.bmp" />
+    <Content Include="Resources\ViewFence.bmp" />
+    <Content Include="Resources\ViewFit.bmp" />
+    <Content Include="Resources\ViewFront.bmp" />
+    <Content Include="Resources\ViewIso.bmp" />
+    <Content Include="Resources\viewpan.bmp" />
+    <Content Include="Resources\ViewRight.bmp" />
+    <Content Include="Resources\viewrotate.bmp" />
+    <Content Include="Resources\ViewTop.bmp" />
+    <Content Include="Resources\viewzoom.bmp" />
+    <Content Include="Resources\web.bmp" />
     <Content Include="xmlDB.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

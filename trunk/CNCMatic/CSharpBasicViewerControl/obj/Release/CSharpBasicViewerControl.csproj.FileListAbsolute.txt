@@ -1,0 +1,28 @@
+E:\Descagas\CNC_Viewer_src\CSharp\BasicViewer\CSharpBasicViewerControl\bin\Release\CSharpBasicViewerControl.dll
+E:\Descagas\CNC_Viewer_src\CSharp\BasicViewer\CSharpBasicViewerControl\bin\Release\CSharpBasicViewerControl.pdb
+E:\Descagas\CNC_Viewer_src\CSharp\BasicViewer\CSharpBasicViewerControl\obj\Release\ResolveAssemblyReference.cache
+E:\Descagas\CNC_Viewer_src\CSharp\BasicViewer\CSharpBasicViewerControl\obj\Release\MacGen.MG_CS_BasicViewer.resources
+E:\Descagas\CNC_Viewer_src\CSharp\BasicViewer\CSharpBasicViewerControl\obj\Release\CSharpBasicViewerControl.csproj.GenerateResource.Cache
+E:\Descagas\CNC_Viewer_src\CSharp\BasicViewer\CSharpBasicViewerControl\obj\Release\CSharpBasicViewerControl.dll
+E:\Descagas\CNC_Viewer_src\CSharp\BasicViewer\CSharpBasicViewerControl\obj\Release\CSharpBasicViewerControl.pdb
+D:\Documentos\Facultad\Proyecto\CNC_Viewer_src\CSharp\BasicViewer\CSharpBasicViewerControl\bin\Release\CSharpBasicViewerControl.dll
+D:\Documentos\Facultad\Proyecto\CNC_Viewer_src\CSharp\BasicViewer\CSharpBasicViewerControl\bin\Release\CSharpBasicViewerControl.pdb
+D:\Documentos\Facultad\Proyecto\CNC_Viewer_src\CSharp\BasicViewer\CSharpBasicViewerControl\obj\Release\ResolveAssemblyReference.cache
+D:\Documentos\Facultad\Proyecto\CNC_Viewer_src\CSharp\BasicViewer\CSharpBasicViewerControl\obj\Release\MacGen.MG_CS_BasicViewer.resources
+D:\Documentos\Facultad\Proyecto\CNC_Viewer_src\CSharp\BasicViewer\CSharpBasicViewerControl\obj\Release\CSharpBasicViewerControl.csproj.GenerateResource.Cache
+D:\Documentos\Facultad\Proyecto\CNC_Viewer_src\CSharp\BasicViewer\CSharpBasicViewerControl\obj\Release\CSharpBasicViewerControl.dll
+D:\Documentos\Facultad\Proyecto\CNC_Viewer_src\CSharp\BasicViewer\CSharpBasicViewerControl\obj\Release\CSharpBasicViewerControl.pdb
+C:\Users\Nicolás\Desktop\Proyecto CNCMatic\CNCMatic\CSharpBasicViewerControl\bin\Release\CSharpBasicViewerControl.dll
+C:\Users\Nicolás\Desktop\Proyecto CNCMatic\CNCMatic\CSharpBasicViewerControl\bin\Release\CSharpBasicViewerControl.pdb
+C:\Users\Nicolás\Desktop\Proyecto CNCMatic\CNCMatic\CSharpBasicViewerControl\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Nicolás\Desktop\Proyecto CNCMatic\CNCMatic\CSharpBasicViewerControl\obj\Release\MacGen.MG_CS_BasicViewer.resources
+C:\Users\Nicolás\Desktop\Proyecto CNCMatic\CNCMatic\CSharpBasicViewerControl\obj\Release\CSharpBasicViewerControl.csproj.GenerateResource.Cache
+C:\Users\Nicolás\Desktop\Proyecto CNCMatic\CNCMatic\CSharpBasicViewerControl\obj\Release\CSharpBasicViewerControl.dll
+C:\Users\Nicolás\Desktop\Proyecto CNCMatic\CNCMatic\CSharpBasicViewerControl\obj\Release\CSharpBasicViewerControl.pdb
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\Proyecto CNCMatic\CNCMatic\CSharpBasicViewerControl\bin\Release\CSharpBasicViewerControl.dll
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\Proyecto CNCMatic\CNCMatic\CSharpBasicViewerControl\bin\Release\CSharpBasicViewerControl.pdb
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\Proyecto CNCMatic\CNCMatic\CSharpBasicViewerControl\obj\Release\ResolveAssemblyReference.cache
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\Proyecto CNCMatic\CNCMatic\CSharpBasicViewerControl\obj\Release\MacGen.MG_CS_BasicViewer.resources
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\Proyecto CNCMatic\CNCMatic\CSharpBasicViewerControl\obj\Release\CSharpBasicViewerControl.csproj.GenerateResource.Cache
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\Proyecto CNCMatic\CNCMatic\CSharpBasicViewerControl\obj\Release\CSharpBasicViewerControl.dll
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\Proyecto CNCMatic\CNCMatic\CSharpBasicViewerControl\obj\Release\CSharpBasicViewerControl.pdb

@@ -166,7 +166,7 @@
             this.Padding = new System.Windows.Forms.Padding(9);
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Acerca";
+            this.Text = "Acerca de CNC Matic";
             this.Load += new System.EventHandler(this.Acerca_Load);
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();

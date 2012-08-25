@@ -287,5 +287,7 @@ namespace CNCMatic
             (new FrmComunicacion()).ShowDialog();
         }
 
+        
+
     }
 }

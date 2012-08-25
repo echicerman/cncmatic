@@ -36,8 +36,7 @@ namespace CNCMatic
 
             
         }
-
-
+        
         private void CargaMotores()
         {
             //cargar configuraciones
@@ -53,6 +52,7 @@ namespace CNCMatic
             this.cmbMotor.SelectedValueChanged += new System.EventHandler(this.cmbMotor_SelectedValueChanged);
 
         }
+
         private void CargaMateriales()
         {
             //cargar configuraciones
@@ -68,6 +68,7 @@ namespace CNCMatic
             this.cmbMaterial.SelectedValueChanged += new System.EventHandler(this.cmbMaterial_SelectedValueChanged);
 
         }
+
         private void CargaConfiguracionGeneral()
         {
             //cargar configuraciones
@@ -88,9 +89,7 @@ namespace CNCMatic
 
 
         }
-
-
-
+        
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             buscarPuertos();

@@ -148,6 +148,7 @@
     <Content Include="img\logo teCNoC.jpg" />
     <Content Include="img\stop.png" />
     <None Include="Resources\Refresh-icon.png" />
+    <None Include="Resources\brush-icon %281%29.png" />
     <Content Include="Resources\Color.bmp" />
     <Content Include="Resources\DisplayOpts.bmp" />
     <Content Include="Resources\EditInformation.bmp" />

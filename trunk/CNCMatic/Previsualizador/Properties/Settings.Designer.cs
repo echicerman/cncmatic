@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CNCMatic.Properties {
+namespace Previsualizador.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

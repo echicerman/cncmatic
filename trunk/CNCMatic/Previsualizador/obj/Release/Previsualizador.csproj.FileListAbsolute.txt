@@ -1,0 +1,9 @@
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\CNCMatic\CNCMatic\Previsualizador\obj\Release\ResolveAssemblyReference.cache
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\CNCMatic\CNCMatic\Previsualizador\bin\Release\Previsualizador.dll
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\CNCMatic\CNCMatic\Previsualizador\bin\Release\Previsualizador.pdb
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\CNCMatic\CNCMatic\Previsualizador\bin\Release\CSharpBasicViewerControl.dll
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\CNCMatic\CNCMatic\Previsualizador\bin\Release\CSharpBasicViewerControl.pdb
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\CNCMatic\CNCMatic\Previsualizador\obj\Release\Previsualizador.dll
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\CNCMatic\CNCMatic\Previsualizador\obj\Release\Previsualizador.pdb
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\CNCMatic\CNCMatic\Previsualizador\obj\Release\Previsualizador.csproj.GenerateResource.Cache
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\CNCMatic\CNCMatic\Previsualizador\obj\Release\Previsualizador.Properties.Resources.resources

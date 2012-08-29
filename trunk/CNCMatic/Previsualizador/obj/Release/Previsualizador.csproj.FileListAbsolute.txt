@@ -7,3 +7,12 @@ E:\Mis Dcocumentos\Facultad UTN\Proyecto\CNCMatic\CNCMatic\Previsualizador\obj\R
 E:\Mis Dcocumentos\Facultad UTN\Proyecto\CNCMatic\CNCMatic\Previsualizador\obj\Release\Previsualizador.pdb
 E:\Mis Dcocumentos\Facultad UTN\Proyecto\CNCMatic\CNCMatic\Previsualizador\obj\Release\Previsualizador.csproj.GenerateResource.Cache
 E:\Mis Dcocumentos\Facultad UTN\Proyecto\CNCMatic\CNCMatic\Previsualizador\obj\Release\Previsualizador.Properties.Resources.resources
+D:\UTNProyecto\CNCMatic\CNCMatic\Previsualizador\bin\Release\Previsualizador.dll
+D:\UTNProyecto\CNCMatic\CNCMatic\Previsualizador\bin\Release\Previsualizador.pdb
+D:\UTNProyecto\CNCMatic\CNCMatic\Previsualizador\bin\Release\CSharpBasicViewerControl.dll
+D:\UTNProyecto\CNCMatic\CNCMatic\Previsualizador\bin\Release\CSharpBasicViewerControl.pdb
+D:\UTNProyecto\CNCMatic\CNCMatic\Previsualizador\obj\Release\ResolveAssemblyReference.cache
+D:\UTNProyecto\CNCMatic\CNCMatic\Previsualizador\obj\Release\Previsualizador.Properties.Resources.resources
+D:\UTNProyecto\CNCMatic\CNCMatic\Previsualizador\obj\Release\Previsualizador.csproj.GenerateResource.Cache
+D:\UTNProyecto\CNCMatic\CNCMatic\Previsualizador\obj\Release\Previsualizador.dll
+D:\UTNProyecto\CNCMatic\CNCMatic\Previsualizador\obj\Release\Previsualizador.pdb

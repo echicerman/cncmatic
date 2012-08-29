@@ -12,6 +12,7 @@
     <AssemblyName>CNCMatic</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ApplicationIcon>gear.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -151,6 +152,7 @@
     <Content Include="Data\Mill.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="gear.ico" />
     <Content Include="img\flecha_ABA.jpg" />
     <Content Include="img\flecha_ARR.jpg" />
     <Content Include="img\flecha_DER.jpg" />

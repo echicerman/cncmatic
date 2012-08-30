@@ -88,11 +88,11 @@ namespace VirtualSerial
 
                 VirtualPort.DataReceived += new SerialDataReceivedEventHandler(Port_DataReceived);
                 VirtualPort.Write(Handshake);
-
-                Timer t = new Timer(5000);
+                
+                /*Timer t = new Timer(5000);
                 t.Enabled = true;
                 t.Start();
-                t.Elapsed += new ElapsedEventHandler(t_Elapsed);
+                t.Elapsed += new ElapsedEventHandler(t_Elapsed);*/
             }
             catch (Exception ex)
             {

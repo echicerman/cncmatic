@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using VirtualSerial;
 using System.IO.Ports;
+using System.Timers;
 
 namespace CNCMatic
 {
@@ -15,21 +16,25 @@ namespace CNCMatic
     {
         public FrmComunicacion()
         {
-          
+
             InitializeComponent();
 
             buscarPuertos();
         }
 
+        private string ultimaInstruccion;
+        private System.Timers.Timer timer;
         private void FrmComunicacion_Load(object sender, EventArgs e)
         {
-
+            timer = new System.Timers.Timer(5000);
+            timer.Enabled = true;
+            timer.Elapsed += new ElapsedEventHandler(proximaInstruccion);
         }
 
         private void buscarPuertos()
         {
             portComboBox.Items.Clear();
-            
+
             foreach (string s in SerialPort.GetPortNames())
             {
                 portComboBox.Items.Add(s);
@@ -93,6 +98,76 @@ namespace CNCMatic
             Port.Write(sendTextBox.Text);
             //Port.Write(comandos[i]);
             //i++;
+        }
+
+        public void IniciarTransmision()
+        {
+
+            conectar("COM1");
+
+            enviarConfiguracion();
+
+            enviarInstrucciones();
+
+            //desconectar();
+
+
+        }
+
+        private void conectar(string puerto)
+        {
+            Port.DataReceivedCallback = new Port.DataReceivedCallbackDelegate(DataReceivedCallback);
+            Port.Connect(puerto);
+
+        }
+        private void enviarConfiguracion()
+        {
+
+        }
+        private void enviarInstrucciones()
+        {
+            //armamos un Timer para el tiempo de espera entre cada instruccion enviada
+            /*System.Timers.Timer t = new System.Timers.Timer(5000);
+            t.Enabled = true;
+            t.Elapsed += new ElapsedEventHandler(proximaInstruccion);
+            */
+
+            this.ultimaInstruccion = (this.Owner as Principal).proximaInstruccion();
+            Port.Write(ultimaInstruccion);
+            timer.Start();
+
+            //while (this.ultimaInstruccion != "")
+            //{
+                
+
+            //    //ultimaInstruccion = (this.Owner as Principal).proximaInstruccion();
+
+            //    //System.Threading.Thread.Sleep(1000);
+
+            //    t.Start();
+            //}
+        }
+        private void proximaInstruccion(object sender, ElapsedEventArgs e)
+        {
+
+            this.ultimaInstruccion = (this.Owner as Principal).proximaInstruccion();
+
+            if (ultimaInstruccion != "")
+            {
+                Port.Write(ultimaInstruccion);
+
+                ultimaInstruccion = (this.Owner as Principal).proximaInstruccion();
+
+                timer.Start();
+            }
+            else
+            {
+                desconectar();
+            }
+        }
+        private void desconectar()
+        {
+            Port.CloseConnection();
         }
     }
 }

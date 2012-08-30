@@ -30,7 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmConfiguracion));
             this.grpConfGral = new System.Windows.Forms.GroupBox();
-            this.btnRefresh = new System.Windows.Forms.Button();
             this.grpTipoProgr = new System.Windows.Forms.GroupBox();
             this.rbtRelativa = new System.Windows.Forms.RadioButton();
             this.lblTipoProg = new System.Windows.Forms.Label();
@@ -41,7 +40,6 @@
             this.rbtMM = new System.Windows.Forms.RadioButton();
             this.lblPuerto = new System.Windows.Forms.Label();
             this.portComboBox = new System.Windows.Forms.ComboBox();
-            this.btnGrabar = new System.Windows.Forms.Button();
             this.grpConfigMaterial = new System.Windows.Forms.GroupBox();
             this.txtGrados = new System.Windows.Forms.MaskedTextBox();
             this.lblGrados = new System.Windows.Forms.Label();
@@ -53,6 +51,26 @@
             this.lblMaterial = new System.Windows.Forms.Label();
             this.lblConfig = new System.Windows.Forms.Label();
             this.cmbConfiguracion = new System.Windows.Forms.ComboBox();
+            this.lblNombre = new System.Windows.Forms.Label();
+            this.txtNombrePerfil = new System.Windows.Forms.TextBox();
+            this.txtMaxX = new System.Windows.Forms.MaskedTextBox();
+            this.lblMaxX = new System.Windows.Forms.Label();
+            this.txtMaxY = new System.Windows.Forms.MaskedTextBox();
+            this.lblMaxY = new System.Windows.Forms.Label();
+            this.txtMaxZ = new System.Windows.Forms.MaskedTextBox();
+            this.lblMaxZ = new System.Windows.Forms.Label();
+            this.txtMaterialNombre = new System.Windows.Forms.TextBox();
+            this.lblMaterialNombre = new System.Windows.Forms.Label();
+            this.txtMotorNombre = new System.Windows.Forms.TextBox();
+            this.lblMotorNombre = new System.Windows.Forms.Label();
+            this.btnGrabar = new System.Windows.Forms.Button();
+            this.btnCancelar = new System.Windows.Forms.Button();
+            this.btnNuevo = new System.Windows.Forms.Button();
+            this.btnGrabaMotor = new System.Windows.Forms.Button();
+            this.btnGrabaMaterial = new System.Windows.Forms.Button();
+            this.btnAltaMotor = new System.Windows.Forms.Button();
+            this.btnAltaMaterial = new System.Windows.Forms.Button();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.grpConfGral.SuspendLayout();
             this.grpTipoProgr.SuspendLayout();
             this.grpUnidadMedida.SuspendLayout();
@@ -61,29 +79,24 @@
             // 
             // grpConfGral
             // 
+            this.grpConfGral.Controls.Add(this.txtMaxZ);
+            this.grpConfGral.Controls.Add(this.lblMaxZ);
+            this.grpConfGral.Controls.Add(this.txtMaxY);
+            this.grpConfGral.Controls.Add(this.lblMaxY);
+            this.grpConfGral.Controls.Add(this.txtMaxX);
+            this.grpConfGral.Controls.Add(this.lblMaxX);
             this.grpConfGral.Controls.Add(this.btnRefresh);
             this.grpConfGral.Controls.Add(this.grpTipoProgr);
             this.grpConfGral.Controls.Add(this.grpUnidadMedida);
             this.grpConfGral.Controls.Add(this.lblPuerto);
             this.grpConfGral.Controls.Add(this.portComboBox);
             this.grpConfGral.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpConfGral.Location = new System.Drawing.Point(9, 50);
+            this.grpConfGral.Location = new System.Drawing.Point(9, 47);
             this.grpConfGral.Name = "grpConfGral";
-            this.grpConfGral.Size = new System.Drawing.Size(453, 146);
+            this.grpConfGral.Size = new System.Drawing.Size(453, 164);
             this.grpConfGral.TabIndex = 0;
             this.grpConfGral.TabStop = false;
             this.grpConfGral.Text = "Configuración General";
-            // 
-            // btnRefresh
-            // 
-            this.btnRefresh.Image = global::CNCMatic.Properties.Resources.Refresh_icon;
-            this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnRefresh.Location = new System.Drawing.Point(297, 107);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(31, 23);
-            this.btnRefresh.TabIndex = 23;
-            this.btnRefresh.UseVisualStyleBackColor = true;
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // grpTipoProgr
             // 
@@ -175,7 +188,7 @@
             // 
             this.lblPuerto.AutoSize = true;
             this.lblPuerto.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPuerto.Location = new System.Drawing.Point(71, 111);
+            this.lblPuerto.Location = new System.Drawing.Point(71, 137);
             this.lblPuerto.Name = "lblPuerto";
             this.lblPuerto.Size = new System.Drawing.Size(68, 13);
             this.lblPuerto.TabIndex = 17;
@@ -185,23 +198,21 @@
             // 
             this.portComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.portComboBox.FormattingEnabled = true;
-            this.portComboBox.Location = new System.Drawing.Point(145, 108);
+            this.portComboBox.Location = new System.Drawing.Point(145, 134);
             this.portComboBox.Name = "portComboBox";
             this.portComboBox.Size = new System.Drawing.Size(154, 21);
             this.portComboBox.TabIndex = 16;
             // 
-            // btnGrabar
-            // 
-            this.btnGrabar.Location = new System.Drawing.Point(197, 359);
-            this.btnGrabar.Name = "btnGrabar";
-            this.btnGrabar.Size = new System.Drawing.Size(75, 23);
-            this.btnGrabar.TabIndex = 1;
-            this.btnGrabar.Text = "Grabar";
-            this.btnGrabar.UseVisualStyleBackColor = true;
-            this.btnGrabar.Click += new System.EventHandler(this.btnGrabar_Click);
-            // 
             // grpConfigMaterial
             // 
+            this.grpConfigMaterial.Controls.Add(this.btnGrabaMotor);
+            this.grpConfigMaterial.Controls.Add(this.btnGrabaMaterial);
+            this.grpConfigMaterial.Controls.Add(this.txtMotorNombre);
+            this.grpConfigMaterial.Controls.Add(this.lblMotorNombre);
+            this.grpConfigMaterial.Controls.Add(this.txtMaterialNombre);
+            this.grpConfigMaterial.Controls.Add(this.lblMaterialNombre);
+            this.grpConfigMaterial.Controls.Add(this.btnAltaMotor);
+            this.grpConfigMaterial.Controls.Add(this.btnAltaMaterial);
             this.grpConfigMaterial.Controls.Add(this.txtGrados);
             this.grpConfigMaterial.Controls.Add(this.lblGrados);
             this.grpConfigMaterial.Controls.Add(this.txtVueltas);
@@ -211,9 +222,9 @@
             this.grpConfigMaterial.Controls.Add(this.lblMotor);
             this.grpConfigMaterial.Controls.Add(this.lblMaterial);
             this.grpConfigMaterial.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpConfigMaterial.Location = new System.Drawing.Point(9, 211);
+            this.grpConfigMaterial.Location = new System.Drawing.Point(9, 215);
             this.grpConfigMaterial.Name = "grpConfigMaterial";
-            this.grpConfigMaterial.Size = new System.Drawing.Size(453, 139);
+            this.grpConfigMaterial.Size = new System.Drawing.Size(453, 101);
             this.grpConfigMaterial.TabIndex = 2;
             this.grpConfigMaterial.TabStop = false;
             this.grpConfigMaterial.Text = "Configuración por Material";
@@ -221,7 +232,7 @@
             // txtGrados
             // 
             this.txtGrados.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtGrados.Location = new System.Drawing.Point(116, 101);
+            this.txtGrados.Location = new System.Drawing.Point(344, 65);
             this.txtGrados.Mask = "9999999";
             this.txtGrados.Name = "txtGrados";
             this.txtGrados.Size = new System.Drawing.Size(79, 20);
@@ -231,7 +242,7 @@
             // 
             this.lblGrados.AutoSize = true;
             this.lblGrados.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblGrados.Location = new System.Drawing.Point(21, 104);
+            this.lblGrados.Location = new System.Drawing.Point(249, 68);
             this.lblGrados.Name = "lblGrados";
             this.lblGrados.Size = new System.Drawing.Size(88, 13);
             this.lblGrados.TabIndex = 7;
@@ -240,7 +251,7 @@
             // txtVueltas
             // 
             this.txtVueltas.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtVueltas.Location = new System.Drawing.Point(116, 65);
+            this.txtVueltas.Location = new System.Drawing.Point(116, 62);
             this.txtVueltas.Mask = "9999999";
             this.txtVueltas.Name = "txtVueltas";
             this.txtVueltas.Size = new System.Drawing.Size(79, 20);
@@ -250,27 +261,25 @@
             // 
             this.cmbMotor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbMotor.FormattingEnabled = true;
-            this.cmbMotor.Location = new System.Drawing.Point(289, 27);
+            this.cmbMotor.Location = new System.Drawing.Point(278, 26);
             this.cmbMotor.Name = "cmbMotor";
             this.cmbMotor.Size = new System.Drawing.Size(121, 21);
             this.cmbMotor.TabIndex = 4;
-            
             // 
             // cmbMaterial
             // 
             this.cmbMaterial.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbMaterial.FormattingEnabled = true;
-            this.cmbMaterial.Location = new System.Drawing.Point(74, 27);
+            this.cmbMaterial.Location = new System.Drawing.Point(65, 27);
             this.cmbMaterial.Name = "cmbMaterial";
             this.cmbMaterial.Size = new System.Drawing.Size(121, 21);
             this.cmbMaterial.TabIndex = 3;
-            
             // 
             // lblVueltas
             // 
             this.lblVueltas.AutoSize = true;
             this.lblVueltas.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVueltas.Location = new System.Drawing.Point(21, 68);
+            this.lblVueltas.Location = new System.Drawing.Point(21, 65);
             this.lblVueltas.Name = "lblVueltas";
             this.lblVueltas.Size = new System.Drawing.Size(89, 13);
             this.lblVueltas.TabIndex = 2;
@@ -280,7 +289,7 @@
             // 
             this.lblMotor.AutoSize = true;
             this.lblMotor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMotor.Location = new System.Drawing.Point(236, 30);
+            this.lblMotor.Location = new System.Drawing.Point(241, 30);
             this.lblMotor.Name = "lblMotor";
             this.lblMotor.Size = new System.Drawing.Size(37, 13);
             this.lblMotor.TabIndex = 1;
@@ -290,7 +299,7 @@
             // 
             this.lblMaterial.AutoSize = true;
             this.lblMaterial.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMaterial.Location = new System.Drawing.Point(21, 30);
+            this.lblMaterial.Location = new System.Drawing.Point(12, 30);
             this.lblMaterial.Name = "lblMaterial";
             this.lblMaterial.Size = new System.Drawing.Size(47, 13);
             this.lblMaterial.TabIndex = 0;
@@ -311,15 +320,219 @@
             this.cmbConfiguracion.FormattingEnabled = true;
             this.cmbConfiguracion.Location = new System.Drawing.Point(154, 13);
             this.cmbConfiguracion.Name = "cmbConfiguracion";
-            this.cmbConfiguracion.Size = new System.Drawing.Size(240, 21);
+            this.cmbConfiguracion.Size = new System.Drawing.Size(227, 21);
             this.cmbConfiguracion.TabIndex = 4;
+            // 
+            // lblNombre
+            // 
+            this.lblNombre.AutoSize = true;
+            this.lblNombre.Location = new System.Drawing.Point(42, 54);
+            this.lblNombre.Name = "lblNombre";
+            this.lblNombre.Size = new System.Drawing.Size(89, 13);
+            this.lblNombre.TabIndex = 6;
+            this.lblNombre.Text = "Nombre del perfil:";
+            this.lblNombre.Visible = false;
+            // 
+            // txtNombrePerfil
+            // 
+            this.txtNombrePerfil.Location = new System.Drawing.Point(154, 51);
+            this.txtNombrePerfil.Name = "txtNombrePerfil";
+            this.txtNombrePerfil.Size = new System.Drawing.Size(227, 20);
+            this.txtNombrePerfil.TabIndex = 7;
+            this.txtNombrePerfil.Visible = false;
+            // 
+            // txtMaxX
+            // 
+            this.txtMaxX.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMaxX.Location = new System.Drawing.Point(61, 103);
+            this.txtMaxX.Mask = "9999999";
+            this.txtMaxX.Name = "txtMaxX";
+            this.txtMaxX.Size = new System.Drawing.Size(48, 20);
+            this.txtMaxX.TabIndex = 25;
+            // 
+            // lblMaxX
+            // 
+            this.lblMaxX.AutoSize = true;
+            this.lblMaxX.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMaxX.Location = new System.Drawing.Point(21, 106);
+            this.lblMaxX.Name = "lblMaxX";
+            this.lblMaxX.Size = new System.Drawing.Size(37, 13);
+            this.lblMaxX.TabIndex = 24;
+            this.lblMaxX.Text = "MaxX:";
+            // 
+            // txtMaxY
+            // 
+            this.txtMaxY.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMaxY.Location = new System.Drawing.Point(222, 103);
+            this.txtMaxY.Mask = "9999999";
+            this.txtMaxY.Name = "txtMaxY";
+            this.txtMaxY.Size = new System.Drawing.Size(48, 20);
+            this.txtMaxY.TabIndex = 27;
+            // 
+            // lblMaxY
+            // 
+            this.lblMaxY.AutoSize = true;
+            this.lblMaxY.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMaxY.Location = new System.Drawing.Point(182, 106);
+            this.lblMaxY.Name = "lblMaxY";
+            this.lblMaxY.Size = new System.Drawing.Size(37, 13);
+            this.lblMaxY.TabIndex = 26;
+            this.lblMaxY.Text = "MaxY:";
+            // 
+            // txtMaxZ
+            // 
+            this.txtMaxZ.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMaxZ.Location = new System.Drawing.Point(375, 103);
+            this.txtMaxZ.Mask = "9999999";
+            this.txtMaxZ.Name = "txtMaxZ";
+            this.txtMaxZ.Size = new System.Drawing.Size(48, 20);
+            this.txtMaxZ.TabIndex = 29;
+            // 
+            // lblMaxZ
+            // 
+            this.lblMaxZ.AutoSize = true;
+            this.lblMaxZ.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMaxZ.Location = new System.Drawing.Point(335, 106);
+            this.lblMaxZ.Name = "lblMaxZ";
+            this.lblMaxZ.Size = new System.Drawing.Size(37, 13);
+            this.lblMaxZ.TabIndex = 28;
+            this.lblMaxZ.Text = "MaxZ:";
+            // 
+            // txtMaterialNombre
+            // 
+            this.txtMaterialNombre.Location = new System.Drawing.Point(118, 52);
+            this.txtMaterialNombre.Name = "txtMaterialNombre";
+            this.txtMaterialNombre.Size = new System.Drawing.Size(97, 20);
+            this.txtMaterialNombre.TabIndex = 12;
+            this.txtMaterialNombre.Visible = false;
+            // 
+            // lblMaterialNombre
+            // 
+            this.lblMaterialNombre.AutoSize = true;
+            this.lblMaterialNombre.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMaterialNombre.Location = new System.Drawing.Point(18, 55);
+            this.lblMaterialNombre.Name = "lblMaterialNombre";
+            this.lblMaterialNombre.Size = new System.Drawing.Size(103, 13);
+            this.lblMaterialNombre.TabIndex = 11;
+            this.lblMaterialNombre.Text = "Nombre del material:";
+            this.lblMaterialNombre.Visible = false;
+            // 
+            // txtMotorNombre
+            // 
+            this.txtMotorNombre.Location = new System.Drawing.Point(335, 54);
+            this.txtMotorNombre.Name = "txtMotorNombre";
+            this.txtMotorNombre.Size = new System.Drawing.Size(97, 20);
+            this.txtMotorNombre.TabIndex = 14;
+            this.txtMotorNombre.Visible = false;
+            // 
+            // lblMotorNombre
+            // 
+            this.lblMotorNombre.AutoSize = true;
+            this.lblMotorNombre.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMotorNombre.Location = new System.Drawing.Point(235, 57);
+            this.lblMotorNombre.Name = "lblMotorNombre";
+            this.lblMotorNombre.Size = new System.Drawing.Size(93, 13);
+            this.lblMotorNombre.TabIndex = 13;
+            this.lblMotorNombre.Text = "Nombre del motor:";
+            this.lblMotorNombre.Visible = false;
+            // 
+            // btnGrabar
+            // 
+            this.btnGrabar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGrabar.Image = global::CNCMatic.Properties.Resources.save1;
+            this.btnGrabar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnGrabar.Location = new System.Drawing.Point(190, 322);
+            this.btnGrabar.Name = "btnGrabar";
+            this.btnGrabar.Size = new System.Drawing.Size(88, 40);
+            this.btnGrabar.TabIndex = 1;
+            this.btnGrabar.Text = "Grabar";
+            this.btnGrabar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnGrabar.UseVisualStyleBackColor = true;
+            this.btnGrabar.Click += new System.EventHandler(this.btnGrabar_Click);
+            // 
+            // btnCancelar
+            // 
+            this.btnCancelar.Image = global::CNCMatic.Properties.Resources.Cancel_icon;
+            this.btnCancelar.Location = new System.Drawing.Point(422, 3);
+            this.btnCancelar.Name = "btnCancelar";
+            this.btnCancelar.Size = new System.Drawing.Size(40, 40);
+            this.btnCancelar.TabIndex = 8;
+            this.btnCancelar.UseVisualStyleBackColor = true;
+            this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
+            // 
+            // btnNuevo
+            // 
+            this.btnNuevo.Image = global::CNCMatic.Properties.Resources.New_icon;
+            this.btnNuevo.Location = new System.Drawing.Point(382, 3);
+            this.btnNuevo.Name = "btnNuevo";
+            this.btnNuevo.Size = new System.Drawing.Size(40, 40);
+            this.btnNuevo.TabIndex = 5;
+            this.btnNuevo.UseVisualStyleBackColor = true;
+            this.btnNuevo.Click += new System.EventHandler(this.btnNuevo_Click);
+            // 
+            // btnGrabaMotor
+            // 
+            this.btnGrabaMotor.Enabled = false;
+            this.btnGrabaMotor.Image = global::CNCMatic.Properties.Resources.Ok_icon2;
+            this.btnGrabaMotor.Location = new System.Drawing.Point(422, 24);
+            this.btnGrabaMotor.Name = "btnGrabaMotor";
+            this.btnGrabaMotor.Size = new System.Drawing.Size(26, 26);
+            this.btnGrabaMotor.TabIndex = 16;
+            this.btnGrabaMotor.UseVisualStyleBackColor = true;
+            this.btnGrabaMotor.Click += new System.EventHandler(this.btnGrabaMotor_Click);
+            // 
+            // btnGrabaMaterial
+            // 
+            this.btnGrabaMaterial.Enabled = false;
+            this.btnGrabaMaterial.Image = global::CNCMatic.Properties.Resources.Ok_icon2;
+            this.btnGrabaMaterial.Location = new System.Drawing.Point(209, 23);
+            this.btnGrabaMaterial.Name = "btnGrabaMaterial";
+            this.btnGrabaMaterial.Size = new System.Drawing.Size(26, 26);
+            this.btnGrabaMaterial.TabIndex = 15;
+            this.btnGrabaMaterial.UseVisualStyleBackColor = true;
+            this.btnGrabaMaterial.Click += new System.EventHandler(this.btnGrabaMaterial_Click);
+            // 
+            // btnAltaMotor
+            // 
+            this.btnAltaMotor.Image = global::CNCMatic.Properties.Resources.New_icon2;
+            this.btnAltaMotor.Location = new System.Drawing.Point(398, 24);
+            this.btnAltaMotor.Name = "btnAltaMotor";
+            this.btnAltaMotor.Size = new System.Drawing.Size(26, 26);
+            this.btnAltaMotor.TabIndex = 10;
+            this.btnAltaMotor.UseVisualStyleBackColor = true;
+            this.btnAltaMotor.Click += new System.EventHandler(this.btnAltaMotor_Click);
+            // 
+            // btnAltaMaterial
+            // 
+            this.btnAltaMaterial.Image = global::CNCMatic.Properties.Resources.New_icon2;
+            this.btnAltaMaterial.Location = new System.Drawing.Point(185, 23);
+            this.btnAltaMaterial.Name = "btnAltaMaterial";
+            this.btnAltaMaterial.Size = new System.Drawing.Size(26, 26);
+            this.btnAltaMaterial.TabIndex = 9;
+            this.btnAltaMaterial.UseVisualStyleBackColor = true;
+            this.btnAltaMaterial.Click += new System.EventHandler(this.btnAltaMaterial_Click);
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Image = global::CNCMatic.Properties.Resources.Refresh_icon;
+            this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnRefresh.Location = new System.Drawing.Point(297, 133);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(31, 23);
+            this.btnRefresh.TabIndex = 23;
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // FrmConfiguracion
             // 
             this.AcceptButton = this.btnGrabar;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(469, 390);
+            this.ClientSize = new System.Drawing.Size(469, 377);
+            this.Controls.Add(this.btnCancelar);
+            this.Controls.Add(this.txtNombrePerfil);
+            this.Controls.Add(this.lblNombre);
+            this.Controls.Add(this.btnNuevo);
             this.Controls.Add(this.cmbConfiguracion);
             this.Controls.Add(this.lblConfig);
             this.Controls.Add(this.grpConfigMaterial);
@@ -371,5 +584,23 @@
         private System.Windows.Forms.Label lblConfig;
         private System.Windows.Forms.ComboBox cmbConfiguracion;
         private System.Windows.Forms.Button btnRefresh;
+        private System.Windows.Forms.Button btnNuevo;
+        private System.Windows.Forms.Label lblNombre;
+        private System.Windows.Forms.TextBox txtNombrePerfil;
+        private System.Windows.Forms.Button btnCancelar;
+        private System.Windows.Forms.MaskedTextBox txtMaxZ;
+        private System.Windows.Forms.Label lblMaxZ;
+        private System.Windows.Forms.MaskedTextBox txtMaxY;
+        private System.Windows.Forms.Label lblMaxY;
+        private System.Windows.Forms.MaskedTextBox txtMaxX;
+        private System.Windows.Forms.Label lblMaxX;
+        private System.Windows.Forms.Button btnAltaMaterial;
+        private System.Windows.Forms.Button btnAltaMotor;
+        private System.Windows.Forms.TextBox txtMaterialNombre;
+        private System.Windows.Forms.Label lblMaterialNombre;
+        private System.Windows.Forms.TextBox txtMotorNombre;
+        private System.Windows.Forms.Label lblMotorNombre;
+        private System.Windows.Forms.Button btnGrabaMotor;
+        private System.Windows.Forms.Button btnGrabaMaterial;
     }
 }

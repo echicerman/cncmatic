@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="iso-8859-1"?>
 <cncDb>
   <Configuraciones ultConfig="1">
     <Configuracion>
@@ -16,6 +16,10 @@
           rel: Relativa
     -->
       <TipoProgramacion>abs</TipoProgramacion>
+      <!--Coordenadas del punto maximo del area de trabajo expresadas en mm-->
+      <XMax>200</XMax>
+      <YMax>210</YMax>
+      <ZMax>100</ZMax>
       <!--ConfigsMatMot: contiene todas las configuraciones de material/motor
       -->
       <ConfigsMatMot>
@@ -35,8 +39,17 @@
         </ConfigMatMot>
       </ConfigsMatMot>
     </Configuracion>
+    <Configuracion>
+      <idConfig>2</idConfig>
+      <descripcion>qwertyui</descripcion>
+      <puerto></puerto>
+      <UnidadMedida>mm</UnidadMedida>
+      <TipoProgramacion>abs</TipoProgramacion>
+      <XMax>12</XMax>
+      <YMax>3</YMax>
+      <ZMax>2</ZMax>
+    </Configuracion>
   </Configuraciones>
-
   <!--Motores: guarda los motores configuradas-->
   <Motores>
     <Motor>
@@ -46,6 +59,18 @@
     <Motor>
       <idMotor>2</idMotor>
       <descripcion>Motor2</descripcion>
+    </Motor>
+    <Motor>
+      <idMotor>5</idMotor>
+      <descripcion>xxxxx</descripcion>
+    </Motor>
+    <Motor>
+      <idMotor>6</idMotor>
+      <descripcion>ertertet</descripcion>
+    </Motor>
+    <Motor>
+      <idMotor>7</idMotor>
+      <descripcion>Motor Nuevo</descripcion>
     </Motor>
   </Motores>
   <!--Materiales: guarda los materiales configuradas-->

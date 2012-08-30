@@ -88,6 +88,13 @@ namespace CNCMatic.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Cancel_icon {
+            get {
+                object obj = ResourceManager.GetObject("Cancel-icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap circle_icon {
             get {
                 object obj = ResourceManager.GetObject("circle-icon", resourceCulture);
@@ -179,6 +186,27 @@ namespace CNCMatic.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap New_icon {
+            get {
+                object obj = ResourceManager.GetObject("New-icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap New_icon2 {
+            get {
+                object obj = ResourceManager.GetObject("New-icon2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Ok_icon2 {
+            get {
+                object obj = ResourceManager.GetObject("Ok-icon2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap OpenFolder {
             get {
                 object obj = ResourceManager.GetObject("OpenFolder", resourceCulture);
@@ -217,6 +245,13 @@ namespace CNCMatic.Properties {
         internal static System.Drawing.Bitmap Refresh_icon {
             get {
                 object obj = ResourceManager.GetObject("Refresh-icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap save1 {
+            get {
+                object obj = ResourceManager.GetObject("save1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -162,11 +163,16 @@
     <Content Include="img\stop.png" />
     <None Include="Resources\Refresh-icon.png" />
     <None Include="Resources\brush-icon %281%29.png" />
+    <None Include="Resources\Cancel-icon.png" />
     <Content Include="Resources\Color.bmp" />
     <Content Include="Resources\DisplayOpts.bmp" />
     <Content Include="Resources\EditInformation.bmp" />
+    <None Include="Resources\New-icon.png" />
+    <None Include="Resources\New-icon2.png" />
+    <None Include="Resources\Ok-icon2.png" />
     <Content Include="Resources\OpenFolder.bmp" />
     <Content Include="Resources\Refresh.png" />
+    <None Include="Resources\save1.png" />
     <Content Include="Resources\screens1.bmp" />
     <Content Include="Resources\screens2.bmp" />
     <Content Include="Resources\screens4.bmp" />
@@ -183,7 +189,6 @@
     <Content Include="Resources\viewzoom.bmp" />
     <Content Include="Resources\web.bmp" />
     <Content Include="xmlDB.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\Actions-layer-visible-on-icon2.png" />
     <None Include="Resources\Actions-layer-visible-on-icon.png" />

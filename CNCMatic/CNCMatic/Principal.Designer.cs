@@ -104,6 +104,11 @@
             this.tsbFit = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbSelect = new System.Windows.Forms.ToolStripButton();
+            this.tsbView = new System.Windows.Forms.ToolStripDropDownButton();
+            this.mnuTop = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuFront = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuRight = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuIsometric = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.Coordinates = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
@@ -112,11 +117,6 @@
             this.tblScreens = new System.Windows.Forms.TableLayoutPanel();
             this.btnLimpiar = new System.Windows.Forms.Button();
             this.CodeTip = new System.Windows.Forms.ToolTip(this.components);
-            this.tsbView = new System.Windows.Forms.ToolStripDropDownButton();
-            this.mnuTop = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuFront = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuRight = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuIsometric = new System.Windows.Forms.ToolStripMenuItem();
             this.gbPosicionActual.SuspendLayout();
             this.gbMovZ.SuspendLayout();
             this.gbMovXY.SuspendLayout();
@@ -574,6 +574,7 @@
             this.btnPlay.Size = new System.Drawing.Size(71, 76);
             this.btnPlay.TabIndex = 23;
             this.btnPlay.UseVisualStyleBackColor = false;
+            this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
             // 
             // btnPause
             // 
@@ -870,63 +871,6 @@
             this.tsbSelect.Text = "Seleccionar";
             this.tsbSelect.Click += new System.EventHandler(this.ViewButtonClicked);
             // 
-            // toolStripSeparator8
-            // 
-            this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 25);
-            // 
-            // Coordinates
-            // 
-            this.Coordinates.Name = "Coordinates";
-            this.Coordinates.Size = new System.Drawing.Size(0, 22);
-            // 
-            // toolStripSeparator9
-            // 
-            this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(6, 25);
-            // 
-            // lblStatus
-            // 
-            this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(0, 22);
-            // 
-            // grpPrevisualizacion
-            // 
-            this.grpPrevisualizacion.Location = new System.Drawing.Point(0, 0);
-            this.grpPrevisualizacion.Name = "grpPrevisualizacion";
-            this.grpPrevisualizacion.Size = new System.Drawing.Size(200, 100);
-            this.grpPrevisualizacion.TabIndex = 0;
-            this.grpPrevisualizacion.TabStop = false;
-            // 
-            // tblScreens
-            // 
-            this.tblScreens.BackColor = System.Drawing.Color.Black;
-            this.tblScreens.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
-            this.tblScreens.ColumnCount = 1;
-            this.tblScreens.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblScreens.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tblScreens.Location = new System.Drawing.Point(0, 0);
-            this.tblScreens.Margin = new System.Windows.Forms.Padding(0);
-            this.tblScreens.Name = "tblScreens";
-            this.tblScreens.RowCount = 1;
-            this.tblScreens.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tblScreens.Size = new System.Drawing.Size(200, 100);
-            this.tblScreens.TabIndex = 0;
-            // 
-            // btnLimpiar
-            // 
-            this.btnLimpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLimpiar.Image = global::CNCMatic.Properties.Resources.brush_icon__1_;
-            this.btnLimpiar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnLimpiar.Location = new System.Drawing.Point(432, 375);
-            this.btnLimpiar.Name = "btnLimpiar";
-            this.btnLimpiar.Size = new System.Drawing.Size(79, 39);
-            this.btnLimpiar.TabIndex = 7;
-            this.btnLimpiar.Text = "Limpiar";
-            this.btnLimpiar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnLimpiar.UseVisualStyleBackColor = true;
-            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
-            // 
             // tsbView
             // 
             this.tsbView.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -984,6 +928,63 @@
             this.mnuIsometric.Tag = "Isometrica";
             this.mnuIsometric.Text = "&Isometrica";
             this.mnuIsometric.Click += new System.EventHandler(this.mnuViewOrient_Click);
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 25);
+            // 
+            // Coordinates
+            // 
+            this.Coordinates.Name = "Coordinates";
+            this.Coordinates.Size = new System.Drawing.Size(0, 22);
+            // 
+            // toolStripSeparator9
+            // 
+            this.toolStripSeparator9.Name = "toolStripSeparator9";
+            this.toolStripSeparator9.Size = new System.Drawing.Size(6, 25);
+            // 
+            // lblStatus
+            // 
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(0, 22);
+            // 
+            // grpPrevisualizacion
+            // 
+            this.grpPrevisualizacion.Location = new System.Drawing.Point(0, 0);
+            this.grpPrevisualizacion.Name = "grpPrevisualizacion";
+            this.grpPrevisualizacion.Size = new System.Drawing.Size(200, 100);
+            this.grpPrevisualizacion.TabIndex = 0;
+            this.grpPrevisualizacion.TabStop = false;
+            // 
+            // tblScreens
+            // 
+            this.tblScreens.BackColor = System.Drawing.Color.Black;
+            this.tblScreens.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
+            this.tblScreens.ColumnCount = 1;
+            this.tblScreens.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tblScreens.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tblScreens.Location = new System.Drawing.Point(0, 0);
+            this.tblScreens.Margin = new System.Windows.Forms.Padding(0);
+            this.tblScreens.Name = "tblScreens";
+            this.tblScreens.RowCount = 1;
+            this.tblScreens.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tblScreens.Size = new System.Drawing.Size(200, 100);
+            this.tblScreens.TabIndex = 0;
+            // 
+            // btnLimpiar
+            // 
+            this.btnLimpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLimpiar.Image = global::CNCMatic.Properties.Resources.brush_icon__1_;
+            this.btnLimpiar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnLimpiar.Location = new System.Drawing.Point(432, 375);
+            this.btnLimpiar.Name = "btnLimpiar";
+            this.btnLimpiar.Size = new System.Drawing.Size(79, 39);
+            this.btnLimpiar.TabIndex = 7;
+            this.btnLimpiar.Text = "Limpiar";
+            this.btnLimpiar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnLimpiar.UseVisualStyleBackColor = true;
+            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
             // 
             // Principal
             // 

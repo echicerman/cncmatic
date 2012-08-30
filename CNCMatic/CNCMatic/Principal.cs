@@ -23,6 +23,7 @@ namespace CNCMatic
         private clsProcessor mProcessor = clsProcessor.Instance();
         private clsSettings mSetup = clsSettings.Instance();
         private MG_CS_BasicViewer mViewer;
+        public int proxLinea;
 
         public class RepeatButton : System.Windows.Forms.Button
         {
@@ -86,6 +87,8 @@ namespace CNCMatic
             mSetup.LoadAllMachines(System.IO.Directory.GetCurrentDirectory() + "\\Data");
             mProcessor.Init(mSetup.Machine);
 
+            //proxima linea a transmitir
+            proxLinea = 0;
         }
 
 
@@ -606,9 +609,7 @@ namespace CNCMatic
             mViewer.BreakPoint = BreakPointSlider.Value;
             mViewer.Redraw(true);
         }
-
-
-
+        
         private void OpenFile(string fileName)
         {
             long[] ticks = new long[2];
@@ -628,7 +629,30 @@ namespace CNCMatic
             ticks[1] = DateTime.Now.Ticks;
             MG_Viewer1.DynamicViewManipulation = (ticks[1] - ticks[0]) < 2000000;
             mViewer.Redraw(true);
-        } 
+        }
+
+        private void btnPlay_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DialogResult respuesta = MessageBox.Show("¿Desea conectar con la maquina CNC?", "Conectar CNC", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                if (DialogResult.Yes == respuesta)
+                {
+                    FrmComunicacion enlace = new FrmComunicacion();
+                    enlace.Show(this);
+                    enlace.IniciarTransmision();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Se ha producido un error: " + ex.Message, "CNC Matic", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public string proximaInstruccion()
+        {
+            return txtPreview.Lines[this.proxLinea++];
+        }
     }
 
 }

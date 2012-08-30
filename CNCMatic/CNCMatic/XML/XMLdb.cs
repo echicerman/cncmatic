@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace CNCMatic.XML
 {
@@ -15,7 +16,7 @@ namespace CNCMatic.XML
         public XMLdb(string filePath)
         {
             this.filePath = filePath;
-            
+
             this.settings = new XmlReaderSettings();
 
             this.settings.IgnoreWhitespace = true;
@@ -24,7 +25,40 @@ namespace CNCMatic.XML
             this.settings.ProhibitDtd = true;
             this.settings.CloseInput = true;
         }
-        
+
+        public void GrabaConfiguracion(XML_Config config)
+        {
+
+            XDocument doc = XDocument.Load(this.filePath);
+            XElement configNodo = new XElement("Configuracion");
+            configNodo.Add(new XElement("descripcion",config.Descripcion));
+            configNodo.Add(new XElement("puerto",config.PuertoCom));
+            configNodo.Add(new XElement("UnidadMedida", config.UnidadMedida));
+            configNodo.Add(new XElement("TipoProgramacion",config.TipoProg));
+            configNodo.Add(new XElement("XMax",config.MaxX.ToString()));
+            configNodo.Add(new XElement("YMax",config.MaxY.ToString()));
+            configNodo.Add(new XElement("ZMax",config.MaxZ.ToString()));
+
+            
+            doc.Descendants("Configuraciones").Single().Add(configNodo);
+            
+            doc.Save(this.filePath);
+            
+            
+        }
+
+        public void GrabaMotor(XML_Motor motor)
+        {
+            XDocument doc = XDocument.Load(this.filePath);
+            XElement motorNodo = new XElement("Motor");
+            motorNodo.Add(new XElement("idMotor", motor.Id));
+            motorNodo.Add(new XElement("descripcion", motor.Descripcion));
+
+            doc.Descendants("Motores").Single().Add(motorNodo);
+
+            doc.Save(this.filePath);
+        }
+
         public List<XML_Config> LeeConfiguracion()
         {
 
@@ -36,7 +70,7 @@ namespace CNCMatic.XML
 
             XML_Config c;
             List<XML_Config> cs = new List<XML_Config>();
-
+           
             while (reader.ReadToFollowing("Configuracion"))
             {
                 //XmlReader motor=motores.ReadSubtree();
@@ -48,6 +82,9 @@ namespace CNCMatic.XML
                 c.PuertoCom = reader.ReadElementContentAsString();
                 c.UnidadMedida = reader.ReadElementContentAsString();
                 c.TipoProg = reader.ReadElementContentAsString();
+                c.MaxX = reader.ReadElementContentAsDecimal();
+                c.MaxY = reader.ReadElementContentAsDecimal();
+                c.MaxZ = reader.ReadElementContentAsDecimal();
                 //
                 XML_ConfigMatMot configMatMot;
                 while (reader.ReadToFollowing("ConfigMatMot"))
@@ -99,7 +136,7 @@ namespace CNCMatic.XML
             }
             reader.Close();
             return ms;
-            
+
         }
 
         public List<XML_Motor> LeerMotores()
@@ -135,6 +172,9 @@ namespace CNCMatic.XML
         private string puertoCom;
         private string tipoProg;
         private string unidadMedida;
+        private decimal maxX;
+        private decimal maxY;
+        private decimal maxZ;
         private List<XML_ConfigMatMot> configMatMot;
 
         public int Id
@@ -161,6 +201,21 @@ namespace CNCMatic.XML
         {
             get { return unidadMedida; }
             set { unidadMedida = value; }
+        }
+        public decimal MaxX
+        {
+            get { return maxX; }
+            set { maxX = value; }
+        }
+        public decimal MaxY
+        {
+            get { return maxY; }
+            set { maxY = value; }
+        }
+        public decimal MaxZ
+        {
+            get { return maxZ; }
+            set { maxZ = value; }
         }
         public List<XML_ConfigMatMot> ConfigMatMot
         {
@@ -225,6 +280,7 @@ namespace CNCMatic.XML
             get { return descripcion; }
             set { descripcion = value; }
         }
+
 
     }
 

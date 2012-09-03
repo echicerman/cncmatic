@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Text; 
 
 namespace G.Objetos
 {
@@ -12,7 +12,6 @@ namespace G.Objetos
     {
         #region propiedades privadas
         private Punto inicio;
-        private Punto fin;
         private float radio;
         #endregion
 
@@ -24,7 +23,6 @@ namespace G.Objetos
         public G02_CirculoH()
         {
             this.inicio = new Punto(0, 0, 0);
-            this.fin = new Punto(0, 0, 0);
             this.radio = 0;
             this._moveCode = MovesCodes.circuloHorario;
         }
@@ -47,24 +45,6 @@ namespace G.Objetos
             set { this.Inicio.Z = value; }
         }
 
-        public float Fin_X
-        {
-            get { return this.Fin.X; }
-            set { this.Fin.X = value; }
-        }
-
-        public float Fin_Y
-        {
-            get { return this.Fin.Y; }
-            set { this.Fin.Y = value; }
-        }
-
-        public float Fin_Z
-        {
-            get { return this.Fin.Z; }
-            set { this.Fin.Z = value; }
-        }
-
         #endregion
 
         #region propiedades publicas
@@ -77,14 +57,14 @@ namespace G.Objetos
             set { this.inicio = value; }
         }
 
-        /// <summary>
-        /// Punto de fin
-        /// </summary>
-        public Punto Fin
-        {
-            get { return this.fin; }
-            set { this.fin = value; }
-        }
+        ///// <summary>
+        ///// Punto de fin
+        ///// </summary>
+        //public Punto Fin
+        //{
+        //    get { return this.fin; }
+        //    set { this.fin = value; }
+        //}
 
         /// <summary>
         /// Valor del radio
@@ -109,17 +89,14 @@ namespace G.Objetos
         {
             string s = "";
 
-            //si algun parametro no es nulo
-            if (this.Fin.X != 0 || this.Fin.Y != 0 || this.Fin.Z != 0)
-            {
-                s += " X" + this.Fin.X.ToString("F4");
-                s += " Y" + this.Fin.Y.ToString("F4");
-                s += " R" + this.radio.ToString("F4");
-            }
-
-            //si se va a generar la linea sumamos el codigo del movimiento
-            if (s != "")
-                s = this.MoveCode + s;
+            //Voy al punto de de inicio (que coincide con el de fin)
+            s += "G00 X" + this.Inicio.X.ToString("F4");
+            s += " Y" + this.Inicio.Y.ToString("F4") + Environment.NewLine;
+            //Dibujo el Circulo
+            s += this.MoveCode;
+            s += " X" + this.Inicio.X.ToString("F4");
+            s += " Y" + this.Inicio.Y.ToString("F4");
+            s += " R" + this.radio.ToString("F4");
 
             return s;
         }

@@ -165,6 +165,12 @@ namespace CNCMatic
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             AgregaTextoEditor(true, "");
+            this.LimpiarPrevisualizador();
+        }
+
+        private void LimpiarPrevisualizador()
+        {
+            OpenFile(System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Mill.cnc");
         }
 
         private void btnStop2_Click(object sender, EventArgs e)
@@ -202,15 +208,58 @@ namespace CNCMatic
                 List<string> sl = Traduce.Lineas(doc.Lineas);
                 List<string> sa = Traduce.Arcos(doc.Arcos);
 
+                //Creo un archivo temporal para previsualizar
+                string curTempFileName = System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Temp" ;
 
-                foreach (string s in sl)
-                    AgregaTextoEditor(false, s);
-                foreach (string s in sa)
-                    AgregaTextoEditor(false, s);
+                using (StreamWriter sw = File.CreateText(curTempFileName))
+                {
+                    foreach (string s in sl)
+                    {
+                        AgregaTextoEditor(false, s);
+                        sw.WriteLine(s);
+                    }
+                   foreach (string s in sa)
+                    {
+                        AgregaTextoEditor(false, s);
+                        //sw.WriteLine(s);
+                    }
+                   sw.Close();
+                    OpenFile(curTempFileName);
+                }
+
+                
             }
 
 
         }
+
+        //***************************************
+
+        static void crearArchivoTemp()
+        {
+
+            string curTempFileName = "";
+
+            curTempFileName = Path.GetTempFileName();
+
+            //Ahora creamos fisicamente el archivo
+
+            using (StreamWriter sw = File.CreateText(curTempFileName))
+            {
+
+                sw.WriteLine("Primera linea del archivo");
+
+                sw.Close();
+
+            }
+
+            Console.WriteLine("Se ha creado el archivo temporal satisfactoriamente!!");
+
+            Console.ReadLine();
+
+        }
+
+        //*******************************************
 
         private void gCodeFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -224,14 +273,17 @@ namespace CNCMatic
                 foreach (string s in lineas)
                     this.txtPreview.Text += (s + Environment.NewLine);
 
-                string mensaje = "¿Desea que el sistema intente optimizar el código G importado? Atención: esta operación podría variar el orden de fresado preestablecido.";
+                //Muestra codigo en el previsualizador
+                OpenFile(importaG.FileName);
 
-                DialogResult r = MessageBox.Show(mensaje, "Optimización de código G", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                //string mensaje = "¿Desea que el sistema intente optimizar el código G importado? Atención: esta operación podría variar el orden de fresado preestablecido.";
 
-                if (r == DialogResult.Yes)
-                {
-                    //lanzamos optimizacion de código G
-                }
+                //DialogResult r = MessageBox.Show(mensaje, "Optimización de código G", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+
+                //if (r == DialogResult.Yes)
+                //{
+                //    //lanzamos optimizacion de código G
+                //}
 
             }
 
@@ -265,16 +317,34 @@ namespace CNCMatic
 
             AgregaTextoEditor(false, g.ToString());
 
+            //Muestra figura en el previsualizador
+            PrevisualizarFigurasManual();
         }
 
         private void btnArco_Click(object sender, EventArgs e)
         {
-            G02_CirculoH g;
+            G02_Arco g;
 
             FrmDibujoParams dibujoParams = new FrmDibujoParams(out g);
             dibujoParams.ShowDialog();
 
             AgregaTextoEditor(false, g.ToString());
+
+            //Muestra figura en el previsualizador
+            PrevisualizarFigurasManual();
+            
+        }
+
+        private void PrevisualizarFigurasManual() 
+        {
+            string curTempFileName = System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Temp";
+
+            using (StreamWriter sw = File.CreateText(curTempFileName))
+            {
+                sw.WriteLine(txtPreview.Text);
+                sw.Close();
+                OpenFile(curTempFileName);
+            }  
         }
 
         private void btnCirculo_Click(object sender, EventArgs e)
@@ -285,6 +355,11 @@ namespace CNCMatic
             dibujoParams.ShowDialog();
 
             AgregaTextoEditor(false, g.ToString());
+
+            //string curTempFileName = System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Temp";
+
+            //Muestra figura en el previsualizador
+            PrevisualizarFigurasManual();
         }
 
         private void btnEsfera_Click(object sender, EventArgs e)
@@ -310,7 +385,6 @@ namespace CNCMatic
                 this.Size = Properties.Settings.Default.ViewFormSize;
             }
 
-            OpenFile(System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Mill.cnc"); 
             SetDefaultViews();
             Properties.Settings.Default.Virgin = false;
         }
@@ -352,6 +426,15 @@ namespace CNCMatic
             catch (Exception ex)
             {
                 MessageBox.Show("Se ha producido un error: " + ex.Message, "Guardar como...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void IniciarFresado(object sender, EventArgs e)
+        {
+            this.Refresh();
+            if (OpenFileDialog1.FileName.Length > 0)
+            {
+                OpenFile(OpenFileDialog1.FileName);
             }
         }
 
@@ -609,6 +692,16 @@ namespace CNCMatic
             mViewer.BreakPoint = BreakPointSlider.Value;
             mViewer.Redraw(true);
         }
+
+        private void tsbOpen_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog1.ShowDialog();
+            this.Refresh();
+            if (OpenFileDialog1.FileName.Length > 0)
+            {
+                OpenFile(OpenFileDialog1.FileName);
+            }
+        }
         
         private void OpenFile(string fileName)
         {
@@ -632,21 +725,28 @@ namespace CNCMatic
         }
 
         private void btnPlay_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                DialogResult respuesta = MessageBox.Show("¿Desea conectar con la maquina CNC?", "Conectar CNC", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
-                if (DialogResult.Yes == respuesta)
-                {
-                    FrmComunicacion enlace = new FrmComunicacion();
-                    enlace.Show(this);
-                    enlace.IniciarTransmision();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Se ha producido un error: " + ex.Message, "CNC Matic", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+         {
+
+            this.LimpiarPrevisualizador();
+            PrevisualizarFigurasManual();
+
+            //Muestra codigo en el previsualizador
+            //OpenFile(importaG.FileName);
+
+            //try
+            //{
+            //    DialogResult respuesta = MessageBox.Show("¿Desea conectar con la maquina CNC?", "Conectar CNC", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+            //    if (DialogResult.Yes == respuesta)
+            //    {
+            //        FrmComunicacion enlace = new FrmComunicacion();
+            //        enlace.Show(this);
+            //        enlace.IniciarTransmision();
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Se ha producido un error: " + ex.Message, "CNC Matic", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
         }
 
         public string proximaInstruccion()

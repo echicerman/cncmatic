@@ -41,6 +41,18 @@ namespace CNCMatic
             this.lblMensaje.Text = "Ingrese los parametros para dibujar el circulo:";
         }
 
+        public FrmDibujoParams(out G02_Arco g)
+        {
+            InitializeComponent();
+
+            g = new G02_Arco();
+
+            propiedades.SelectedObject = g;
+
+            this.Text = "Parametros Arco";
+            this.lblMensaje.Text = "Ingrese los parametros para dibujar el arco:";
+        }
+
 
         private void btnOK_Click(object sender, EventArgs e)
         {

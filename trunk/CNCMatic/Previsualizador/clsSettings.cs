@@ -278,18 +278,20 @@ public class clsSettings
     { 
         int ln = 0; 
         System.Text.StringBuilder sb = new System.Text.StringBuilder(); 
-        string sTemp = null; 
-        System.IO.StreamReader fileReader = default(System.IO.StreamReader); 
-        if (mMachines.Count == 0) { 
-            Machine = null; 
-            return; 
-        } 
+        string sTemp = null;
+        System.IO.StreamReader fileReader = default(System.IO.StreamReader);
+        if (mMachines.Count == 0)
+        {
+            Machine = null;
+            return;
+        }
         //Open CNC file and get 50 lines of text 
         fileReader = new System.IO.StreamReader(sFullfile);
-        while (fileReader.Peek() >= 0) { 
+        while (fileReader.Peek() >= 0)
+        {
             if (ln >= 50) break;
-            sb.Append(fileReader.ReadLine()); 
-            ln += 1; 
+            sb.Append(fileReader.ReadLine());  
+        ln += 1; 
         } 
         fileReader.Close(); 
         sTemp = sb.ToString(); 

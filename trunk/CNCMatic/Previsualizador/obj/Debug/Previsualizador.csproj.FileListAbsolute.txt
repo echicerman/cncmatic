@@ -16,3 +16,39 @@ D:\UTNProyecto\CNCMatic\CNCMatic\Previsualizador\obj\Debug\Previsualizador.Prope
 D:\UTNProyecto\CNCMatic\CNCMatic\Previsualizador\obj\Debug\Previsualizador.csproj.GenerateResource.Cache
 D:\UTNProyecto\CNCMatic\CNCMatic\Previsualizador\obj\Debug\Previsualizador.dll
 D:\UTNProyecto\CNCMatic\CNCMatic\Previsualizador\obj\Debug\Previsualizador.pdb
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\Descargas SVN\CNCMatic\Previsualizador\bin\Debug\Previsualizador.dll
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\Descargas SVN\CNCMatic\Previsualizador\bin\Debug\Previsualizador.pdb
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\Descargas SVN\CNCMatic\Previsualizador\bin\Debug\CSharpBasicViewerControl.dll
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\Descargas SVN\CNCMatic\Previsualizador\bin\Debug\CSharpBasicViewerControl.pdb
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\Descargas SVN\CNCMatic\Previsualizador\obj\Debug\ResolveAssemblyReference.cache
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\Descargas SVN\CNCMatic\Previsualizador\obj\Debug\Previsualizador.Properties.Resources.resources
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\Descargas SVN\CNCMatic\Previsualizador\obj\Debug\Previsualizador.csproj.GenerateResource.Cache
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\Descargas SVN\CNCMatic\Previsualizador\obj\Debug\Previsualizador.dll
+E:\Mis Dcocumentos\Facultad UTN\Proyecto\Descargas SVN\CNCMatic\Previsualizador\obj\Debug\Previsualizador.pdb
+C:\Users\Nicolás\Desktop\Proyecto CNCMatic\CNCMatic\Previsualizador\bin\Debug\Previsualizador.dll
+C:\Users\Nicolás\Desktop\Proyecto CNCMatic\CNCMatic\Previsualizador\bin\Debug\Previsualizador.pdb
+C:\Users\Nicolás\Desktop\Proyecto CNCMatic\CNCMatic\Previsualizador\bin\Debug\CSharpBasicViewerControl.dll
+C:\Users\Nicolás\Desktop\Proyecto CNCMatic\CNCMatic\Previsualizador\bin\Debug\CSharpBasicViewerControl.pdb
+C:\Users\Nicolás\Desktop\Proyecto CNCMatic\CNCMatic\Previsualizador\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Nicolás\Desktop\Proyecto CNCMatic\CNCMatic\Previsualizador\obj\Debug\Previsualizador.Properties.Resources.resources
+C:\Users\Nicolás\Desktop\Proyecto CNCMatic\CNCMatic\Previsualizador\obj\Debug\Previsualizador.csproj.GenerateResource.Cache
+C:\Users\Nicolás\Desktop\Proyecto CNCMatic\CNCMatic\Previsualizador\obj\Debug\Previsualizador.dll
+C:\Users\Nicolás\Desktop\Proyecto CNCMatic\CNCMatic\Previsualizador\obj\Debug\Previsualizador.pdb
+D:\Documentos\Facultad\Proyecto\Proyecto CNCMatic\CNCMatic\Previsualizador\bin\Debug\Previsualizador.dll
+D:\Documentos\Facultad\Proyecto\Proyecto CNCMatic\CNCMatic\Previsualizador\bin\Debug\Previsualizador.pdb
+D:\Documentos\Facultad\Proyecto\Proyecto CNCMatic\CNCMatic\Previsualizador\bin\Debug\CSharpBasicViewerControl.dll
+D:\Documentos\Facultad\Proyecto\Proyecto CNCMatic\CNCMatic\Previsualizador\bin\Debug\CSharpBasicViewerControl.pdb
+D:\Documentos\Facultad\Proyecto\Proyecto CNCMatic\CNCMatic\Previsualizador\obj\Debug\ResolveAssemblyReference.cache
+D:\Documentos\Facultad\Proyecto\Proyecto CNCMatic\CNCMatic\Previsualizador\obj\Debug\Previsualizador.Properties.Resources.resources
+D:\Documentos\Facultad\Proyecto\Proyecto CNCMatic\CNCMatic\Previsualizador\obj\Debug\Previsualizador.csproj.GenerateResource.Cache
+D:\Documentos\Facultad\Proyecto\Proyecto CNCMatic\CNCMatic\Previsualizador\obj\Debug\Previsualizador.dll
+D:\Documentos\Facultad\Proyecto\Proyecto CNCMatic\CNCMatic\Previsualizador\obj\Debug\Previsualizador.pdb
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Previsualizador\bin\Debug\Previsualizador.dll
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Previsualizador\bin\Debug\Previsualizador.pdb
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Previsualizador\bin\Debug\CSharpBasicViewerControl.dll
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Previsualizador\bin\Debug\CSharpBasicViewerControl.pdb
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Previsualizador\obj\Debug\ResolveAssemblyReference.cache
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Previsualizador\obj\Debug\Previsualizador.Properties.Resources.resources
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Previsualizador\obj\Debug\Previsualizador.csproj.GenerateResource.Cache
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Previsualizador\obj\Debug\Previsualizador.dll
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Previsualizador\obj\Debug\Previsualizador.pdb

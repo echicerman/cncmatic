@@ -51,10 +51,10 @@ namespace G.Servicios
             if (comando == "")
                 return false;
 
-            //que solo inicie con g o m
-            if (!comando.StartsWith("g", true, null)
-                && !comando.StartsWith("m", true, null))
-                return false;
+            //que solo inicie con g o m  --> Por el momento no cumple ya que puede empezar con N (según ejemplo sample.cnc)
+            //if (!comando.StartsWith("g", true, null)
+            //    && !comando.StartsWith("m", true, null))
+            //    return false;
                         
             //todo OK
             return true;

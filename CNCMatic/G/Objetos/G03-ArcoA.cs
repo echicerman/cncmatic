@@ -5,7 +5,7 @@ using System.Text;
 
 namespace G.Objetos
 {
-   public class G02_Arco: Gcode
+   public class G03_ArcoA: Gcode
     {
         #region propiedades privadas
         private Punto inicio;
@@ -18,12 +18,12 @@ namespace G.Objetos
         /// <summary>
         /// Inicializa una nueva instancia de la clase <c>G02_Arco</c>
         /// </summary>
-        public G02_Arco()
+        public G03_ArcoA()
         {
             this.inicio = new Punto(0, 0, 0);
             this.fin = new Punto(0, 0, 0);
             this.radio = 0;
-            this._moveCode = MovesCodes.circuloHorario;
+            this._moveCode = MovesCodes.circuloAntihorario;
         }
 
         public float Inicio_X
@@ -105,15 +105,12 @@ namespace G.Objetos
         public override string ToString()
         {
             string s = "";
-
-            //Voy al punto de de inicio (que coincide con el de fin)
-            s += "G00 X" + this.Inicio.X.ToString();
-            s += " Y" + this.Inicio.Y.ToString() + Environment.NewLine;
             //Dibujo el Arco
             s += this.MoveCode;
             s += " X" + this.Fin.X.ToString();
             s += " Y" + this.Fin.Y.ToString();
-            s += " R" + ((int)Math.Round(this.radio * 10)).ToString();
+            s += " Z" + this.Fin_Z.ToString();
+            s += " R" + this.radio.ToString();
             
 
             return s;

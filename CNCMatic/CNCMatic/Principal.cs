@@ -207,6 +207,7 @@ namespace CNCMatic
 
                 List<string> sl = Traduce.Lineas(doc.Lineas);
                 List<string> sa = Traduce.Arcos(doc.Arcos);
+                List<string> sc = Traduce.Circulos(doc.Circulos);
 
                 //Creo un archivo temporal para previsualizar
                 string curTempFileName = System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Temp" ;
@@ -223,6 +224,11 @@ namespace CNCMatic
                         AgregaTextoEditor(false, s);
                         sw.WriteLine(s);
                     }
+                   foreach (string s in sc)
+                   {
+                       AgregaTextoEditor(false, s);
+                       sw.WriteLine(s);
+                   }
                    sw.Close();
                     OpenFile(curTempFileName);
                 }
@@ -323,7 +329,7 @@ namespace CNCMatic
 
         private void btnArco_Click(object sender, EventArgs e)
         {
-            G02_Arco g;
+            G02_ArcoH g;
 
             FrmDibujoParams dibujoParams = new FrmDibujoParams(out g);
             dibujoParams.ShowDialog();
@@ -729,24 +735,6 @@ namespace CNCMatic
 
             this.LimpiarPrevisualizador();
             PrevisualizarFigurasManual();
-
-            //Muestra codigo en el previsualizador
-            //OpenFile(importaG.FileName);
-
-            //try
-            //{
-            //    DialogResult respuesta = MessageBox.Show("¿Desea conectar con la maquina CNC?", "Conectar CNC", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
-            //    if (DialogResult.Yes == respuesta)
-            //    {
-            //        FrmComunicacion enlace = new FrmComunicacion();
-            //        enlace.Show(this);
-            //        enlace.IniciarTransmision();
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("Se ha producido un error: " + ex.Message, "CNC Matic", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
         }
 
         public string proximaInstruccion()

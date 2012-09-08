@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text; 
+using System.Text;
 
 namespace G.Objetos
 {
-    /// <summary>
-    /// Clase que representa G02 - Circulo en sentido horario
-    /// </summary>
-    public class G02_CirculoH : Gcode
+   public class G02_ArcoH: Gcode
     {
         #region propiedades privadas
         private Punto inicio;
+        private Punto fin;
         private float radio;
         #endregion
 
         #region constructores
 
         /// <summary>
-        /// Inicializa una nueva instancia de la clase <c>G02_CirculoH</c>
+        /// Inicializa una nueva instancia de la clase <c>G02_Arco</c>
         /// </summary>
-        public G02_CirculoH()
+        public G02_ArcoH()
         {
             this.inicio = new Punto(0, 0, 0);
+            this.fin = new Punto(0, 0, 0);
             this.radio = 0;
             this._moveCode = MovesCodes.circuloHorario;
+            
         }
 
         public float Inicio_X
@@ -45,6 +45,24 @@ namespace G.Objetos
             set { this.Inicio.Z = value; }
         }
 
+        public float Fin_X
+        {
+            get { return this.Fin.X; }
+            set { this.Fin.X = value; }
+        }
+
+        public float Fin_Y
+        {
+            get { return this.Fin.Y; }
+            set { this.Fin.Y = value; }
+        }
+
+        public float Fin_Z
+        {
+            get { return this.Fin.Z; }
+            set { this.Fin.Z = value; }
+        }
+
         #endregion
 
         #region propiedades publicas
@@ -57,14 +75,14 @@ namespace G.Objetos
             set { this.inicio = value; }
         }
 
-        ///// <summary>
-        ///// Punto de fin
-        ///// </summary>
-        //public Punto Fin
-        //{
-        //    get { return this.fin; }
-        //    set { this.fin = value; }
-        //}
+        /// <summary>
+        /// Punto de fin
+        /// </summary>
+        public Punto Fin
+        {
+            get { return this.fin; }
+            set { this.fin = value; }
+        }
 
         /// <summary>
         /// Valor del radio
@@ -88,20 +106,16 @@ namespace G.Objetos
         public override string ToString()
         {
             string s = "";
-
-            //Voy al punto de de inicio (que coincide con el de fin)
-            s += "G00 X" + this.Inicio.X.ToString();
-            s += " Y" + this.Inicio.Y.ToString() + Environment.NewLine;
-            //Dibujo el Circulo
+            //Dibujo el Arco
             s += this.MoveCode;
-            s += " X" + this.Inicio.X.ToString();
-            s += " Y" + this.Inicio.Y.ToString();
+            s += " X" + this.Fin.X.ToString();
+            s += " Y" + this.Fin.Y.ToString();
+            s += " Z" + this.Fin_Z.ToString();
             s += " R" + this.radio.ToString();
+            
 
             return s;
         }
         #endregion
-
     }
-
 }

@@ -45,10 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Objetos\G03-ArcoA.cs" />
     <Compile Include="Objetos\G00-Avance.cs" />
     <Compile Include="Objetos\G01-Cuadrado.cs" />
     <Compile Include="Objetos\G01-Lineal.cs" />
-    <Compile Include="Objetos\G02-Arco.cs" />
+    <Compile Include="Objetos\G02-ArcoH.cs" />
     <Compile Include="Objetos\G02-CirculoH.cs" />
     <Compile Include="Objetos\G03-CirculoA.cs" />
     <Compile Include="Objetos\G04-Espera.cs" />

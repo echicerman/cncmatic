@@ -41,11 +41,11 @@ namespace CNCMatic
             this.lblMensaje.Text = "Ingrese los parametros para dibujar el circulo:";
         }
 
-        public FrmDibujoParams(out G02_Arco g)
+        public FrmDibujoParams(out G02_ArcoH g)
         {
             InitializeComponent();
 
-            g = new G02_Arco();
+            g = new G02_ArcoH();
 
             propiedades.SelectedObject = g;
 

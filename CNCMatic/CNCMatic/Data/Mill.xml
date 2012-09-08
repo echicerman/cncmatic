@@ -11,7 +11,7 @@
   <MachineType>MILL</MachineType>
   <RotaryAxis>X</RotaryAxis>
   <RotaryDir>CCW</RotaryDir>
-  <Precision>4</Precision>
+  <Precision>0</Precision>
   <ProgramId>:$O</ProgramId>
   <SubReturn>M99</SubReturn>
   <RotPrecision>4</RotPrecision>

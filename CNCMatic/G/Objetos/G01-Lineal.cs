@@ -13,7 +13,7 @@ namespace G.Objetos
         #region propiedades privadas
         private Punto inicio;
         private Punto fin;
-        
+
         #endregion
 
         #region constructores
@@ -23,7 +23,7 @@ namespace G.Objetos
         /// </summary>
         public G01_Lineal()
         {
-            this.inicio = new Punto(0,0,0);
+            this.inicio = new Punto(0, 0, 0);
             this.fin = new Punto(0, 0, 0);
             this._moveCode = MovesCodes.lineal;
         }
@@ -40,7 +40,7 @@ namespace G.Objetos
             set { this.inicio = value; }
         }
 
-        
+
         /// <summary>
         /// Punto de fin
         /// </summary>
@@ -104,15 +104,15 @@ namespace G.Objetos
             //si algun parametro no es nulo
             if (this.Fin.X != 0 || this.Fin.Y != 0 || this.Fin.Z != 0)
             {
-                s += " X" + ((int)Math.Round(this.Fin.X, 0)).ToString();
-                s += " Y" + ((int)Math.Round(this.Fin.Y)).ToString();
-                s += " Z" + ((int)Math.Round(this.Fin.Z)).ToString();
-            } 
+                s += " X" + this.Fin.X.ToString();
+                s += " Y" + this.Fin.Y.ToString();
+                s += " Z" + this.Fin.Z.ToString();
+            }
             else
             {
-                s += " Z" + ((int)Math.Round(this.Fin.Z)).ToString();
+                s += " Z" + this.Fin.Z.ToString();
             }
-            
+
             //si se va a generar la linea sumamos el codigo del movimiento
             if (s != "")
                 s = this.MoveCode + s;

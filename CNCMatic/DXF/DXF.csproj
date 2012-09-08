@@ -51,8 +51,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DxfException.cs" />
+    <Compile Include="Entidades\Elipse.cs" />
+    <Compile Include="Entidades\Polilinea.cs" />
     <Compile Include="Header\HeaderVariable.cs" />
     <Compile Include="Header\SystemVariable.cs" />
+    <Compile Include="Objetos\Matrix3d.cs" />
+    <Compile Include="Objetos\Vector2d.cs" />
     <Compile Include="ParCodigoValor.cs" />
     <Compile Include="DxfDoc.cs" />
     <Compile Include="Entidades\Circulo.cs" />

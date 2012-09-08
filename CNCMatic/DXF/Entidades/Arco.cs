@@ -40,7 +40,7 @@ namespace DXF.Entidades
         /// <param name="radio">Arco radio</param>
         /// <param name="anguloInicio">Angulo de inicio del arco en grados</param>
         /// <param name="anguloFin">Angulo de fin del arco en grados</param>
-        /// <remarks>La coordinada Z del centro representa la elevacion sobre la normal.</remarks>
+        /// <remarks>La coordenada Z del centro representa la elevacion sobre la normal.</remarks>
         public Arco(Vector3f centro, float radio, float anguloInicio, float anguloFin)
             : base(DxfCodigoObjeto.Arco)
         {

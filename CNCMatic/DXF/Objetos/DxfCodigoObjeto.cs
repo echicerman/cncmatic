@@ -68,7 +68,7 @@
         /// <summary>
         /// elipse.
         /// </summary>
-        public const string Ellipse = "ELLIPSE";
+        public const string Elipse = "ELLIPSE";
 
         /// <summary>
         /// polyline.

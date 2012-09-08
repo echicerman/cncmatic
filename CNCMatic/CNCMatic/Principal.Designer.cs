@@ -41,7 +41,13 @@
             this.lblPosX = new System.Windows.Forms.Label();
             this.txtPosX = new System.Windows.Forms.TextBox();
             this.gbMovZ = new System.Windows.Forms.GroupBox();
+            this.btnMovZ_Aba = new CNCMatic.Principal.RepeatButton();
+            this.btnMovZ_Arr = new CNCMatic.Principal.RepeatButton();
             this.gbMovXY = new System.Windows.Forms.GroupBox();
+            this.btnMovXY_Der = new CNCMatic.Principal.RepeatButton();
+            this.btnMovXY_Izq = new CNCMatic.Principal.RepeatButton();
+            this.btnMovXY_Aba = new CNCMatic.Principal.RepeatButton();
+            this.btnMovXY_Arr = new CNCMatic.Principal.RepeatButton();
             this.menu = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.importaciónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -83,6 +89,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.BreakPointSlider = new System.Windows.Forms.TrackBar();
+            this.MG_Viewer1 = new MacGen.MG_CS_BasicViewer();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.tsbDisplay = new System.Windows.Forms.ToolStripDropDownButton();
             this.mnuRapidLines = new System.Windows.Forms.ToolStripMenuItem();
@@ -110,13 +117,6 @@
             this.tblScreens = new System.Windows.Forms.TableLayoutPanel();
             this.btnLimpiar = new System.Windows.Forms.Button();
             this.CodeTip = new System.Windows.Forms.ToolTip(this.components);
-            this.MG_Viewer1 = new MacGen.MG_CS_BasicViewer();
-            this.btnMovXY_Der = new CNCMatic.Principal.RepeatButton();
-            this.btnMovXY_Izq = new CNCMatic.Principal.RepeatButton();
-            this.btnMovXY_Aba = new CNCMatic.Principal.RepeatButton();
-            this.btnMovXY_Arr = new CNCMatic.Principal.RepeatButton();
-            this.btnMovZ_Aba = new CNCMatic.Principal.RepeatButton();
-            this.btnMovZ_Arr = new CNCMatic.Principal.RepeatButton();
             this.gbPosicionActual.SuspendLayout();
             this.gbMovZ.SuspendLayout();
             this.gbMovXY.SuspendLayout();
@@ -232,6 +232,28 @@
             this.gbMovZ.TabStop = false;
             this.gbMovZ.Text = "Mov-Z";
             // 
+            // btnMovZ_Aba
+            // 
+            this.btnMovZ_Aba.BackColor = System.Drawing.Color.White;
+            this.btnMovZ_Aba.Image = global::CNCMatic.Properties.Resources.flecha_ABA;
+            this.btnMovZ_Aba.Location = new System.Drawing.Point(13, 73);
+            this.btnMovZ_Aba.Name = "btnMovZ_Aba";
+            this.btnMovZ_Aba.Size = new System.Drawing.Size(49, 45);
+            this.btnMovZ_Aba.TabIndex = 7;
+            this.btnMovZ_Aba.UseVisualStyleBackColor = false;
+            this.btnMovZ_Aba.Click += new System.EventHandler(this.btnMovZ_Aba_Click);
+            // 
+            // btnMovZ_Arr
+            // 
+            this.btnMovZ_Arr.BackColor = System.Drawing.Color.White;
+            this.btnMovZ_Arr.Image = global::CNCMatic.Properties.Resources.flecha_ARR;
+            this.btnMovZ_Arr.Location = new System.Drawing.Point(13, 19);
+            this.btnMovZ_Arr.Name = "btnMovZ_Arr";
+            this.btnMovZ_Arr.Size = new System.Drawing.Size(48, 43);
+            this.btnMovZ_Arr.TabIndex = 6;
+            this.btnMovZ_Arr.UseVisualStyleBackColor = false;
+            this.btnMovZ_Arr.Click += new System.EventHandler(this.btnMovZ_Arr_Click);
+            // 
             // gbMovXY
             // 
             this.gbMovXY.Controls.Add(this.btnMovXY_Der);
@@ -245,6 +267,51 @@
             this.gbMovXY.TabStop = false;
             this.gbMovXY.Text = "Mov-XY";
             this.gbMovXY.Enter += new System.EventHandler(this.gbMovXY_Enter);
+            // 
+            // btnMovXY_Der
+            // 
+            this.btnMovXY_Der.BackColor = System.Drawing.Color.White;
+            this.btnMovXY_Der.Image = global::CNCMatic.Properties.Resources.flecha_DER;
+            this.btnMovXY_Der.Location = new System.Drawing.Point(107, 43);
+            this.btnMovXY_Der.Name = "btnMovXY_Der";
+            this.btnMovXY_Der.Size = new System.Drawing.Size(46, 50);
+            this.btnMovXY_Der.TabIndex = 10;
+            this.btnMovXY_Der.UseVisualStyleBackColor = false;
+            this.btnMovXY_Der.Click += new System.EventHandler(this.btnMovXY_Der_Click);
+            this.btnMovXY_Der.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Der_MouseUp);
+            // 
+            // btnMovXY_Izq
+            // 
+            this.btnMovXY_Izq.BackColor = System.Drawing.Color.White;
+            this.btnMovXY_Izq.Image = global::CNCMatic.Properties.Resources.flecha_IZQ;
+            this.btnMovXY_Izq.Location = new System.Drawing.Point(6, 43);
+            this.btnMovXY_Izq.Name = "btnMovXY_Izq";
+            this.btnMovXY_Izq.Size = new System.Drawing.Size(44, 50);
+            this.btnMovXY_Izq.TabIndex = 9;
+            this.btnMovXY_Izq.UseVisualStyleBackColor = false;
+            this.btnMovXY_Izq.Click += new System.EventHandler(this.btnMovXY_Izq_Click);
+            // 
+            // btnMovXY_Aba
+            // 
+            this.btnMovXY_Aba.BackColor = System.Drawing.Color.White;
+            this.btnMovXY_Aba.Image = global::CNCMatic.Properties.Resources.flecha_ABA;
+            this.btnMovXY_Aba.Location = new System.Drawing.Point(56, 72);
+            this.btnMovXY_Aba.Name = "btnMovXY_Aba";
+            this.btnMovXY_Aba.Size = new System.Drawing.Size(44, 45);
+            this.btnMovXY_Aba.TabIndex = 8;
+            this.btnMovXY_Aba.UseVisualStyleBackColor = false;
+            this.btnMovXY_Aba.Click += new System.EventHandler(this.btnMovXY_Aba_Click);
+            // 
+            // btnMovXY_Arr
+            // 
+            this.btnMovXY_Arr.BackColor = System.Drawing.Color.White;
+            this.btnMovXY_Arr.Image = global::CNCMatic.Properties.Resources.flecha_ARR;
+            this.btnMovXY_Arr.Location = new System.Drawing.Point(56, 15);
+            this.btnMovXY_Arr.Name = "btnMovXY_Arr";
+            this.btnMovXY_Arr.Size = new System.Drawing.Size(44, 46);
+            this.btnMovXY_Arr.TabIndex = 7;
+            this.btnMovXY_Arr.UseVisualStyleBackColor = false;
+            this.btnMovXY_Arr.Click += new System.EventHandler(this.btnMovXY_Arr_Click);
             // 
             // menu
             // 
@@ -282,14 +349,14 @@
             // dXFFileToolStripMenuItem
             // 
             this.dXFFileToolStripMenuItem.Name = "dXFFileToolStripMenuItem";
-            this.dXFFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.dXFFileToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.dXFFileToolStripMenuItem.Text = "DXF File";
             this.dXFFileToolStripMenuItem.Click += new System.EventHandler(this.dXFFileToolStripMenuItem_Click);
             // 
             // gCodeFileToolStripMenuItem
             // 
             this.gCodeFileToolStripMenuItem.Name = "gCodeFileToolStripMenuItem";
-            this.gCodeFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.gCodeFileToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.gCodeFileToolStripMenuItem.Text = "G Code File";
             this.gCodeFileToolStripMenuItem.Click += new System.EventHandler(this.gCodeFileToolStripMenuItem_Click);
             // 
@@ -617,6 +684,26 @@
             this.BreakPointSlider.TickStyle = System.Windows.Forms.TickStyle.None;
             this.BreakPointSlider.ValueChanged += new System.EventHandler(this.BreakPointSlider_ValueChanged);
             // 
+            // MG_Viewer1
+            // 
+            this.MG_Viewer1.AxisIndicatorScale = 0.75F;
+            this.MG_Viewer1.BackColor = System.Drawing.Color.Black;
+            this.MG_Viewer1.BreakPoint = -1;
+            this.MG_Viewer1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.MG_Viewer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MG_Viewer1.DynamicViewManipulation = true;
+            this.MG_Viewer1.FourthAxis = 0F;
+            this.MG_Viewer1.Location = new System.Drawing.Point(1, 1);
+            this.MG_Viewer1.Margin = new System.Windows.Forms.Padding(0);
+            this.MG_Viewer1.Name = "MG_Viewer1";
+            this.MG_Viewer1.Pitch = 0F;
+            this.MG_Viewer1.Roll = 0F;
+            this.MG_Viewer1.RotaryType = MacGen.RotaryMotionType.BMC;
+            this.MG_Viewer1.Size = new System.Drawing.Size(604, 545);
+            this.MG_Viewer1.TabIndex = 0;
+            this.MG_Viewer1.ViewManipMode = MacGen.MG_CS_BasicViewer.ManipMode.SELECTION;
+            this.MG_Viewer1.Yaw = 0F;
+            // 
             // toolStrip2
             // 
             this.toolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
@@ -899,93 +986,6 @@
             this.btnLimpiar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnLimpiar.UseVisualStyleBackColor = true;
             this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
-            // 
-            // MG_Viewer1
-            // 
-            this.MG_Viewer1.AxisIndicatorScale = 0.75F;
-            this.MG_Viewer1.BackColor = System.Drawing.Color.Black;
-            this.MG_Viewer1.BreakPoint = -1;
-            this.MG_Viewer1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.MG_Viewer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MG_Viewer1.DynamicViewManipulation = true;
-            this.MG_Viewer1.FourthAxis = 0F;
-            this.MG_Viewer1.Location = new System.Drawing.Point(1, 1);
-            this.MG_Viewer1.Margin = new System.Windows.Forms.Padding(0);
-            this.MG_Viewer1.Name = "MG_Viewer1";
-            this.MG_Viewer1.Pitch = 0F;
-            this.MG_Viewer1.Roll = 0F;
-            this.MG_Viewer1.RotaryType = MacGen.RotaryMotionType.BMC;
-            this.MG_Viewer1.Size = new System.Drawing.Size(604, 545);
-            this.MG_Viewer1.TabIndex = 0;
-            this.MG_Viewer1.ViewManipMode = MacGen.MG_CS_BasicViewer.ManipMode.SELECTION;
-            this.MG_Viewer1.Yaw = 0F;
-            // 
-            // btnMovXY_Der
-            // 
-            this.btnMovXY_Der.BackColor = System.Drawing.Color.White;
-            this.btnMovXY_Der.Image = global::CNCMatic.Properties.Resources.flecha_DER;
-            this.btnMovXY_Der.Location = new System.Drawing.Point(107, 43);
-            this.btnMovXY_Der.Name = "btnMovXY_Der";
-            this.btnMovXY_Der.Size = new System.Drawing.Size(46, 50);
-            this.btnMovXY_Der.TabIndex = 10;
-            this.btnMovXY_Der.UseVisualStyleBackColor = false;
-            this.btnMovXY_Der.Click += new System.EventHandler(this.btnMovXY_Der_Click);
-            this.btnMovXY_Der.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Der_MouseUp);
-            // 
-            // btnMovXY_Izq
-            // 
-            this.btnMovXY_Izq.BackColor = System.Drawing.Color.White;
-            this.btnMovXY_Izq.Image = global::CNCMatic.Properties.Resources.flecha_IZQ;
-            this.btnMovXY_Izq.Location = new System.Drawing.Point(6, 43);
-            this.btnMovXY_Izq.Name = "btnMovXY_Izq";
-            this.btnMovXY_Izq.Size = new System.Drawing.Size(44, 50);
-            this.btnMovXY_Izq.TabIndex = 9;
-            this.btnMovXY_Izq.UseVisualStyleBackColor = false;
-            this.btnMovXY_Izq.Click += new System.EventHandler(this.btnMovXY_Izq_Click);
-            // 
-            // btnMovXY_Aba
-            // 
-            this.btnMovXY_Aba.BackColor = System.Drawing.Color.White;
-            this.btnMovXY_Aba.Image = global::CNCMatic.Properties.Resources.flecha_ABA;
-            this.btnMovXY_Aba.Location = new System.Drawing.Point(56, 72);
-            this.btnMovXY_Aba.Name = "btnMovXY_Aba";
-            this.btnMovXY_Aba.Size = new System.Drawing.Size(44, 45);
-            this.btnMovXY_Aba.TabIndex = 8;
-            this.btnMovXY_Aba.UseVisualStyleBackColor = false;
-            this.btnMovXY_Aba.Click += new System.EventHandler(this.btnMovXY_Aba_Click);
-            // 
-            // btnMovXY_Arr
-            // 
-            this.btnMovXY_Arr.BackColor = System.Drawing.Color.White;
-            this.btnMovXY_Arr.Image = global::CNCMatic.Properties.Resources.flecha_ARR;
-            this.btnMovXY_Arr.Location = new System.Drawing.Point(56, 15);
-            this.btnMovXY_Arr.Name = "btnMovXY_Arr";
-            this.btnMovXY_Arr.Size = new System.Drawing.Size(44, 46);
-            this.btnMovXY_Arr.TabIndex = 7;
-            this.btnMovXY_Arr.UseVisualStyleBackColor = false;
-            this.btnMovXY_Arr.Click += new System.EventHandler(this.btnMovXY_Arr_Click);
-            // 
-            // btnMovZ_Aba
-            // 
-            this.btnMovZ_Aba.BackColor = System.Drawing.Color.White;
-            this.btnMovZ_Aba.Image = global::CNCMatic.Properties.Resources.flecha_ABA;
-            this.btnMovZ_Aba.Location = new System.Drawing.Point(13, 73);
-            this.btnMovZ_Aba.Name = "btnMovZ_Aba";
-            this.btnMovZ_Aba.Size = new System.Drawing.Size(49, 45);
-            this.btnMovZ_Aba.TabIndex = 7;
-            this.btnMovZ_Aba.UseVisualStyleBackColor = false;
-            this.btnMovZ_Aba.Click += new System.EventHandler(this.btnMovZ_Aba_Click);
-            // 
-            // btnMovZ_Arr
-            // 
-            this.btnMovZ_Arr.BackColor = System.Drawing.Color.White;
-            this.btnMovZ_Arr.Image = global::CNCMatic.Properties.Resources.flecha_ARR;
-            this.btnMovZ_Arr.Location = new System.Drawing.Point(13, 19);
-            this.btnMovZ_Arr.Name = "btnMovZ_Arr";
-            this.btnMovZ_Arr.Size = new System.Drawing.Size(48, 43);
-            this.btnMovZ_Arr.TabIndex = 6;
-            this.btnMovZ_Arr.UseVisualStyleBackColor = false;
-            this.btnMovZ_Arr.Click += new System.EventHandler(this.btnMovZ_Arr_Click);
             // 
             // Principal
             // 

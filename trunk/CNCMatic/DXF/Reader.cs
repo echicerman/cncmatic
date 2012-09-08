@@ -35,7 +35,7 @@ namespace DXF
         private List<Arco> arcos;
         private List<Circulo> circulos;
         private List<Punto> puntos;
-        //private List<Ellipse> ellipses;
+        private List<Elipse> elipses;
         //private List<Face3d> faces3d;
         //private List<Solid> solids;
         //private List<Insert> inserts;
@@ -103,10 +103,10 @@ namespace DXF
             get { return this.circulos; }
         }
 
-        //public List<Ellipse> Ellipses
-        //{
-        //    get { return this.ellipses; }
-        //}
+        public List<Elipse> Elipses
+        {
+            get { return this.elipses; }
+        }
 
         public List<Punto> Puntos
         {
@@ -212,7 +212,7 @@ namespace DXF
             this.arcos = new List<Arco>();
             this.circulos = new List<Circulo>();
             //this.faces3d = new List<Face3d>();
-            //this.ellipses = new List<Ellipse>();
+            this.elipses = new List<Elipse>();
             //this.solids = new List<Solid>();
             //this.inserts = new List<Insert>();
             this.lineas = new List<Linea>();
@@ -712,10 +712,10 @@ namespace DXF
                         entidad = this.ReadPunto(ref cod);
                         this.puntos.Add((Punto)entidad);
                         break;
-                    //case DxfCodigoObjeto.Ellipse:
-                    //    entidad = this.ReadEllipse(ref code);
-                    //    this.ellipses.Add((Ellipse)entidad);
-                    //    break;
+                    case DxfCodigoObjeto.Elipse:
+                        entidad = this.ReadElipse(ref cod);
+                        this.elipses.Add((Elipse)entidad);
+                        break;
                     //case DxfObjectCode.Face3D:
                     //    entity = this.ReadFace3D(ref code);
                     //    this.faces3d.Add((Face3d)entity);
@@ -1314,111 +1314,111 @@ namespace DXF
         //    return circle;
         //}
 
-        //private Ellipse ReadEllipse(ref ParCodigoValor code)
-        //{
-        //    var ellipse = new Ellipse();
-        //    Vector3f center = Vector3f.Zero;
-        //    Vector3f axisPoint = Vector3f.Zero;
-        //    Vector3f normal = Vector3f.UnitZ;
-        //    float ratio = 0;
-        //    Dictionary<ApplicationRegistry, XData> xData = new Dictionary<ApplicationRegistry, XData>();
+        private Elipse ReadElipse(ref ParCodigoValor code)
+        {
+            var ellipse = new Elipse();
+            Vector3f center = Vector3f.Nulo;
+            Vector3f axisPoint = Vector3f.Nulo;
+            Vector3f normal = Vector3f.UnitarioZ;
+            float ratio = 0;
+            //Dictionary<ApplicationRegistry, XData> xData = new Dictionary<ApplicationRegistry, XData>();
 
-        //    code = this.ReadCodePair();
-        //    while (code.Code != 0)
-        //    {
-        //        switch (code.Code)
-        //        {
-        //            case 5:
-        //                ellipse.Handle = code.Value;
-        //                code = this.ReadCodePair();
-        //                break;
-        //            case 8: //layer code
-        //                ellipse.Layer = this.GetLayer(code.Value);
-        //                code = this.ReadCodePair();
-        //                break;
-        //            case 62: //aci color code
-        //                ellipse.Color = new AciColor(short.Parse(code.Value));
-        //                code = this.ReadCodePair();
-        //                break;
-        //            case 6: //type line code
-        //                ellipse.LineType = this.GetLineType(code.Value);
-        //                code = this.ReadCodePair();
-        //                break;
-        //            case 10:
-        //                center.X = float.Parse(code.Value);
-        //                code = this.ReadCodePair();
-        //                break;
-        //            case 20:
-        //                center.Y = float.Parse(code.Value);
-        //                code = this.ReadCodePair();
-        //                break;
-        //            case 30:
-        //                center.Z = float.Parse(code.Value);
-        //                code = this.ReadCodePair();
-        //                break;
-        //            case 11:
-        //                axisPoint.X = float.Parse(code.Value);
-        //                code = this.ReadCodePair();
-        //                break;
-        //            case 21:
-        //                axisPoint.Y = float.Parse(code.Value);
-        //                code = this.ReadCodePair();
-        //                break;
-        //            case 31:
-        //                axisPoint.Z = float.Parse(code.Value);
-        //                code = this.ReadCodePair();
-        //                break;
-        //            case 40:
-        //                ratio = float.Parse(code.Value);
-        //                code = this.ReadCodePair();
-        //                break;
-        //            case 41:
-        //                ellipse.StartAngle = (float)(double.Parse(code.Value) * MathHelper.RadToDeg);
-        //                code = this.ReadCodePair();
-        //                break;
-        //            case 42:
-        //                ellipse.EndAngle = (float)(double.Parse(code.Value) * MathHelper.RadToDeg);
-        //                code = this.ReadCodePair();
-        //                break;
-        //            case 210:
-        //                normal.X = float.Parse(code.Value);
-        //                code = this.ReadCodePair();
-        //                break;
-        //            case 220:
-        //                normal.Y = float.Parse(code.Value);
-        //                code = this.ReadCodePair();
-        //                break;
-        //            case 230:
-        //                normal.Z = float.Parse(code.Value);
-        //                code = this.ReadCodePair();
-        //                break;
-        //            case 1001:
-        //                XData xDataItem = this.ReadXDataRecord(code.Value, ref code);
-        //                xData.Add(xDataItem.ApplicationRegistry, xDataItem);
-        //                break;
-        //            default:
-        //                if (code.Code >= 1000 && code.Code <= 1071)
-        //                    throw new DxfInvalidCodeValueEntityException(code.Code, code.Value, this.file,
-        //                                                                 "The extended data of an entity must start with the application registry code " + this.fileLine);
-        //                code = this.ReadCodePair();
-        //                break;
-        //        }
-        //    }
+            code = this.ReadCodePair();
+            while (code.Cod != 0)
+            {
+                switch (code.Cod)
+                {
+                    case 5:
+                        ellipse.Handle = code.Val;
+                        code = this.ReadCodePair();
+                        break;
+                    //case 8: //layer code
+                    //    ellipse.Layer = this.GetLayer(code.Val);
+                    //    code = this.ReadCodePair();
+                    //    break;
+                    //case 62: //aci color code
+                    //    ellipse.Color = new AciColor(short.Parse(code.Val));
+                    //    code = this.ReadCodePair();
+                    //    break;
+                    //case 6: //type line code
+                    //    ellipse.LineType = this.GetLineType(code.Val);
+                    //    code = this.ReadCodePair();
+                    //    break;
+                    case 10:
+                        center.X = float.Parse(code.Val);
+                        code = this.ReadCodePair();
+                        break;
+                    case 20:
+                        center.Y = float.Parse(code.Val);
+                        code = this.ReadCodePair();
+                        break;
+                    case 30:
+                        center.Z = float.Parse(code.Val);
+                        code = this.ReadCodePair();
+                        break;
+                    case 11:
+                        axisPoint.X = float.Parse(code.Val);
+                        code = this.ReadCodePair();
+                        break;
+                    case 21:
+                        axisPoint.Y = float.Parse(code.Val);
+                        code = this.ReadCodePair();
+                        break;
+                    case 31:
+                        axisPoint.Z = float.Parse(code.Val);
+                        code = this.ReadCodePair();
+                        break;
+                    case 40:
+                        ratio = float.Parse(code.Val);
+                        code = this.ReadCodePair();
+                        break;
+                    case 41:
+                        ellipse.AnguloInicio = (float)(double.Parse(code.Val) * MathHelper.RadToDeg);
+                        code = this.ReadCodePair();
+                        break;
+                    case 42:
+                        ellipse.AnguloFin = (float)(double.Parse(code.Val) * MathHelper.RadToDeg);
+                        code = this.ReadCodePair();
+                        break;
+                    case 210:
+                        normal.X = float.Parse(code.Val);
+                        code = this.ReadCodePair();
+                        break;
+                    case 220:
+                        normal.Y = float.Parse(code.Val);
+                        code = this.ReadCodePair();
+                        break;
+                    case 230:
+                        normal.Z = float.Parse(code.Val);
+                        code = this.ReadCodePair();
+                        break;
+                    //case 1001:
+                    //    XData xDataItem = this.ReadXDataRecord(code.Value, ref code);
+                    //    xData.Add(xDataItem.ApplicationRegistry, xDataItem);
+                    //    break;
+                    default:
+                        if (code.Cod >= 1000 && code.Cod <= 1071)
+                            throw new DxfInvalidCodeValueEntityException(code.Cod, code.Val, this.archivo,
+                                                                         "The extended data of an entity must start with the application registry code " + this.fileLine);
+                        code = this.ReadCodePair();
+                        break;
+                }
+            }
 
-        //    Vector3d ocsAxisPoint = MathHelper.Transform((Vector3d)axisPoint,
-        //                                                 (Vector3d)normal,
-        //                                                 MathHelper.CoordinateSystem.World,
-        //                                                 MathHelper.CoordinateSystem.Object);
-        //    double rotation = (float)Vector2d.AngleBetween(Vector2d.UnitX, new Vector2d(ocsAxisPoint.X, ocsAxisPoint.Y));
-
-        //    ellipse.MajorAxis = 2 * axisPoint.Modulus();
-        //    ellipse.MinorAxis = ellipse.MajorAxis * ratio;
-        //    ellipse.Rotation = (float)(rotation * MathHelper.RadToDeg);
-        //    ellipse.Center = center;
-        //    ellipse.Normal = normal;
-        //    ellipse.XData = xData;
-        //    return ellipse;
-        //}
+            Vector3d ocsAxisPoint = MathHelper.Transform((Vector3d)axisPoint,
+                                                         (Vector3d)normal,
+                                                         MathHelper.CoordinateSystem.World,
+                                                         MathHelper.CoordinateSystem.Object);
+            double rotacion = (float)Vector2d.AngleBetween(Vector2d.UnitarioX, new Vector2d(ocsAxisPoint.X, ocsAxisPoint.Y));
+            
+            ellipse.EjeMayor = 2 * axisPoint.Modulus();
+            ellipse.EjeMenor = ellipse.EjeMayor * ratio;
+            ellipse.Rotacion = (float)(rotacion * MathHelper.RadToDeg);
+            ellipse.Centro = center;
+            ellipse.Normal = normal;
+            //ellipse.XData = xData;
+            return ellipse;
+        }
 
         private Punto ReadPunto(ref ParCodigoValor cod)
         {

@@ -208,6 +208,8 @@ namespace CNCMatic
                 List<string> sl = Traduce.Lineas(doc.Lineas);
                 List<string> sa = Traduce.Arcos(doc.Arcos);
                 List<string> sc = Traduce.Circulos(doc.Circulos);
+                List<string> se = Traduce.Elipses(doc.Elipses);
+                List<string> sp = Traduce.Puntos(doc.Puntos);
 
                 //Creo un archivo temporal para previsualizar
                 string curTempFileName = System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Temp" ;
@@ -229,8 +231,18 @@ namespace CNCMatic
                        AgregaTextoEditor(false, s);
                        sw.WriteLine(s);
                    }
+                   foreach (string s in se)
+                   {
+                       AgregaTextoEditor(false, s);
+                       sw.WriteLine(s);
+                   }
+                   foreach (string s in sp)
+                   {
+                       AgregaTextoEditor(false, s);
+                       sw.WriteLine(s);
+                   }
                    sw.Close();
-                    OpenFile(curTempFileName);
+                   OpenFile(curTempFileName);
                 }
 
                 

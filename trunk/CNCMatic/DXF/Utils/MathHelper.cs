@@ -154,20 +154,20 @@ namespace DXF.Utils
         /// <param name="from">Point coordinate system.</param>
         /// <param name="to">Coordinate system of the transformed point.</param>
         /// <returns>Transormed point.</returns>
-        //public static Vector3d Transform(Vector3d point, Vector3d zAxis, CoordinateSystem from, CoordinateSystem to)
-        //{
-        //    Matrix3d trans = ArbitraryAxis(zAxis);
-        //    if (from == CoordinateSystem.World && to == CoordinateSystem.Object)
-        //    {
-        //        trans = trans.Traspose();
-        //        return trans * point;
-        //    }
-        //    if (from == CoordinateSystem.Object && to == CoordinateSystem.World)
-        //    {
-        //        return trans * point;
-        //    }
-        //    return point;
-        //}
+        public static Vector3d Transform(Vector3d point, Vector3d zAxis, CoordinateSystem from, CoordinateSystem to)
+        {
+            Matrix3d trans = ArbitraryAxis(zAxis);
+            if (from == CoordinateSystem.World && to == CoordinateSystem.Object)
+            {
+                trans = trans.Traspose();
+                return trans * point;
+            }
+            if (from == CoordinateSystem.Object && to == CoordinateSystem.World)
+            {
+                return trans * point;
+            }
+            return point;
+        }
 
         /// <summary>
         /// Transforms a point list between coordinate systems.
@@ -177,55 +177,55 @@ namespace DXF.Utils
         /// <param name="from">Points coordinate system.</param>
         /// <param name="to">Coordinate system of the transformed points.</param>
         /// <returns>Transormed point list.</returns>
-        //public static IList<Vector3d> Transform(IList<Vector3d> points, Vector3d zAxis, CoordinateSystem from, CoordinateSystem to)
-        //{
-        //    Matrix3d trans = ArbitraryAxis(zAxis);
-        //    List<Vector3d> transPoints;
-        //    if (from == CoordinateSystem.World && to == CoordinateSystem.Object)
-        //    {
-        //        transPoints = new List<Vector3d>();
-        //        trans = trans.Traspose();
-        //        foreach (Vector3d p in points)
-        //        {
-        //            transPoints.Add(trans * p);
-        //        }
-        //        return transPoints;
-        //    }
-        //    if (from == CoordinateSystem.Object && to == CoordinateSystem.World)
-        //    {
-        //        transPoints = new List<Vector3d>();
-        //        foreach (Vector3d p in points)
-        //        {
-        //            transPoints.Add(trans * p);
-        //        }
-        //        return transPoints;
-        //    }
-        //    return points;
-        //}
+        public static IList<Vector3d> Transform(IList<Vector3d> points, Vector3d zAxis, CoordinateSystem from, CoordinateSystem to)
+        {
+            Matrix3d trans = ArbitraryAxis(zAxis);
+            List<Vector3d> transPoints;
+            if (from == CoordinateSystem.World && to == CoordinateSystem.Object)
+            {
+                transPoints = new List<Vector3d>();
+                trans = trans.Traspose();
+                foreach (Vector3d p in points)
+                {
+                    transPoints.Add(trans * p);
+                }
+                return transPoints;
+            }
+            if (from == CoordinateSystem.Object && to == CoordinateSystem.World)
+            {
+                transPoints = new List<Vector3d>();
+                foreach (Vector3d p in points)
+                {
+                    transPoints.Add(trans * p);
+                }
+                return transPoints;
+            }
+            return points;
+        }
 
         /// <summary>
         /// Gets the rotation matrix from the normal vector (extrusion direction) of an entity.
         /// </summary>
         /// <param name="zAxis">Normal vector.</param>
         /// <returns>Rotation matriz.</returns>
-        //public static Matrix3d ArbitraryAxis(Vector3d zAxis)
-        //{
-        //    zAxis.Normalize();
-        //    Vector3d wY = Vector3d.UnitY;
-        //    Vector3d wZ = Vector3d.UnitZ;
-        //    Vector3d aX;
+        public static Matrix3d ArbitraryAxis(Vector3d zAxis)
+        {
+            zAxis.Normalize();
+            Vector3d wY = Vector3d.UnitarioY;
+            Vector3d wZ = Vector3d.UnitarioZ;
+            Vector3d aX;
 
-        //    if ((Math.Abs(zAxis.X) < 1 / 64.0) && (Math.Abs(zAxis.Y) < 1 / 64.0))
-        //        aX = Vector3d.CrossProduct(wY, zAxis);
-        //    else
-        //        aX = Vector3d.CrossProduct(wZ, zAxis);
+            if ((Math.Abs(zAxis.X) < 1 / 64.0) && (Math.Abs(zAxis.Y) < 1 / 64.0))
+                aX = Vector3d.CrossProduct(wY, zAxis);
+            else
+                aX = Vector3d.CrossProduct(wZ, zAxis);
 
-        //    aX.Normalize();
+            aX.Normalize();
 
-        //    Vector3d aY = Vector3d.CrossProduct(zAxis, aX);
-        //    aY.Normalize();
+            Vector3d aY = Vector3d.CrossProduct(zAxis, aX);
+            aY.Normalize();
 
-        //    return new Matrix3d(aX.X, aY.X, zAxis.X, aX.Y, aY.Y, zAxis.Y, aX.Z, aY.Z, zAxis.Z);
-        //}
+            return new Matrix3d(aX.X, aY.X, zAxis.X, aX.Y, aY.Y, zAxis.Y, aX.Z, aY.Z, zAxis.Z);
+        }
     }
 }

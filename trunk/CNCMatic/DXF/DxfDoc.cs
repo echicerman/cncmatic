@@ -55,7 +55,7 @@ namespace DXF
         private readonly Hashtable addedObjects;
         private List<Arco> arcos;
         private List<Circulo> circulos;
-        //private List<Ellipse> ellipses;
+        private List<Elipse> elipses;
         //private List<NurbsCurve> nurbsCurves;
         //private List<Solid> solids;
         //private List<Face3d> faces3d;
@@ -86,7 +86,7 @@ namespace DXF
             //this.appRegisterNames = new Dictionary<string, ApplicationRegistry>();
             //this.dimStyles = new Dictionary<string, DimensionStyle>();
             this.arcos = new List<Arco>();
-            //this.ellipses = new List<Ellipse>();
+            this.elipses = new List<Elipse>();
             //this.nurbsCurves = new List<NurbsCurve>();
             //this.faces3d = new List<Face3d>();
             //this.solids = new List<Solid>();
@@ -204,10 +204,10 @@ namespace DXF
         /// <summary>
         /// Gets the <see cref="netDxf.Entities.Ellipse">ellipse</see> list.
         /// </summary>
-        //public ReadOnlyCollection<Ellipse> Ellipses
-        //{
-        //    get { return this.ellipses.AsReadOnly(); }
-        //}
+        public ReadOnlyCollection<Elipse> Elipses
+        {
+            get { return this.elipses.AsReadOnly(); }
+        }
 
         /// <summary>
         /// Gets the <see cref="netDxf.Entities.NurbsCurve">NURBS Curve</see> list.
@@ -580,7 +580,7 @@ namespace DXF
             //entities information
             this.arcos = dxfReader.Arcos;
             this.circulos = dxfReader.Circulos;
-            //this.ellipses = dxfReader.Ellipses;
+            this.elipses = dxfReader.Elipses;
             this.puntos = dxfReader.Puntos;
             //this.faces3d = dxfReader.Faces3d;
             //this.solids = dxfReader.Solids;

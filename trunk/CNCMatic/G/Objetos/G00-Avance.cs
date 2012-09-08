@@ -75,19 +75,19 @@ namespace G.Objetos
 
             if (this.x + this.y + this.z == 0)
             {
-                s += " X" + x.ToString("F4");
-                s += " Y" + y.ToString("F4");
-                s += " Z" + z.ToString("F4");
+                s += " X" + x.ToString();
+                s += " Y" + y.ToString();
+                s += " Z" + z.ToString();
             }
             else
             {
                 //revisamos cada uno de los parametros del movimiento
                 if (this.x != 0)
-                    s += " X" + x.ToString("F4");
+                    s += " X" + x.ToString();
                 if (this.y != 0)
-                    s += " Y" + y.ToString("F4");
+                    s += " Y" + y.ToString();
                 if (this.z != 0)
-                    s += " Z" + z.ToString("F4");
+                    s += " Z" + z.ToString();
             }
             //si se va a generar la linea sumamos el codigo del movimiento
             if (s != "")

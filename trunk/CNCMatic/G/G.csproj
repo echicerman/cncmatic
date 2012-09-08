@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Objetos\G00-Avance.cs" />
+    <Compile Include="Objetos\G01-Cuadrado.cs" />
     <Compile Include="Objetos\G01-Lineal.cs" />
     <Compile Include="Objetos\G02-Arco.cs" />
     <Compile Include="Objetos\G02-CirculoH.cs" />

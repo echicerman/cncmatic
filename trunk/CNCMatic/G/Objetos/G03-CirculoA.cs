@@ -63,13 +63,13 @@ namespace G.Objetos
             string s = "";
 
             //Voy al punto de de inicio (que coincide con el de fin)
-            s += "G00 X" + this.Inicio.X.ToString("F4");
-            s += " Y" + this.Inicio.Y.ToString("F4") + Environment.NewLine;
+            s += "G00 X" + this.Inicio.X.ToString();
+            s += " Y" + this.Inicio.Y.ToString() + Environment.NewLine;
             //Dibujo el Circulo
             s += this.MoveCode;
-            s += " X" + this.Inicio.X.ToString("F4");
-            s += " Y" + this.Inicio.Y.ToString("F4");
-            s += " R" + this.radio.ToString("F4");
+            s += " X" + this.Inicio.X.ToString();
+            s += " Y" + this.Inicio.Y.ToString();
+            s += " R" + ((int)Math.Round(this.radio * 10,0)).ToString();
 
             return s;
         }

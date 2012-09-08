@@ -18,7 +18,7 @@ namespace G.Objetos
         #region constructores
 
         /// <summary>
-        /// Inicializa una nueva instancia de la clase <c>G02_CirculoH</c>
+        /// Inicializa una nueva instancia de la clase <c>G03_CirculoA</c>
         /// </summary>
         public G03_CirculoA()
         {
@@ -63,13 +63,13 @@ namespace G.Objetos
             string s = "";
 
             //Voy al punto de de inicio (que coincide con el de fin)
-            s += "G00 X" + this.Inicio.X.ToString();
-            s += " Y" + this.Inicio.Y.ToString() + Environment.NewLine;
+            //s += "G00 X" + this.Inicio.X.ToString();
+            //s += " Y" + this.Inicio.Y.ToString() + Environment.NewLine;
             //Dibujo el Circulo
             s += this.MoveCode;
             s += " X" + this.Inicio.X.ToString();
             s += " Y" + this.Inicio.Y.ToString();
-            s += " R" + ((int)Math.Round(this.radio * 10,0)).ToString();
+            s += " R" + (this.radio).ToString();
 
             return s;
         }

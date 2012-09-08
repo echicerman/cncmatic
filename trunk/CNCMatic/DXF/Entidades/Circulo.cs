@@ -18,6 +18,7 @@ namespace DXF.Entidades
 
         private const EntidadTipo TIPO = EntidadTipo.Circulo;
         private Vector3f centro;
+        private Vector3f inicio;
         private float radio;
         //private float thickness;
         //private Layer layer;
@@ -36,11 +37,12 @@ namespace DXF.Entidades
         /// <param name="centro"><see cref="Vector3f">Centro</see> del circulo en coordenadas</param>
         /// <param name="radio">Radio del circulo.</param>
         /// <remarks>La coordinada Z del centro representa la elevacion sobre la normal.</remarks>
-        public Circulo(Vector3f centro, float radio)
+        public Circulo(Vector3f centro, float radio, Vector3f inicio)
             : base(DxfCodigoObjeto.Circulo)
         {
             this.centro = centro;
             this.radio = radio;
+            this.inicio = inicio;
             //this.thickness = 0.0f;
             //this.layer = Layer.Default;
             //this.color = AciColor.ByLayer;
@@ -56,6 +58,7 @@ namespace DXF.Entidades
         {
             this.centro = Vector3f.Nulo;
             this.radio = 1.0f;
+            this.inicio = Vector3f.Nulo;
             //this.thickness = 0.0f;
             //this.layer = Layer.Default;
             //this.color = AciColor.ByLayer;
@@ -74,7 +77,21 @@ namespace DXF.Entidades
         public Vector3f Centro
         {
             get { return this.centro; }
-            set { this.centro = value; }
+            set
+            {
+                this.centro = value;
+                //recalculamos el punto de inicio del circulo sumando el radio a la coordenada X
+                this.inicio = new Vector3f(this.centro.X + this.radio, centro.Y, centro.Z);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene o establece el punto de inicio del circulo
+        /// </summary>
+        public Vector3f Inicio
+        {
+            get { return this.inicio; }
+            set { this.inicio = value; }
         }
 
         /// <summary>

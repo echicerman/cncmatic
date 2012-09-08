@@ -31,7 +31,7 @@ namespace G.Objetos
         /// </summary>
         public float X
         {
-            get { return (int)Math.Round(this.x * 10, 0); }
+            get { return this.x; }
             set { this.x = value; }
         }
 
@@ -40,7 +40,7 @@ namespace G.Objetos
         /// </summary>
         public float Y
         {
-            get { return (int)Math.Round(this.y * 10, 0); }
+            get { return this.y; }
             set { this.y = value; }
         }
 
@@ -49,7 +49,7 @@ namespace G.Objetos
         /// </summary>
         public float Z
         {
-            get { return (int)Math.Round(this.z * 10, 0); }
+            get { return this.z; }
             set { this.z = value; }
         }
 

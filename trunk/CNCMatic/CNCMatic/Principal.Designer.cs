@@ -282,14 +282,14 @@
             // dXFFileToolStripMenuItem
             // 
             this.dXFFileToolStripMenuItem.Name = "dXFFileToolStripMenuItem";
-            this.dXFFileToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.dXFFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.dXFFileToolStripMenuItem.Text = "DXF File";
             this.dXFFileToolStripMenuItem.Click += new System.EventHandler(this.dXFFileToolStripMenuItem_Click);
             // 
             // gCodeFileToolStripMenuItem
             // 
             this.gCodeFileToolStripMenuItem.Name = "gCodeFileToolStripMenuItem";
-            this.gCodeFileToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.gCodeFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.gCodeFileToolStripMenuItem.Text = "G Code File";
             this.gCodeFileToolStripMenuItem.Click += new System.EventHandler(this.gCodeFileToolStripMenuItem_Click);
             // 
@@ -414,14 +414,14 @@
             // dToolStripMenuItem2
             // 
             this.dToolStripMenuItem2.Name = "dToolStripMenuItem2";
-            this.dToolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
+            this.dToolStripMenuItem2.Size = new System.Drawing.Size(151, 22);
             this.dToolStripMenuItem2.Text = "2D - Cuadrado";
             this.dToolStripMenuItem2.Click += new System.EventHandler(this.dToolStripMenuItem2_Click);
             // 
             // dToolStripMenuItem3
             // 
             this.dToolStripMenuItem3.Name = "dToolStripMenuItem3";
-            this.dToolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
+            this.dToolStripMenuItem3.Size = new System.Drawing.Size(151, 22);
             this.dToolStripMenuItem3.Text = "3D - Cubo";
             // 
             // toolStripSeparator3

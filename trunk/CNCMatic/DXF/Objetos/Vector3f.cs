@@ -89,7 +89,7 @@ namespace DXF.Objetos
         /// </summary>
         public float X
         {
-            get { return (int)Math.Round(this.x, 0); }
+            get { return this.x; }
             set { this.x = value; }
         }
 
@@ -98,7 +98,7 @@ namespace DXF.Objetos
         /// </summary>
         public float Y
         {
-            get { return (int)Math.Round(this.y, 0); }
+            get { return this.y; }
             set { this.y = value; }
         }
 
@@ -107,7 +107,7 @@ namespace DXF.Objetos
         /// </summary>
         public float Z
         {
-            get { return (int)Math.Round(this.z, 0); }
+            get { return this.z; }
             set { this.z = value; }
         }
 

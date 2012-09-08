@@ -414,13 +414,14 @@
             // dToolStripMenuItem2
             // 
             this.dToolStripMenuItem2.Name = "dToolStripMenuItem2";
-            this.dToolStripMenuItem2.Size = new System.Drawing.Size(151, 22);
+            this.dToolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
             this.dToolStripMenuItem2.Text = "2D - Cuadrado";
+            this.dToolStripMenuItem2.Click += new System.EventHandler(this.dToolStripMenuItem2_Click);
             // 
             // dToolStripMenuItem3
             // 
             this.dToolStripMenuItem3.Name = "dToolStripMenuItem3";
-            this.dToolStripMenuItem3.Size = new System.Drawing.Size(151, 22);
+            this.dToolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
             this.dToolStripMenuItem3.Text = "3D - Cubo";
             // 
             // toolStripSeparator3

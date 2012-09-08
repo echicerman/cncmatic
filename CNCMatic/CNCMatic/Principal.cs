@@ -170,7 +170,7 @@ namespace CNCMatic
 
         private void LimpiarPrevisualizador()
         {
-            OpenFile(System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Mill.cnc");
+            OpenFile(System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Limpiar.cnc");
         }
 
         private void btnStop2_Click(object sender, EventArgs e)
@@ -221,7 +221,7 @@ namespace CNCMatic
                    foreach (string s in sa)
                     {
                         AgregaTextoEditor(false, s);
-                        //sw.WriteLine(s);
+                        sw.WriteLine(s);
                     }
                    sw.Close();
                     OpenFile(curTempFileName);
@@ -752,6 +752,22 @@ namespace CNCMatic
         public string proximaInstruccion()
         {
             return txtPreview.Lines[this.proxLinea++];
+        }
+
+        private void dToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+
+            G01_Cuadrado g;
+
+            FrmDibujoParams dibujoParams = new FrmDibujoParams(out g);
+            dibujoParams.ShowDialog();
+
+            AgregaTextoEditor(false, g.ToString());
+
+            //string curTempFileName = System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Temp";
+
+            //Muestra figura en el previsualizador
+            PrevisualizarFigurasManual();
         }
     }
 

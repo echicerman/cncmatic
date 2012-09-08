@@ -28,7 +28,7 @@ namespace G.Traducciones
                 mov.Fin.Y = l.PuntoFinal.Y;
                 mov.Fin.Z = l.PuntoFinal.Z;
 
-                movs.Add(Metodos.IrA(mov.Inicio.X, mov.Inicio.Y, mov.Inicio.Z));
+                //movs.Add(Metodos.IrA(mov.Inicio.X, mov.Inicio.Y, mov.Inicio.Z));
                 movs.Add(mov.ToString());
 
             }
@@ -49,13 +49,9 @@ namespace G.Traducciones
                 mov.Inicio.Y = a.PuntoInicio.Y;
                 mov.Inicio.Z = a.PuntoInicio.Z;
 
-                mov.Fin.X = a.PuntoFin.X ;
-                mov.Fin.Y = a.PuntoFin.Y;
-                mov.Fin.Z = a.PuntoFin.Z;
-
                 mov.Radio = a.Radio;
 
-                movs.Add(Metodos.IrA(mov.Inicio.X, mov.Inicio.Y, mov.Inicio.Z));
+                //movs.Add(Metodos.IrA(mov.Inicio.X, mov.Inicio.Y, mov.Inicio.Z));
                 movs.Add(mov.ToString());
 
             }

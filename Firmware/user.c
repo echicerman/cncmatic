@@ -25,6 +25,7 @@ const rom char *fail[21]		= "Something Went Wrong";
 }state;
 state machineState = SERIALPORTCONNECTED;*/
 
+char ok[3] = "ok";
 int gradoPasoMotor[3];
 int vueltaRosca[3];
 int machineState = 0;
@@ -59,8 +60,8 @@ void user(void)
 						break;
 				}
 			}
-			putUSBUSART(USB_In_Buffer,numBytesRead);
-
+			//putUSBUSART(USB_In_Buffer,numBytesRead);
+			USB_In_Buffer[numBytesRead] = '\0';
 			switch(machineState)
 			{
 				//case SERIALPORTCONNECTED:
@@ -73,7 +74,7 @@ void user(void)
 				//case HANDSHAKERECEIVED:
 				case 1:
 					// Compare confirmation message.
-					if(strcmp(USB_In_Buffer, "ok"))
+					if(strcmp(USB_In_Buffer, ok) == 0)
 						machineState = 2;
 					else
 						machineState = 0;

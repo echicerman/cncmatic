@@ -163,6 +163,7 @@ namespace G.Traducciones
 
             return movs;
         }
+
         public static List<string> calculaEsfera(float xc, float yc, float xr, float yr, int precision)
         {
             double theta;
@@ -170,7 +171,7 @@ namespace G.Traducciones
             double x, y;
 
             i = 1;
-                      
+
             List<Vector2d> puntos = new List<Vector2d>();
 
             while (i <= precision)
@@ -180,7 +181,7 @@ namespace G.Traducciones
                 y = yc + yr * Math.Sin(theta);
 
                 puntos.Add(new Vector2d(x, y));
-                
+
                 i++;
             }
 
@@ -189,13 +190,13 @@ namespace G.Traducciones
             //movs.Add("G00 X" + (xc + xr).ToString() + " Y" + yc);
             movs.Add(Metodos.IrA(xc + xr, yc, 0));
 
-            
+
             foreach (Vector2d punto in puntos)
             {
                 int j = 0;
                 //movs.Add("G01 X" + punto.X.ToString() + " Y" + punto.Y.ToString());
                 movs.Add(Metodos.IrA(float.Parse(punto.X.ToString()), float.Parse(punto.Y.ToString()), 0));
-                Vector2d puntoH = new Vector2d(10000,100000);
+                Vector2d puntoH = new Vector2d(10000, 100000);
                 while (j < puntos.Count)
                 {
                     //if ( (punto.X - puntos[j].X < punto.X-puntoH.X) && (punto.Y < puntos[j].Y && punto.Y < puntoH.Y))
@@ -216,26 +217,59 @@ namespace G.Traducciones
             return movs;
         }
 
-
-        public static List<string> calculaEsfera2(double radio, double escalaY, int pasos)
+        public static List<string> Polilineas(ReadOnlyCollection<IPolilinea> polilineas)
         {
-            int i = 0;
+            G01_Lineal mov;
             List<string> movs = new List<string>();
-            //movs.Add("G01 X" + (radio * Math.Cos(i)).ToString() + " Y" + (radio * escalaY * Math.Sin(i)).ToString());
 
-            while (i < 360)
+            foreach (IPolilinea p in polilineas)
             {
-                movs.Add("G01 X" + (radio * Math.Cos(i)).ToString() + " Y" + (radio * escalaY * Math.Sin(i)).ToString());
-                i = i + pasos;
-            }
+                Polilinea pi=new Polilinea();
 
-            movs.Add("G01 X" + (radio * Math.Cos(360)).ToString() + " Y" + (radio * escalaY * Math.Sin(360)).ToString());
+                if (p.Tipo == EntidadTipo.Polilinea)
+                {
+                    pi = (Polilinea)p;
+                }
+                if (p.Tipo == EntidadTipo.LightWeightPolyline)
+                {
+                    pi = ((LightWeightPolyline)p).ToPolilinea();
+                }
+
+                int i = 0;
+                foreach (PolylineVertex v in pi.Vertexes)
+                {
+                    mov = new G01_Lineal();
+
+                    mov.Inicio.X = v.Location.X;
+                    mov.Inicio.Y = v.Location.Y;
+                    mov.Inicio.Z = 0;
+
+                    mov.Fin.X = v.Location.X;
+                    mov.Fin.Y = v.Location.Y;
+                    mov.Fin.Z = 0;
+
+                    if (i == 0)
+                    {
+                        movs.Add(Metodos.IrA(mov.Inicio.X, mov.Inicio.Y, mov.Inicio.Z));
+                    }
+                    
+                    movs.Add(mov.ToString());
+
+                    i++;
+                }
+
+
+
+
+
+            }
 
             return movs;
         }
+
     }
 
-    
+
 }
 
 

@@ -210,6 +210,7 @@ namespace CNCMatic
                 List<string> sc = Traduce.Circulos(doc.Circulos);
                 List<string> se = Traduce.Elipses(doc.Elipses);
                 List<string> sp = Traduce.Puntos(doc.Puntos);
+                List<string> ss = Traduce.Polilineas(doc.Polilineas);
 
                 //Creo un archivo temporal para previsualizar
                 string curTempFileName = System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Temp" ;
@@ -237,6 +238,11 @@ namespace CNCMatic
                        sw.WriteLine(s);
                    }
                    foreach (string s in sp)
+                   {
+                       AgregaTextoEditor(false, s);
+                       sw.WriteLine(s);
+                   }
+                   foreach (string s in ss)
                    {
                        AgregaTextoEditor(false, s);
                        sw.WriteLine(s);
@@ -350,10 +356,10 @@ namespace CNCMatic
 
             //Muestra figura en el previsualizador
             PrevisualizarFigurasManual();
-            
+
         }
 
-        private void PrevisualizarFigurasManual() 
+        private void PrevisualizarFigurasManual()
         {
             string curTempFileName = System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Temp";
 
@@ -362,7 +368,7 @@ namespace CNCMatic
                 sw.WriteLine(txtPreview.Text);
                 sw.Close();
                 OpenFile(curTempFileName);
-            }  
+            }
         }
 
         private void btnCirculo_Click(object sender, EventArgs e)
@@ -660,7 +666,7 @@ namespace CNCMatic
             }
             mViewer.FindExtents();
             mViewer.Redraw(true);
-        } 
+        }
         private void Principal_ResizeEnd(object sender, EventArgs e)
         {
             MG_Viewer1.FindExtents();
@@ -720,7 +726,7 @@ namespace CNCMatic
                 OpenFile(OpenFileDialog1.FileName);
             }
         }
-        
+
         private void OpenFile(string fileName)
         {
             long[] ticks = new long[2];
@@ -743,7 +749,7 @@ namespace CNCMatic
         }
 
         private void btnPlay_Click(object sender, EventArgs e)
-         {
+        {
 
             this.LimpiarPrevisualizador();
             PrevisualizarFigurasManual();

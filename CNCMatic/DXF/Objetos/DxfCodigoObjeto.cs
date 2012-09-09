@@ -73,7 +73,7 @@
         /// <summary>
         /// polyline.
         /// </summary>
-        public const string Polyline = "POLYLINE";
+        public const string Polilinea = "POLYLINE";
 
         /// <summary>
         /// light weight polyline.

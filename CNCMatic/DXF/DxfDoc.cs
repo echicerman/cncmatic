@@ -62,7 +62,7 @@ namespace DXF
         //private List<Insert> inserts;
         private List<Linea> lineas;
         private List<Punto> puntos;
-        //private List<IPolyline> polylines;
+        private List<IPolilinea> polilineas;
         //private List<Text> texts;
 
         #endregion
@@ -91,7 +91,7 @@ namespace DXF
             //this.faces3d = new List<Face3d>();
             //this.solids = new List<Solid>();
             //this.inserts = new List<Insert>();
-            //this.polylines = new List<IPolyline>();
+            this.polilineas = new List<IPolilinea>();
             this.lineas = new List<Linea>();
             this.circulos = new List<Circulo>();
             this.puntos = new List<Punto>();
@@ -264,10 +264,10 @@ namespace DXF
         /// The polyline list contains all entities that are considered polylines in the dxf, they are:
         /// <see cref="Polyline">polylines</see>, <see cref="Polyline3d">3d polylines</see> and <see cref="PolyfaceMesh">polyface meshes</see>
         /// </remarks>
-        //public ReadOnlyCollection<IPolyline> Polylines
-        //{
-        //    get { return this.polylines.AsReadOnly(); }
-        //}
+        public ReadOnlyCollection<IPolilinea> Polilineas
+        {
+            get { return this.polilineas.AsReadOnly(); }
+        }
 
         /// <summary>
         /// Gets the <see cref="netDxf.Entities.Point">point</see> list.
@@ -584,7 +584,7 @@ namespace DXF
             this.puntos = dxfReader.Puntos;
             //this.faces3d = dxfReader.Faces3d;
             //this.solids = dxfReader.Solids;
-            //this.polylines = dxfReader.Polylines;
+            this.polilineas = dxfReader.Polilineas;
             this.lineas = dxfReader.Lineas;
             //this.inserts = dxfReader.Inserts;
             //this.texts = dxfReader.Texts;

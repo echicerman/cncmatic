@@ -51,21 +51,43 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DxfException.cs" />
-    <Compile Include="Entidades\Elipse.cs" />
-    <Compile Include="Entidades\Polilinea.cs" />
+    <Compile Include="Entidades\Arco.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entidades\Circulo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entidades\Elipse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entidades\IEntidadObjeto.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entidades\IPolilinea.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entidades\Linea.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entidades\Polilinea.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entidades\PolyfaceMesh.cs" />
+    <Compile Include="Entidades\PolylineVertex.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entidades\Punto.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entidades\Vertex.cs" />
     <Compile Include="Header\HeaderVariable.cs" />
     <Compile Include="Header\SystemVariable.cs" />
     <Compile Include="Objetos\Matrix3d.cs" />
     <Compile Include="Objetos\Vector2d.cs" />
     <Compile Include="ParCodigoValor.cs" />
     <Compile Include="DxfDoc.cs" />
-    <Compile Include="Entidades\Circulo.cs" />
-    <Compile Include="Entidades\Linea.cs" />
-    <Compile Include="Entidades\Punto.cs" />
     <Compile Include="Header\DxfVersion.cs" />
     <Compile Include="Objetos\DxfObjeto.cs" />
-    <Compile Include="Entidades\Arco.cs" />
-    <Compile Include="Entidades\IEntidadObjeto.cs" />
     <Compile Include="Objetos\DxfCodigoObjeto.cs" />
     <Compile Include="Objetos\StringCode.cs" />
     <Compile Include="Objetos\Vector2f.cs" />

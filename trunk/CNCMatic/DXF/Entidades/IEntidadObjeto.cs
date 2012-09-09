@@ -17,22 +17,22 @@ namespace DXF.Entidades
         /// <summary>
         /// linea multiple
         /// </summary>
-        Multilinea,
+        Polilinea,
 
         ///// <summary>
         ///// 3d polyline .
         ///// </summary>
-        //Polyline3d,
+        Polyline3d,
 
         ///// <summary>
         ///// lightweight polyline.
         ///// </summary>
-        //LightWeightPolyline,
+        LightWeightPolyline,
 
         ///// <summary>
         ///// polyface mesh.
         ///// </summary>
-        //PolyfaceMesh,
+        PolyfaceMesh,
 
         /// <summary>
         /// circulo
@@ -97,27 +97,27 @@ namespace DXF.Entidades
         /// <summary>
         /// lightweight polyline vertex.
         /// </summary>
-        //LightWeightPolylineVertex,
+        LightWeightPolylineVertex,
 
         /// <summary>
         /// polyline vertex.
         /// </summary>
-        //PolylineVertex,
+        PolylineVertex,
 
         /// <summary>
         /// polyline 3d vertex.
         /// </summary>
-       // Polyline3dVertex,
+        Polyline3dVertex,
 
         /// <summary>
         /// polyface mesh vertex.
         /// </summary>
-        //PolyfaceMeshVertex,
+        PolyfaceMeshVertex,
 
         /// <summary>
         /// polyface mesh face.
         /// </summary>
-        //PolyfaceMeshFace,
+        PolyfaceMeshFace,
 
         /// <summary>
         /// dim.
@@ -127,7 +127,7 @@ namespace DXF.Entidades
         /// <summary>
         /// A generi Vertex
         /// </summary>
-        //Vertex
+        Vertex
     }
 
     /// <summary>

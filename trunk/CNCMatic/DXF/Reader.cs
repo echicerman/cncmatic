@@ -40,7 +40,7 @@ namespace DXF
         //private List<Solid> solids;
         //private List<Insert> inserts;
         private List<Linea> lineas;
-        //private List<IPolyline> polylines;
+        private List<IPolilinea> polilineas;
         //private List<Text> texts;
 
         //tables
@@ -128,10 +128,10 @@ namespace DXF
             get { return this.lineas; }
         }
 
-        //public List<IPolyline> Polylines
-        //{
-        //    get { return this.polylines; }
-        //}
+        public List<IPolilinea> Polilineas
+        {
+            get { return this.polilineas; }
+        }
 
         //public List<Insert> Inserts
         //{
@@ -216,7 +216,7 @@ namespace DXF
             //this.solids = new List<Solid>();
             //this.inserts = new List<Insert>();
             this.lineas = new List<Linea>();
-            //this.polylines = new List<IPolyline>();
+            this.polilineas = new List<IPolilinea>();
             this.puntos = new List<Punto>();
             //this.texts = new List<Text>();
             this.fileLine = -1;
@@ -732,14 +732,14 @@ namespace DXF
                         entidad = this.ReadLinea(ref cod);
                         this.lineas.Add((Linea)entidad);
                         break;
-                    //case DxfObjectCode.LightWeightPolyline:
-                    //    entity = this.ReadLightWeightPolyline(ref code);
-                    //    this.polylines.Add((IPolyline)entity);
-                    //    break;
-                    //case DxfObjectCode.Polyline:
-                    //    entity = this.ReadPolyline(ref code);
-                    //    this.polylines.Add((IPolyline)entity);
-                    //    break;
+                    case DxfCodigoObjeto.LightWeightPolyline:
+                        entidad = this.ReadLightWeightPolyline(ref cod);
+                        this.polilineas.Add((IPolilinea)entidad);
+                        break;
+                    case DxfCodigoObjeto.Polilinea:
+                        entidad = this.ReadPolilinea(ref cod);
+                        this.polilineas.Add((IPolilinea)entidad);
+                        break;
                     //case DxfObjectCode.Text:
                     //    entity = this.ReadText(ref code);
                     //    this.texts.Add((Text)entity);
@@ -1868,7 +1868,7 @@ namespace DXF
         //    return insert;
         //}
 
-        private Linea ReadLinea(ref ParCodigoValor  cod)
+        private Linea ReadLinea(ref ParCodigoValor cod)
         {
             var linea = new Linea();
             Vector3f inicio = Vector3f.Nulo;
@@ -2553,6 +2553,507 @@ namespace DXF
 
             
         //}
+
+        private LightWeightPolyline ReadLightWeightPolyline(ref ParCodigoValor cod)
+        {
+            var pol = new LightWeightPolyline();
+            //int numVertexes;
+            float constantWidth = 0.0F;
+            LightWeightPolylineVertex v = new LightWeightPolylineVertex();
+            float vX = 0.0f;
+            Vector3f normal = Vector3f.UnitarioZ;
+            //Dictionary<ApplicationRegistry, XData> xData = new Dictionary<ApplicationRegistry, XData>();
+
+            cod = this.ReadCodePair();
+
+            while (cod.Cod != 0)
+            {
+                switch (cod.Cod)
+                {
+                    case 5:
+                        pol.Handle = cod.Val;
+                        cod = this.ReadCodePair();
+                        break;
+                    //case 8:
+                    //    pol.Layer = this.GetLayer(code.Value);
+                    //    code = this.ReadCodePair();
+                    //    break;
+                    //case 62:
+                    //    pol.Color = new AciColor(short.Parse(code.Value));
+                    //    code = this.ReadCodePair();
+                    //    break;
+                    //case 6:
+                    //    pol.LineType = this.GetLineType(code.Value);
+                    //    code = this.ReadCodePair();
+                    //    break;
+                    case 38:
+                        pol.Elevation = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 39:
+                        pol.Thickness = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 43:
+                        constantWidth = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 70:
+                        if (int.Parse(cod.Val) == 0)
+                        {
+                            pol.IsClosed = false;
+                        }
+                        else if (int.Parse(cod.Val) == 1)
+                        {
+                            pol.IsClosed = true;
+                        }
+                        cod = this.ReadCodePair();
+                        break;
+                    case 90:
+                        //numVertexes = int.Parse(code.Value);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 10:
+                        v = new LightWeightPolylineVertex
+                        {
+                            BeginThickness = constantWidth,
+                            EndThickness = constantWidth
+                        };
+                        vX = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 20:
+                        float vY = float.Parse(cod.Val);
+                        v.Location = new Vector2f(vX, vY);
+                        pol.Vertexes.Add(v);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 40:
+                        v.BeginThickness = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 41:
+                        v.EndThickness = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 42:
+                        v.Bulge = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 210:
+                        normal.X = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 220:
+                        normal.Y = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 230:
+                        normal.Z = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    //case 1001:
+                    //    XData xDataItem = this.ReadXDataRecord(cod.Val, ref cod);
+                    //    xData.Add(xDataItem.ApplicationRegistry, xDataItem);
+                    //    break;
+                    default:
+                        if (cod.Cod >= 1000 && cod.Cod <= 1071)
+                            throw new DxfInvalidCodeValueEntityException(cod.Cod, cod.Val, this.archivo,
+                                                                         "The extended data of an entity must start with the application registry code " + this.fileLine);
+
+                        cod = this.ReadCodePair();
+                        break;
+                }
+            }
+
+            pol.Normal = normal;
+            //pol.XData = xData;
+
+            return pol;
+        }
+
+        private IPolilinea ReadPolilinea(ref ParCodigoValor cod)
+        {
+            string handle = string.Empty;
+            //Layer layer = Layer.Default;
+            //AciColor color = AciColor.ByLayer;
+            //LineType lineType = LineType.ByLayer;
+            PolylineTypeFlags flags = PolylineTypeFlags.OpenPolyline;
+            float elevation = 0.0f;
+            float thickness = 0.0f;
+            Vector3f normal = Vector3f.UnitarioZ;
+            List<Vertex> vertexes = new List<Vertex>();
+            //Dictionary<ApplicationRegistry, XData> xData = new Dictionary<ApplicationRegistry, XData>();
+            //int numVertexes = -1;
+            //int numFaces = -1;
+
+            cod = this.ReadCodePair();
+
+            while (cod.Cod != 0)
+            {
+                switch (cod.Cod)
+                {
+                    case 5:
+                        handle = cod.Val;
+                        cod = this.ReadCodePair();
+                        break;
+                    //case 8:
+                    //    layer = this.GetLayer(cod.Value);
+                    //    cod = this.ReadCodePair();
+                    //    break;
+                    //case 62:
+                    //    color = new AciColor(short.Parse(code.Value));
+                    //    code = this.ReadCodePair();
+                    //    break;
+                    //case 6:
+                    //    lineType = this.GetLineType(code.Value);
+                    //    code = this.ReadCodePair();
+                    //    break;
+                    case 30:
+                        elevation = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 39:
+                        thickness = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 70:
+                        flags = (PolylineTypeFlags)(int.Parse(cod.Val));
+                        cod = this.ReadCodePair();
+                        break;
+                    case 71:
+                        //this field might not exist for polyface meshes, we cannot depend on it
+                        //numVertexes = int.Parse(code.Value); code = this.ReadCodePair();
+                        cod = this.ReadCodePair();
+                        break;
+                    case 72:
+                        //this field might not exist for polyface meshes, we cannot depend on it
+                        //numFaces  = int.Parse(code.Value);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 210:
+                        normal.X = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 220:
+                        normal.Y = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 230:
+                        normal.Z = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    //case 1001:
+                    //    XData xDataItem = this.ReadXDataRecord(code.Value, ref code);
+                    //    xData.Add(xDataItem.ApplicationRegistry, xDataItem);
+                    //    break;
+                    default:
+                        if (cod.Cod >= 1000 && cod.Cod <= 1071)
+                            throw new DxfInvalidCodeValueEntityException(cod.Cod, cod.Val, this.archivo,
+                                                                         "The extended data of an entity must start with the application registry code " + this.fileLine);
+
+                        cod = this.ReadCodePair();
+                        break;
+                }
+            }
+
+            //begin to read the vertex list
+            if (cod.Val != DxfCodigoObjeto.Vertex)
+                throw new DxfEntityException(DxfCodigoObjeto.Polilinea, this.archivo, "Vertex not found in line " + this.fileLine);
+            while (cod.Val != StringCode.EndSequence)
+            {
+                if (cod.Val == DxfCodigoObjeto.Vertex)
+                {
+                    Debug.Assert(cod.Cod == 0);
+                    Vertex vertex = this.ReadVertex(ref cod);
+                    vertexes.Add(vertex);
+                }
+            }
+
+            // read the end end sequence object until a new element is found
+            if (cod.Val != StringCode.EndSequence)
+                throw new DxfEntityException(DxfCodigoObjeto.Polilinea, this.archivo, "End sequence entity not found in line " + this.fileLine);
+            cod = this.ReadCodePair();
+            string endSequenceHandle = string.Empty;
+            //Layer endSequenceLayer = layer;
+            while (cod.Cod != 0)
+            {
+                switch (cod.Cod)
+                {
+                    case 5:
+                        endSequenceHandle = cod.Val;
+                        cod = this.ReadCodePair();
+                        break;
+                    //case 8:
+                    //    endSequenceLayer = this.GetLayer(code.Value);
+                    //    code = this.ReadCodePair();
+                    //    break;
+                    default:
+                        cod = this.ReadCodePair();
+                        break;
+                }
+            }
+
+            IPolilinea pol;
+            bool isClosed = false;
+
+            if ((flags & PolylineTypeFlags.ClosedPolylineOrClosedPolygonMeshInM) == PolylineTypeFlags.ClosedPolylineOrClosedPolygonMeshInM)
+            {
+                isClosed = true;
+            }
+
+            //to avoid possible error between the vertex type and the polyline type
+            //the polyline type will decide which information to use from the read vertex
+            if ((flags & PolylineTypeFlags.Polyline3D) == PolylineTypeFlags.Polyline3D)
+            {
+                List<Polyline3dVertex> polyline3dVertexes = new List<Polyline3dVertex>();
+                foreach (Vertex v in vertexes)
+                {
+                    Polyline3dVertex vertex = new Polyline3dVertex
+                    {
+                        //Color = v.Color,
+                        //Layer = v.Layer,
+                        //LineType = v.LineType,
+                        Location = v.Location,
+                        Handle = v.Handle
+                    };
+                    //vertex.XData = v.XData;
+                    polyline3dVertexes.Add(vertex);
+                }
+
+                ////posible error avoidance, the polyline is marked as polyline3d code:(70,8) but the vertex is marked as PolylineVertex code:(70,0)
+                //if (v.Type == EntityType.PolylineVertex)
+                //{
+                //    Polyline3dVertex polyline3dVertex = new Polyline3dVertex(((PolylineVertex)v).Location.X, ((PolylineVertex)v).Location.Y,0);
+                //    polyline3dVertexes.Add(polyline3dVertex);
+                //}
+                //else
+                //{
+                //    polyline3dVertexes.Add((Polyline3dVertex)v);
+                //}
+                //}
+                pol = new Polyline3d(polyline3dVertexes, isClosed)
+                {
+                    Handle = handle
+                };
+                //((Polyline3d)pol).EndSequence.Handle = endSequenceHandle;
+                //((Polyline3d)pol).EndSequence.Layer = endSequenceLayer;
+            }
+            else if ((flags & PolylineTypeFlags.PolyfaceMesh) == PolylineTypeFlags.PolyfaceMesh)
+            {
+                //the vertex list created contains vertex and face information
+                List<PolyfaceMeshVertex> polyfaceVertexes = new List<PolyfaceMeshVertex>();
+                List<PolyfaceMeshFace> polyfaceFaces = new List<PolyfaceMeshFace>();
+                foreach (Vertex v in vertexes)
+                {
+                    if ((v.Flags & (VertexTypeFlags.PolyfaceMeshVertex | VertexTypeFlags.Polygon3dMesh)) == (VertexTypeFlags.PolyfaceMeshVertex | VertexTypeFlags.Polygon3dMesh))
+                    {
+                        PolyfaceMeshVertex vertex = new PolyfaceMeshVertex
+                        {
+                            //Color = v.Color,
+                            //Layer = v.Layer,
+                            //LineType = v.LineType,
+                            Location = v.Location,
+                            Handle = v.Handle
+                        };
+                        //vertex.XData = xData;
+                        polyfaceVertexes.Add(vertex);
+                    }
+                    else if ((v.Flags & (VertexTypeFlags.PolyfaceMeshVertex)) == (VertexTypeFlags.PolyfaceMeshVertex))
+                    {
+                        PolyfaceMeshFace vertex = new PolyfaceMeshFace
+                        {
+                            //Color = v.Color,
+                            //Layer = v.Layer,
+                            //LineType = v.LineType,
+                            VertexIndexes = v.VertexIndexes,
+                            Handle = v.Handle
+                        };
+                        //vertex.XData = xData;
+                        polyfaceFaces.Add(vertex);
+                    }
+
+                    //if (v.Type == EntityType.PolyfaceMeshVertex)
+                    //{
+                    //    polyfaceVertexes.Add((PolyfaceMeshVertex) v);
+                    //}
+                    //else if (v.Type == EntityType.PolyfaceMeshFace)
+                    //{
+                    //    polyfaceFaces.Add((PolyfaceMeshFace) v);
+                    //}
+                    //else
+                    //{
+                    //    throw new EntityDxfException(v.Type.ToString(), this.file, "Error in vertex type.");
+                    //}
+                }
+                pol = new PolyfaceMesh(polyfaceVertexes, polyfaceFaces)
+                {
+                    Handle = handle
+                };
+                //((PolyfaceMesh)pol).EndSequence.Handle = endSequenceHandle;
+                //((PolyfaceMesh)pol).EndSequence.Layer = endSequenceLayer;
+            }
+            else
+            {
+                List<PolylineVertex> polylineVertexes = new List<PolylineVertex>();
+                foreach (Vertex v in vertexes)
+                {
+                    PolylineVertex vertex = new PolylineVertex
+                    {
+                        Location = new Vector2f(v.Location.X, v.Location.Y),
+                        BeginThickness = v.BeginThickness,
+                        Bulge = v.Bulge,
+                        //Color = v.Color,
+                        EndThickness = v.EndThickness,
+                        //Layer = v.Layer,
+                        //LineType = v.LineType,
+                        Handle = v.Handle
+                    };
+                    //vertex.XData = xData;
+
+                    ////posible error avoidance, the polyline is marked as polyline code:(70,0) but the vertex is marked as Polyline3dVertex code:(70,32)
+                    //if (v.Type==EntityType.Polyline3dVertex)
+                    //{
+                    //    PolylineVertex polylineVertex = new PolylineVertex(((Polyline3dVertex)v).Location.X, ((Polyline3dVertex)v).Location.Y);
+                    //    polylineVertexes.Add(polylineVertex);
+                    //}
+                    //else
+                    //{
+                    //    polylineVertexes.Add((PolylineVertex) v);
+                    //}
+                    polylineVertexes.Add(vertex);
+                }
+
+                pol = new Polilinea(polylineVertexes, isClosed)
+                {
+                    //Thickness = thickness,
+                    Elevation = elevation,
+                    Normal = normal,
+                    Handle = handle
+                };
+                //((Polilinea)pol).EndSequence.Handle = endSequenceHandle;
+                //((Polilinea)pol).EndSequence.Layer = endSequenceLayer;
+            }
+
+            //pol.Color = color;
+            //pol.Layer = layer;
+            //pol.LineType = lineType;
+            //pol.XData = xData;
+
+            return pol;
+        }
+
+        private Vertex ReadVertex(ref ParCodigoValor cod)
+        {
+            string handle = string.Empty;
+            //Layer layer = Layer.Default;
+            //AciColor color = AciColor.ByLayer;
+            //LineType lineType = LineType.ByLayer;
+            Vector3f location = new Vector3f();
+            //Dictionary<ApplicationRegistry, XData> xData = new Dictionary<ApplicationRegistry, XData>();
+            float endThickness = 0.0f;
+            float beginThickness = 0.0f;
+            float bulge = 0.0f;
+            List<int> vertexIndexes = new List<int>();
+            VertexTypeFlags flags = VertexTypeFlags.PolylineVertex;
+
+            cod = this.ReadCodePair();
+
+            while (cod.Cod != 0)
+            {
+                switch (cod.Cod)
+                {
+                    case 5:
+                        handle = cod.Val;
+                        cod = this.ReadCodePair();
+                        break;
+                    //case 8:
+                    //    layer = this.GetLayer(cod.Val);
+                    //    code = this.ReadCodePair();
+                    //    break;
+                    //case 62:
+                    //    color = new AciColor(short.Parse(cod.Val));
+                    //    code = this.ReadCodePair();
+                    //    break;
+                    //case 6:
+                    //    lineType = this.GetLineType(code.Value);
+                    //    code = this.ReadCodePair();
+                    //    break;
+                    case 10:
+                        location.X = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 20:
+                        location.Y = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 30:
+                        location.Z = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 40:
+                        beginThickness = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 41:
+                        endThickness = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 42:
+                        bulge = float.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 70:
+                        flags = (VertexTypeFlags)int.Parse(cod.Val);
+                        cod = this.ReadCodePair();
+                        break;
+                    case 71:
+                        vertexIndexes.Add(int.Parse(cod.Val));
+                        cod = this.ReadCodePair();
+                        break;
+                    case 72:
+                        vertexIndexes.Add(int.Parse(cod.Val));
+                        cod = this.ReadCodePair();
+                        break;
+                    case 73:
+                        vertexIndexes.Add(int.Parse(cod.Val));
+                        cod = this.ReadCodePair();
+                        break;
+                    case 74:
+                        vertexIndexes.Add(int.Parse(cod.Val));
+                        cod = this.ReadCodePair();
+                        break;
+                    //case 1001:
+                    //    XData xDataItem = this.ReadXDataRecord(code.Value, ref code);
+                    //    xData.Add(xDataItem.ApplicationRegistry, xDataItem);
+                    //    break;
+                    default:
+                        if (cod.Cod >= 1000 && cod.Cod <= 1071)
+                            throw new DxfInvalidCodeValueEntityException(cod.Cod, cod.Val, this.archivo,
+                                                                         "The extended data of an entity must start with the application registry code " + this.fileLine);
+
+                        cod = this.ReadCodePair();
+                        break;
+                }
+            }
+
+            return new Vertex
+            {
+                Flags = flags,
+                Location = location,
+                BeginThickness = beginThickness,
+                Bulge = bulge,
+                //Color = color,
+                EndThickness = endThickness,
+                //Layer = layer,
+                //LineType = lineType,
+                VertexIndexes = vertexIndexes.ToArray(),
+                //XData = xData,
+                Handle = handle
+            };
+
+      
+        }
 
         private void ReadUnknowEntity(ref ParCodigoValor  cod)
         {

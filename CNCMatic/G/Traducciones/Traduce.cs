@@ -94,6 +94,8 @@ namespace G.Traducciones
                 mov.Fin.Z = a.PuntoFin.Z;
 
 
+                mov.Centro = new G.Objetos.Punto(a.Centro);
+
                 mov.Radio = a.Radio;
 
                 movs.Add(Metodos.IrA(mov.Inicio.X, mov.Inicio.Y, mov.Inicio.Z));

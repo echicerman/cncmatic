@@ -5,12 +5,13 @@ using System.Text;
 
 namespace G.Objetos
 {
-   public class G03_ArcoA: Gcode
+    public class G03_ArcoA : Gcode
     {
         #region propiedades privadas
         private Punto inicio;
         private Punto fin;
         private float radio;
+        private Punto centro;
         #endregion
 
         #region constructores
@@ -22,6 +23,7 @@ namespace G.Objetos
         {
             this.inicio = new Punto(0, 0, 0);
             this.fin = new Punto(0, 0, 0);
+            this.centro = new Punto(0, 0, 0);
             this.radio = 0;
             this._moveCode = MovesCodes.circuloAntihorario;
         }
@@ -62,6 +64,7 @@ namespace G.Objetos
             set { this.Fin.Z = value; }
         }
 
+
         #endregion
 
         #region propiedades publicas
@@ -91,6 +94,15 @@ namespace G.Objetos
             get { return this.radio; }
             set { this.radio = value; }
         }
+
+        /// <summary>
+        /// Punto de centro
+        /// </summary>
+        public Punto Centro
+        {
+            get { return this.centro; }
+            set { this.centro = value; }
+        }
         #endregion
 
         #region metodos publicos
@@ -110,8 +122,21 @@ namespace G.Objetos
             s += " X" + this.Fin.X.ToString();
             s += " Y" + this.Fin.Y.ToString();
             s += " Z" + this.Fin_Z.ToString();
-            s += " R" + this.radio.ToString();
-            
+            //s += " R" + this.radio.ToString();
+            if (this.Inicio_X > this.Centro.X)
+                s += " I-" + (this.Inicio_X - this.Centro.X).ToString();
+            else
+                s += " I" + (this.Centro.X - this.Inicio_X).ToString();
+
+            if (this.Inicio_Y > this.Centro.Y)
+                s += " J-" + (this.Inicio_Y - this.Centro.Y).ToString();
+            else
+                s += " J" + (this.Centro.Y - this.Inicio_Y).ToString();
+
+            if (this.Inicio_Z > this.Centro.Z)
+                s += " K-" + (this.Inicio_Z - this.Centro.Z).ToString();
+            else
+                s += " K" + (this.Centro.Z - this.Inicio_Z).ToString();
 
             return s;
         }

@@ -26,6 +26,13 @@ namespace G.Objetos
             this.z = z;
         }
 
+        public Punto(DXF.Objetos.Vector3f vector)
+        {
+            this.x = vector.X;
+            this.y = vector.Y;
+            this.z = vector.Z;
+        }
+
         /// <summary>
         /// Valor de coordenada X
         /// </summary>

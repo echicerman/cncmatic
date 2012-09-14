@@ -72,6 +72,10 @@
       <idMotor>7</idMotor>
       <descripcion>Motor Nuevo</descripcion>
     </Motor>
+    <Motor>
+      <idMotor>8</idMotor>
+      <descripcion>qwerty</descripcion>
+    </Motor>
   </Motores>
   <!--Materiales: guarda los materiales configuradas-->
   <Materiales>

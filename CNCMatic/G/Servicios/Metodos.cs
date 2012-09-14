@@ -43,6 +43,15 @@ namespace G.Servicios
             return s;
         }
 
+        public static string Avance(float x, float y, float z)
+        {
+            G00_Avance mov = new G00_Avance();
+            mov.X = x;
+            mov.Y = y;
+            mov.Z = z;
+            return (mov.ToString() + Environment.NewLine);
+        }
+
         public static string Stop()
         {
             M00_Parada mov = new M00_Parada();

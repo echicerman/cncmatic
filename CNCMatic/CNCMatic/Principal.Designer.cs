@@ -68,7 +68,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
             this.dToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.dToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemCubo = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.btnLinea = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -160,6 +160,7 @@
             this.gbPosicionActual.Controls.Add(this.txtPosY);
             this.gbPosicionActual.Controls.Add(this.lblPosX);
             this.gbPosicionActual.Controls.Add(this.txtPosX);
+            this.gbPosicionActual.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbPosicionActual.Location = new System.Drawing.Point(275, 103);
             this.gbPosicionActual.Name = "gbPosicionActual";
             this.gbPosicionActual.Size = new System.Drawing.Size(103, 128);
@@ -225,6 +226,7 @@
             // 
             this.gbMovZ.Controls.Add(this.btnMovZ_Aba);
             this.gbMovZ.Controls.Add(this.btnMovZ_Arr);
+            this.gbMovZ.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbMovZ.Location = new System.Drawing.Point(193, 102);
             this.gbMovZ.Name = "gbMovZ";
             this.gbMovZ.Size = new System.Drawing.Size(68, 129);
@@ -260,6 +262,7 @@
             this.gbMovXY.Controls.Add(this.btnMovXY_Izq);
             this.gbMovXY.Controls.Add(this.btnMovXY_Aba);
             this.gbMovXY.Controls.Add(this.btnMovXY_Arr);
+            this.gbMovXY.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbMovXY.Location = new System.Drawing.Point(16, 102);
             this.gbMovXY.Name = "gbMovXY";
             this.gbMovXY.Size = new System.Drawing.Size(163, 128);
@@ -470,7 +473,7 @@
             this.toolStripDropDownButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripDropDownButton2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.dToolStripMenuItem2,
-            this.dToolStripMenuItem3});
+            this.menuItemCubo});
             this.toolStripDropDownButton2.Image = global::CNCMatic.Properties.Resources.square_icon;
             this.toolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
@@ -481,15 +484,16 @@
             // dToolStripMenuItem2
             // 
             this.dToolStripMenuItem2.Name = "dToolStripMenuItem2";
-            this.dToolStripMenuItem2.Size = new System.Drawing.Size(151, 22);
+            this.dToolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
             this.dToolStripMenuItem2.Text = "2D - Cuadrado";
             this.dToolStripMenuItem2.Click += new System.EventHandler(this.dToolStripMenuItem2_Click);
             // 
-            // dToolStripMenuItem3
+            // menuItemCubo
             // 
-            this.dToolStripMenuItem3.Name = "dToolStripMenuItem3";
-            this.dToolStripMenuItem3.Size = new System.Drawing.Size(151, 22);
-            this.dToolStripMenuItem3.Text = "3D - Cubo";
+            this.menuItemCubo.Name = "menuItemCubo";
+            this.menuItemCubo.Size = new System.Drawing.Size(152, 22);
+            this.menuItemCubo.Text = "3D - Cubo";
+            this.menuItemCubo.Click += new System.EventHandler(this.menuItemCubo_Click);
             // 
             // toolStripSeparator3
             // 
@@ -535,6 +539,7 @@
             this.grpOperacion.Controls.Add(this.gbMovXY);
             this.grpOperacion.Controls.Add(this.gbMovZ);
             this.grpOperacion.Controls.Add(this.gbPosicionActual);
+            this.grpOperacion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpOperacion.Location = new System.Drawing.Point(110, 428);
             this.grpOperacion.Name = "grpOperacion";
             this.grpOperacion.Size = new System.Drawing.Size(396, 237);
@@ -639,6 +644,7 @@
             // 
             this.grpPrev.Controls.Add(this.groupBox2);
             this.grpPrev.Controls.Add(this.toolStrip2);
+            this.grpPrev.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpPrev.Location = new System.Drawing.Point(529, 28);
             this.grpPrev.Name = "grpPrev";
             this.grpPrev.Size = new System.Drawing.Size(618, 637);
@@ -1083,7 +1089,7 @@
         private System.Windows.Forms.ToolStripMenuItem btnEsfera;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton2;
         private System.Windows.Forms.ToolStripMenuItem dToolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem dToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem menuItemCubo;
         private System.Windows.Forms.ToolStripButton btnLinea;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton btnArco;

@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Objetos\G01-Cubo.cs" />
     <Compile Include="Objetos\G03-ArcoA.cs" />
     <Compile Include="Objetos\G00-Avance.cs" />
     <Compile Include="Objetos\G01-Cuadrado.cs" />

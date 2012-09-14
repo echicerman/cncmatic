@@ -103,7 +103,12 @@
         /// <summary>
         /// cadena de texto.
         /// </summary>
-        public const string Text = "TEXT";
+        //public const string Text = "TEXT";
+
+        /// <summary>
+        /// cadena de texto.
+        /// </summary>
+        //public const string MText = "MTEXT";
 
         /// <summary>
         /// 3d face.

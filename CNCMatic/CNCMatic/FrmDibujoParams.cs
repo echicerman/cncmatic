@@ -65,6 +65,18 @@ namespace CNCMatic
             this.lblMensaje.Text = "Ingrese los parametros para dibujar el cuadrado:";
         }
 
+        public FrmDibujoParams(out G01_Cubo g)
+        {
+            InitializeComponent();
+
+            g = new G01_Cubo();
+
+            propiedades.SelectedObject = g;
+
+            this.Text = "Parametros Cubo";
+            this.lblMensaje.Text = "Ingrese los parametros para dibujar el cubo:";
+        }
+
 
         private void btnOK_Click(object sender, EventArgs e)
         {

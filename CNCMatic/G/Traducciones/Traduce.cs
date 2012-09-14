@@ -141,7 +141,7 @@ namespace G.Traducciones
             foreach (Elipse e in elipses)
             {
 
-                mov = new G03_ArcoA();
+                //mov = new G03_ArcoA();
                 //mov.Inicio.X = e..PuntoInicio.X;
                 //mov.Inicio.Y = a.PuntoInicio.Y;
                 //mov.Inicio.Z = a.PuntoInicio.Z;
@@ -156,7 +156,8 @@ namespace G.Traducciones
 
                 //movs = calculaEsfera(0,0,40,15,1000);
                 //movs = calculaEsfera2(40, 0.1, 10);
-                movs = calculaEsfera(e.Centro.X, e.Centro.Y, e.EjeMenor, e.EjeMayor, 1000);
+                //movs.InsertRange(0, calculaElipse(e.Centro.X, e.Centro.Y, e.EjeMenor, e.EjeMayor, e.Rotacion, 1000));
+                calculaElipse(e,95);
 
                 //movs.Add(Metodos.IrA(mov.Inicio.X, mov.Inicio.Y, mov.Inicio.Z));
                 //movs.Add(mov.ToString());
@@ -165,58 +166,101 @@ namespace G.Traducciones
 
             return movs;
         }
-
-        public static List<string> calculaEsfera(float xc, float yc, float xr, float yr, int precision)
+        public static void calculaElipse(Elipse elip, int precision)
         {
-            double theta;
-            int i;
-            double x, y;
-
-            i = 1;
-
+            float angulo = elip.AnguloInicio;
+            Vector2d pi = ElipsePunto(elip.Centro.X, elip.Centro.Y, elip.EjeMayor/2, elip.EjeMenor / 2, angulo, elip.Rotacion);
+            double phi = ElipseTang(elip.EjeMayor / 2, elip.EjeMenor / 2, angulo, elip.Rotacion);
+            
             List<Vector2d> puntos = new List<Vector2d>();
+            List<double> tans = new List<double>();
+
+            puntos.Insert(0, pi);
+            tans.Insert(0,phi);
+
+            int i = 1;
+            float theta = elip.AnguloFin - elip.AnguloInicio;
 
             while (i <= precision)
             {
-                theta = 360 * i / precision;
-                x = xc + xr * Math.Cos(theta);
-                y = yc + yr * Math.Sin(theta);
+                //theta = 360 * i / precision;
 
-                puntos.Add(new Vector2d(x, y));
+                angulo += theta / precision;
 
+                puntos.Insert(i, ElipsePunto(elip.Centro.X, elip.Centro.Y, elip.EjeMayor/2, elip.EjeMenor/2, angulo, elip.Rotacion));
+                tans.Insert(i, ElipseTang(elip.EjeMayor/2, elip.EjeMenor/2, angulo, elip.Rotacion));
                 i++;
             }
+            return;
 
-            List<string> movs = new List<string>();
-            //movs.Add("G00 Z0.1");
-            //movs.Add("G00 X" + (xc + xr).ToString() + " Y" + yc);
-            movs.Add(Metodos.IrA(xc + xr, yc, 0));
+        }
 
 
-            foreach (Vector2d punto in puntos)
-            {
-                int j = 0;
-                //movs.Add("G01 X" + punto.X.ToString() + " Y" + punto.Y.ToString());
-                movs.Add(Metodos.IrA(float.Parse(punto.X.ToString()), float.Parse(punto.Y.ToString()), 0));
-                Vector2d puntoH = new Vector2d(10000, 100000);
-                while (j < puntos.Count)
-                {
-                    //if ( (punto.X - puntos[j].X < punto.X-puntoH.X) && (punto.Y < puntos[j].Y && punto.Y < puntoH.Y))
-                    //{
-                    //    puntoH = puntos[j];
-                    //}
-                    if (punto.X != puntos[j].X && punto.Y != puntos[j].Y)
-                    {
-                        if (Vector2d.Distance(punto, puntos[j]) < Vector2d.Distance(punto, puntoH))
-                        {
-                            puntoH = puntos[j];
-                        }
-                    }
-                    j++;
-                }
-                movs.Add("G01 X" + puntoH.X.ToString() + " Y" + puntoH.Y.ToString());
-            }
-            return movs;
+        //public static List<string> calculaElipse(float xc, float yc, float xr, float yr, float rotacion, int precision)
+        //{
+        //    double theta;
+        //    int i;
+        //    double x, y;
+
+        //    i = 1;
+
+        //    List<Vector2d> puntos = new List<Vector2d>();
+
+        //    while (i <= precision)
+        //    {
+        //        theta = 360 * i / precision;
+        //        x = xc + xr * Math.Cos(theta);
+        //        y = yc + xr * Math.Cos(theta);
+
+        //        puntos.Add(new Vector2d(x, y));
+
+        //        i++;
+        //    }
+
+        //    List<string> movs = new List<string>();
+        //    //movs.Add("G00 Z0.1");
+        //    //movs.Add("G00 X" + (xc + xr).ToString() + " Y" + yc);
+        //    movs.Add(Metodos.IrA(xc + xr, yc, 0));
+
+
+        //    foreach (Vector2d punto in puntos)
+        //    {
+        //        int j = 0;
+        //        //movs.Add("G01 X" + punto.X.ToString() + " Y" + punto.Y.ToString());
+        //        movs.Add(Metodos.IrA(float.Parse(punto.X.ToString()), float.Parse(punto.Y.ToString()), 0));
+        //        Vector2d puntoH = new Vector2d(10000, 100000);
+        //        while (j < puntos.Count)
+        //        {
+        //            //if ( (punto.X - puntos[j].X < punto.X-puntoH.X) && (punto.Y < puntos[j].Y && punto.Y < puntoH.Y))
+        //            //{
+        //            //    puntoH = puntos[j];
+        //            //}
+        //            if (punto.X != puntos[j].X && punto.Y != puntos[j].Y)
+        //            {
+        //                if (Vector2d.Distance(punto, puntos[j]) < Vector2d.Distance(punto, puntoH))
+        //                {
+        //                    puntoH = puntos[j];
+        //                }
+        //            }
+        //            j++;
+        //        }
+        //        movs.Add("G01 X" + puntoH.X.ToString() + " Y" + puntoH.Y.ToString());
+        //    }
+        //    return movs;
+        //}
+
+        public static Vector2d ElipsePunto(float xc, float yc, float a, float b, float angulo, float rotacion)
+        {
+            double Px = a * Math.Cos(angulo) * Math.Cos(rotacion) - b * Math.Sin(angulo) * Math.Sin(rotacion);
+            double Py = a * Math.Cos(angulo) * Math.Sin(rotacion) + b * Math.Sin(angulo) * Math.Cos(rotacion);
+
+            return new Vector2d(xc+Px, yc+Py);
+        }
+
+        public static double ElipseTang(float a, float b, float angulo, float rotacion)
+        {
+            double phi = Math.Atan2(a * Math.Sin(angulo), b * Math.Cos(angulo)) + rotacion + Math.PI / 2;
+            return phi;
         }
 
         public static List<string> Polilineas(ReadOnlyCollection<IPolilinea> polilineas)
@@ -226,7 +270,7 @@ namespace G.Traducciones
 
             foreach (IPolilinea p in polilineas)
             {
-                Polilinea pi=new Polilinea();
+                Polilinea pi = new Polilinea();
 
                 if (p.Tipo == EntidadTipo.Polilinea)
                 {
@@ -254,7 +298,7 @@ namespace G.Traducciones
                     {
                         movs.Add(Metodos.IrA(mov.Inicio.X, mov.Inicio.Y, mov.Inicio.Z));
                     }
-                    
+
                     movs.Add(mov.ToString());
 
                     i++;

@@ -12,7 +12,7 @@ namespace G.Objetos
         {
             #region propiedades privadas
             private Punto inicio;
-            private int lado;
+            private float lado;
 
             #endregion
 
@@ -58,7 +58,7 @@ namespace G.Objetos
                 set { this.Inicio.Z = value; }
             }
 
-            public int Lado
+            public float Lado
             {
                 get { return this.lado; }
                 set { this.lado = value; }
@@ -80,21 +80,21 @@ namespace G.Objetos
                 string s = "";
 
                 //Se mueve al putno inicial
-                s = "G00 X" + this.Inicio.X.ToString();
-                s += " Y" + this.inicio.Y.ToString() + Environment.NewLine;
+                s += G.Servicios.Metodos.IrA(this.Inicio.X, this.inicio.Y, this.inicio.Z) + Environment.NewLine;
+
                 //Dibuja un lado
                 s += this.MoveCode;
-                s += " X" + this.lado.ToString() + " Y" + this.inicio.Y.ToString() + Environment.NewLine;
+                s += " X" + this.inicio.X.ToString() + " Y" + (this.inicio.Y+this.lado).ToString() + Environment.NewLine;
                 s += this.MoveCode;
-                s += " X" + this.lado.ToString() + " Y" + this.lado.ToString() + Environment.NewLine;
+                s += " X" + (this.inicio.X + this.lado).ToString() + " Y" + (this.inicio.Y + this.lado).ToString() + Environment.NewLine;
                 s += this.MoveCode;
-                s += " X" + this.inicio.X.ToString() + " Y" + this.lado.ToString() + Environment.NewLine;
+                s += " X" + (this.inicio.X + this.lado).ToString() + " Y" + this.inicio.Y.ToString() + Environment.NewLine;
                 s += this.MoveCode;
                 s += " X" + this.inicio.X.ToString() + " Y" + this.Inicio.Y.ToString();
 
                 //si se va a generar la linea sumamos el codigo del movimiento
-                if (s != "")
-                    s = this.MoveCode + s;
+                //if (s != "")
+                //    s = this.MoveCode + s;
 
                 return s;
             }

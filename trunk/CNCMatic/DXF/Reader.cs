@@ -740,9 +740,13 @@ namespace DXF
                         entidad = this.ReadPolilinea(ref cod);
                         this.polilineas.Add((IPolilinea)entidad);
                         break;
-                    //case DxfObjectCode.Text:
-                    //    entity = this.ReadText(ref code);
-                    //    this.texts.Add((Text)entity);
+                    //case DxfCodigoObjeto.Text:
+                    //    entidad = this.ReadText(ref cod);
+                    //    this.texts.Add((Text)entidad);
+                    //    break;
+                    //case DxfCodigoObjeto.MText:
+                    //    entidad = this.ReadText(ref cod);
+                    //    this.texts.Add((Text)entidad);
                     //    break;
                     //case DxfObjectCode.Esfera:
                     //    entity = this.ReadEsfera(ref code);
@@ -1495,6 +1499,7 @@ namespace DXF
             return punto;
         }
 
+       
         //private Face3d ReadFace3D(ref CodeValuePair code)
         //{
         //    var face = new Face3d();

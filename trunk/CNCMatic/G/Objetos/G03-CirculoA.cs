@@ -69,6 +69,7 @@ namespace G.Objetos
             s += this.MoveCode;
             s += " X" + this.Inicio.X.ToString();
             s += " Y" + this.Inicio.Y.ToString();
+            s += " Z" + this.Inicio.Z.ToString();
             s += " R" + (this.radio).ToString();
 
             return s;

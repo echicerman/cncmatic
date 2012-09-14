@@ -22,24 +22,75 @@ namespace CNCMatic
 
         private void btnGrabar_Click(object sender, EventArgs e)
         {
-            GrabaConfiguracionGeneral();
+            //GrabaConfiguracionGeneral();
+            List<XML_Motor> motores = new List<XML_Motor>();
+            XML_Motor mot = new XML_Motor();
+            mot.Id = 1;
+            mot.Descripcion = "123";
+
+            motores.Add(mot);
+
+            mot = new XML_Motor();
+            mot.Id = 2;
+            mot.Descripcion = "1234";
+
+            motores.Add(mot);
+
+            DataTable dt = new DataTable("motores");
+
+            DataColumn dc = new DataColumn("Id");
+            DataColumn dc2 = new DataColumn("Descripcion");
+
+            dt.Columns.Add("Id");
+            dt.Columns.Add("Descripcion");
+
+            DataRow dr;
+            foreach (XML_Motor m in motores)
+            {
+                dr = dt.NewRow();
+                
+                dr["Id"] = m.Id.ToString();
+                dr["Descripcion"] = m.Descripcion.ToString();
+
+                dt.Rows.Add(dr);
+            }
+
+            dt.WriteXml(@"D:\dxftest\test1.xml");
+
         }
 
         private void FrmConfiguracion_Load(object sender, EventArgs e)
         {
+            DataSet ds = new DataSet();
+            ds.ReadXml(@"D:\dxftest\test1.xml");
+
+            DataTable dt = ds.Tables["motores"];
+
+
+            DataRow dr = dt.NewRow();
+
+            dr["Id"] = "3";
+            dr["Descripcion"] = "XXX";
+
+            dt.Rows.Add(dr);
+
+
+            ds.WriteXml(@"D:\dxftest\test1.xml");
+
+
             buscarPuertos();
 
-            CargaMotores();
+            //CargaMotores();
 
-            CargaMateriales();
+            //CargaMateriales();
 
-            CargaConfiguracionGeneral();
+            //CargaConfiguracionGeneral();
 
-            (new ToolTip()).SetToolTip(btnNuevo, "Nuevo perfil de configuracion");
-            (new ToolTip()).SetToolTip(btnCancelar, "Cancela la accion actual");
-            (new ToolTip()).SetToolTip(btnAltaMaterial, "Dar de alta un nuevo material");
-            (new ToolTip()).SetToolTip(btnAltaMotor, "Dar de alta un nuevo motor");
-            (new ToolTip()).SetToolTip(btnGrabar, "Graba el nuevo perfil o los cambios sobre el perfil seleccionado");
+            //(new ToolTip()).SetToolTip(btnNuevo, "Nuevo perfil de configuracion");
+            //(new ToolTip()).SetToolTip(btnCancelar, "Cancela la accion actual");
+            //(new ToolTip()).SetToolTip(btnAltaMaterial, "Dar de alta un nuevo material");
+            //(new ToolTip()).SetToolTip(btnAltaMotor, "Dar de alta un nuevo motor");
+            //(new ToolTip()).SetToolTip(btnGrabar, "Graba el nuevo perfil o los cambios sobre el perfil seleccionado");
 
         }
 
@@ -111,7 +162,7 @@ namespace CNCMatic
             config.MaxZ = Convert.ToDecimal(txtMaxZ.Text);
             config.PuertoCom = portComboBox.SelectedText;
             config.Descripcion = txtNombrePerfil.Text.Trim();
-            
+
             if (rbtAbsoluta.Checked)
                 config.TipoProg = "abs";
             if (rbtRelativa.Checked)
@@ -123,7 +174,7 @@ namespace CNCMatic
                 config.UnidadMedida = "pulg";
 
             x.GrabaConfiguracion(config);
-            
+
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
@@ -269,7 +320,7 @@ namespace CNCMatic
         {
             lblGrados.Location = new Point(249, 79);
             txtGrados.Location = new Point(344, 76);
-            
+
             lblMotorNombre.Visible = true;
             txtMotorNombre.Visible = true;
 
@@ -278,8 +329,17 @@ namespace CNCMatic
 
         private void btnGrabaMaterial_Click(object sender, EventArgs e)
         {
-            XML_Material mat = new XML_Material();
-            
+            try
+            {
+                XML_Material mat = new XML_Material();
+                mat.Descripcion = txtMaterialNombre.Text;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Se ha producido un error: " + ex.Message, "Alta Material", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
         private void btnGrabaMotor_Click(object sender, EventArgs e)
@@ -315,8 +375,8 @@ namespace CNCMatic
                 btnGrabaMotor.Enabled = false;
                 lblMotorNombre.Visible = false;
                 txtMotorNombre.Visible = false;
-                lblGrados.Location=new Point(249, 68);
-                txtGrados.Location=new Point(344, 65);
+                lblGrados.Location = new Point(249, 68);
+                txtGrados.Location = new Point(344, 65);
             }
             catch (Exception ex)
             {

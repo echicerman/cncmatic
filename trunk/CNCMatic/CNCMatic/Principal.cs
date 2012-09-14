@@ -775,6 +775,23 @@ namespace CNCMatic
             //Muestra figura en el previsualizador
             PrevisualizarFigurasManual();
         }
+
+        private void menuItemCubo_Click(object sender, EventArgs e)
+        {
+            G01_Cubo g;
+
+            FrmDibujoParams dibujoParams = new FrmDibujoParams(out g);
+            dibujoParams.ShowDialog();
+
+            AgregaTextoEditor(false, g.ToString());
+
+            //string curTempFileName = System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Temp";
+
+            //Muestra figura en el previsualizador
+            PrevisualizarFigurasManual();
+        }
+
+
     }
 
 }

@@ -82,11 +82,11 @@ namespace G.Objetos
             else
             {
                 //revisamos cada uno de los parametros del movimiento
-                if (this.x != 0)
+                //if (this.x != 0)
                     s += " X" + x.ToString();
-                if (this.y != 0)
+                //if (this.y != 0)
                     s += " Y" + y.ToString();
-                if (this.z != 0)
+                //if (this.z != 0)
                     s += " Z" + z.ToString();
             }
             //si se va a generar la linea sumamos el codigo del movimiento

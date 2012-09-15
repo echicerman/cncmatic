@@ -2,6 +2,8 @@
 #include "./USB/usb.h"
 #include "./USB/usb_function_cdc.h"
 #include "main.h"
+#include "user.h"
+#include <string.h>
 /*
 const rom char *configOk[14]	= "Configured OK";
 const rom char *receptOk[12]	= "Received OK";
@@ -15,20 +17,10 @@ const rom char *commandFail[22]	= "Command Not Supported";
 const rom char *fail[21]		= "Something Went Wrong";
 */
 
-/*typedef enum state_t {
-	SERIALPORTCONNECTED,	// 0
-	HANDSHAKERECEIVED,		// 1
-	CNCMATICCONNECTED,		// 2
-	CONFIGURED,							// 3
-	WAITINGCOMMAND,				// 4
-	PROCESSINGCOMMAND		// 5
-}state;
-state machineState = SERIALPORTCONNECTED;*/
+//int machineState = 0;
 
-char ok[3] = "ok";
-int gradoPasoMotor[3];
-int vueltaRosca[3];
-int machineState = 0;
+state_t machineState = SERIALPORTCONNECTED;
+config_t configuracion[3];
 
 void user(void)
 {
@@ -64,35 +56,35 @@ void user(void)
 			USB_In_Buffer[numBytesRead] = '\0';
 			switch(machineState)
 			{
-				//case SERIALPORTCONNECTED:
-				case 0:
-					// Count characters received and send them to PC
+				case SERIALPORTCONNECTED:
+				//case 0:
+					// Count characters received and send this number to PC
 					sprintf(length, "%d", numBytesRead);
-					putUSBUSART(length, 2);
+					putUSBUSART(length, strlen(length) + 1);
 					machineState = 1;
 					break;
-				//case HANDSHAKERECEIVED:
-				case 1:
+				case HANDSHAKERECEIVED:
+				//case 1:
 					// Compare confirmation message.
-					if(strcmp(USB_In_Buffer, ok) == 0)
+					if(!strcmppgm2ram(USB_In_Buffer, "ok"))
 						machineState = 2;
 					else
 						machineState = 0;
 					break;
-				//case CNCMATICCONNECTED:
-				case 2:
+				case CNCMATICCONNECTED:
+				//case 2:
 					machineState = 3;
 					break;
-				//case CONFIGURED:
-				case 3:
+				case CONFIGURED:
+				//case 3:
 					machineState = 4;
 					break;
-				//case WAITINGCOMMAND:
-				case 4:
+				case WAITINGCOMMAND:
+				//case 4:
 					machineState = 5;
 					break;
-				 //case PROCESSINGCOMMAND:
-				 case 5:
+				 case PROCESSINGCOMMAND:
+				 //case 5:
 					machineState = 4;
 					break;
 			}

@@ -12,6 +12,7 @@ using G.Servicios;
 using G.Objetos;
 using System.IO;
 using MacGen;
+using DXF.Objetos;
 
 namespace CNCMatic
 {
@@ -206,14 +207,17 @@ namespace CNCMatic
                 doc.Cargar(importaDXF.FileName);
 
                 List<string> sl = Traduce.Lineas(doc.Lineas);
-                List<string> sa = Traduce.Arcos(doc.Arcos);
-                List<string> sc = Traduce.Circulos(doc.Circulos);
-                List<string> se = Traduce.Elipses(doc.Elipses);
-                List<string> sp = Traduce.Puntos(doc.Puntos);
-                List<string> ss = Traduce.Polilineas(doc.Polilineas);
+                sl.AddRange(Traduce.Arcos(doc.Arcos));
+                sl.AddRange(Traduce.Circulos(doc.Circulos));
+                sl.AddRange(Traduce.Elipses(doc.Elipses));
+                sl.AddRange(Traduce.Puntos(doc.Puntos));
+                sl.AddRange(Traduce.Polilineas(doc.Polilineas));
+
+                //Optimizamos las líneas de código G
+                sl = OptimizarCodigoG(sl);
 
                 //Creo un archivo temporal para previsualizar
-                string curTempFileName = System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Temp" ;
+                string curTempFileName = System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Temp";
 
                 using (StreamWriter sw = File.CreateText(curTempFileName))
                 {
@@ -222,42 +226,164 @@ namespace CNCMatic
                         AgregaTextoEditor(false, s);
                         sw.WriteLine(s);
                     }
-                   foreach (string s in sa)
-                    {
-                        AgregaTextoEditor(false, s);
-                        sw.WriteLine(s);
-                    }
-                   foreach (string s in sc)
-                   {
-                       AgregaTextoEditor(false, s);
-                       sw.WriteLine(s);
-                   }
-                   foreach (string s in se)
-                   {
-                       AgregaTextoEditor(false, s);
-                       sw.WriteLine(s);
-                   }
-                   foreach (string s in sp)
-                   {
-                       AgregaTextoEditor(false, s);
-                       sw.WriteLine(s);
-                   }
-                   foreach (string s in ss)
-                   {
-                       AgregaTextoEditor(false, s);
-                       sw.WriteLine(s);
-                   }
-                   sw.Close();
-                   OpenFile(curTempFileName);
-                }
 
-                
+                    sw.Close();
+                    OpenFile(curTempFileName);
+                }
+            }
+        }
+
+
+        private double ObtieneDistancia(DXF.Objetos.Vector3d puntoActual, DXF.Objetos.Vector3d puntoInicioFigura)
+        {
+            double distancia;
+            distancia = Math.Sqrt(Math.Pow((puntoActual.X - puntoInicioFigura.X), 2) + Math.Pow((puntoActual.Y - puntoInicioFigura.Y), 2) + Math.Pow((puntoActual.Z - puntoInicioFigura.Z), 2));
+            return distancia;
+        }
+
+        private List<string> OptimizarCodigoG(List<string> list)
+        {
+            List<string> newList = new List<string>();
+            Vector3d puntoActual = new Vector3d(0, 0, 0);
+
+            //Eliminamos movimientos sobrantes
+            list = QuitartMovimientos(list);
+
+            // Variables
+            int j;
+            string tempFig;
+            string auxiliar1;
+            string auxiliar2;
+
+            while (list.Count > 0)
+            {
+                auxiliar1 = list[0];
+                tempFig = list[1];
+                j = 2;
+                while (j <= list.Count - 1)
+                {
+                    auxiliar2 = list[j];
+                    if (ObtieneDistancia(puntoActual, new Vector3d(Convert.ToDouble(PuntoInicioX(auxiliar1)), Convert.ToDouble(PuntoInicioY(auxiliar1)), Convert.ToDouble(PuntoInicioZ(auxiliar1)))) > ObtieneDistancia(puntoActual, new Vector3d(Convert.ToDouble(PuntoInicioX(auxiliar2)), Convert.ToDouble(PuntoInicioY(auxiliar2)), Convert.ToDouble(PuntoInicioZ(auxiliar2)))))
+                    {
+                        auxiliar1 = auxiliar2;
+                        tempFig = list[j + 1];
+                        j = 0;
+                    }
+                    j = j + 2;
+                }
+                newList.Add(auxiliar1);
+                newList.Add(tempFig);
+
+                puntoActual = new Vector3d(Convert.ToDouble(PuntoInicioX(tempFig)), Convert.ToDouble(PuntoInicioY(tempFig)), Convert.ToDouble(PuntoInicioZ(tempFig)));
+
+                foreach (string line in newList)
+                {
+                    list.Remove(line);
+                }
             }
 
+            //Eliminamos movimientos cuando el pto de fin de una figura coincide con el de la siguiente figura
+            newList = EliminarCodigoInnecesario(newList);
 
+            return newList;
+        }
+
+        private List<string> QuitartMovimientos(List<string> list)
+        {
+            List<string> lista = new List<string>();
+            foreach (string lineaG in list)
+            {
+                string subcadena;
+
+                string[] partes = lineaG.Split('G');
+
+                if (partes.Length > 2)
+                {
+                    subcadena = partes[2];
+                }
+                else
+                {
+                    subcadena = partes[1];
+                }
+
+                lista.Add("G" + subcadena.Trim());
+            }
+            return lista;
+        }
+
+        private List<string> EliminarCodigoInnecesario(List<string> newList)
+        {
+            List<string> lista = new List<string>();
+            Vector3d punto1 = new Vector3d(0, 0, 0);
+            Vector3d punto2 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[0])), Convert.ToDouble(PuntoInicioY(newList[0])), Convert.ToDouble(PuntoInicioZ(newList[0])));
+            if (!(punto1 == punto2))
+            {
+                lista.Add(newList[0]);
+            }
+
+            int i = 1;
+
+            while (i < newList.Count - 1)
+            {
+                punto1 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[i])), Convert.ToDouble(PuntoInicioY(newList[i])), Convert.ToDouble(PuntoInicioZ(newList[i])));
+                punto2 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[i + 1])), Convert.ToDouble(PuntoInicioY(newList[i + 1])), Convert.ToDouble(PuntoInicioZ(newList[i + 1])));
+
+                if (punto1 == punto2)
+                {
+                    lista.Add(newList[i]);
+                }
+                else
+                {
+                    lista.Add(newList[i]);
+                    lista.Add(newList[i + 1]);
+                }
+                i = i + 2;
+            }
+
+            lista.Add(newList[i]);
+
+            return lista;
+        }
+
+        private string movimiento(string lineaG)
+        {
+            return lineaG.Substring(0, 3);
+        }
+
+        private string PuntoInicioX(string lineaG)
+        {
+            string[] partes = lineaG.Split(' ');
+
+            string subcadena = partes[1].Substring(1, partes[1].Length - 1);
+
+            return subcadena;
+        }
+
+        private string PuntoInicioY(string lineaG)
+        {
+            string[] partes = lineaG.Split(' ');
+
+            string subcadena = partes[2].Substring(1, partes[2].Length - 1);
+
+            return subcadena;
+        }
+
+        private string PuntoInicioZ(string lineaG)
+        {
+            string[] partes = lineaG.Split(' ');
+
+            string subcadena = partes[3].Substring(1, partes[3].Length - 1);
+
+            return subcadena;
+        }
+
+        private string PuntoFin(string lineaG)
+        {
+            return lineaG.Substring(1, 3);
         }
 
         //***************************************
+
 
         static void crearArchivoTemp()
         {

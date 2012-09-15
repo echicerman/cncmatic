@@ -23,12 +23,45 @@ state_t machineState = SERIALPORTCONNECTED;
 config_t configuracion[3];
 bool_t  commandFailure = FALSE;
 
+void Move(char command[])
+{
+	unsigned int i, count = strlen(command), xSteps = 0, ySteps = 0, zSteps = 0;
+	char *ptr;
+	
+	for(i = 0; i < count; i++)
+	{
+		if( !xSteps && command[i] == 'X')
+		{
+			ptr = &command[i + 1];
+			for(++i; (command[i] != ' ') && (i < count); i++) ;
+			command[i] = '\0';
+			xSteps = ( atoi(ptr) * ( 360 / configuracion[0].stepDegrees ) ) / configuracion[0].distancePerRevolution;
+		}
+		
+		if( !ySteps && command[i] == 'Y')
+		{
+			ptr = &command[i + 1];
+			for(++i; (command[i] != ' ') && (i < count); i++) ;
+			command[i] = '\0';
+			ySteps = ( atoi(ptr) * ( 360 / configuracion[1].stepDegrees ) ) / configuracion[1].distancePerRevolution;
+		}
+		
+		if( !zSteps && command[i] == 'Z')
+		{
+			ptr = &command[i + 1];
+			for(++i; (command[i] != ' ') && (i < count); i++) ;
+			command[i] = '\0';
+			zSteps = ( atoi(ptr) * ( 360 / configuracion[2].stepDegrees ) ) / configuracion[2].distancePerRevolution;
+		}
+	}
+}
+
 void user(void)
 {
 	BYTE numBytesRead;
-	char *configPtr, *movementPtr, message[20];
+	char *configPtr, *movementPtr, message[20], stringAux[64];
 	char movementCommand[3];
-	int motor = 0;
+	int motor = 0, gCommand = -1, mCommand = -1;
 
 	//Blink the LEDs according to the USB device status
 	/*BlinkUSBStatus();*/
@@ -46,125 +79,128 @@ void user(void)
 				USB_In_Buffer[i] = USB_Out_Buffer[i];
 			}
 			USB_In_Buffer[i] = '\0';
-			/*for(i=0;i<numBytesRead;i++)
-			{
-				switch(USB_Out_Buffer[i])
-				{
-					case 0x0A:
-					case 0x0D:
-						USB_In_Buffer[i] = USB_Out_Buffer[i];
-						break;
-					default:
-						USB_In_Buffer[i] = USB_Out_Buffer[i];// + 1;
-						break;
-				}
-			}*/
-			//putUSBUSART(USB_In_Buffer,numBytesRead);
+			strcpy(stringAux, USB_In_Buffer);
 			
 			switch(machineState)
 			{
 				case SERIALPORTCONNECTED:
-				//case 0:
 					// Count characters received and send this number to PC
 					sprintf(message, "%d", numBytesRead);
 					putUSBUSART(message, strlen(message) + 1);
-					//machineState = 1;
 					machineState = HANDSHAKEACKRECEIVED;
 					break;
 					
 				case HANDSHAKEACKRECEIVED:
-				//case 1:
 					// Compare confirmation message.
-					if(!strcmppgm2ram(USB_In_Buffer, "ok"))
-						//machineState = 2;
+					if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"ok"))
 						machineState = CNCMATICCONNECTED;
 					else
-						//machineState = 0;
 						machineState = SERIALPORTCONNECTED;
 					break;
 					
 				case CNCMATICCONNECTED:
-				//case 2:
-					configPtr = strtokpgmram(USB_In_Buffer, ";");
+					// tokenize the configuration string
+					configPtr = strtokpgmram(stringAux, (const rom char far *)";");
 					configuracion[motor].stepDegrees = atoi(configPtr);
-					configPtr = strtokpgmram(NULL, ";");
+					configPtr = strtokpgmram(NULL, (const rom char far *)";");
 					configuracion[motor].distancePerRevolution = atoi(configPtr);
-					while( (++motor ) && ( (configPtr = strtokpgmram( NULL, ";" )) != NULL ) )    // Posteriores llamadas
+					while( (++motor ) && ( (configPtr = strtokpgmram( NULL, (const rom char far *)";" )) != NULL ) )    // Posteriores llamadas
 					{						
 						configuracion[motor].stepDegrees = atoi(configPtr);
-						configPtr = strtokpgmram(NULL, ";");
+						configPtr = strtokpgmram(NULL, (const rom char far *)";");
 						configuracion[motor].distancePerRevolution = atoi(configPtr);
 					}
 					
 					if(motor == 3)
 					{
-						strcpypgm2ram(message, "Configuration OK");
+						// if it has been configured all 3 engines
+						strcpypgm2ram(message, (const rom char far *)"Configuration OK");
 						putUSBUSART(message, strlen(message) + 1);
-						//machineState = 3;
 						machineState = CONFIGURED;
 						
 						// TODO: Mover punta a (0;0;0)
 						
 						machineState = WAITINGCOMMAND;
-						strcpypgm2ram(message, "Origin Position Set");
+						strcpypgm2ram(message, (const rom char far *)"Origin Position Set");
 						putUSBUSART(message, strlen(message) + 1);
 					}
 					else
 					{
-						strcpypgm2ram(message, "Configuration FAIL");
+						// not all 3 engines had been configured correctly
+						strcpypgm2ram(message, (const rom char far *)"Configuration FAIL");
 						putUSBUSART(message, strlen(message) + 1);
-						//machineState = 2;
 						machineState = CNCMATICCONNECTED;
 					}
 					break;
 					
 				case CONFIGURED:
-				//case 3:
 					// Moving to (0;0;0)
 					break;
 					
 				case WAITINGCOMMAND:
-				//case 4:
-					//machineState = 5;
-					movementPtr = strtokpgmram(USB_In_Buffer, " ");
+					movementPtr = strtokpgmram(stringAux, (const rom char far *)" ");
 					movementCommand[0] = movementPtr[1];
 					movementCommand[1] = movementPtr[2];
 					movementCommand[2] = '\0';
-					switch( atoi(movementCommand) )
+					
+					if(movementPtr[0] == 'G')
+						gCommand = atoi(movementCommand);
+					else if(movementPtr[0] == 'M')
+						mCommand = atoi(movementCommand);
+						
+					switch( gCommand )
 					{
 						case 0:
 						case 1:
 						case 2:
 						case 3:
 						case 4:
-						case 5:
-						case 6:
+						case 17:
+						case 18:
+						case 19:
+						case 20:
+						case 21:
+						case 90:
+						case 91:
 							commandFailure = FALSE;
-							strcpypgm2ram(message, "Command OK");
+							strcpypgm2ram(message, (const rom char far *)"Command OK");
 							putUSBUSART(message, strlen(message) + 1);
 							machineState = PROCESSINGCOMMAND;
+							Move(USB_In_Buffer);
 							break;
 						
 						default:
-							commandFailure = TRUE;
-							strcpypgm2ram(message, "Command Not Supported");
-							putUSBUSART(message, strlen(message) + 1);
-							if(commandFailure)
+							switch (mCommand)
 							{
+								case 0:
+								case 2:
+									commandFailure = FALSE;
+									strcpypgm2ram(message, (const rom char far *)"Command OK");
+									putUSBUSART(message, strlen(message) + 1);
+									machineState = PROCESSINGCOMMAND;
+									break;
 								
-								// TODO: Mover punta a (0;0;0)
-						
-								machineState = WAITINGCOMMAND;
-								strcpypgm2ram(message, "Origin Position Set");
+								default:
+								strcpypgm2ram(message, (const rom char far *)"Command Not Supported");
 								putUSBUSART(message, strlen(message) + 1);
-								
+								if(commandFailure)
+								{
+									// TODO: Mover punta a (0;0;0)
+							
+									machineState = WAITINGCOMMAND;
+									strcpypgm2ram(message, (const rom char far *)"Origin Position Set");
+									putUSBUSART(message, strlen(message) + 1);
+									commandFailure = FALSE;
+								}
+								else
+									commandFailure = TRUE;
+								break;
 							}
 							break;
 					}
 					break;
 					
 				 case PROCESSINGCOMMAND:
-				 //case 5:
 					// Processing command received
 					machineState = WAITINGCOMMAND;
 					break;

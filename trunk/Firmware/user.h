@@ -22,6 +22,16 @@ typedef struct
 	int distancePerRevolution;
 } config_t;
 
+typedef struct 
+{
+int x;
+int y;
+int z;
+	/*unsigned short long x;
+	unsigned short long y;
+	unsigned short long z;*/
+} position_t;
+
 void user(void);
 
 #endif

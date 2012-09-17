@@ -25,6 +25,11 @@ config_t configuracion[3];
 bool_t  commandFailure = FALSE;
 position_t currentPosition;
 
+void LimitSensor(void)
+{
+	;
+}
+
 void Move(char command[])
 {
 	unsigned char i, count = strlen(command);
@@ -82,6 +87,9 @@ void Move(char command[])
 	finalPosition.y = currentPosition.y + ySteps;
 	finalPosition.z = currentPosition.z + zSteps;
 
+	// Enable PortB Interrupts
+	INTCONbits.RBIE = 1;
+	
 	// Mientras no lleguemos a la posicion final en los 3 ejes, tenemos que hacer girar algún motor
 	while( (finalPosition.x != currentPosition.x) || (finalPosition.y != currentPosition.y) || (finalPosition.z != currentPosition.z) )
 	{
@@ -129,6 +137,9 @@ void Move(char command[])
 		}
 		clock++;
 	}
+	
+	// Disable PortB Interrupts
+	INTCONbits.RBIE = 0;
 }
 
 void user(void)

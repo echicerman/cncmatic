@@ -389,8 +389,23 @@ void UserInit(void);
 		//Etc.
         #if defined(USB_INTERRUPT)
 	        USBDeviceTasks();
-        #endif
-	
+		#endif
+		
+		// Handle PORTB interrupts
+		if (INTCONbits.RBIF)
+		{
+			LimitSensor();
+			//truquito para el proteus jijiji	
+			_asm MOVF	PORTB,0,ACCESS	_endasm
+			//no implemententar en la realidad
+			//********************************
+			INTCONbits.RBIF = 0;  //limpia bandera y salimos
+			//*******************************
+			//truquito para el proteus jijiji	
+			_asm	MOVF	PORTB,0,ACCESS	_endasm
+			//no implemententar en la realidad
+		}
+		
 	}	//This return will be a "retfie fast", since this is in a #pragma interrupt section 
 	#pragma interruptlow YourLowPriorityISRCode
 	void YourLowPriorityISRCode()
@@ -455,6 +470,21 @@ int main(void)
 #endif
 {   
     InitializeSystem();
+	
+	//********************************************
+	// Disable PortB Interrupts
+	INTCONbits.RBIE = 0;
+	
+	TRISA = 0b00000000;
+	LATA = 0b00000000;
+    TRISC = 0b00000000;
+    LATC = 0b00000000;
+	TRISD = 0b00000000;
+    LATD = 0b00000000;
+	
+	TRISB = 0b11111111;
+	//LATBbits.LATB4 = 0;
+	//********************************************
 
     while(1)
     {

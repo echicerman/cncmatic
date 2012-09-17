@@ -32,6 +32,7 @@ int z;
 	unsigned short long z;*/
 } position_t;
 
+void LimitSensor(void);
 void user(void);
 
 #endif

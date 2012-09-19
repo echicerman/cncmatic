@@ -250,7 +250,7 @@ void Move(char command[])
 void user(void)
 {
 	BYTE numBytesRead;
-	char *configPtr, *movementPtr, message[20], stringAux[64];
+	char *configPtr, *movementPtr, message[25], stringAux[64];
 	char movementCommand[3];
 	unsigned char motor = 0, gCommand = -1, mCommand = -1;
 
@@ -305,7 +305,7 @@ void user(void)
 					if(motor == 3)
 					{
 						// if it has been configured all 3 engines
-						strcpypgm2ram(message, (const rom char far *)"Configuration OK");
+						strcpypgm2ram(message, (const rom char far *)"Configuracion Correcta");
 						putUSBUSART(message, strlen(message));
 						machineState = CONFIGURED;
 						
@@ -318,7 +318,7 @@ void user(void)
 					else
 					{
 						// not all 3 engines had been configured correctly
-						strcpypgm2ram(message, (const rom char far *)"Configuration FAIL");
+						strcpypgm2ram(message, (const rom char far *)"Error en Configuracion");
 						putUSBUSART(message, strlen(message));
 						machineState = CNCMATICCONNECTED;
 					}
@@ -336,7 +336,7 @@ void user(void)
 						if(gCode[gCommand] != NULL)
 						{
 							commandFailure = FALSE;
-							strcpypgm2ram(message, (const rom char far *)"Command OK");
+							strcpypgm2ram(message, (const rom char far *)"Comando Soportado");
 							putUSBUSART(message, strlen(message));
 							machineState = PROCESSINGCOMMAND;
 							
@@ -344,7 +344,7 @@ void user(void)
 						}
 						else
 						{
-							strcpypgm2ram(message, (const rom char far *)"Command Not Supported");
+							strcpypgm2ram(message, (const rom char far *)"Comando No Soportado");
 							putUSBUSART(message, strlen(message));
 						}
 					}
@@ -354,7 +354,7 @@ void user(void)
 						if(mCode[mCommand] != NULL)
 						{
 							commandFailure = FALSE;
-							strcpypgm2ram(message, (const rom char far *)"Command OK");
+							strcpypgm2ram(message, (const rom char far *)"Comando Soportado");
 							putUSBUSART(message, strlen(message));
 							machineState = PROCESSINGCOMMAND;
 							
@@ -362,13 +362,13 @@ void user(void)
 						}
 						else
 						{
-							strcpypgm2ram(message, (const rom char far *)"Command Not Supported");
+							strcpypgm2ram(message, (const rom char far *)"Comando No Soportado");
 							putUSBUSART(message, strlen(message));
 						}
 					}
 					else
 					{
-						strcpypgm2ram(message, (const rom char far *)"Command Failure");
+						strcpypgm2ram(message, (const rom char far *)"Error en Comando");
 						putUSBUSART(message, strlen(message));
 					}
 					break;
@@ -383,12 +383,14 @@ void user(void)
 			{
 				case CONFIGURED:
 					machineState = WAITINGCOMMAND;
-					strcpypgm2ram(message, (const rom char far *)"Origin Position Set");
+					strcpypgm2ram(message, (const rom char far *)"Posicion de Origen");
 					putUSBUSART(message, strlen(message));
 					break;
 					
 				case PROCESSINGCOMMAND:
 					// Processing command received
+					strcpypgm2ram(message, (const rom char far *)"Comando Ejecutado");
+					putUSBUSART(message, strlen(message));
 					machineState = WAITINGCOMMAND;
 					break;
 						

@@ -50,8 +50,12 @@ namespace G.Traducciones
                 mov.Inicio.Y = p.Ubicacion.Y;
                 mov.Inicio.Z = p.Ubicacion.Z;
 
+                mov.Fin.X = p.Ubicacion.X;
+                mov.Fin.Y = p.Ubicacion.Y;
+                mov.Fin.Z = p.Ubicacion.Z;
+
                 movs.Add(Metodos.IrA(mov.Inicio.X, mov.Inicio.Y, mov.Inicio.Z));
-                //movs.Add(mov.ToString());
+                movs.Add(mov.ToString());
 
             }
 
@@ -298,9 +302,16 @@ namespace G.Traducciones
                     {
                         movs.Add(Metodos.IrA(mov.Inicio.X, mov.Inicio.Y, mov.Inicio.Z));
                     }
-
-                    movs.Add(mov.ToString());
-
+                    else if (i == 1)
+                    {
+                        //movs.Add(Metodos.IrA(pi.Vertexes[i - 1].Location.X, pi.Vertexes[i - 1].Location.Y, 0));
+                        movs.Add(mov.ToString());
+                    }
+                    else
+                    {
+                        movs.Add(Metodos.IrA(pi.Vertexes[i - 1].Location.X, pi.Vertexes[i - 1].Location.Y, 0));
+                        movs.Add(mov.ToString());
+                    }
                     i++;
                 }
 

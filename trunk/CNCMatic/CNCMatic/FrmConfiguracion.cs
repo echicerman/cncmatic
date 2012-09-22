@@ -10,6 +10,7 @@ using System.Xml;
 using System.IO.Ports;
 using CNCMatic.XML;
 using System.Configuration;
+using Configuracion;
 
 namespace CNCMatic
 {
@@ -157,9 +158,9 @@ namespace CNCMatic
             XMLdb x = new XMLdb(xmlPath);
 
             XML_Config config = new XML_Config();
-            config.MaxX = Convert.ToDecimal(txtMaxX.Text);
-            config.MaxY = Convert.ToDecimal(txtMaxY.Text);
-            config.MaxZ = Convert.ToDecimal(txtMaxZ.Text);
+            config.MaxX = float.Parse(txtMaxX.Text);
+            config.MaxY = float.Parse(txtMaxY.Text);
+            config.MaxZ = float.Parse(txtMaxZ.Text);
             config.PuertoCom = portComboBox.SelectedText;
             config.Descripcion = txtNombrePerfil.Text.Trim();
 

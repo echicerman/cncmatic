@@ -1138,12 +1138,12 @@ namespace DXF
             PuntoInicio.X = arco.Centro.X + arco.Radio * (float)Math.Cos(MathHelper.DegToRad * arco.AnguloInicio);
             PuntoInicio.Y = arco.Centro.Y + arco.Radio * (float)Math.Sin(MathHelper.DegToRad * arco.AnguloInicio);
             //por ahora queda en duro
-            PuntoInicio.Z = 0;
+            PuntoInicio.Z = arco.Centro.Z;
 
             PuntoFin.X = arco.Centro.X + arco.Radio * (float)Math.Cos(MathHelper.DegToRad * arco.AnguloFin);
             PuntoFin.Y = arco.Centro.Y + arco.Radio * (float)Math.Sin(MathHelper.DegToRad * arco.AnguloFin);
             //por ahora queda en duro
-            PuntoFin.Z = 0;
+            PuntoFin.Z = arco.Centro.Z;
 
             arco.PuntoInicio = PuntoInicio;
             arco.PuntoFin = PuntoFin;

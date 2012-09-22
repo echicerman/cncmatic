@@ -57,7 +57,6 @@
     <Compile Include="Acerca.Designer.cs">
       <DependentUpon>Acerca.cs</DependentUpon>
     </Compile>
-    <Compile Include="Configuracion.cs" />
     <Compile Include="FrmComunicacion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -125,6 +124,10 @@
     <ProjectReference Include="..\..\VirtualSerial\VirtualSerial\VirtualSerial.csproj">
       <Project>{0ADE2784-D0C2-49F2-95CF-DE67C97C8BE2}</Project>
       <Name>VirtualSerial</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Configuracion\Configuracion.csproj">
+      <Project>{5FB8E387-D096-4A98-8158-368D43664730}</Project>
+      <Name>Configuracion</Name>
     </ProjectReference>
     <ProjectReference Include="..\DXF\DXF.csproj">
       <Project>{49C08920-9410-4246-8128-F7A3D6D7A8AC}</Project>

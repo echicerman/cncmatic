@@ -9,6 +9,7 @@ using System.Threading;
 using DXF.Entidades;
 using DXF.Header;
 using DXF.Objetos;
+using Configuracion;
 //using Dxf.Tables;
 //using Attribute = DXF.Entidades.Attribute;
 
@@ -592,6 +593,61 @@ namespace DXF
             Thread.CurrentThread.CurrentCulture = cultureInfo;
 
 
+        }
+
+        public bool AnalizarFiguras()
+        {
+            //hay que cambiar esto...
+            XML_Config config = new XML_Config();
+            config.MaxX = 100;
+            config.MaxY = 100;
+            config.MaxZ = 100;
+
+            //analizamos los arcos del documento
+            foreach (Arco arco in this.arcos)
+            {
+                if (!arco.PerteneceAreaTrabajo(config))
+                    return false;
+            }
+
+            //analizamos los puntos del documento
+            foreach (Punto punto in this.puntos)
+            {
+                if (!punto.PerteneceAreaTrabajo(config))
+                    return false;
+            }
+
+            //analizamos las lineas del documento
+            foreach (Linea linea in this.lineas)
+            {
+                if (!linea.PerteneceAreaTrabajo(config))
+                    return false;
+            }
+
+            //analizamos las polilineas del documento
+            foreach (IPolilinea polilinea in this.polilineas)
+            {
+                if (polilinea.Tipo == EntidadTipo.Polilinea)
+                {
+                    if (!((Polilinea)polilinea).PerteneceAreaTrabajo(config))
+                        return false;
+                }
+                if (polilinea.Tipo == EntidadTipo.LightWeightPolyline)
+                {
+                    if (!((LightWeightPolyline)polilinea).PerteneceAreaTrabajo(config))
+                        return false;
+                }
+            }
+
+            //analizamos los circulos del documento
+            foreach (Circulo circulo in this.circulos)
+            {
+                if (!circulo.PerteneceAreaTrabajo(config))
+                    return false;
+            }
+
+
+            return true;
         }
 
         #endregion

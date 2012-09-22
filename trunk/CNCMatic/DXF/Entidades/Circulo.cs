@@ -3,7 +3,7 @@ using System.Collections.Generic;
 //using DXF.Tables;
 using DXF.Objetos;
 using DXF.Utils;
-
+using Configuracion;
 
 namespace DXF.Entidades
 {
@@ -123,6 +123,26 @@ namespace DXF.Entidades
                 value.Normalize();
                 this.normal = value;
             }
+        }
+
+        public float MinimoX
+        {
+            get { return this.centro.X - radio; }
+
+        }
+        public float MaximoX
+        {
+            get { return this.centro.X + radio; }
+
+        }
+        public float MinimoY
+        {
+            get { return this.centro.Y - radio; }
+        }
+        public float MaximoY
+        {
+            get { return this.centro.Y + radio; }
+
         }
 
         #endregion
@@ -258,6 +278,26 @@ namespace DXF.Entidades
 
             return ocsVertices;
         }
+
+        
+        public bool PerteneceAreaTrabajo(XML_Config config)
+        {
+            //por defecto estimamos que la figura estara dentro
+            bool resultado = true;
+
+            //ANALIZAMOS LOS MAXIMOS Y MINIMOS DE CAJA EJE
+            if (this.MaximoX > config.MaxX || this.MinimoX < 0)
+            {
+                return false;
+            }
+            if (this.MaximoY > config.MaxY || this.MinimoX < 0)
+            {
+                return false;
+            }
+
+            return resultado;
+        }
+        
 
         #endregion
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DXF.Objetos;
 using DXF.Utils;
+using Configuracion;
 //using DXF.Tables;
 
 namespace DXF.Entidades
@@ -284,6 +285,31 @@ namespace DXF.Entidades
         //        XData = this.xData
         //    };
         //}
+
+        public bool PerteneceAreaTrabajo(XML_Config config)
+        {
+            //por defecto estimamos que la figura estara dentro
+            bool resultado = true;
+
+            foreach (PolylineVertex v in this.Vertexes)
+            {
+                //ANALIZAMOS LOS PUNTOS DE INICIO Y FIN:
+                if (v.Location.X > config.MaxX || v.Location.X < 0)
+                {
+                    return false;
+                }
+                if (v.Location.Y > config.MaxY || v.Location.Y < 0)
+                {
+                    return false;
+                }
+                //    if (v.Location.Z > config.MaxZ || v.Location.Z < 0)
+                //{
+                //    return false;
+                //}
+            }
+
+            return resultado;
+        }
 
         /// <summary>
         /// Obtains a list of vertexes that represent the polyline approximating the curve segments as necessary.
@@ -1044,6 +1070,34 @@ namespace DXF.Entidades
                 //XData = this.xData
             };
         }
+
+        #region metodos publicos
+
+        public bool PerteneceAreaTrabajo(XML_Config config)
+        {
+            //por defecto estimamos que la figura estara dentro
+            bool resultado = true;
+
+            foreach (LightWeightPolylineVertex v in this.Vertexes)
+            {
+                //ANALIZAMOS LOS PUNTOS DE INICIO Y FIN:
+                if (v.Location.X > config.MaxX || v.Location.X < 0)
+                {
+                    return false;
+                }
+                if (v.Location.Y > config.MaxY || v.Location.Y < 0)
+                {
+                    return false;
+                }
+                //    if (v.Location.Z > config.MaxZ || v.Location.Z < 0)
+                //{
+                //    return false;
+                //}
+            }
+
+            return resultado;
+        }
+        #endregion
 
 
         /// <summary>

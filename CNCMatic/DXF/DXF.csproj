@@ -117,6 +117,12 @@
     <Compile Include="Utils\MathHelper.cs" />
     <Compile Include="Utils\StringEnum.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Configuracion\Configuracion.csproj">
+      <Project>{5FB8E387-D096-4A98-8158-368D43664730}</Project>
+      <Name>Configuracion</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

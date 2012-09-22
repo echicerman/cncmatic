@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using DXF.Objetos ;
+using DXF.Objetos;
 using DXF.Utils;
+using Configuracion;
 //using DXF.Tables;
 
 namespace DXF.Entidades
@@ -25,9 +26,9 @@ namespace DXF.Entidades
         //private float thickness;
         private Vector3f normal;
         //private AciColor color;
-       // private Layer layer;
-       // private LineType lineType;
-       // private Dictionary<ApplicationRegistry, XData> xData;
+        // private Layer layer;
+        // private LineType lineType;
+        // private Dictionary<ApplicationRegistry, XData> xData;
 
         #endregion
 
@@ -45,14 +46,14 @@ namespace DXF.Entidades
             : base(DxfCodigoObjeto.Arco)
         {
             this.centro = centro;
-            this.radio  = radio;
-            this.anguloInicio  = anguloInicio;
-            this.anguloFin  = anguloFin;
+            this.radio = radio;
+            this.anguloInicio = anguloInicio;
+            this.anguloFin = anguloFin;
             //this.thickness = 0.0f;
             //this.layer = Layer.Default;
             //this.color = AciColor.ByLayer;
             //this.lineType = LineType.ByLayer;
-            this.normal = Vector3f.UnitarioZ ;
+            this.normal = Vector3f.UnitarioZ;
         }
 
         /// <summary>
@@ -102,7 +103,7 @@ namespace DXF.Entidades
         /// <remarks>The .</remarks>
         public Vector3f PuntoFin
         {
-            get { return this.puntoFin ; }
+            get { return this.puntoFin; }
             set { this.puntoFin = value; }
         }
 
@@ -111,12 +112,12 @@ namespace DXF.Entidades
         /// </summary>
         public float Radio
         {
-            get { return this.radio ; }
+            get { return this.radio; }
             set
             {
                 if (value <= 0)
                     throw new ArgumentOutOfRangeException("valor", value.ToString());
-                this.radio  = value;
+                this.radio = value;
             }
         }
 
@@ -125,7 +126,7 @@ namespace DXF.Entidades
         /// </summary>
         public float AnguloInicio
         {
-            get { return this.anguloInicio ; }
+            get { return this.anguloInicio; }
             set { this.anguloInicio = value; }
         }
 
@@ -134,7 +135,7 @@ namespace DXF.Entidades
         /// </summary>
         public float AnguloFin
         {
-            get { return this.anguloFin ; }
+            get { return this.anguloFin; }
             set { this.anguloFin = value; }
         }
 
@@ -155,13 +156,32 @@ namespace DXF.Entidades
             get { return this.normal; }
             set
             {
-                if (Vector3f.Nulo  == value)
+                if (Vector3f.Nulo == value)
                     throw new ArgumentNullException("valor", "The normal can not be the zero vector");
                 value.Normalize();
                 this.normal = value;
             }
         }
 
+        public float MinimoX
+        {
+            get { return this.centro.X - radio; }
+
+        }
+        public float MaximoX
+        {
+            get { return this.centro.X + radio; }
+
+        }
+        public float MinimoY
+        {
+            get { return this.centro.Y - radio; }
+        }
+        public float MaximoY
+        {
+            get { return this.centro.Y + radio; }
+
+        }
         #endregion
 
         #region IEntidadObjeto miembros
@@ -240,7 +260,7 @@ namespace DXF.Entidades
                 throw new ArgumentOutOfRangeException("precision", precision, "The arc precision must be greater or equal to two");
 
             List<Vector2f> ocsVertexes = new List<Vector2f>();
-            float start = (float)(this.anguloInicio  * MathHelper.DegToRad);
+            float start = (float)(this.anguloInicio * MathHelper.DegToRad);
             float end = (float)(this.anguloFin * MathHelper.DegToRad);
             float angle = (end - start) / precision;
 
@@ -297,6 +317,236 @@ namespace DXF.Entidades
 
             return ocsVertexes;
         }
+
+        public bool PerteneceAreaTrabajo(XML_Config config)
+        {
+            //por defecto estimamos que la figura estara dentro
+            bool resultado = true;
+
+
+            //ANALIZAMOS LOS PUNTOS DE INICIO Y FIN:
+            if (this.puntoInicio.X > config.MaxX || this.puntoInicio.X < 0)
+            {
+                return false;
+            }
+            if (this.puntoInicio.Y > config.MaxY || this.puntoInicio.Y < 0)
+            {
+                return false;
+            }
+            if (this.puntoInicio.Z > config.MaxZ || this.puntoInicio.Z < 0)
+            {
+                return false;
+            }
+
+            if (this.puntoFin.X > config.MaxX || this.puntoFin.X < 0)
+            {
+                return false;
+            }
+            if (this.puntoFin.Y > config.MaxY || this.puntoFin.Y < 0)
+            {
+                return false;
+            }
+            if (this.puntoFin.Z > config.MaxZ || this.puntoFin.Z < 0)
+            {
+                return false;
+            }
+
+            //CASO 1 - CUADRANTE DEL INICIO = 1
+            if (this.CuadranteInicio() == 1)
+            {
+                switch (this.CuadranteFin())
+                {
+                    case 1: //como los dos estan en el cuadrante 1
+                        if (this.anguloInicio > this.anguloFin)
+                        {
+                            //hay que calcular todos los maximos y minimos
+                            if (this.MaximoY > config.MaxY || this.MinimoY < 0 || this.MinimoX < 0 || this.MaximoX > config.MaxX)
+                            {
+                                return false;
+                            } break;
+                        } break;
+                    case 2:
+                        //hay que comparar con el maximo en y
+                        if (this.MaximoY > config.MaxY)
+                        {
+                            return false;
+                        } break;
+                    case 3:
+                        //hay que comparar con el maximo en y, minimo en X
+                        if (this.MaximoY > config.MaxY || this.MinimoX < 0)
+                        {
+                            return false;
+                        } break;
+                    case 4:
+                        //hay que comparar con el maximo y minimo en y, minimo en X
+                        if (this.MaximoY > config.MaxY || this.MinimoY < 0 || this.MinimoX < 0)
+                        {
+                            return false;
+                        } break;
+                    default:
+                        return false;
+                }
+            }
+
+
+            //CASO 2 - CUADRANTE DEL INICIO = 2
+            if (this.CuadranteInicio() == 2)
+            {
+                switch (this.CuadranteFin())
+                {
+                    case 1:
+                        //hay que comparar con el maximo y minimo en x, maximo en X
+                        if (this.MaximoX > config.MaxX || this.MinimoX < 0 || this.MaximoY > config.MaxY)
+                        {
+                            return false;
+                        } break;
+                    case 2://como los dos estan en el cuadrante 2
+                        if (this.anguloInicio > this.anguloFin)
+                        {
+                            //hay que calcular todos los maximos y minimos
+                            if (this.MaximoY > config.MaxY || this.MinimoY < 0 || this.MinimoX < 0 || this.MaximoX > config.MaxX)
+                            {
+                                return false;
+                            } break;
+                        } break;
+                    case 3:
+                        //hay que comparar con el minimo en X
+                        if (this.MinimoX < 0)
+                        {
+                            return false;
+                        } break;
+                    case 4:
+                        //hay que comparar con el minimo en y, minimo en X
+                        if (this.MinimoY < 0 || this.MinimoX < 0)
+                        {
+                            return false;
+                        } break;
+                    default:
+                        return false;
+                }
+            }
+
+            //CASO 3 - CUADRANTE DEL INICIO = 3
+            if (this.CuadranteInicio() == 3)
+            {
+                switch (this.CuadranteFin())
+                {
+                    case 1:
+                        //hay que comparar con el minimo en y, maximo en X
+                        if (this.MaximoX > config.MaxX || this.MinimoY < 0)
+                        {
+                            return false;
+                        } break;
+                    case 2:
+                        //hay que comparar con el minimo en y, maximo en X
+                        if (this.MaximoX > config.MaxX || this.MinimoY < 0 || this.MaximoY > config.MaxY)
+                        {
+                            return false;
+                        } break;
+                    case 3://como los dos estan en el cuadrante 3
+                        if (this.anguloInicio > this.anguloFin)
+                        {
+                            //hay que calcular todos los maximos y minimos
+                            if (this.MaximoY > config.MaxY || this.MinimoY < 0 || this.MinimoX < 0 || this.MaximoX > config.MaxX)
+                            {
+                                return false;
+                            } break;
+                        } break;
+                    case 4:
+                        //hay que comparar con el minimo en y
+                        if (this.MinimoY < 0)
+                        {
+                            return false;
+                        } break;
+                    default:
+                        return false;
+                }
+            }
+
+            //CASO 4 - CUADRANTE DEL INICIO = 4
+            if (this.CuadranteInicio() == 4)
+            {
+                switch (this.CuadranteFin())
+                {
+                    case 1:
+                        //hay que comparar con el maximo en X
+                        if (this.MaximoX > config.MaxX)
+                        {
+                            return false;
+                        } break;
+                    case 2:
+                        //hay que comparar con el maximo en y, maximo en X
+                        if (this.MaximoX > config.MaxX || this.MaximoY > config.MaxY)
+                        {
+                            return false;
+                        } break;
+                    case 3:
+                        //hay que comparar con el maximo en y, maximo y minimo en X
+                        if (this.MaximoX > config.MaxX || this.MaximoX < 0 || this.MaximoY > config.MaxY)
+                        {
+                            return false;
+                        } break;
+                    case 4:
+                        //como los dos estan en el cuadrante 4
+                        if (this.anguloInicio > this.anguloFin)
+                        {
+                            //hay que calcular todos los maximos y minimos
+                            if (this.MaximoY > config.MaxY || this.MinimoY < 0 || this.MinimoX < 0 || this.MaximoX > config.MaxX)
+                            {
+                                return false;
+                            } break;
+                        } break;
+                    default:
+                        return false;
+                }
+            }
+
+            return resultado;
+        }
+
+        private int CuadranteInicio()
+        {
+
+            if (this.anguloInicio >= 0 && this.AnguloInicio < 90)
+            {
+                return 1;
+            }
+            else if (this.anguloInicio >= 90 && this.AnguloInicio < 180)
+            {
+                return 2;
+            }
+            else if (this.anguloInicio >= 180 && this.AnguloInicio < 270)
+            {
+                return 3;
+            }
+            else
+            {
+                return 4;
+            }
+
+
+        }
+        private int CuadranteFin()
+        {
+
+            if (this.anguloFin >= 0 && this.anguloFin < 90)
+            {
+                return 1;
+            }
+            else if (this.anguloFin >= 90 && this.anguloFin < 180)
+            {
+                return 2;
+            }
+            else if (this.anguloFin >= 180 && this.anguloFin < 270)
+            {
+                return 3;
+            }
+            else
+            {
+                return 4;
+            }
+        }
+
 
         #endregion
 

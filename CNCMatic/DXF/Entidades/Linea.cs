@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 //using DXF.Tables;
-using DXF.Objetos ;
+using DXF.Objetos;
+using Configuracion;
 
 namespace DXF.Entidades
 {
@@ -42,7 +43,7 @@ namespace DXF.Entidades
             //this.layer = Layer.Default;
             //this.color = AciColor.ByLayer;
             //this.lineType = LineType.ByLayer;
-            this.normal = Vector3f.UnitarioZ ;
+            this.normal = Vector3f.UnitarioZ;
         }
 
         /// <summary>
@@ -51,13 +52,13 @@ namespace DXF.Entidades
         public Linea()
             : base(DxfCodigoObjeto.Linea)
         {
-            this.puntoInicio = Vector3f.Nulo ;
+            this.puntoInicio = Vector3f.Nulo;
             this.puntoFin = Vector3f.Nulo;
             //this.thickness = 0.0f;
             //this.layer = Layer.Default;
             //this.color = AciColor.ByLayer;
             //this.lineType = LineType.ByLayer;
-            this.normal = Vector3f.UnitarioZ ;
+            this.normal = Vector3f.UnitarioZ;
         }
 
         #endregion
@@ -169,6 +170,45 @@ namespace DXF.Entidades
         //    set { this.xData = value; }
         //}
 
+        #endregion
+
+        #region metodos publicos
+        
+        public bool PerteneceAreaTrabajo(XML_Config config)
+        {
+            //por defecto estimamos que la figura estara dentro
+            bool resultado = true;
+
+
+            //ANALIZAMOS LOS PUNTOS DE INICIO Y FIN:
+            if (this.puntoInicio.X > config.MaxX || this.puntoInicio.X < 0)
+            {
+                return false;
+            }
+            if (this.puntoInicio.Y > config.MaxY || this.puntoInicio.Y < 0)
+            {
+                return false;
+            }
+            if (this.puntoInicio.Z > config.MaxZ || this.puntoInicio.Z < 0)
+            {
+                return false;
+            }
+
+            if (this.puntoFin.X > config.MaxX || this.puntoFin.X < 0)
+            {
+                return false;
+            }
+            if (this.puntoFin.Y > config.MaxY || this.puntoFin.Y < 0)
+            {
+                return false;
+            }
+            if (this.puntoFin.Z > config.MaxZ || this.puntoFin.Z < 0)
+            {
+                return false;
+            }
+
+            return resultado;
+        }
         #endregion
 
         #region overrides

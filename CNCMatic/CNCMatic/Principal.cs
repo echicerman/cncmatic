@@ -13,6 +13,7 @@ using G.Objetos;
 using System.IO;
 using MacGen;
 using DXF.Objetos;
+using Configuracion;
 
 namespace CNCMatic
 {
@@ -142,7 +143,9 @@ namespace CNCMatic
 
             if (flag == true)
             {
-                AgregaTextoEditor(false, Metodos.IrA(Configuracion.X_MAX, 0, 0));
+                //////OJO ACA CAMBIAR LUEGO A LA CONFIGURACION QUE SE ESTE UTILIZANDO!! HERNAN
+                XML_Config x = new XML_Config();
+                AgregaTextoEditor(false, Metodos.IrA(x.MaxX, 0, 0));
                 flag = false;
             }
         }
@@ -196,40 +199,74 @@ namespace CNCMatic
             if (text != "")
                 this.txtPreview.Text += Environment.NewLine;
         }
+        /// <summary>
+        /// Funcion que limpia el texto contenido sobre el editor visual
+        /// </summary>
+        private void LimpiaTextoEditor()
+        {
+            this.txtPreview.Text = "";
+        }
 
         private void dXFFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //realizamos la busqueda del archivo
-            if (importaDXF.ShowDialog() == DialogResult.OK)
+            try
             {
-                //realizamos la importacion del DXF
-                DxfDoc doc = new DxfDoc();
-                doc.Cargar(importaDXF.FileName);
-
-                List<string> sl = Traduce.Lineas(doc.Lineas);
-                sl.AddRange(Traduce.Arcos(doc.Arcos));
-                sl.AddRange(Traduce.Circulos(doc.Circulos));
-                sl.AddRange(Traduce.Elipses(doc.Elipses));
-                sl.AddRange(Traduce.Puntos(doc.Puntos));
-                sl.AddRange(Traduce.Polilineas(doc.Polilineas));
-
-                //Optimizamos las líneas de código G
-                sl = OptimizarCodigoG(sl);
-
-                //Creo un archivo temporal para previsualizar
-                string curTempFileName = System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Temp";
-
-                using (StreamWriter sw = File.CreateText(curTempFileName))
+                //realizamos la busqueda del archivo
+                if (importaDXF.ShowDialog() == DialogResult.OK)
                 {
-                    foreach (string s in sl)
+                    //Realizamos la importacion del DXF
+                    DxfDoc doc = new DxfDoc();
+                    doc.Cargar(importaDXF.FileName);
+
+                    //Analizamos las figuras
+                    if (!doc.AnalizarFiguras())
                     {
-                        AgregaTextoEditor(false, s);
-                        sw.WriteLine(s);
+                        MessageBox.Show("Error: Se han encontrado figuras que superan el área de trabajo definido", "Importar DXF", MessageBoxButtons.OK, MessageBoxIcon.Error );
+                        return;
                     }
 
-                    sw.Close();
-                    OpenFile(curTempFileName);
+                    //Realizamos la traduccion de las figuras a código G
+                    List<string> sl=new List<string>();
+                    sl.AddRange(Traduce.Lineas(doc.Lineas));
+                    sl.AddRange(Traduce.Arcos(doc.Arcos));
+                    sl.AddRange(Traduce.Circulos(doc.Circulos));
+                    sl.AddRange(Traduce.Elipses(doc.Elipses));
+                    sl.AddRange(Traduce.Puntos(doc.Puntos));
+                    sl.AddRange(Traduce.Polilineas(doc.Polilineas));
+
+                    //Optimizamos las líneas de código G
+                    sl = OptimizarCodigoG(sl);
+
+                    //Mostramos el G en pantalla y previsualizamos
+                    if (sl != null)
+                    {
+                        //Creo un archivo temporal para previsualizar
+                        string curTempFileName = System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Temp";
+
+                        //limpiamos el texto contenido en el editor
+                        LimpiaTextoEditor();
+
+                        using (StreamWriter sw = File.CreateText(curTempFileName))
+                        {
+                            foreach (string s in sl)
+                            {
+                                AgregaTextoEditor(false, s);
+                                sw.WriteLine(s);
+                            }
+
+                            sw.Close();
+                            OpenFile(curTempFileName);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se han encontrado figuras para importar", "Importar DXF", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Se ha producido un error " + ex.Message, "Importar DXF", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -263,7 +300,22 @@ namespace CNCMatic
                 while (j <= list.Count - 1)
                 {
                     auxiliar2 = list[j];
-                    if (ObtieneDistancia(puntoActual, new Vector3d(Convert.ToDouble(PuntoInicioX(auxiliar1)), Convert.ToDouble(PuntoInicioY(auxiliar1)), Convert.ToDouble(PuntoInicioZ(auxiliar1)))) > ObtieneDistancia(puntoActual, new Vector3d(Convert.ToDouble(PuntoInicioX(auxiliar2)), Convert.ToDouble(PuntoInicioY(auxiliar2)), Convert.ToDouble(PuntoInicioZ(auxiliar2)))))
+                    if (ObtieneDistancia(
+                            puntoActual, 
+                            new Vector3d(
+                                Convert.ToDouble(PuntoInicioX(auxiliar1)), 
+                                Convert.ToDouble(PuntoInicioY(auxiliar1)), 
+                                Convert.ToDouble(PuntoInicioZ(auxiliar1)))
+                            ) > 
+                        ObtieneDistancia(
+                            puntoActual, 
+                            new Vector3d(
+                                Convert.ToDouble(PuntoInicioX(auxiliar2)), 
+                                Convert.ToDouble(PuntoInicioY(auxiliar2)), 
+                                Convert.ToDouble(PuntoInicioZ(auxiliar2))
+                            )
+                        )
+                    )
                     {
                         auxiliar1 = auxiliar2;
                         tempFig = list[j + 1];
@@ -313,36 +365,41 @@ namespace CNCMatic
 
         private List<string> EliminarCodigoInnecesario(List<string> newList)
         {
-            List<string> lista = new List<string>();
-            Vector3d punto1 = new Vector3d(0, 0, 0);
-            Vector3d punto2 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[0])), Convert.ToDouble(PuntoInicioY(newList[0])), Convert.ToDouble(PuntoInicioZ(newList[0])));
-            if (!(punto1 == punto2))
+            if (newList.Count > 0)
             {
-                lista.Add(newList[0]);
-            }
 
-            int i = 1;
-
-            while (i < newList.Count - 1)
-            {
-                punto1 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[i])), Convert.ToDouble(PuntoInicioY(newList[i])), Convert.ToDouble(PuntoInicioZ(newList[i])));
-                punto2 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[i + 1])), Convert.ToDouble(PuntoInicioY(newList[i + 1])), Convert.ToDouble(PuntoInicioZ(newList[i + 1])));
-
-                if (punto1 == punto2)
+                List<string> lista = new List<string>();
+                Vector3d punto1 = new Vector3d(0, 0, 0);
+                Vector3d punto2 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[0])), Convert.ToDouble(PuntoInicioY(newList[0])), Convert.ToDouble(PuntoInicioZ(newList[0])));
+                if (!(punto1 == punto2))
                 {
-                    lista.Add(newList[i]);
+                    lista.Add(newList[0]);
                 }
-                else
+
+                int i = 1;
+
+                while (i < newList.Count - 1)
                 {
-                    lista.Add(newList[i]);
-                    lista.Add(newList[i + 1]);
+                    punto1 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[i])), Convert.ToDouble(PuntoInicioY(newList[i])), Convert.ToDouble(PuntoInicioZ(newList[i])));
+                    punto2 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[i + 1])), Convert.ToDouble(PuntoInicioY(newList[i + 1])), Convert.ToDouble(PuntoInicioZ(newList[i + 1])));
+
+                    if (punto1 == punto2)
+                    {
+                        lista.Add(newList[i]);
+                    }
+                    else
+                    {
+                        lista.Add(newList[i]);
+                        lista.Add(newList[i + 1]);
+                    }
+                    i = i + 2;
                 }
-                i = i + 2;
+
+                lista.Add(newList[i]);
+
+                return lista;
             }
-
-            lista.Add(newList[i]);
-
-            return lista;
+            return null;
         }
 
         private string movimiento(string lineaG)

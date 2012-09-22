@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 //using DXF.Tables;
 using DXF.Objetos;
+using Configuracion;
 
 namespace DXF.Entidades
 {
@@ -89,6 +90,31 @@ namespace DXF.Entidades
                 value.Normalize();
                 this.normal = value;
             }
+        }
+
+        #endregion
+
+        #region metodos publicos
+
+        public bool PerteneceAreaTrabajo(XML_Config config)
+        {
+            //por defecto estimamos que la figura estara dentro
+            bool resultado = true;
+            
+            //ANALIZAMOS LA UBICACION DEL PUNTO
+            if (this.Ubicacion.X > config.MaxX || this.Ubicacion.X < 0)
+            {
+                return false;
+            }
+            if (this.Ubicacion.Y > config.MaxY || this.Ubicacion.Y < 0)
+            {
+                return false;
+            }
+            if (this.Ubicacion.Z > config.MaxZ || this.Ubicacion.Z < 0)
+            {
+                return false;
+            }
+            return resultado;
         }
 
         #endregion

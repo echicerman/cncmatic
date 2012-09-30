@@ -6,33 +6,10 @@
 #include <string.h>
 #include <math.h>
 
-// Calculamos la distancia total del movimiento
-// distanciaTotal = sqrt ( pasosX^2 + pasosY^2 + pasosZ^2 )
-/*totalDistance = sqrt( pow(finalPosition.x - currentPosition.x , 2) + pow(finalPosition.y - currentPosition.y, 2) + pow(finalPosition.z - currentPosition.z, 2) );*/
-
-// Calculamos la distancia total del movimiento
-// tiempoTotal = distancia / velocidad -> pasos x segundo
-/*totalTime = (totalDistance / 100) * 1000;*/
-/*totalTime = ( (sqrt( pow(finalPosition.x - currentPosition.x , 2) + pow(finalPosition.y - currentPosition.y, 2) + pow(finalPosition.z - currentPosition.z, 2) )) / 100) * 1000;*/
-
-// Calculamos la frecuencia de cambio de estado de bit de paso por cada motor
-// frecuencia = tiempoTotal / pasosTotal / 2 -> se realiza un paso por flanco descendente; dividiendo por 2 nos indica la frecuencia para cambiar de estado: de 1 a 0; y de 0 a 1.
-// Version 1
-/*xClock = totalTime / ( (finalPosition.x - currentPosition.x) * 2 ) + 500;
-yClock = totalTime / ( (finalPosition.y - currentPosition.y) * 2 ) + 500;
-zClock = totalTime / ( (finalPosition.z - currentPosition.z) * 2 ) + 500;*/	
-// Version 2
-/*xClock = ( ( (sqrt( pow(finalPosition.x - currentPosition.x , 2) + pow(finalPosition.y - currentPosition.y, 2) + pow(finalPosition.z - currentPosition.z, 2) )) / 100) * 1000 ) / ( (finalPosition.x - currentPosition.x) * 2 ) + 500;
-yClock = ( ( (sqrt( pow(finalPosition.x - currentPosition.x , 2) + pow(finalPosition.y - currentPosition.y, 2) + pow(finalPosition.z - currentPosition.z, 2) )) / 100) * 1000 ) / ( (finalPosition.y - currentPosition.y) * 2 ) + 500;
-zClock = ( ( (sqrt( pow(finalPosition.x - currentPosition.x , 2) + pow(finalPosition.y - currentPosition.y, 2) + pow(finalPosition.z - currentPosition.z, 2) )) / 100) * 1000 ) / ( (finalPosition.z - currentPosition.z) * 2 ) + 500;*/
-// ( Distancia * 5 ) / (final - current) + "delay" - MAL
-// ( Distancia * 5 ) / (final - current) * "ajuste" -> el ajuste es para no perder la relación entre el avance en cada eje - MISMO VALOR - y para no tirar los pulsos tan rapidos
-
 volatile state_t machineState = SERIALPORTCONNECTED;
 config_t configuracion[3];
-bool_t  commandFailure = FALSE;
 position_t currentPosition;
-unsigned char gCommand = -1, mCommand = -1;
+char gCommand = -1, mCommand = -1;
 
 typedef void (*_func)(char[]);
 position_t GetFinalPosition(char[]);
@@ -40,45 +17,44 @@ void Line(long, long, long, position_t);
 
 void LimitSensorHandler(void)
 {
-	;
+	machineState = LIMITSENSOR;
 }
 
-// Definimos funciones MGsoportadas
+// Definimos funciones Gsoportadas
 void G00(char code[])
 {
-	unsigned long/*unsigned short long */ xClock, yClock, zClock, xPow, yPow, zPow, distance;
+	unsigned long xClock, yClock, zClock, xPow, yPow, zPow, distance, time;
 	position_t position = GetFinalPosition(code);
 	
 	xPow = (position.x - currentPosition.x) * (position.x - currentPosition.x);
 	yPow = (position.y - currentPosition.y) * (position.y - currentPosition.y);
 	zPow = (position.z - currentPosition.z) * (position.z - currentPosition.z);
 	distance = sqrt( xPow + yPow + zPow );
+	time = ( distance / 100 ) * 1000; // milisegundos
 	
-	
-	/*xClock = ( (sqrt( pow(position.x - currentPosition.x , 2) + pow(position.y - currentPosition.y, 2) + pow(position.z - currentPosition.z, 2) ) * 5 ) / ( (position.x - currentPosition.x) ) ) * 100;
-	yClock = ( (sqrt( pow(position.x - currentPosition.x , 2) + pow(position.y - currentPosition.y, 2) + pow(position.z - currentPosition.z, 2) ) * 5 ) / ( (position.y - currentPosition.y) ) ) * 100;
-	zClock = ( (sqrt( pow(position.x - currentPosition.x , 2) + pow(position.y - currentPosition.y, 2) + pow(position.z - currentPosition.z, 2) ) * 5 ) / ( (position.z - currentPosition.z) ) ) * 100;*/
-	
-	xClock = ( (distance * 5 ) / (position.x - currentPosition.x) );
-	yClock = ( (distance * 5 ) / (position.y - currentPosition.y) );
-	zClock = ( (distance * 5 ) / (position.z - currentPosition.z) );
+	/** time / cantidadDeCambiosDeEstado **/
+	xClock = time / ( (position.x - currentPosition.x)  * 2 );
+	yClock = time / ( (position.y - currentPosition.y)  * 2 );
+	zClock = time / ( (position.z - currentPosition.z) * 2 );
 	
 	Line(xClock, yClock, zClock, position);
 }
 
 void G01(char code[])
 {
-	unsigned long/*unsigned short long */ xClock, yClock, zClock, xPow, yPow, zPow, distance;
+	unsigned long xClock, yClock, zClock, xPow, yPow, zPow, distance, time;
 	position_t position = GetFinalPosition(code);
 	
 	xPow = (position.x - currentPosition.x) * (position.x - currentPosition.x);
 	yPow = (position.y - currentPosition.y) * (position.y - currentPosition.y);
 	zPow = (position.z - currentPosition.z) * (position.z - currentPosition.z);
 	distance = sqrt( xPow + yPow + zPow );
+	time = ( distance / 100 ) * 1000; // milisegundos
 	
-	xClock = ( (distance * 5 ) / (position.x - currentPosition.x) );
-	yClock = ( (distance * 5 ) / (position.y - currentPosition.y) );
-	zClock = ( (distance * 5 ) / (position.z - currentPosition.z) );
+	/** time / cantidadDeCambiosDeEstado **/
+	xClock = time / ( (position.x - currentPosition.x)  * 2 );
+	yClock = time / ( (position.y - currentPosition.y)  * 2 );
+	zClock = time / ( (position.z - currentPosition.z) * 2 );
 	
 	Line(xClock, yClock, zClock, position);
 }
@@ -206,7 +182,7 @@ void Line(long xFreq, long yFreq, long zFreq, position_t finalPosition)
 	while( ( machineState == PROCESSINGCOMMAND ) && ( (finalPosition.x != currentPosition.x) || (finalPosition.y != currentPosition.y) || (finalPosition.z != currentPosition.z) ) )
 	{
 		// si el clock es mayor o igual al clock del próximo paso del motor y si no llegué a la posición final
-		if( (clock >= xNextStep) && finalPosition.x != currentPosition.x )
+		if( (clock >= xNextStep) && (currentPosition.x != finalPosition.x) )
 		{
 			if( LATAbits.LATA2 )
 			{
@@ -220,7 +196,7 @@ void Line(long xFreq, long yFreq, long zFreq, position_t finalPosition)
 			xNextStep += xFreq;
 		}
 		
-		if( (clock >= yNextStep) && finalPosition.y != currentPosition.y )
+		if( (clock >= yNextStep) && (currentPosition.y != finalPosition.y) )
 		{
 			if( LATCbits.LATC2 )
 			{
@@ -234,7 +210,7 @@ void Line(long xFreq, long yFreq, long zFreq, position_t finalPosition)
 			yNextStep += yFreq;
 		}
 		
-		if( (clock >= zNextStep) && finalPosition.z != currentPosition.z )
+		if( (clock >= zNextStep) && (currentPosition.z != finalPosition.z) )
 		{
 			if( LATDbits.LATD4 )
 			{
@@ -277,6 +253,15 @@ void user(void)
 			}
 			USB_In_Buffer[i] = '\0';
 			
+			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"reset"))
+			{
+				// Resetear la maquina si recibimos el comando 'reset'
+				strcpypgm2ram(message, (const rom char far *)"CNC Reset");
+				putUSBUSART(message, strlen(message));
+				machineState = SERIALPORTCONNECTED;
+				goto endUser;
+			}
+			
 			switch(machineState)
 			{
 				case SERIALPORTCONNECTED:
@@ -311,7 +296,6 @@ void user(void)
 					{
 						// if it has been configured all 3 engines
 						strcpypgm2ram(message, (const rom char far *)"Configuracion Correcta");
-						putUSBUSART(message, strlen(message));
 						machineState = CONFIGURED;
 						
 						// TODO: Mover punta a (0;0;0)
@@ -323,55 +307,57 @@ void user(void)
 					else
 					{
 						// not all 3 engines had been configured correctly
-						strcpypgm2ram(message, (const rom char far *)"Error en Configuracion");
-						putUSBUSART(message, strlen(message));
+						strcpypgm2ram(message, (const rom char far *)"Error en Configuracion");						
 						machineState = CNCMATICCONNECTED;
 					}
+					
+					putUSBUSART(message, strlen(message));
 					break;
 					
 				case WAITINGCOMMAND:
+					// Tipo de codigo [ G | M ]
 					movementCommandType = USB_In_Buffer[0];
+					// Numero de codigo
 					movementCommandCode[0] = USB_In_Buffer[1];
 					movementCommandCode[1] = USB_In_Buffer[2];
 					movementCommandCode[2] = '\0';
 					
+					// Chequeamos si el comando es G
 					if(movementCommandType == 'G')
-					{
+					{						
 						gCommand = atoi(movementCommandCode);
 						if(gCode[gCommand] != NULL)
 						{
-							commandFailure = FALSE;
 							strcpypgm2ram(message, (const rom char far *)"Comando Soportado");
-							putUSBUSART(message, strlen(message));
 							machineState = PROCESSINGCOMMAND;
 						}
 						else
 						{
 							strcpypgm2ram(message, (const rom char far *)"Comando No Soportado");
-							putUSBUSART(message, strlen(message));
 						}
 					}
+					// Chequeamos si el comando es M
 					else if(movementCommandType == 'M')
 					{
 						mCommand = atoi(movementCommandCode);
 						if(mCode[mCommand] != NULL)
 						{
-							commandFailure = FALSE;
 							strcpypgm2ram(message, (const rom char far *)"Comando Soportado");
-							putUSBUSART(message, strlen(message));
 							machineState = PROCESSINGCOMMAND;
 						}
 						else
 						{
 							strcpypgm2ram(message, (const rom char far *)"Comando No Soportado");
-							putUSBUSART(message, strlen(message));
 						}
 					}
+					// El comando no era ni G ni M
 					else
 					{
 						strcpypgm2ram(message, (const rom char far *)"Error en Comando");
-						putUSBUSART(message, strlen(message));
 					}
+					
+					// mandamos el mensaje correspondiente a la PC
+					putUSBUSART(message, strlen(message));
 					break;
 					
 				default:
@@ -383,28 +369,28 @@ void user(void)
 			switch(machineState)
 			{
 				case CONFIGURED:
-					machineState = WAITINGCOMMAND;
 					strcpypgm2ram(message, (const rom char far *)"Posicion de Origen");
 					putUSBUSART(message, strlen(message));
+					machineState = WAITINGCOMMAND;
 					break;
 					
 				case PROCESSINGCOMMAND:
 					// Processing command received
-					if(gCommand != -1)
+					if(gCommand != -1) { gCode[gCommand](USB_In_Buffer); }
+					if(mCommand != -1) { mCode[mCommand](USB_In_Buffer); }
+					
+					// reseteamos variables de comando
+					gCommand = mCommand = -1;
+					
+					// Chequeamos machineState -> si se activo algun fin de carrera
+					if(machineState == LIMITSENSOR)
 					{
-						gCode[gCommand](USB_In_Buffer);
-						gCommand = -1;
+						strcpypgm2ram(message, (const rom char far *)"Sensor Fin de Carrera");
 					}
 					else
 					{
-						mCode[mCommand](USB_In_Buffer);
-						mCommand = -1;
+						strcpypgm2ram(message, (const rom char far *)"Comando Ejecutado");						
 					}
-					machineState = COMMANDPROCESSED;
-					break;
-					
-				case COMMANDPROCESSED:
-					strcpypgm2ram(message, (const rom char far *)"Comando Ejecutado");
 					putUSBUSART(message, strlen(message));
 					machineState = WAITINGCOMMAND;
 					break;
@@ -415,5 +401,6 @@ void user(void)
 			}
 		}
 	}
-	CDCTxService();
+	endUser:
+		CDCTxService();
 }

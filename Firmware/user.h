@@ -1,20 +1,14 @@
 #ifndef USER_H
 #define USER_H
 
-typedef enum 
-{ 
-	FALSE, 
-	TRUE 
-} bool_t;
-
 typedef enum {
 	SERIALPORTCONNECTED,		// 0
 	HANDSHAKEACKRECEIVED,	// 1
-	CNCMATICCONNECTED,		// 2
-	CONFIGURED,						// 3
-	WAITINGCOMMAND,				// 4
-	PROCESSINGCOMMAND,		// 5
-	COMMANDPROCESSED		// 5
+	CNCMATICCONNECTED,			// 2
+	CONFIGURED,							// 3
+	WAITINGCOMMAND,					// 4
+	PROCESSINGCOMMAND,			// 5
+	LIMITSENSOR							// 6
 } state_t;
 
 typedef struct 

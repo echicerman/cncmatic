@@ -394,7 +394,7 @@ void UserInit(void);
 		// Handle PORTB interrupts
 		if (INTCONbits.RBIF)
 		{
-			LimitSensor();
+			LimitSensorHandler();
 			//truquito para el proteus jijiji	
 			_asm MOVF	PORTB,0,ACCESS	_endasm
 			//no implemententar en la realidad

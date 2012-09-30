@@ -13,7 +13,8 @@ typedef enum {
 	CNCMATICCONNECTED,		// 2
 	CONFIGURED,						// 3
 	WAITINGCOMMAND,				// 4
-	PROCESSINGCOMMAND		// 5
+	PROCESSINGCOMMAND,		// 5
+	COMMANDPROCESSED		// 5
 } state_t;
 
 typedef struct 

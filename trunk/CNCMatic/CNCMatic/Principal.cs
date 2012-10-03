@@ -221,12 +221,12 @@ namespace CNCMatic
                     //Analizamos las figuras
                     if (!doc.AnalizarFiguras())
                     {
-                        MessageBox.Show("Error: Se han encontrado figuras que superan el área de trabajo definido", "Importar DXF", MessageBoxButtons.OK, MessageBoxIcon.Error );
+                        MessageBox.Show("Error: Se han encontrado figuras que superan el área de trabajo definido", "Importar DXF", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
 
                     //Realizamos la traduccion de las figuras a código G
-                    List<string> sl=new List<string>();
+                    List<string> sl = new List<string>();
                     sl.AddRange(Traduce.Lineas(doc.Lineas));
                     sl.AddRange(Traduce.Arcos(doc.Arcos));
                     sl.AddRange(Traduce.Circulos(doc.Circulos));
@@ -291,34 +291,40 @@ namespace CNCMatic
             string tempFig;
             string auxiliar1;
             string auxiliar2;
+            int posAux;
+            int posFig;
 
             while (list.Count > 0)
             {
                 auxiliar1 = list[0];
+                posAux = 0;
                 tempFig = list[1];
+                posFig = 1;
                 j = 2;
                 while (j <= list.Count - 1)
                 {
                     auxiliar2 = list[j];
                     if (ObtieneDistancia(
-                            puntoActual, 
+                            puntoActual,
                             new Vector3d(
-                                Convert.ToDouble(PuntoInicioX(auxiliar1)), 
-                                Convert.ToDouble(PuntoInicioY(auxiliar1)), 
+                                Convert.ToDouble(PuntoInicioX(auxiliar1)),
+                                Convert.ToDouble(PuntoInicioY(auxiliar1)),
                                 Convert.ToDouble(PuntoInicioZ(auxiliar1)))
-                            ) > 
+                            ) >
                         ObtieneDistancia(
-                            puntoActual, 
+                            puntoActual,
                             new Vector3d(
-                                Convert.ToDouble(PuntoInicioX(auxiliar2)), 
-                                Convert.ToDouble(PuntoInicioY(auxiliar2)), 
+                                Convert.ToDouble(PuntoInicioX(auxiliar2)),
+                                Convert.ToDouble(PuntoInicioY(auxiliar2)),
                                 Convert.ToDouble(PuntoInicioZ(auxiliar2))
                             )
                         )
                     )
                     {
                         auxiliar1 = auxiliar2;
+                        posAux = j;
                         tempFig = list[j + 1];
+                        posFig = j + 1;
                         j = 0;
                     }
                     j = j + 2;
@@ -328,14 +334,16 @@ namespace CNCMatic
 
                 puntoActual = new Vector3d(Convert.ToDouble(PuntoInicioX(tempFig)), Convert.ToDouble(PuntoInicioY(tempFig)), Convert.ToDouble(PuntoInicioZ(tempFig)));
 
-                foreach (string line in newList)
-                {
-                    list.Remove(line);
-                }
+                //Elimino los elementos agregados a la nueva lista
+                list.RemoveAt(posAux);
+                list.RemoveAt(posAux);//Vuelvo a eliminar el mismo, porque al eliminarlo por primera vez, se corren un indice menos.
             }
 
             //Eliminamos movimientos cuando el pto de fin de una figura coincide con el de la siguiente figura
             newList = EliminarCodigoInnecesario(newList);
+
+            //Agregamos a cada G00 la instruccion para que levante en z, se desplace y baje.
+            newList = AgregarAccionesAG00(newList);
 
             return newList;
         }
@@ -371,7 +379,7 @@ namespace CNCMatic
                 List<string> lista = new List<string>();
                 Vector3d punto1 = new Vector3d(0, 0, 0);
                 Vector3d punto2 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[0])), Convert.ToDouble(PuntoInicioY(newList[0])), Convert.ToDouble(PuntoInicioZ(newList[0])));
-                if (!(punto1 == punto2))
+                if (!(ObtenerDoubleTresDecimales(punto1) == ObtenerDoubleTresDecimales(punto2)))
                 {
                     lista.Add(newList[0]);
                 }
@@ -383,7 +391,7 @@ namespace CNCMatic
                     punto1 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[i])), Convert.ToDouble(PuntoInicioY(newList[i])), Convert.ToDouble(PuntoInicioZ(newList[i])));
                     punto2 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[i + 1])), Convert.ToDouble(PuntoInicioY(newList[i + 1])), Convert.ToDouble(PuntoInicioZ(newList[i + 1])));
 
-                    if (punto1 == punto2)
+                    if (ObtenerDoubleTresDecimales(punto1) == ObtenerDoubleTresDecimales(punto2))
                     {
                         lista.Add(newList[i]);
                     }
@@ -397,6 +405,44 @@ namespace CNCMatic
 
                 lista.Add(newList[i]);
 
+                return lista;
+            }
+            return null;
+        }
+
+        private Vector3d ObtenerDoubleTresDecimales(Vector3d num)
+        {
+            Vector3d d = new Vector3d();
+           d.X = (double) (int)(num.X * 1000) / 1000;
+           d.Y = (double)(int)(num.Y * 1000) / 1000;
+           d.Z = (double)(int)(num.Z * 1000) / 1000;
+            return d;
+        }
+
+        private List<string> AgregarAccionesAG00(List<string> newList)
+        {
+            string linea;
+            string[] valoresZ;
+            int valorZ;
+            if (newList.Count > 0)
+            {
+                List<string> lista = new List<string>();
+                foreach (string lineaG in newList)
+                {
+
+                    if (lineaG.Substring(0, 3).Equals("G00"))
+                    {
+                        valoresZ = lineaG.Split('Z');
+                        valorZ = Convert.ToInt16(valoresZ[1]);
+                        linea = "G00 Z" + Convert.ToString(valorZ + 0.5) + Environment.NewLine + valoresZ[0] + "Z" +
+                            Convert.ToString(valorZ + 0.5) + Environment.NewLine + "G00 Z" + Convert.ToString(valorZ);
+                    }
+                    else
+                    {
+                        linea = lineaG;
+                    }
+                    lista.Add(linea);
+                }
                 return lista;
             }
             return null;

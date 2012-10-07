@@ -8,7 +8,8 @@ typedef enum {
 	CONFIGURED,							// 3
 	WAITINGCOMMAND,					// 4
 	PROCESSINGCOMMAND,			// 5
-	LIMITSENSOR							// 6
+	LIMITSENSOR,							// 6
+	EMERGENCYSTOP					// 7
 } state_t;
 
 typedef struct 
@@ -27,7 +28,7 @@ int z;
 	unsigned short long z;*/
 } position_t;
 
-void LimitSensor(void);
+void LimitSensorHandler(void);
 void user(void);
 
 #endif

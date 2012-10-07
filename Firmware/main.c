@@ -395,15 +395,15 @@ void UserInit(void);
 		if (INTCONbits.RBIF)
 		{
 			LimitSensorHandler();
-			//truquito para el proteus jijiji	
+			/*//truquito para el proteus jijiji	
 			_asm MOVF	PORTB,0,ACCESS	_endasm
 			//no implemententar en la realidad
-			//********************************
+			//*********************************/
 			INTCONbits.RBIF = 0;  //limpia bandera y salimos
-			//*******************************
+			/*//*******************************
 			//truquito para el proteus jijiji	
 			_asm	MOVF	PORTB,0,ACCESS	_endasm
-			//no implemententar en la realidad
+			//no implemententar en la realidad*/
 		}
 		
 	}	//This return will be a "retfie fast", since this is in a #pragma interrupt section 
@@ -476,11 +476,11 @@ int main(void)
 	INTCONbits.RBIE = 0;
 	
 	TRISA = 0b00000000;
-	LATA = 0b00000000;
+	PORTA = 0b00000000;
     TRISC = 0b00000000;
-    LATC = 0b00000000;
+    PORTC = 0b00000000;
 	TRISD = 0b00000000;
-    LATD = 0b00000000;
+    PORTD = 0b00000000;
 	
 	TRISB = 0b11111111;
 	//LATBbits.LATB4 = 0;

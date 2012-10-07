@@ -5,6 +5,7 @@
 #include "user.h"
 #include <string.h>
 #include <math.h>
+#include <delays.h>
 
 volatile state_t machineState = SERIALPORTCONNECTED;
 config_t configuracion[3];
@@ -17,20 +18,57 @@ void Line(long, long, long, position_t);
 
 void LimitSensorHandler(void)
 {
-	machineState = LIMITSENSOR;
+	if( PORTBbits.RB4 ) // fin de carrera en EJE X
+	{
+		PORTAbits.RA1 = ~PORTAbits.RA1;
+		PORTAbits.RA2 = 1;
+		Delay100TCYx(120);
+		PORTAbits.RA2 = 0;
+		PORTAbits.RA1 = ~PORTAbits.RA1;
+
+		machineState = LIMITSENSOR;
+	}
+	
+	if( PORTBbits.RB5 ) // fin de carrera en EJE Y
+	{
+		PORTCbits.RC1 = ~PORTCbits.RC1;
+		PORTCbits.RC2 = 1;
+		Delay100TCYx(120);
+		PORTAbits.RA2 = 0;
+		PORTCbits.RC1 = ~PORTCbits.RC1;
+
+		machineState = LIMITSENSOR;
+	}
+	
+	if( PORTBbits.RB6 ) // fin de carrera en EJE Z
+	{
+		PORTDbits.RD2 = ~PORTDbits.RD2;
+		PORTDbits.RD4 = 1;
+		Delay100TCYx(120);
+		PORTDbits.RD4 = 0;
+		PORTDbits.RD2 = ~PORTDbits.RD2;
+
+		machineState = LIMITSENSOR;
+	}
+	
+	if( PORTBbits.RB7 ) // parada de emergencia
+	{
+		machineState = EMERGENCYSTOP;
+	}
 }
 
 // Definimos funciones Gsoportadas
 void G00(char code[])
 {
 	unsigned long xClock, yClock, zClock, xPow, yPow, zPow, distance, time;
+	unsigned char speed = 100;
 	position_t position = GetFinalPosition(code);
 	
 	xPow = (position.x - currentPosition.x) * (position.x - currentPosition.x);
 	yPow = (position.y - currentPosition.y) * (position.y - currentPosition.y);
 	zPow = (position.z - currentPosition.z) * (position.z - currentPosition.z);
 	distance = sqrt( xPow + yPow + zPow );
-	time = ( distance / 100 ) * 1000; // milisegundos
+	time = ( distance / speed ) * 1000; // milisegundos
 	
 	/** time / cantidadDeCambiosDeEstado **/
 	xClock = time / ( (position.x - currentPosition.x)  * 2 );
@@ -43,13 +81,14 @@ void G00(char code[])
 void G01(char code[])
 {
 	unsigned long xClock, yClock, zClock, xPow, yPow, zPow, distance, time;
+	unsigned char speed = 100;
 	position_t position = GetFinalPosition(code);
 	
 	xPow = (position.x - currentPosition.x) * (position.x - currentPosition.x);
 	yPow = (position.y - currentPosition.y) * (position.y - currentPosition.y);
 	zPow = (position.z - currentPosition.z) * (position.z - currentPosition.z);
 	distance = sqrt( xPow + yPow + zPow );
-	time = ( distance / 100 ) * 1000; // milisegundos
+	time = ( distance / speed ) * 1000; // milisegundos
 	
 	/** time / cantidadDeCambiosDeEstado **/
 	xClock = time / ( (position.x - currentPosition.x)  * 2 );
@@ -134,34 +173,36 @@ position_t GetFinalPosition(char code[])
 	unsigned char i, count = strlen(code);
 	char *ptr;
 	position_t position;
-	position.x = position.y = position.z = 0;
+	position.x = currentPosition.x;
+	position.y = currentPosition.y;
+	position.z = currentPosition.z;
 	
 	// Calculamos los pasos que se deben dar en cada eje
 	// pasos = ( distancia * ( 360 / gradosPorPaso) ) / distanciaPorVuelta
 	for(i = 0; i < count; i++)
 	{
-		if( !position.x && code[i] == 'X')
+		if( code[i] == 'X')
 		{
 			ptr = &code[i + 1];
 			for(++i; (code[i] != ' ') && (i < count); i++) ;
 			code[i] = '\0';
-			position.x = ( atoi(ptr) * ( 360 / configuracion[0].stepDegrees ) ) / configuracion[0].distancePerRevolution + currentPosition.x;
+			position.x = ( atoi(ptr) * ( 360 / configuracion[0].stepDegrees ) ) / configuracion[0].distancePerRevolution;
 		}
 		
-		if( !position.y && code[i] == 'Y')
+		if( code[i] == 'Y')
 		{
 			ptr = &code[i + 1];
 			for(++i; (code[i] != ' ') && (i < count); i++) ;
 			code[i] = '\0';
-			position.y = ( atoi(ptr) * ( 360 / configuracion[1].stepDegrees ) ) / configuracion[1].distancePerRevolution + currentPosition.y;
+			position.y = ( atoi(ptr) * ( 360 / configuracion[1].stepDegrees ) ) / configuracion[1].distancePerRevolution;
 		}
 		
-		if( !position.z && code[i] == 'Z')
+		if( code[i] == 'Z')
 		{
 			ptr = &code[i + 1];
 			for(++i; (code[i] != ' ') && (i < count); i++) ;
 			code[i] = '\0';
-			position.z = ( atoi(ptr) * ( 360 / configuracion[2].stepDegrees ) ) / configuracion[2].distancePerRevolution + currentPosition.z;
+			position.z = ( atoi(ptr) * ( 360 / configuracion[2].stepDegrees ) ) / configuracion[2].distancePerRevolution;
 		}
 	}	
 	return position;
@@ -176,7 +217,13 @@ void Line(long xFreq, long yFreq, long zFreq, position_t finalPosition)
 {
 	long clock = 0, xNextStep = 0, yNextStep = 0, zNextStep = 0;
 	
+	// Seteamos bit de sentido de giro
+	PORTAbits.RA1 = finalPosition.x > currentPosition.x ? 0 : 1;
+	PORTCbits.RC1 = finalPosition.y > currentPosition.y ? 0 : 1;
+	PORTDbits.RD2 = finalPosition.z > currentPosition.z ? 0 : 1;
+	
 	// Enable PortB Interrupts
+	INTCONbits.RBIF = 0;  //limpia bandera
 	INTCONbits.RBIE = 1;
 	// Mientras no lleguemos a la posicion final en los 3 ejes, tenemos que hacer girar algún motor
 	while( ( machineState == PROCESSINGCOMMAND ) && ( (finalPosition.x != currentPosition.x) || (finalPosition.y != currentPosition.y) || (finalPosition.z != currentPosition.z) ) )
@@ -184,42 +231,42 @@ void Line(long xFreq, long yFreq, long zFreq, position_t finalPosition)
 		// si el clock es mayor o igual al clock del próximo paso del motor y si no llegué a la posición final
 		if( (clock >= xNextStep) && (currentPosition.x != finalPosition.x) )
 		{
-			if( LATAbits.LATA2 )
+			if( PORTAbits.RA2 )
 			{
-				LATAbits.LATA2 = 0;
-				currentPosition.x++;
+				currentPosition.x += (PORTAbits.RA1 ? -1 : 1);
+				PORTAbits.RA2 = 0;
 			}
 			else
 			{
-				LATAbits.LATA2 = 1;
+				PORTAbits.RA2 = 1;
 			}
 			xNextStep += xFreq;
 		}
 		
 		if( (clock >= yNextStep) && (currentPosition.y != finalPosition.y) )
 		{
-			if( LATCbits.LATC2 )
+			if( PORTCbits.RC2 )
 			{
-				LATCbits.LATC2 = 0;
-				currentPosition.y++;
+				currentPosition.y += (PORTCbits.RC1 ? -1 : 1);
+				PORTCbits.RC2 = 0;
 			}
 			else
 			{
-				LATCbits.LATC2 = 1;
+				PORTCbits.RC2 = 1;
 			}
 			yNextStep += yFreq;
 		}
 		
 		if( (clock >= zNextStep) && (currentPosition.z != finalPosition.z) )
 		{
-			if( LATDbits.LATD4 )
+			if( PORTDbits.RD4 )
 			{
-				LATDbits.LATD4 = 0;
-				currentPosition.z++;
+				currentPosition.z += (PORTDbits.RD2 ? -1 : 1);
+				PORTDbits.RD4 = 0;
 			}
 			else
 			{
-				LATDbits.LATD4 = 1;
+				PORTDbits.RD4 = 1;
 			}
 			zNextStep += zFreq;
 		}
@@ -386,6 +433,10 @@ void user(void)
 					if(machineState == LIMITSENSOR)
 					{
 						strcpypgm2ram(message, (const rom char far *)"Sensor Fin de Carrera");
+					}
+					else if(machineState == EMERGENCYSTOP)
+					{
+						strcpypgm2ram(message, (const rom char far *)"Parada de Emergencia");
 					}
 					else
 					{

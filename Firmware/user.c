@@ -349,6 +349,16 @@ void user(void)
 				goto endUser;
 			}
 			
+			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"status"))
+			{
+				// Resetear la maquina si recibimos el comando 'reset'
+				sprintf(message, "status: %d", machineState);
+				//strcpypgm2ram(message, (const rom char far *)"status: ");
+				putUSBUSART(message, strlen(message));
+				//machineState = SERIALPORTCONNECTED;
+				goto endUser;
+			}
+			
 			switch(machineState)
 			{
 				case TEST:

@@ -18,6 +18,7 @@ void Line(long, long, long, position_t);
 
 void LimitSensorHandler(void)
 {
+/*
 	if( PORTBbits.RB4 ) // fin de carrera en EJE X
 	{
 		PORTAbits.RA1 = ~PORTAbits.RA1;
@@ -55,6 +56,7 @@ void LimitSensorHandler(void)
 	{
 		machineState = EMERGENCYSTOP;
 	}
+*/
 }
 
 // Definimos funciones Gsoportadas
@@ -226,8 +228,9 @@ void Line(long xFreq, long yFreq, long zFreq, position_t finalPosition)
 	PORTDbits.RD2 = finalPosition.z > currentPosition.z ? 1 : 0;
 	
 	// Enable PortB Interrupts
-	INTCONbits.RBIF = 0;  //limpia bandera
+	/*INTCONbits.RBIF = 0;  //limpia bandera
 	INTCONbits.RBIE = 1;
+	*/
 	// Mientras no lleguemos a la posicion final en los 3 ejes, tenemos que hacer girar algún motor
 	while( ( machineState == PROCESSINGCOMMAND ) && ( (finalPosition.x != currentPosition.x) || (finalPosition.y != currentPosition.y) || (finalPosition.z != currentPosition.z) ) )
 	{
@@ -298,7 +301,7 @@ void Line(long xFreq, long yFreq, long zFreq, position_t finalPosition)
 		clock++;
 	}
 	// Disable PortB Interrupts
-	INTCONbits.RBIE = 0;
+	/*INTCONbits.RBIE = 0;*/
 }
 
 void user(void)

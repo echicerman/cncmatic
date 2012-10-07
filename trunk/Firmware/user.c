@@ -60,20 +60,23 @@ void LimitSensorHandler(void)
 // Definimos funciones Gsoportadas
 void G00(char code[])
 {
-	unsigned long xClock, yClock, zClock, xPow, yPow, zPow, distance, time;
+	unsigned long xClock, yClock, zClock, xPow, yPow, zPow, distance, time, testX, testPowX;
 	unsigned char speed = 100;
 	position_t position = GetFinalPosition(code);
 	
+	testX = position.x;
+	testPowX = position.x * position.x;
 	xPow = (position.x - currentPosition.x) * (position.x - currentPosition.x);
 	yPow = (position.y - currentPosition.y) * (position.y - currentPosition.y);
 	zPow = (position.z - currentPosition.z) * (position.z - currentPosition.z);
 	distance = sqrt( xPow + yPow + zPow );
-	time = ( distance / speed ) * 1000; // milisegundos
+	time = ( distance / 100 ) * 1000; // milisegundos
 	
 	/** time / cantidadDeCambiosDeEstado **/
 	xClock = time / ( (position.x - currentPosition.x)  * 2 );
 	yClock = time / ( (position.y - currentPosition.y)  * 2 );
-	zClock = time / ( (position.z - currentPosition.z) * 2 );
+	zClock = time / ( (position.z - currentPosition.z)  * 2 );
+	
 	
 	Line(xClock, yClock, zClock, position);
 }
@@ -218,9 +221,9 @@ void Line(long xFreq, long yFreq, long zFreq, position_t finalPosition)
 	long clock = 0, xNextStep = 0, yNextStep = 0, zNextStep = 0;
 	
 	// Seteamos bit de sentido de giro
-	PORTAbits.RA1 = finalPosition.x > currentPosition.x ? 0 : 1;
-	PORTCbits.RC1 = finalPosition.y > currentPosition.y ? 0 : 1;
-	PORTDbits.RD2 = finalPosition.z > currentPosition.z ? 0 : 1;
+	PORTAbits.RA1 = finalPosition.x > currentPosition.x ? 1 : 0;
+	PORTCbits.RC1 = finalPosition.y > currentPosition.y ? 1 : 0;
+	PORTDbits.RD2 = finalPosition.z > currentPosition.z ? 1 : 0;
 	
 	// Enable PortB Interrupts
 	INTCONbits.RBIF = 0;  //limpia bandera
@@ -233,7 +236,15 @@ void Line(long xFreq, long yFreq, long zFreq, position_t finalPosition)
 		{
 			if( PORTAbits.RA2 )
 			{
-				currentPosition.x += (PORTAbits.RA1 ? -1 : 1);
+				if(PORTAbits.RA1)
+				{
+					currentPosition.x++;
+				}
+				else
+				{
+					currentPosition.x--;
+				}
+				
 				PORTAbits.RA2 = 0;
 			}
 			else
@@ -247,7 +258,14 @@ void Line(long xFreq, long yFreq, long zFreq, position_t finalPosition)
 		{
 			if( PORTCbits.RC2 )
 			{
-				currentPosition.y += (PORTCbits.RC1 ? -1 : 1);
+				if(PORTCbits.RC1)
+				{
+					currentPosition.y++;
+				}
+				else
+				{
+					currentPosition.y--;
+				}
 				PORTCbits.RC2 = 0;
 			}
 			else
@@ -261,7 +279,14 @@ void Line(long xFreq, long yFreq, long zFreq, position_t finalPosition)
 		{
 			if( PORTDbits.RD4 )
 			{
-				currentPosition.z += (PORTDbits.RD2 ? -1 : 1);
+				if(PORTDbits.RD2)
+				{
+					currentPosition.z++;
+				}
+				else
+				{
+					currentPosition.z--;
+				}
 				PORTDbits.RD4 = 0;
 			}
 			else
@@ -300,6 +325,21 @@ void user(void)
 			}
 			USB_In_Buffer[i] = '\0';
 			
+			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"test"))
+			{
+				// Resetear la maquina si recibimos el comando 'reset'
+				configuracion[0].stepDegrees = 1;
+				configuracion[0].distancePerRevolution = 1;
+				configuracion[1].stepDegrees = 1;
+				configuracion[1].distancePerRevolution = 1;
+				configuracion[2].stepDegrees = 1;
+				configuracion[2].distancePerRevolution = 1;
+				strcpypgm2ram(message, (const rom char far *)"CNC TestMode");
+				putUSBUSART(message, strlen(message));
+				machineState = TEST;
+				goto endUser;
+			}
+			
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"reset"))
 			{
 				// Resetear la maquina si recibimos el comando 'reset'
@@ -311,6 +351,10 @@ void user(void)
 			
 			switch(machineState)
 			{
+				case TEST:
+					currentPosition = GetFinalPosition(USB_In_Buffer);
+					machineState = ANSWERTEST;
+					break;
 				case SERIALPORTCONNECTED:
 					// Count characters received and send this number to PC
 					sprintf(message, "%d", numBytesRead);
@@ -415,6 +459,12 @@ void user(void)
 		{
 			switch(machineState)
 			{
+				case ANSWERTEST:
+					sprintf(message, "%d", currentPosition.x + currentPosition.y);
+					putUSBUSART(message, strlen(message));
+					machineState = TEST;
+					break;
+					
 				case CONFIGURED:
 					strcpypgm2ram(message, (const rom char far *)"Posicion de Origen");
 					putUSBUSART(message, strlen(message));

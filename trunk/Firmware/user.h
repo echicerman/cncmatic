@@ -22,9 +22,9 @@ typedef struct
 
 typedef struct 
 {
-unsigned long x;
-unsigned long y;
-unsigned long z;
+int x;
+int y;
+int z;
 	/*unsigned short long x;
 	unsigned short long y;
 	unsigned short long z;*/

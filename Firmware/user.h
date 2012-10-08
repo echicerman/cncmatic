@@ -16,17 +16,14 @@ typedef enum {
 
 typedef struct 
 {
-	int axisFactor;
+	double axisFactor;
 } config_t;
 
 typedef struct 
 {
-unsigned long x;
-unsigned long y;
-unsigned long z;
-	/*unsigned short long x;
-	unsigned short long y;
-	unsigned short long z;*/
+	unsigned long x;
+	unsigned long y;
+	unsigned long z;
 } position_t;
 
 void LimitSensorHandler(void);

@@ -72,7 +72,7 @@ void LimitSensorHandler(void)
 // Definimos funciones Gsoportadas
 void G00(char code[])
 {
-	unsigned long xClock, yClock, zClock, xPow, yPow, zPow, totalSteps, time;
+	unsigned long xPow, yPow, zPow, totalSteps, xClock, yClock, zClock;
 	unsigned char speed = 50; // cuanto mas grande, mas lento girara el motor
 	position_t position = GetFinalPosition(code);
 	
@@ -96,7 +96,7 @@ void G00(char code[])
 
 void G01(char code[])
 {
-	unsigned long xClock, yClock, zClock, xPow, yPow, zPow, totalSteps, time;
+	unsigned long xPow, yPow, zPow, totalSteps, xClock, yClock, zClock;
 	unsigned char speed = 100; // cuanto mas grande, mas lento girara el motor
 	position_t position = GetFinalPosition(code);
 	
@@ -206,7 +206,7 @@ position_t GetFinalPosition(char code[])
 			ptr = &code[i + 1];
 			for(++i; (code[i] != ' ') && (i < count); i++) ;
 			code[i] = '\0';
-			position.x = (unsigned long) (atoi(ptr) * configuracion[0].axisFactor);
+			position.x = (unsigned long) ceil(atof(ptr) * configuracion[0].axisFactor);
 		}
 		
 		if( code[i] == 'Y')
@@ -214,7 +214,7 @@ position_t GetFinalPosition(char code[])
 			ptr = &code[i + 1];
 			for(++i; (code[i] != ' ') && (i < count); i++) ;
 			code[i] = '\0';
-			position.y = (unsigned long) (atoi(ptr) * configuracion[1].axisFactor);
+			position.y = (unsigned long) ceil(atof(ptr) * configuracion[1].axisFactor);
 		}
 		
 		if( code[i] == 'Z')
@@ -222,7 +222,7 @@ position_t GetFinalPosition(char code[])
 			ptr = &code[i + 1];
 			for(++i; (code[i] != ' ') && (i < count); i++) ;
 			code[i] = '\0';
-			position.z = (unsigned long) (atoi(ptr) * configuracion[2].axisFactor);
+			position.z = (unsigned long) ceil(atof(ptr) * configuracion[2].axisFactor);
 		}
 	}	
 	return position;
@@ -341,14 +341,13 @@ void MoveToOrigin()
 }
 
 float testFloat;
-int integer, decimal;
 void user(void)
 {
 	BYTE numBytesRead;
 	char *configPtr, message[25];
 	char movementCommandCode[3], movementCommandType;
 	unsigned char motor = 0;
-	int stepDegrees, distancePerRevolution;
+	double stepDegrees, distancePerRevolution;
 
 	//Blink the LEDs according to the USB device status
 	/*BlinkUSBStatus();*/
@@ -427,16 +426,16 @@ void user(void)
 				case CNCMATICCONNECTED:
 					// tokenize the configuration string
 					configPtr = strtokpgmram(USB_In_Buffer, (const rom char far *)";");
-					stepDegrees = atoi(configPtr);
+					stepDegrees = atof(configPtr);
 					configPtr = strtokpgmram(NULL, (const rom char far *)";");
-					distancePerRevolution = atoi(configPtr);
-					configuracion[motor].axisFactor = ( 360 / stepDegrees ) / distancePerRevolution;
+					distancePerRevolution = atof(configPtr);
+					configuracion[motor].axisFactor = 360 / (stepDegrees * distancePerRevolution);
 					while( (++motor ) && ( (configPtr = strtokpgmram( NULL, (const rom char far *)";" )) != NULL ) )    // Posteriores llamadas
 					{
-						stepDegrees = atoi(configPtr);
+						stepDegrees = atof(configPtr);
 						configPtr = strtokpgmram(NULL, (const rom char far *)";");
-						distancePerRevolution = atoi(configPtr);
-						configuracion[motor].axisFactor = ( 360 / stepDegrees ) / distancePerRevolution;
+						distancePerRevolution = atof(configPtr);
+						configuracion[motor].axisFactor = 360 / (stepDegrees * distancePerRevolution);
 					}
 					
 					if(motor == 3)
@@ -510,9 +509,7 @@ void user(void)
 			switch(machineState)
 			{
 				case ANSWERTEST:
-					integer = floor(testFloat);
-					decimal = ceil((testFloat - integer) * 100);
-					sprintf(message, "%d.%d", integer, decimal);
+					sprintf(message, (const rom char far *)"X: %ld Y: %ld Z:%ld", currentPosition.x, currentPosition.y, currentPosition.z);
 					putUSBUSART(message, strlen(message));
 					//putUSBUSART(USB_In_Buffer, strlen(USB_In_Buffer));
 					

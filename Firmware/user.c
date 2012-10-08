@@ -7,6 +7,7 @@
 #include <math.h>
 #include <delays.h>
 #include <limits.h>
+#include <stdio.h>
 
 volatile state_t machineState = SERIALPORTCONNECTED;
 config_t configuracion[3];
@@ -20,7 +21,7 @@ void MoveToOrigin(void);
 
 void LimitSensorHandler(void)
 {
-	if( PORTBbits.RB4 == 1 ) // fin de carrera en EJE X
+	if( !PORTBbits.RB4 ) // fin de carrera en EJE X
 	{
 		// invierto el sentido de giro
 		PORTAbits.RA1 = ~PORTAbits.RA1;
@@ -28,12 +29,12 @@ void LimitSensorHandler(void)
 		PORTAbits.RA2 = 1;
 		Delay100TCYx(120);
 		PORTAbits.RA2 = 0;
-		
-		PORTBbits.RB4 = 0;
+
+		LATBbits.LATB4 = ~PORTBbits.RB4;
 		machineState = LIMITSENSOR;
 	}
 
-	if( PORTBbits.RB5 == 1 ) // fin de carrera en EJE Y
+	if( !PORTBbits.RB5 ) // fin de carrera en EJE Y
 	{
 		// invierto el sentido de giro
 		PORTCbits.RC1 = ~PORTCbits.RC1;
@@ -42,11 +43,11 @@ void LimitSensorHandler(void)
 		Delay100TCYx(120);
 		PORTAbits.RA2 = 0;
 
-		PORTBbits.RB5 = 0;
+		LATBbits.LATB5 = ~PORTBbits.RB5;
 		machineState = LIMITSENSOR;
 	}
-
-	if( PORTBbits.RB6 == 1 ) // fin de carrera en EJE Z
+/*
+	if( PORTBbits.RB6 == 0) // fin de carrera en EJE Z
 	{
 		// invierto el sentido de giro
 		PORTDbits.RD2 = ~PORTDbits.RD2;
@@ -55,18 +56,17 @@ void LimitSensorHandler(void)
 		Delay100TCYx(120);
 		PORTDbits.RD4 = 0;
 
-		PORTBbits.RB6 = 0;
+		LATBbits.LATB6 = ~PORTBbits.RB6;
 		machineState = LIMITSENSOR;
 	}
 
-	if( PORTBbits.RB7 == 1 ) // parada de emergencia
+	if( PORTBbits.RB7 == 0) // parada de emergencia
 	{
-		PORTBbits.RB7 = 0;
+		LATBbits.LATB7 = ~PORTBbits.RB7;
 		machineState = EMERGENCYSTOP;
 	}
-	_asm     MOVF    PORTB,0,ACCESS    _endasm
+*/
 	INTCONbits.RBIF = 0;  //limpia bandera y salimos
-	_asm    MOVF    PORTB,0,ACCESS    _endasm
 }
 
 // Definimos funciones Gsoportadas
@@ -81,9 +81,15 @@ void G00(char code[])
 	zPow = (unsigned long) (position.z - currentPosition.z) * (position.z - currentPosition.z);
 	totalSteps = ceil( sqrt( xPow + yPow + zPow ) );
 	
-	xClock = ceil( speed * totalSteps / (position.x - currentPosition.x) );
-	yClock = ceil( speed * totalSteps / (position.y - currentPosition.y) );
-	zClock = ceil( speed * totalSteps / (position.z - currentPosition.z) );
+	//abs consume mucha memoria
+	if(position.x > currentPosition.x) {xClock = ceil( speed * totalSteps / (position.x - currentPosition.x) );}
+	else {xClock = ceil( speed * totalSteps / (currentPosition.x - position.x) );}
+	
+	if(position.y > currentPosition.y) {yClock = ceil( speed * totalSteps / (position.y - currentPosition.y) );}
+	else {yClock = ceil( speed * totalSteps / (currentPosition.y - position.y) );}
+	
+	if(position.z > currentPosition.z) {zClock = ceil( speed * totalSteps / (position.z - currentPosition.z) );}
+	else {zClock = ceil( speed * totalSteps / (currentPosition.z - position.z) );}
 
 	Line(xClock, yClock, zClock, position);
 }
@@ -99,9 +105,15 @@ void G01(char code[])
 	zPow = (unsigned long) (position.z - currentPosition.z) * (position.z - currentPosition.z);
 	totalSteps = ceil( sqrt( xPow + yPow + zPow ) );
 	
-	xClock = ceil( speed * totalSteps / (position.x - currentPosition.x) );
-	yClock = ceil( speed * totalSteps / (position.y - currentPosition.y) );
-	zClock = ceil( speed * totalSteps / (position.z - currentPosition.z) );
+	//abs consume mucha memoria
+	if(position.x > currentPosition.x) {xClock = ceil( speed * totalSteps / (position.x - currentPosition.x) );}
+	else {xClock = ceil( speed * totalSteps / (currentPosition.x - position.x) );}
+	
+	if(position.y > currentPosition.y) {yClock = ceil( speed * totalSteps / (position.y - currentPosition.y) );}
+	else {yClock = ceil( speed * totalSteps / (currentPosition.y - position.y) );}
+	
+	if(position.z > currentPosition.z) {zClock = ceil( speed * totalSteps / (position.z - currentPosition.z) );}
+	else {zClock = ceil( speed * totalSteps / (currentPosition.z - position.z) );}
 
 	Line(xClock, yClock, zClock, position);
 }
@@ -194,7 +206,7 @@ position_t GetFinalPosition(char code[])
 			ptr = &code[i + 1];
 			for(++i; (code[i] != ' ') && (i < count); i++) ;
 			code[i] = '\0';
-			position.x = atoi(ptr) * configuracion[0].axisFactor;
+			position.x = (unsigned long) (atoi(ptr) * configuracion[0].axisFactor);
 		}
 		
 		if( code[i] == 'Y')
@@ -202,7 +214,7 @@ position_t GetFinalPosition(char code[])
 			ptr = &code[i + 1];
 			for(++i; (code[i] != ' ') && (i < count); i++) ;
 			code[i] = '\0';
-			position.y = atoi(ptr) * configuracion[1].axisFactor;
+			position.y = (unsigned long) (atoi(ptr) * configuracion[1].axisFactor);
 		}
 		
 		if( code[i] == 'Z')
@@ -210,7 +222,7 @@ position_t GetFinalPosition(char code[])
 			ptr = &code[i + 1];
 			for(++i; (code[i] != ' ') && (i < count); i++) ;
 			code[i] = '\0';
-			position.z = atoi(ptr) * configuracion[2].axisFactor;
+			position.z = (unsigned long) (atoi(ptr) * configuracion[2].axisFactor);
 		}
 	}	
 	return position;
@@ -328,6 +340,8 @@ void MoveToOrigin()
 	currentPosition.x = 0;
 }
 
+float testFloat;
+int integer, decimal;
 void user(void)
 {
 	BYTE numBytesRead;
@@ -356,6 +370,9 @@ void user(void)
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"test"))
 			{
 				// Resetear la maquina si recibimos el comando 'reset'
+				currentPosition.x = 0;
+				currentPosition.y = 0;
+				currentPosition.z = 0;
 				configuracion[0].axisFactor = 360;
 				configuracion[1].axisFactor = 360;
 				configuracion[2].axisFactor = 360;
@@ -387,7 +404,8 @@ void user(void)
 			switch(machineState)
 			{
 				case TEST:
-					currentPosition = GetFinalPosition(USB_In_Buffer);
+					//currentPosition = GetFinalPosition(USB_In_Buffer);
+					testFloat = atof(USB_In_Buffer);
 					machineState = ANSWERTEST;
 					break;
 					
@@ -492,14 +510,19 @@ void user(void)
 			switch(machineState)
 			{
 				case ANSWERTEST:
-					sprintf(message, "%d", currentPosition.x + currentPosition.y);
+					integer = floor(testFloat);
+					decimal = ceil((testFloat - integer) * 100);
+					sprintf(message, "%d.%d", integer, decimal);
 					putUSBUSART(message, strlen(message));
+					//putUSBUSART(USB_In_Buffer, strlen(USB_In_Buffer));
+					
 					machineState = TEST;
 					break;
 					
 				case CONFIGURED:
 					MoveToOrigin();
-					strcpypgm2ram(message, (const rom char far *)"Posicion de Origen");
+					//strcpypgm2ram(message, (const rom char far *)"Posicion de Origen");
+					sprintf(message, (const rom char far *)"X: %ld Y: %ld Z:%ld", currentPosition.x, currentPosition.y, currentPosition.z);
 					putUSBUSART(message, strlen(message));
 					machineState = WAITINGCOMMAND;
 					break;
@@ -512,8 +535,10 @@ void user(void)
 					// reseteamos variables de comando
 					gCommand = mCommand = -1;
 					
+					sprintf(message, (const rom char far *)"X: %ld Y: %ld Z:%ld", currentPosition.x, currentPosition.y, currentPosition.z);
+					
 					// Chequeamos machineState -> si se activo algun fin de carrera
-					if(machineState == LIMITSENSOR)
+					/*if(machineState == LIMITSENSOR)
 					{
 						strcpypgm2ram(message, (const rom char far *)"Sensor Fin de Carrera");
 					}
@@ -524,7 +549,7 @@ void user(void)
 					else
 					{
 						strcpypgm2ram(message, (const rom char far *)"Comando Ejecutado");						
-					}
+					}*/
 					putUSBUSART(message, strlen(message));
 					machineState = WAITINGCOMMAND;
 					break;

@@ -390,13 +390,6 @@ void UserInit(void);
         #if defined(USB_INTERRUPT)
 	        USBDeviceTasks();
 		#endif
-		
-		// Handle PORTB interrupts
-		if (INTCONbits.RBIF)
-		{
-			LimitSensorHandler();
-		}
-		
 	}	//This return will be a "retfie fast", since this is in a #pragma interrupt section 
 	#pragma interruptlow YourLowPriorityISRCode
 	void YourLowPriorityISRCode()
@@ -405,6 +398,12 @@ void UserInit(void);
 		//Service the interrupt
 		//Clear the interrupt flag
 		//Etc.
+		
+		// Handle PORTB interrupts
+		if (INTCONbits.RBIF)
+		{
+			LimitSensorHandler();
+		}
 	
 	}	//This return will be a "retfie", since this is in a #pragma interruptlow section 
 
@@ -462,21 +461,23 @@ int main(void)
 {   
     InitializeSystem();
 	
-	//********************************************
-	// Disable PortB Interrupts
-	INTCONbits.RBIE = 0;
+	//********************************************	
+	TRISA = 0x00;	// pines de A son salida - eje X
+	PORTA = 0x00;
+    TRISC = 0x00;	// pines de C son salida - eje Y
+    PORTC = 0x00;
+	TRISD = 0x00;	// pines de D son salida - eje Z
+    PORTD = 0x00;
 	
-	TRISA = 0b00000000;
-	PORTA = 0b00000000;
-    TRISC = 0b00000000;
-    PORTC = 0b00000000;
-	TRISD = 0b00000000;
-    PORTD = 0b00000000;
-	
-	TRISB = 0b11111111;
-	PORTB = 0b00000000;
-	//LATBbits.LATB4 = 0;
+	TRISB = 0xFF;	// pines de B son entrada - sensores
+	PORTB = 0xFF;
 	//********************************************
+	
+	RCONbits.IPEN = 1;		// habilita prioridades
+	INTCON2bits.RBIP = 0;	// interrupciones en puertoB son de baja prioridad
+	INTCONbits.GIEL = 1;	// habilita interrupciones de baja prioridad	
+	INTCONbits.GIE = 1;		// habilita interrupciones
+	
 
     while(1)
     {

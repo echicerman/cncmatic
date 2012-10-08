@@ -12,12 +12,28 @@
 volatile state_t machineState = SERIALPORTCONNECTED;
 config_t configuracion[3];
 position_t currentPosition;
-char gCommand = -1, mCommand = -1;
+char gCode = -1, mCode = -1, freeCode = -1;
+char commandReceived[64];
 
 typedef void (*_func)(char[]);
 position_t GetFinalPosition(char[]);
-void Line(unsigned long, unsigned long, unsigned long, position_t);
+void LinearMoveTo(position_t, unsigned long, unsigned long, unsigned long);
 void MoveToOrigin(void);
+
+position_t CreatePosition(unsigned long x, unsigned long y, unsigned long z)
+{
+	position_t result;
+	
+	result.x = x;
+	result.y = y;
+	result.z = z;
+	
+	return result;
+}
+position_t CreatePositionFrom(position_t position)
+{
+	return CreatePosition(position.x, position.y, position.z);
+}
 
 void LimitSensorHandler(void)
 {
@@ -70,33 +86,23 @@ void LimitSensorHandler(void)
 }
 
 /*
-	Cuanto más grande es la velocidad, más lento girará el motor
+	Cuanto más grande sea la velocidad, más lento gira el motor
 */
 void LinearMovement (char command[], unsigned char speed)
 {
 	unsigned long xPow, yPow, zPow, totalSteps, xClock, yClock, zClock;
-	position_t position = GetFinalPosition(command);
+	position_t finalPosition = GetFinalPosition(command);
 	
-	xPow = (unsigned long) (position.x - currentPosition.x) * (position.x - currentPosition.x);
-	yPow = (unsigned long) (position.y - currentPosition.y) * (position.y - currentPosition.y);
-	zPow = (unsigned long) (position.z - currentPosition.z) * (position.z - currentPosition.z);
+	xPow = (unsigned long) (finalPosition.x - currentPosition.x) * (finalPosition.x - currentPosition.x);
+	yPow = (unsigned long) (finalPosition.y - currentPosition.y) * (finalPosition.y - currentPosition.y);
+	zPow = (unsigned long) (finalPosition.z - currentPosition.z) * (finalPosition.z - currentPosition.z);
 	totalSteps = ceil( sqrt( xPow + yPow + zPow ) );
 	
-	xClock = (position.x > currentPosition.x)? ceil( speed * totalSteps / (position.x - currentPosition.x) ) : ceil( speed * totalSteps / (currentPosition.x - position.x) );
-	yClock = (position.y > currentPosition.y)? ceil( speed * totalSteps / (position.y - currentPosition.y) ) : ceil( speed * totalSteps / (currentPosition.y - position.y) );
-	zClock = (position.z > currentPosition.z)? ceil( speed * totalSteps / (position.z - currentPosition.z) ) : ceil( speed * totalSteps / (currentPosition.z - position.z) );
+	xClock = (finalPosition.x > currentPosition.x)? ceil( speed * totalSteps / (finalPosition.x - currentPosition.x) ) : ceil( speed * totalSteps / (currentPosition.x - finalPosition.x) );
+	yClock = (finalPosition.y > currentPosition.y)? ceil( speed * totalSteps / (finalPosition.y - currentPosition.y) ) : ceil( speed * totalSteps / (currentPosition.y - finalPosition.y) );
+	zClock = (finalPosition.z > currentPosition.z)? ceil( speed * totalSteps / (finalPosition.z - currentPosition.z) ) : ceil( speed * totalSteps / (currentPosition.z - finalPosition.z) );
 	
-	/*if(position.x > currentPosition.x) {xClock = ceil( speed * totalSteps / (position.x - currentPosition.x) );}
-	else {xClock = ceil( speed * totalSteps / (currentPosition.x - position.x) );}
-	
-	if(position.y > currentPosition.y) {yClock = ceil( speed * totalSteps / (position.y - currentPosition.y) );}
-	else {yClock = ceil( speed * totalSteps / (currentPosition.y - position.y) );}
-	
-	if(position.z > currentPosition.z) {zClock = ceil( speed * totalSteps / (position.z - currentPosition.z) );}
-	else {zClock = ceil( speed * totalSteps / (currentPosition.z - position.z) );}
-	*/
-
-	Line(xClock, yClock, zClock, position);
+	LinearMoveTo(finalPosition, xClock, yClock, zClock);
 }
 
 // Definimos funciones G soportadas
@@ -153,7 +159,7 @@ void G91(char code[])
 	;
 }
 // Cargamos nuestro vector de funciones G
-_func gCode[100] = {	G00, 	G01, 	G02, 	G03, 	G04, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL,
+_func gCodes[100] = {	G00, 	G01, 	G02, 	G03, 	G04, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL,
 						NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	G17, 	G18, 	G19, 
 						G20, 	G21, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
 						NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
@@ -174,7 +180,7 @@ void M02(char code[])
 	;
 }
 // Cargamos nuestro vector de funciones M
-_func mCode[3] = {	M00,		NULL,	M02	};
+_func mCodes[3] = {	M00,		NULL,	M02	};
 
 /*********************************************************************************/
 /*************** Obtiene la posición final segun comando ******************/
@@ -185,10 +191,7 @@ position_t GetFinalPosition(char code[])
 	unsigned char i, count = strlen(code);
 	char *ptr;
 	
-	position_t position;
-	position.x = currentPosition.x;
-	position.y = currentPosition.y;
-	position.z = currentPosition.z;
+	position_t position = CreatePositionFrom(currentPosition);
 	
 	// Calculamos los pasos que se deben dar en cada eje
 	for(i = 0; i < count; i++)
@@ -222,25 +225,25 @@ position_t GetFinalPosition(char code[])
 
 /*********************************************************************************/
 /***********************Realiza la línea en el espacio ************************/
+/** targetPosition -----------> posición final del movimiento ******************/
 /** xFreq , yFreq, zFreq -> cada cuántos pulsos cambiar el bit de clock */
-/** finalPosition -----------> posición final del movimiento ******************/
 /*********************************************************************************/
-void Line(unsigned long xFreq, unsigned long yFreq, unsigned long zFreq, position_t finalPosition)
+void LinearMoveTo(position_t targetPosition, unsigned long xFreq, unsigned long yFreq, unsigned long zFreq)
 {
 	unsigned long clock = 0, xNextStep = 0, yNextStep = 0, zNextStep = 0;
 	
 	// Seteamos bit de sentido de giro
-	PORTAbits.RA1 = (finalPosition.x > currentPosition.x) ? 1 : 0;
-	PORTCbits.RC1 = (finalPosition.y > currentPosition.y) ? 1 : 0;
-	PORTDbits.RD2 = (finalPosition.z > currentPosition.z) ? 1 : 0;
+	PORTAbits.RA1 = (targetPosition.x > currentPosition.x) ? 1 : 0;
+	PORTCbits.RC1 = (targetPosition.y > currentPosition.y) ? 1 : 0;
+	PORTDbits.RD2 = (targetPosition.z > currentPosition.z) ? 1 : 0;
 	
 	// Enable PortB Interrupts
 	INTCONbits.RBIE = 1;
 	// Mientras no lleguemos a la posicion final en los 3 ejes, tenemos que hacer girar algún motor
-	while( ( machineState == PROCESSINGCOMMAND ) && ( (finalPosition.x != currentPosition.x) || (finalPosition.y != currentPosition.y) || (finalPosition.z != currentPosition.z) ) )
+	while( ( machineState == PROCESSINGCOMMAND ) && ( (targetPosition.x != currentPosition.x) || (targetPosition.y != currentPosition.y) || (targetPosition.z != currentPosition.z) ) )
 	{
 		// si el clock es mayor o igual al clock del próximo paso del motor y si no llegué a la posición final
-		if( (clock >= xNextStep) && (currentPosition.x != finalPosition.x) )
+		if( (clock >= xNextStep) && (currentPosition.x != targetPosition.x) )
 		{
 			if( PORTAbits.RA2 )
 			{
@@ -262,7 +265,7 @@ void Line(unsigned long xFreq, unsigned long yFreq, unsigned long zFreq, positio
 			xNextStep += xFreq;
 		}
 		
-		if( (clock >= yNextStep) && (currentPosition.y != finalPosition.y) )
+		if( (clock >= yNextStep) && (currentPosition.y != targetPosition.y) )
 		{
 			if( PORTCbits.RC2 )
 			{
@@ -283,7 +286,7 @@ void Line(unsigned long xFreq, unsigned long yFreq, unsigned long zFreq, positio
 			yNextStep += yFreq;
 		}
 		
-		if( (clock >= zNextStep) && (currentPosition.z != finalPosition.z) )
+		if( (clock >= zNextStep) && (currentPosition.z != targetPosition.z) )
 		{
 			if( PORTDbits.RD4 )
 			{
@@ -311,28 +314,29 @@ void Line(unsigned long xFreq, unsigned long yFreq, unsigned long zFreq, positio
 
 void MoveToOrigin()
 {
-	position_t fakeFinalPosition;
 	// seteamos posicion actual como la mas lejana posible
-	currentPosition.x = currentPosition.y = currentPosition.z = ULONG_MAX;
+	position_t fakeFinalPosition = CreatePosition(ULONG_MAX, ULONG_MAX, ULONG_MAX);
+	currentPosition = CreatePositionFrom(fakeFinalPosition);
 	
-	// la posicion final a la que queremos llegar: ejeZ -> 0
-	fakeFinalPosition.x = fakeFinalPosition.y = ULONG_MAX; fakeFinalPosition.z = 0;
+	// Primero movemos solo el eje z hacia su punto 0...
+	fakeFinalPosition.z = 0;
 	machineState = PROCESSINGCOMMAND;
-	Line(ULONG_MAX, ULONG_MAX, 50, fakeFinalPosition);
+	LinearMoveTo(fakeFinalPosition, ULONG_MAX, ULONG_MAX, 50);
 	currentPosition.z = 0;
-	// la posicion final a la que queremos llegar: ejeY -> 0
+	
+	// Luego el eje y hasta su origen...
 	fakeFinalPosition.y = 0;
 	machineState = PROCESSINGCOMMAND;
-	Line(ULONG_MAX, 50, ULONG_MAX, fakeFinalPosition);
+	LinearMoveTo(fakeFinalPosition, ULONG_MAX, 50, ULONG_MAX);
 	currentPosition.y = 0;
-	// la posicion final a la que queremos llegar: ejeX -> 0
+	
+	// por ultimo, el eje x hacia su posicion inicial.
 	fakeFinalPosition.x = 0;
 	machineState = PROCESSINGCOMMAND;
-	Line(50, ULONG_MAX, ULONG_MAX, fakeFinalPosition);
+	LinearMoveTo(fakeFinalPosition, 50, ULONG_MAX, ULONG_MAX);
 	currentPosition.x = 0;
 }
 
-float testFloat;
 void user(void)
 {
 	BYTE numBytesRead;
@@ -343,6 +347,7 @@ void user(void)
 
 	//Blink the LEDs according to the USB device status
 	/*BlinkUSBStatus();*/
+	
 	// User Application USB tasks
 	if((USBDeviceState < CONFIGURED_STATE)||(USBSuspendControl==1)) return;
 
@@ -358,21 +363,6 @@ void user(void)
 			}
 			USB_In_Buffer[i] = '\0';
 			
-			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"test"))
-			{
-				// Resetear la maquina si recibimos el comando 'reset'
-				currentPosition.x = 0;
-				currentPosition.y = 0;
-				currentPosition.z = 0;
-				configuracion[0].axisFactor = 360;
-				configuracion[1].axisFactor = 360;
-				configuracion[2].axisFactor = 360;
-				strcpypgm2ram(message, (const rom char far *)"CNC TestMode");
-				putUSBUSART(message, strlen(message));
-				machineState = TEST;
-				goto endUser;
-			}
-			
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"reset"))
 			{
 				// Resetear la maquina si recibimos el comando 'reset'
@@ -384,20 +374,38 @@ void user(void)
 			
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"status"))
 			{
-				// Resetear la maquina si recibimos el comando 'reset'
+				// devolvemos el etado en el que esta la maquina
 				sprintf(message, "status: %d", machineState);
-				//strcpypgm2ram(message, (const rom char far *)"status: ");
 				putUSBUSART(message, strlen(message));
-				//machineState = SERIALPORTCONNECTED;
+				goto endUser;
+			}
+			
+			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"freemoves"))
+			{
+				strcpypgm2ram(message, (const rom char far *)"CNC Free Moves");
+				putUSBUSART(message, strlen(message));
+				machineState = FREEMOVES;
+				goto endUser;
+			}
+			
+			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"stop"))
+			{
+				freeCode = -1;
+				strcpypgm2ram(message, (const rom char far *)"CNC Stop Free Moves");
+				putUSBUSART(message, strlen(message));
+				machineState = SERIALPORTCONNECTED;
 				goto endUser;
 			}
 			
 			switch(machineState)
 			{
-				case TEST:
-					//currentPosition = GetFinalPosition(USB_In_Buffer);
-					testFloat = atof(USB_In_Buffer);
-					machineState = ANSWERTEST;
+				case FREEMOVES:
+					if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"+X")) { freeCode = 0; goto endUser; }
+					if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"-X")) { freeCode = 1; goto endUser; }
+					if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"+Y")) { freeCode = 2; goto endUser; }
+					if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"-Y")) { freeCode = 3; goto endUser; }
+					if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"+Z")) { freeCode = 4; goto endUser; }
+					if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"-Z")) { freeCode = 5; goto endUser; }
 					break;
 					
 				case SERIALPORTCONNECTED:
@@ -457,9 +465,10 @@ void user(void)
 					// Chequeamos si el comando es G
 					if(movementCommandType == 'G')
 					{						
-						gCommand = atoi(movementCommandCode);
-						if(gCode[gCommand] != NULL)
+						gCode = atoi(movementCommandCode);
+						if(gCodes[gCode] != NULL)
 						{
+							strcpy(commandReceived, USB_In_Buffer);
 							strcpypgm2ram(message, (const rom char far *)"Comando Soportado");
 							machineState = PROCESSINGCOMMAND;
 						}
@@ -471,9 +480,10 @@ void user(void)
 					// Chequeamos si el comando es M
 					else if(movementCommandType == 'M')
 					{
-						mCommand = atoi(movementCommandCode);
-						if(mCode[mCommand] != NULL)
+						mCode = atoi(movementCommandCode);
+						if(mCodes[mCode] != NULL)
 						{
+							strcpy(commandReceived, USB_In_Buffer);
 							strcpypgm2ram(message, (const rom char far *)"Comando Soportado");
 							machineState = PROCESSINGCOMMAND;
 						}
@@ -500,34 +510,49 @@ void user(void)
 		{
 			switch(machineState)
 			{
-				case ANSWERTEST:
-					sprintf(message, (const rom char far *)"X: %ld Y: %ld Z:%ld", currentPosition.x, currentPosition.y, currentPosition.z);
-					putUSBUSART(message, strlen(message));
-					//putUSBUSART(USB_In_Buffer, strlen(USB_In_Buffer));
-					
-					machineState = TEST;
+				case FREEMOVES:
+					if(freeCode != -1)
+					{
+						position_t freeTargetPosition = CreatePositionFrom(currentPosition);
+						
+						machineState = PROCESSINGCOMMAND;
+						if( freeCode == 0) { freeTargetPosition.x += ceil(configuracion[0].axisFactor); LinearMoveTo(freeTargetPosition, 50, ULONG_MAX, ULONG_MAX); }
+						if( freeCode == 1) { freeTargetPosition.x -= ceil(configuracion[0].axisFactor); LinearMoveTo(freeTargetPosition, 50, ULONG_MAX, ULONG_MAX); }
+						if( freeCode == 2) { freeTargetPosition.y += ceil(configuracion[1].axisFactor); LinearMoveTo(freeTargetPosition, ULONG_MAX, 50, ULONG_MAX); }
+						if( freeCode == 3) { freeTargetPosition.y -= ceil(configuracion[1].axisFactor); LinearMoveTo(freeTargetPosition, ULONG_MAX, 50, ULONG_MAX); }
+						if( freeCode == 4) { freeTargetPosition.z += ceil(configuracion[2].axisFactor); LinearMoveTo(freeTargetPosition, ULONG_MAX, ULONG_MAX, 50); }
+						if( freeCode == 5) { freeTargetPosition.z -= ceil(configuracion[2].axisFactor); LinearMoveTo(freeTargetPosition, ULONG_MAX, ULONG_MAX, 50); }
+						
+						if(machineState == LIMITSENSOR)
+						{
+							freeCode = -1;
+							strcpypgm2ram(message, (const rom char far *)"Sensor Fin de Carrera");
+							putUSBUSART(message, strlen(message));
+						}
+						else
+						{
+							machineState = FREEMOVES;
+						}
+					}
 					break;
 					
 				case CONFIGURED:
 					MoveToOrigin();
-					//strcpypgm2ram(message, (const rom char far *)"Posicion de Origen");
-					sprintf(message, (const rom char far *)"X: %ld Y: %ld Z:%ld", currentPosition.x, currentPosition.y, currentPosition.z);
+					strcpypgm2ram(message, (const rom char far *)"Posicion de Origen");
 					putUSBUSART(message, strlen(message));
 					machineState = WAITINGCOMMAND;
 					break;
 					
 				case PROCESSINGCOMMAND:
 					// Processing command received
-					if(gCommand != -1) { gCode[gCommand](USB_In_Buffer); }
-					if(mCommand != -1) { mCode[mCommand](USB_In_Buffer); }
+					if(gCode != -1) { gCodes[gCode](commandReceived); }
+					if(mCode != -1) { mCodes[mCode](commandReceived); }
 					
 					// reseteamos variables de comando
-					gCommand = mCommand = -1;
-					
-					sprintf(message, (const rom char far *)"X: %ld Y: %ld Z:%ld", currentPosition.x, currentPosition.y, currentPosition.z);
+					gCode = mCode = -1;
 					
 					// Chequeamos machineState -> si se activo algun fin de carrera
-					/*if(machineState == LIMITSENSOR)
+					if(machineState == LIMITSENSOR)
 					{
 						strcpypgm2ram(message, (const rom char far *)"Sensor Fin de Carrera");
 					}
@@ -538,7 +563,7 @@ void user(void)
 					else
 					{
 						strcpypgm2ram(message, (const rom char far *)"Comando Ejecutado");						
-					}*/
+					}
 					putUSBUSART(message, strlen(message));
 					machineState = WAITINGCOMMAND;
 					break;

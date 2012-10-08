@@ -517,11 +517,11 @@ void user(void)
 						
 						machineState = PROCESSINGCOMMAND;
 						if( freeCode == 0) { freeTargetPosition.x += ceil(configuracion[0].axisFactor); LinearMoveTo(freeTargetPosition, 50, ULONG_MAX, ULONG_MAX); }
-						if( freeCode == 1) { freeTargetPosition.x -= ceil(configuracion[0].axisFactor); LinearMoveTo(freeTargetPosition, 50, ULONG_MAX, ULONG_MAX); }
-						if( freeCode == 2) { freeTargetPosition.y += ceil(configuracion[1].axisFactor); LinearMoveTo(freeTargetPosition, ULONG_MAX, 50, ULONG_MAX); }
-						if( freeCode == 3) { freeTargetPosition.y -= ceil(configuracion[1].axisFactor); LinearMoveTo(freeTargetPosition, ULONG_MAX, 50, ULONG_MAX); }
-						if( freeCode == 4) { freeTargetPosition.z += ceil(configuracion[2].axisFactor); LinearMoveTo(freeTargetPosition, ULONG_MAX, ULONG_MAX, 50); }
-						if( freeCode == 5) { freeTargetPosition.z -= ceil(configuracion[2].axisFactor); LinearMoveTo(freeTargetPosition, ULONG_MAX, ULONG_MAX, 50); }
+						else if( freeCode == 1) { freeTargetPosition.x -= ceil(configuracion[0].axisFactor); LinearMoveTo(freeTargetPosition, 50, ULONG_MAX, ULONG_MAX); }
+						else if( freeCode == 2) { freeTargetPosition.y += ceil(configuracion[1].axisFactor); LinearMoveTo(freeTargetPosition, ULONG_MAX, 50, ULONG_MAX); }
+						else if( freeCode == 3) { freeTargetPosition.y -= ceil(configuracion[1].axisFactor); LinearMoveTo(freeTargetPosition, ULONG_MAX, 50, ULONG_MAX); }
+						else if( freeCode == 4) { freeTargetPosition.z += ceil(configuracion[2].axisFactor); LinearMoveTo(freeTargetPosition, ULONG_MAX, ULONG_MAX, 50); }
+						else if( freeCode == 5) { freeTargetPosition.z -= ceil(configuracion[2].axisFactor); LinearMoveTo(freeTargetPosition, ULONG_MAX, ULONG_MAX, 50); }
 						
 						if(machineState == LIMITSENSOR)
 						{

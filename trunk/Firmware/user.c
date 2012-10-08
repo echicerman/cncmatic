@@ -69,20 +69,24 @@ void LimitSensorHandler(void)
 	INTCONbits.RBIF = 0;  //limpia bandera y salimos
 }
 
-// Definimos funciones Gsoportadas
-void G00(char code[])
+/*
+	Cuanto más grande es la velocidad, más lento girará el motor
+*/
+void LinearMovement (char command[], unsigned char speed)
 {
 	unsigned long xPow, yPow, zPow, totalSteps, xClock, yClock, zClock;
-	unsigned char speed = 50; // cuanto mas grande, mas lento girara el motor
-	position_t position = GetFinalPosition(code);
+	position_t position = GetFinalPosition(command);
 	
 	xPow = (unsigned long) (position.x - currentPosition.x) * (position.x - currentPosition.x);
 	yPow = (unsigned long) (position.y - currentPosition.y) * (position.y - currentPosition.y);
 	zPow = (unsigned long) (position.z - currentPosition.z) * (position.z - currentPosition.z);
 	totalSteps = ceil( sqrt( xPow + yPow + zPow ) );
 	
-	//abs consume mucha memoria
-	if(position.x > currentPosition.x) {xClock = ceil( speed * totalSteps / (position.x - currentPosition.x) );}
+	xClock = (position.x > currentPosition.x)? ceil( speed * totalSteps / (position.x - currentPosition.x) ) : ceil( speed * totalSteps / (currentPosition.x - position.x) );
+	yClock = (position.y > currentPosition.y)? ceil( speed * totalSteps / (position.y - currentPosition.y) ) : ceil( speed * totalSteps / (currentPosition.y - position.y) );
+	zClock = (position.z > currentPosition.z)? ceil( speed * totalSteps / (position.z - currentPosition.z) ) : ceil( speed * totalSteps / (currentPosition.z - position.z) );
+	
+	/*if(position.x > currentPosition.x) {xClock = ceil( speed * totalSteps / (position.x - currentPosition.x) );}
 	else {xClock = ceil( speed * totalSteps / (currentPosition.x - position.x) );}
 	
 	if(position.y > currentPosition.y) {yClock = ceil( speed * totalSteps / (position.y - currentPosition.y) );}
@@ -90,32 +94,20 @@ void G00(char code[])
 	
 	if(position.z > currentPosition.z) {zClock = ceil( speed * totalSteps / (position.z - currentPosition.z) );}
 	else {zClock = ceil( speed * totalSteps / (currentPosition.z - position.z) );}
+	*/
 
 	Line(xClock, yClock, zClock, position);
 }
 
+// Definimos funciones G soportadas
+void G00(char code[])
+{
+	LinearMovement(code, 50);
+}
+
 void G01(char code[])
 {
-	unsigned long xPow, yPow, zPow, totalSteps, xClock, yClock, zClock;
-	unsigned char speed = 100; // cuanto mas grande, mas lento girara el motor
-	position_t position = GetFinalPosition(code);
-	
-	xPow = (unsigned long) (position.x - currentPosition.x) * (position.x - currentPosition.x);
-	yPow = (unsigned long) (position.y - currentPosition.y) * (position.y - currentPosition.y);
-	zPow = (unsigned long) (position.z - currentPosition.z) * (position.z - currentPosition.z);
-	totalSteps = ceil( sqrt( xPow + yPow + zPow ) );
-	
-	//abs consume mucha memoria
-	if(position.x > currentPosition.x) {xClock = ceil( speed * totalSteps / (position.x - currentPosition.x) );}
-	else {xClock = ceil( speed * totalSteps / (currentPosition.x - position.x) );}
-	
-	if(position.y > currentPosition.y) {yClock = ceil( speed * totalSteps / (position.y - currentPosition.y) );}
-	else {yClock = ceil( speed * totalSteps / (currentPosition.y - position.y) );}
-	
-	if(position.z > currentPosition.z) {zClock = ceil( speed * totalSteps / (position.z - currentPosition.z) );}
-	else {zClock = ceil( speed * totalSteps / (currentPosition.z - position.z) );}
-
-	Line(xClock, yClock, zClock, position);
+	LinearMovement(code, 100);
 }
 
 void G02(char code[])
@@ -162,15 +154,15 @@ void G91(char code[])
 }
 // Cargamos nuestro vector de funciones G
 _func gCode[100] = {	G00, 	G01, 	G02, 	G03, 	G04, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL,
-								NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	G17, 	G18, 	G19, 
-								G20, 	G21, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
-								NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
-								NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
-								NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
-								NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
-								NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
-								NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
-								G90, 	G91, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL};
+						NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	G17, 	G18, 	G19, 
+						G20, 	G21, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
+						NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
+						NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
+						NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
+						NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
+						NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
+						NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
+						G90, 	G91, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL};
 
 // Definimos funciones M soportadas
 void M00(char code[])
@@ -192,13 +184,13 @@ position_t GetFinalPosition(char code[])
 {
 	unsigned char i, count = strlen(code);
 	char *ptr;
+	
 	position_t position;
 	position.x = currentPosition.x;
 	position.y = currentPosition.y;
 	position.z = currentPosition.z;
 	
 	// Calculamos los pasos que se deben dar en cada eje
-	// pasos = ( distancia * ( 360 / gradosPorPaso) ) / distanciaPorVuelta
 	for(i = 0; i < count; i++)
 	{
 		if( code[i] == 'X')
@@ -238,9 +230,9 @@ void Line(unsigned long xFreq, unsigned long yFreq, unsigned long zFreq, positio
 	unsigned long clock = 0, xNextStep = 0, yNextStep = 0, zNextStep = 0;
 	
 	// Seteamos bit de sentido de giro
-	PORTAbits.RA1 = finalPosition.x > currentPosition.x ? 1 : 0;
-	PORTCbits.RC1 = finalPosition.y > currentPosition.y ? 1 : 0;
-	PORTDbits.RD2 = finalPosition.z > currentPosition.z ? 1 : 0;
+	PORTAbits.RA1 = (finalPosition.x > currentPosition.x) ? 1 : 0;
+	PORTCbits.RC1 = (finalPosition.y > currentPosition.y) ? 1 : 0;
+	PORTDbits.RD2 = (finalPosition.z > currentPosition.z) ? 1 : 0;
 	
 	// Enable PortB Interrupts
 	INTCONbits.RBIE = 1;

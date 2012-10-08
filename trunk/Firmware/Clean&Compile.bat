@@ -1,8 +1,9 @@
+echo off
+
 REM AGREGAR EL PATH DEL COMPILADOR (mcc18.exe) A LA VARIABLE PATH DEL SISTEMA
 REM x86 -> C:\Program Files\Microchip\mplabc18\v3.40\bin\
 REM x64 -> C:\Program Files (x86)\Microchip\mplabc18\v3.40\bin\
 
-echo off
 cd "C:\Documents and Settings\gabriel\Mis documentos\Firmware"
 
 echo * Delete files *

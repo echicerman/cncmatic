@@ -10,21 +10,20 @@ typedef enum {
 	PROCESSINGCOMMAND,			// 5
 	LIMITSENSOR,							// 6
 	EMERGENCYSTOP,					// 7
-	TEST,
-	ANSWERTEST
+	TEST,										// 8
+	ANSWERTEST							// 9
 } state_t;
 
 typedef struct 
 {
-	int stepDegrees;
-	int distancePerRevolution;
+	int axisFactor;
 } config_t;
 
 typedef struct 
 {
-int x;
-int y;
-int z;
+unsigned long x;
+unsigned long y;
+unsigned long z;
 	/*unsigned short long x;
 	unsigned short long y;
 	unsigned short long z;*/

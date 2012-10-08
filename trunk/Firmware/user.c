@@ -6,6 +6,7 @@
 #include <string.h>
 #include <math.h>
 #include <delays.h>
+#include <limits.h>
 
 volatile state_t machineState = SERIALPORTCONNECTED;
 config_t configuracion[3];
@@ -14,92 +15,94 @@ char gCommand = -1, mCommand = -1;
 
 typedef void (*_func)(char[]);
 position_t GetFinalPosition(char[]);
-void Line(long, long, long, position_t);
+void Line(unsigned long, unsigned long, unsigned long, position_t);
+void MoveToOrigin(void);
 
 void LimitSensorHandler(void)
 {
-/*
-	if( PORTBbits.RB4 ) // fin de carrera en EJE X
+	if( PORTBbits.RB4 == 1 ) // fin de carrera en EJE X
 	{
+		// invierto el sentido de giro
 		PORTAbits.RA1 = ~PORTAbits.RA1;
+		// tiro un paso
 		PORTAbits.RA2 = 1;
 		Delay100TCYx(120);
 		PORTAbits.RA2 = 0;
-		PORTAbits.RA1 = ~PORTAbits.RA1;
-
+		
+		PORTBbits.RB4 = 0;
 		machineState = LIMITSENSOR;
 	}
-	
-	if( PORTBbits.RB5 ) // fin de carrera en EJE Y
+
+	if( PORTBbits.RB5 == 1 ) // fin de carrera en EJE Y
 	{
+		// invierto el sentido de giro
 		PORTCbits.RC1 = ~PORTCbits.RC1;
+		// tiro un paso
 		PORTCbits.RC2 = 1;
 		Delay100TCYx(120);
 		PORTAbits.RA2 = 0;
-		PORTCbits.RC1 = ~PORTCbits.RC1;
 
+		PORTBbits.RB5 = 0;
 		machineState = LIMITSENSOR;
 	}
-	
-	if( PORTBbits.RB6 ) // fin de carrera en EJE Z
+
+	if( PORTBbits.RB6 == 1 ) // fin de carrera en EJE Z
 	{
+		// invierto el sentido de giro
 		PORTDbits.RD2 = ~PORTDbits.RD2;
+		// tiro un paso
 		PORTDbits.RD4 = 1;
 		Delay100TCYx(120);
 		PORTDbits.RD4 = 0;
-		PORTDbits.RD2 = ~PORTDbits.RD2;
 
+		PORTBbits.RB6 = 0;
 		machineState = LIMITSENSOR;
 	}
-	
-	if( PORTBbits.RB7 ) // parada de emergencia
+
+	if( PORTBbits.RB7 == 1 ) // parada de emergencia
 	{
+		PORTBbits.RB7 = 0;
 		machineState = EMERGENCYSTOP;
 	}
-*/
+	_asm     MOVF    PORTB,0,ACCESS    _endasm
+	INTCONbits.RBIF = 0;  //limpia bandera y salimos
+	_asm    MOVF    PORTB,0,ACCESS    _endasm
 }
 
 // Definimos funciones Gsoportadas
 void G00(char code[])
 {
-	unsigned long xClock, yClock, zClock, xPow, yPow, zPow, distance, time, testX, testPowX;
-	unsigned char speed = 100;
+	unsigned long xClock, yClock, zClock, xPow, yPow, zPow, totalSteps, time;
+	unsigned char speed = 50; // cuanto mas grande, mas lento girara el motor
 	position_t position = GetFinalPosition(code);
 	
-	testX = position.x;
-	testPowX = position.x * position.x;
-	xPow = (position.x - currentPosition.x) * (position.x - currentPosition.x);
-	yPow = (position.y - currentPosition.y) * (position.y - currentPosition.y);
-	zPow = (position.z - currentPosition.z) * (position.z - currentPosition.z);
-	distance = sqrt( xPow + yPow + zPow );
-	time = ( distance / 100 ) * 1000; // milisegundos
+	xPow = (unsigned long) (position.x - currentPosition.x) * (position.x - currentPosition.x);
+	yPow = (unsigned long) (position.y - currentPosition.y) * (position.y - currentPosition.y);
+	zPow = (unsigned long) (position.z - currentPosition.z) * (position.z - currentPosition.z);
+	totalSteps = ceil( sqrt( xPow + yPow + zPow ) );
 	
-	/** time / cantidadDeCambiosDeEstado **/
-	xClock = time / ( (position.x - currentPosition.x)  * 2 );
-	yClock = time / ( (position.y - currentPosition.y)  * 2 );
-	zClock = time / ( (position.z - currentPosition.z)  * 2 );
-	
-	
+	xClock = ceil( speed * totalSteps / (position.x - currentPosition.x) );
+	yClock = ceil( speed * totalSteps / (position.y - currentPosition.y) );
+	zClock = ceil( speed * totalSteps / (position.z - currentPosition.z) );
+
 	Line(xClock, yClock, zClock, position);
 }
 
 void G01(char code[])
 {
-	unsigned long xClock, yClock, zClock, xPow, yPow, zPow, distance, time;
-	unsigned char speed = 100;
+	unsigned long xClock, yClock, zClock, xPow, yPow, zPow, totalSteps, time;
+	unsigned char speed = 100; // cuanto mas grande, mas lento girara el motor
 	position_t position = GetFinalPosition(code);
 	
-	xPow = (position.x - currentPosition.x) * (position.x - currentPosition.x);
-	yPow = (position.y - currentPosition.y) * (position.y - currentPosition.y);
-	zPow = (position.z - currentPosition.z) * (position.z - currentPosition.z);
-	distance = sqrt( xPow + yPow + zPow );
-	time = ( distance / speed ) * 1000; // milisegundos
+	xPow = (unsigned long) (position.x - currentPosition.x) * (position.x - currentPosition.x);
+	yPow = (unsigned long) (position.y - currentPosition.y) * (position.y - currentPosition.y);
+	zPow = (unsigned long) (position.z - currentPosition.z) * (position.z - currentPosition.z);
+	totalSteps = ceil( sqrt( xPow + yPow + zPow ) );
 	
-	/** time / cantidadDeCambiosDeEstado **/
-	xClock = time / ( (position.x - currentPosition.x)  * 2 );
-	yClock = time / ( (position.y - currentPosition.y)  * 2 );
-	zClock = time / ( (position.z - currentPosition.z) * 2 );
-	
+	xClock = ceil( speed * totalSteps / (position.x - currentPosition.x) );
+	yClock = ceil( speed * totalSteps / (position.y - currentPosition.y) );
+	zClock = ceil( speed * totalSteps / (position.z - currentPosition.z) );
+
 	Line(xClock, yClock, zClock, position);
 }
 
@@ -191,7 +194,7 @@ position_t GetFinalPosition(char code[])
 			ptr = &code[i + 1];
 			for(++i; (code[i] != ' ') && (i < count); i++) ;
 			code[i] = '\0';
-			position.x = ( atoi(ptr) * ( 360 / configuracion[0].stepDegrees ) ) / configuracion[0].distancePerRevolution;
+			position.x = atoi(ptr) * configuracion[0].axisFactor;
 		}
 		
 		if( code[i] == 'Y')
@@ -199,7 +202,7 @@ position_t GetFinalPosition(char code[])
 			ptr = &code[i + 1];
 			for(++i; (code[i] != ' ') && (i < count); i++) ;
 			code[i] = '\0';
-			position.y = ( atoi(ptr) * ( 360 / configuracion[1].stepDegrees ) ) / configuracion[1].distancePerRevolution;
+			position.y = atoi(ptr) * configuracion[1].axisFactor;
 		}
 		
 		if( code[i] == 'Z')
@@ -207,7 +210,7 @@ position_t GetFinalPosition(char code[])
 			ptr = &code[i + 1];
 			for(++i; (code[i] != ' ') && (i < count); i++) ;
 			code[i] = '\0';
-			position.z = ( atoi(ptr) * ( 360 / configuracion[2].stepDegrees ) ) / configuracion[2].distancePerRevolution;
+			position.z = atoi(ptr) * configuracion[2].axisFactor;
 		}
 	}	
 	return position;
@@ -218,9 +221,9 @@ position_t GetFinalPosition(char code[])
 /** xFreq , yFreq, zFreq -> cada cuántos pulsos cambiar el bit de clock */
 /** finalPosition -----------> posición final del movimiento ******************/
 /*********************************************************************************/
-void Line(long xFreq, long yFreq, long zFreq, position_t finalPosition)
+void Line(unsigned long xFreq, unsigned long yFreq, unsigned long zFreq, position_t finalPosition)
 {
-	long clock = 0, xNextStep = 0, yNextStep = 0, zNextStep = 0;
+	unsigned long clock = 0, xNextStep = 0, yNextStep = 0, zNextStep = 0;
 	
 	// Seteamos bit de sentido de giro
 	PORTAbits.RA1 = finalPosition.x > currentPosition.x ? 1 : 0;
@@ -228,9 +231,7 @@ void Line(long xFreq, long yFreq, long zFreq, position_t finalPosition)
 	PORTDbits.RD2 = finalPosition.z > currentPosition.z ? 1 : 0;
 	
 	// Enable PortB Interrupts
-	/*INTCONbits.RBIF = 0;  //limpia bandera
 	INTCONbits.RBIE = 1;
-	*/
 	// Mientras no lleguemos a la posicion final en los 3 ejes, tenemos que hacer girar algún motor
 	while( ( machineState == PROCESSINGCOMMAND ) && ( (finalPosition.x != currentPosition.x) || (finalPosition.y != currentPosition.y) || (finalPosition.z != currentPosition.z) ) )
 	{
@@ -301,7 +302,30 @@ void Line(long xFreq, long yFreq, long zFreq, position_t finalPosition)
 		clock++;
 	}
 	// Disable PortB Interrupts
-	/*INTCONbits.RBIE = 0;*/
+	INTCONbits.RBIE = 0;
+}
+
+void MoveToOrigin()
+{
+	position_t fakeFinalPosition;
+	// seteamos posicion actual como la mas lejana posible
+	currentPosition.x = currentPosition.y = currentPosition.z = ULONG_MAX;
+	
+	// la posicion final a la que queremos llegar: ejeZ -> 0
+	fakeFinalPosition.x = fakeFinalPosition.y = ULONG_MAX; fakeFinalPosition.z = 0;
+	machineState = PROCESSINGCOMMAND;
+	Line(ULONG_MAX, ULONG_MAX, 50, fakeFinalPosition);
+	currentPosition.z = 0;
+	// la posicion final a la que queremos llegar: ejeY -> 0
+	fakeFinalPosition.y = 0;
+	machineState = PROCESSINGCOMMAND;
+	Line(ULONG_MAX, 50, ULONG_MAX, fakeFinalPosition);
+	currentPosition.y = 0;
+	// la posicion final a la que queremos llegar: ejeX -> 0
+	fakeFinalPosition.x = 0;
+	machineState = PROCESSINGCOMMAND;
+	Line(50, ULONG_MAX, ULONG_MAX, fakeFinalPosition);
+	currentPosition.x = 0;
 }
 
 void user(void)
@@ -310,6 +334,7 @@ void user(void)
 	char *configPtr, message[25];
 	char movementCommandCode[3], movementCommandType;
 	unsigned char motor = 0;
+	int stepDegrees, distancePerRevolution;
 
 	//Blink the LEDs according to the USB device status
 	/*BlinkUSBStatus();*/
@@ -331,12 +356,9 @@ void user(void)
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"test"))
 			{
 				// Resetear la maquina si recibimos el comando 'reset'
-				configuracion[0].stepDegrees = 1;
-				configuracion[0].distancePerRevolution = 1;
-				configuracion[1].stepDegrees = 1;
-				configuracion[1].distancePerRevolution = 1;
-				configuracion[2].stepDegrees = 1;
-				configuracion[2].distancePerRevolution = 1;
+				configuracion[0].axisFactor = 360;
+				configuracion[1].axisFactor = 360;
+				configuracion[2].axisFactor = 360;
 				strcpypgm2ram(message, (const rom char far *)"CNC TestMode");
 				putUSBUSART(message, strlen(message));
 				machineState = TEST;
@@ -368,6 +390,7 @@ void user(void)
 					currentPosition = GetFinalPosition(USB_In_Buffer);
 					machineState = ANSWERTEST;
 					break;
+					
 				case SERIALPORTCONNECTED:
 					// Count characters received and send this number to PC
 					sprintf(message, "%d", numBytesRead);
@@ -386,14 +409,16 @@ void user(void)
 				case CNCMATICCONNECTED:
 					// tokenize the configuration string
 					configPtr = strtokpgmram(USB_In_Buffer, (const rom char far *)";");
-					configuracion[motor].stepDegrees = atoi(configPtr);
+					stepDegrees = atoi(configPtr);
 					configPtr = strtokpgmram(NULL, (const rom char far *)";");
-					configuracion[motor].distancePerRevolution = atoi(configPtr);
+					distancePerRevolution = atoi(configPtr);
+					configuracion[motor].axisFactor = ( 360 / stepDegrees ) / distancePerRevolution;
 					while( (++motor ) && ( (configPtr = strtokpgmram( NULL, (const rom char far *)";" )) != NULL ) )    // Posteriores llamadas
-					{						
-						configuracion[motor].stepDegrees = atoi(configPtr);
+					{
+						stepDegrees = atoi(configPtr);
 						configPtr = strtokpgmram(NULL, (const rom char far *)";");
-						configuracion[motor].distancePerRevolution = atoi(configPtr);
+						distancePerRevolution = atoi(configPtr);
+						configuracion[motor].axisFactor = ( 360 / stepDegrees ) / distancePerRevolution;
 					}
 					
 					if(motor == 3)
@@ -401,12 +426,6 @@ void user(void)
 						// if it has been configured all 3 engines
 						strcpypgm2ram(message, (const rom char far *)"Configuracion Correcta");
 						machineState = CONFIGURED;
-						
-						// TODO: Mover punta a (0;0;0)
-						currentPosition.x = 0;
-						currentPosition.y = 0;
-						currentPosition.z = 0;
-						//*******************************
 					}
 					else
 					{
@@ -479,6 +498,7 @@ void user(void)
 					break;
 					
 				case CONFIGURED:
+					MoveToOrigin();
 					strcpypgm2ram(message, (const rom char far *)"Posicion de Origen");
 					putUSBUSART(message, strlen(message));
 					machineState = WAITINGCOMMAND;

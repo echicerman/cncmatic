@@ -375,7 +375,7 @@ void user(void)
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"status"))
 			{
 				// devolvemos el etado en el que esta la maquina
-				sprintf(message, "status: %d", machineState);
+				sprintf(message, "CNC Status: %d", machineState);
 				putUSBUSART(message, strlen(message));
 				goto endUser;
 			}
@@ -447,7 +447,7 @@ void user(void)
 					else
 					{
 						// not all 3 engines had been configured correctly
-						strcpypgm2ram(message, (const rom char far *)"Error en Configuracion");						
+						strcpypgm2ram(message, (const rom char far *)"Error en Configuracion");
 						machineState = CNCMATICCONNECTED;
 					}
 					
@@ -529,10 +529,7 @@ void user(void)
 							strcpypgm2ram(message, (const rom char far *)"Sensor Fin de Carrera");
 							putUSBUSART(message, strlen(message));
 						}
-						else
-						{
-							machineState = FREEMOVES;
-						}
+						machineState = FREEMOVES;
 					}
 					break;
 					
@@ -562,7 +559,7 @@ void user(void)
 					}
 					else
 					{
-						strcpypgm2ram(message, (const rom char far *)"Comando Ejecutado");						
+						strcpypgm2ram(message, (const rom char far *)"Comando Ejecutado");
 					}
 					putUSBUSART(message, strlen(message));
 					machineState = WAITINGCOMMAND;

@@ -72,26 +72,38 @@ namespace Configuracion
 
     public class XML_ConfigMatMot
     {
-        private int idConfig;
+        private int idConfigMatMot;
         private int idMaterial;
         private int idMotor;
         private decimal tamVuelta;
         private decimal gradosPaso;
+        private string nombreMotor;
+        private string nombreMaterial;
 
-        public int IdConfig
+        public int IdConfigMatMot
         {
-            get { return idConfig; }
-            set { idConfig = value; }
+            get { return idConfigMatMot; }
+            set { idConfigMatMot = value; }
         }
         public int IdMaterial
         {
             get { return idMaterial; }
             set { idMaterial = value; }
         }
+        public string Material
+        {
+            get { return nombreMaterial; }
+            set { nombreMaterial = value; }
+        }
         public int IdMotor
         {
             get { return idMotor; }
             set { idMotor = value; }
+        }
+        public string Motor
+        {
+            get { return nombreMotor; }
+            set { nombreMotor = value; }
         }
         public decimal TamVuelta
         {

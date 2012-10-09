@@ -118,9 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ViewRight" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ViewRight.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="HomeButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\HomeButton.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -132,6 +129,9 @@
   </data>
   <data name="Play-1-Normal-icon (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Play-1-Normal-icon (1).png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="circle-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\circle-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ViewIso" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ViewIso.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -175,11 +175,14 @@
   <data name="flecha_IZQ" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\flecha_IZQ.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="viewrotate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\viewrotate.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="EditInformation" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EditInformation.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="screens2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\screens2.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Play-1-Normal-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Play-1-Normal-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Color.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -190,14 +193,14 @@
   <data name="New-icon2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\New-icon2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="draw-circle-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\draw-circle-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Actions-layer-visible-on-icon2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Actions-layer-visible-on-icon2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="logo teCNoC" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\logo teCNoC.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Ok-icon2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Ok-icon2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Cancel-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Cancel-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -208,8 +211,8 @@
   <data name="screens4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\screens4.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Play-1-Normal-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Play-1-Normal-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="screens2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\screens2.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="flecha_ARR" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\flecha_ARR.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -235,8 +238,8 @@
   <data name="viewpan" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\viewpan.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="viewrotate" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\viewrotate.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ViewRight" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ViewRight.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="draw-line-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\draw-line-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -253,10 +256,10 @@
   <data name="brush-icon (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\brush-icon (1).png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="circle-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\circle-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="draw-circle-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\draw-circle-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Ok-icon2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Ok-icon2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Cancel-icon2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Cancel-icon2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

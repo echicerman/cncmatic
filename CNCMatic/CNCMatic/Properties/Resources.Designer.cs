@@ -95,6 +95,13 @@ namespace CNCMatic.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Cancel_icon2 {
+            get {
+                object obj = ResourceManager.GetObject("Cancel-icon2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap circle_icon {
             get {
                 object obj = ResourceManager.GetObject("circle-icon", resourceCulture);

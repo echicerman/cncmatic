@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using VirtualSerial;
 using System.IO.Ports;
 using System.Timers;
+using CNC;
 
 namespace CNCMatic
 {
@@ -16,9 +17,8 @@ namespace CNCMatic
     {
         public FrmComunicacion()
         {
-
             InitializeComponent();
-
+                        
             buscarPuertos();
         }
 

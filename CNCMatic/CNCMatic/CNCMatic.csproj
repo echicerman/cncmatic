@@ -125,6 +125,10 @@
       <Project>{0ADE2784-D0C2-49F2-95CF-DE67C97C8BE2}</Project>
       <Name>VirtualSerial</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CNC\CNC.csproj">
+      <Project>{7808BA58-15F0-4FF3-A1DE-58DF3B898C08}</Project>
+      <Name>CNC</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Configuracion\Configuracion.csproj">
       <Project>{5FB8E387-D096-4A98-8158-368D43664730}</Project>
       <Name>Configuracion</Name>
@@ -167,6 +171,7 @@
     <None Include="Resources\Refresh-icon.png" />
     <None Include="Resources\brush-icon %281%29.png" />
     <None Include="Resources\Cancel-icon.png" />
+    <None Include="Resources\Cancel-icon2.png" />
     <Content Include="Resources\Color.bmp" />
     <Content Include="Resources\DisplayOpts.bmp" />
     <Content Include="Resources\EditInformation.bmp" />

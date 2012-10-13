@@ -979,9 +979,25 @@ namespace CNCMatic
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
+            try
+            {
+                this.LimpiarPrevisualizador();
+                PrevisualizarFigurasManual();
 
-            this.LimpiarPrevisualizador();
-            PrevisualizarFigurasManual();
+                //bloqueamos controles
+                btnPlay.Enabled = false;
+                btnInicio.Enabled = false;
+                btnStop2.Enabled = false;
+                gbMovXY.Enabled = false;
+                gbMovZ.Enabled = false;
+                txtLineaManual.Enabled = false;
+                btnLimpiar.Enabled = false;
+                toolStrip1.Enabled = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
         }
 
         public string proximaInstruccion()
@@ -1018,6 +1034,26 @@ namespace CNCMatic
 
             //Muestra figura en el previsualizador
             PrevisualizarFigurasManual();
+        }
+
+        private void acercaDeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            (new Acerca()).ShowDialog();
+        }
+
+        private void btnPause_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //habilitamos los controles permitidos en una pausa
+                btnStop2.Enabled = true;
+                btnPlay.Enabled = true;
+                btnInicio.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
         }
 
 

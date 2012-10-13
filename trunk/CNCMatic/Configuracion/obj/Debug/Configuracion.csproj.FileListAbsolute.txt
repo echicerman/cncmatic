@@ -8,3 +8,8 @@ E:\Mis Dcocumentos\Facultad UTN\Proyecto\Descargas SVN\CNCMatic\Configuracion\bi
 E:\Mis Dcocumentos\Facultad UTN\Proyecto\Descargas SVN\CNCMatic\Configuracion\obj\Debug\ResolveAssemblyReference.cache
 E:\Mis Dcocumentos\Facultad UTN\Proyecto\Descargas SVN\CNCMatic\Configuracion\obj\Debug\Configuracion.dll
 E:\Mis Dcocumentos\Facultad UTN\Proyecto\Descargas SVN\CNCMatic\Configuracion\obj\Debug\Configuracion.pdb
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Configuracion\bin\Debug\Configuracion.dll
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Configuracion\bin\Debug\Configuracion.pdb
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Configuracion\obj\Debug\ResolveAssemblyReference.cache
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Configuracion\obj\Debug\Configuracion.dll
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Configuracion\obj\Debug\Configuracion.pdb

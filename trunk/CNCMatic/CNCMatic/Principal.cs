@@ -991,18 +991,28 @@ namespace CNCMatic
         {
             try
             {
+                //List<string> lineas = Metodos.CilindroCentrado(20, 30, 5, 1,5);
+                //List<string> lineas = Metodos.GastarPlano(0,0,20, 20, 1);
+                //List<string> lineas = Metodos.Escalera(50, 50, 50, 10, 10);
+                List<string> lineas = Metodos.Escalera(15, 15, 15, 5, 5);
+
+                this.txtPreview.Text += ("G00 Z15" + Environment.NewLine);
+
+                foreach (string s in lineas)
+                    this.txtPreview.Text += (s + Environment.NewLine);
+
                 this.LimpiarPrevisualizador();
                 PrevisualizarFigurasManual();
 
-                //bloqueamos controles
-                btnPlay.Enabled = false;
-                btnInicio.Enabled = false;
-                btnStop2.Enabled = false;
-                gbMovXY.Enabled = false;
-                gbMovZ.Enabled = false;
-                txtLineaManual.Enabled = false;
-                btnLimpiar.Enabled = false;
-                toolStrip1.Enabled = false;
+                ////bloqueamos controles
+                //btnPlay.Enabled = false;
+                //btnInicio.Enabled = false;
+                //btnStop2.Enabled = false;
+                //gbMovXY.Enabled = false;
+                //gbMovZ.Enabled = false;
+                //txtLineaManual.Enabled = false;
+                //btnLimpiar.Enabled = false;
+                //toolStrip1.Enabled = false;
             }
             catch (Exception ex)
             {

@@ -58,5 +58,48 @@ namespace G.Servicios
             return mov.ToString();
 
         }
+
+        //public static string GastarUnPlano(float x, float y, float z, float deltaX)
+        //{
+
+        //}
+
+        public static string CilindroCentrado(float baseMenor, float baseMayor, float radio, float deltaY)
+        {
+            try
+            { //validacion 1: el radio no puede ser mas largo que la baseMenor/2
+                if (radio > baseMenor / 2)
+                {
+                    throw (new Exception("Error de validacion: el cilindro que se intenta fresar supera el area del material ingresado"));
+                }
+
+                //esquina inferior izquierda
+                float x = baseMenor / 2 - radio;
+                float y = baseMenor / 2 - radio;
+                List<String> movimientos;
+                float dist;
+
+                for (int i = 0; i <= (baseMenor / deltaY); i++)
+                {
+                    if (i % 2 == 0) //es par
+                    {
+                        movimientos += "G01 X" & x.ToString & " Y" & (y + deltaY * i).ToString & Environment.NewLine;
+                        //calcular punto de la circunsferencia 
+                        dist = Math.Sqrt(Math.Pow(radio,2) - Math.Pow(radio - deltaY * i)); 
+                        movimientos += "G01 X" & ()
+                    }
+                    else
+                    {//es impar
+
+                    }
+
+                }
+                return "";
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
     }
 }

@@ -179,7 +179,17 @@ namespace CNCMatic
 
         private void btnStop2_Click(object sender, EventArgs e)
         {
-            AgregaTextoEditor(false, Metodos.Stop());
+            //AgregaTextoEditor(false, Metodos.Stop());
+
+            //Habilita todas las funciones y borra el fresado actual
+            btnPlay.Enabled = true;
+            btnInicio.Enabled = true;
+            btnStop2.Enabled = true;
+            gbMovXY.Enabled = true;
+            gbMovZ.Enabled = true;
+            txtLineaManual.Enabled = true;
+            btnLimpiar.Enabled = true;
+            toolStrip1.Enabled = true;
         }
 
         /// <summary>

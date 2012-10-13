@@ -8,3 +8,8 @@ D:\UTNProyecto\CNCMatic\CNCMatic\Configuracion\bin\Release\Configuracion.pdb
 D:\UTNProyecto\CNCMatic\CNCMatic\Configuracion\obj\Release\ResolveAssemblyReference.cache
 D:\UTNProyecto\CNCMatic\CNCMatic\Configuracion\obj\Release\Configuracion.dll
 D:\UTNProyecto\CNCMatic\CNCMatic\Configuracion\obj\Release\Configuracion.pdb
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Configuracion\bin\Release\Configuracion.dll
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Configuracion\bin\Release\Configuracion.pdb
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Configuracion\obj\Release\ResolveAssemblyReference.cache
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Configuracion\obj\Release\Configuracion.dll
+D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\Configuracion\obj\Release\Configuracion.pdb

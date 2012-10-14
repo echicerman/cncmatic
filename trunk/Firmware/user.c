@@ -37,6 +37,10 @@ position_t CreatePositionFrom(position_t position)
 
 void LimitSensorHandler(void)
 {
+	char message[25];
+    strcpypgm2ram(message, (const rom char far *)"Limit Sensor");
+	putUSBUSART(message, strlen(message));
+	
 	if( !PORTBbits.RB4 ) // fin de carrera en EJE X
 	{
 		// invierto el sentido de giro
@@ -48,6 +52,8 @@ void LimitSensorHandler(void)
 
 		LATBbits.LATB4 = ~PORTBbits.RB4;
 		machineState = LIMITSENSOR;
+		strcpypgm2ram(message, (const rom char far *)"Eje X - RB4");
+		putUSBUSART(message, strlen(message));
 	}
 
 	if( !PORTBbits.RB5 ) // fin de carrera en EJE Y
@@ -61,6 +67,8 @@ void LimitSensorHandler(void)
 
 		LATBbits.LATB5 = ~PORTBbits.RB5;
 		machineState = LIMITSENSOR;
+		strcpypgm2ram(message, (const rom char far *)"Eje Y - RB5");
+		putUSBUSART(message, strlen(message));
 	}
 /*
 	if( PORTBbits.RB6 == 0) // fin de carrera en EJE Z

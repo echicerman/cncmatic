@@ -391,7 +391,6 @@ void UserInit(void);
 	        USBDeviceTasks();
 		#endif
 		
-		
 	}	//This return will be a "retfie fast", since this is in a #pragma interrupt section 
 	#pragma interruptlow YourLowPriorityISRCode
 	void YourLowPriorityISRCode()
@@ -400,11 +399,7 @@ void UserInit(void);
 		//Service the interrupt
 		//Clear the interrupt flag
 		//Etc.
-		// Handle PORTB interrupts
-		if (INTCONbits.RBIF)
-		{
-			LimitSensorHandler();
-		}
+		
 	}	//This return will be a "retfie", since this is in a #pragma interruptlow section 
 
 #elif defined(__C30__)
@@ -470,14 +465,7 @@ int main(void)
     PORTD = 0x00;
 	
 	TRISB = 0xFF;	// pines de B son entrada - sensores
-	PORTB = 0xFF;
 	//********************************************
-	
-	RCONbits.IPEN = 1;		// habilita prioridades
-	INTCON2bits.RBIP = 0;	// interrupciones en puertoB son de baja prioridad
-	INTCONbits.GIEL = 1;	// habilita interrupciones de baja prioridad	
-	INTCONbits.GIE = 1;		// habilita interrupciones
-	
 
     while(1)
     {

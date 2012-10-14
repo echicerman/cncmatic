@@ -390,6 +390,8 @@ void UserInit(void);
         #if defined(USB_INTERRUPT)
 	        USBDeviceTasks();
 		#endif
+		
+		
 	}	//This return will be a "retfie fast", since this is in a #pragma interrupt section 
 	#pragma interruptlow YourLowPriorityISRCode
 	void YourLowPriorityISRCode()
@@ -398,13 +400,11 @@ void UserInit(void);
 		//Service the interrupt
 		//Clear the interrupt flag
 		//Etc.
-		
 		// Handle PORTB interrupts
 		if (INTCONbits.RBIF)
 		{
 			LimitSensorHandler();
 		}
-	
 	}	//This return will be a "retfie", since this is in a #pragma interruptlow section 
 
 #elif defined(__C30__)

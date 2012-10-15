@@ -49,7 +49,8 @@ stepsPosition_t CreateStepsPositionFrom(stepsPosition_t position)
 double GetValueParameter(char name, char command[])
 {
 	int i, count = strlen(command);
-	char* ptr, *temp;
+	char* ptr;
+	char temp[64];
 	strcpy(temp, command);
 	
 	for(i = 0; i < count; i++)
@@ -63,6 +64,18 @@ double GetValueParameter(char name, char command[])
 		}
 	}
 	return 0;
+}
+bool_t HasValueParameter(char name, char command[])
+{
+	int i, count = strlen(command);
+	for(i = 0; i < count; i++)
+	{
+		if(command[i] == name)
+		{
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
 
 /********************************************************************/
@@ -139,17 +152,19 @@ bool_t ConfigureMachine(char configurationString[])
 	if(mmConfiguration.step_units_axisZ == 0) return FALSE;
 	
 	// inches configuration
-	configPtr = strtokpgmram(USB_In_Buffer, (const rom char far *)";");
+	configPtr = strtokpgmram(NULL, (const rom char far *)";");
 	if(configPtr == NULL) return FALSE;
 	inchesConfiguration.step_units_axisX = atof(configPtr);
 	if(inchesConfiguration.step_units_axisX == 0) return FALSE;
 	
 	configPtr = strtokpgmram(NULL, (const rom char far *)";");
 	if(configPtr == NULL) return FALSE;
+	inchesConfiguration.step_units_axisY = atof(configPtr);
 	if(inchesConfiguration.step_units_axisY == 0) return FALSE;
 	
 	configPtr = strtokpgmram(NULL, (const rom char far *)";");
 	if(configPtr == NULL) return FALSE;
+	inchesConfiguration.step_units_axisZ = atof(configPtr);
 	if(inchesConfiguration.step_units_axisZ == 0) return FALSE;
 
 	// curveSection
@@ -168,8 +183,7 @@ bool_t ConfigureMachine(char configurationString[])
 
 void ProcessCurveMovement(position_t finalPosition, position_t centerPosition, unsigned char speed, bool_t clockwiseRotation)
 {
-	unsigned long aX, aY, bX, bY;
-	float angleA, angleB, angle, radius, length;
+	float angleA, angleB, angle, radius, length, aX, aY, bX, bY;
 	int steps, step, s;
 	position_t stepPosition; 	// each one of the points over the curve that will be joined
 	
@@ -178,10 +192,10 @@ void ProcessCurveMovement(position_t finalPosition, position_t centerPosition, u
 	bX = finalPosition.x - centerPosition.x;
 	bY = finalPosition.y - centerPosition.y;
 	
-	angleA = atan2(bY, bX);
-	angleB = atan2(aY, aX);
-	
-	if(angleB <= angleA) angleB += 2 * PI;
+	angleA = clockwiseRotation ? atan2(bY, bX) : atan2(aY, aX);
+	angleB = clockwiseRotation ? atan2(aY, aX) : atan2(bY, bX);
+
+	if(angleB <= angleA) angleB += 2 * 3.14;
 	angle = angleB - angleA;
 	
 	radius = sqrt(aX * aX + aY * aY);
@@ -190,9 +204,10 @@ void ProcessCurveMovement(position_t finalPosition, position_t centerPosition, u
 	
 	for(s = 1; s <= steps; s++)
 	{
-		step = steps - s;
+		step = clockwiseRotation ? steps - s : s;
 		stepPosition.x = centerPosition.x + radius * cos(angleA + angle * ((float)step / steps));
 		stepPosition.y = centerPosition.y + radius * sin(angleA + angle * ((float)step / steps));
+		stepPosition.z = currentPosition.z;
 		ProcessLinearMovement(stepPosition, 50);
 	}
 }
@@ -310,9 +325,9 @@ position_t GetTargetPosition(char code[])
 	
 	if(absoluteProgramming)
 	{
-		position.x = GetValueParameter('X', code);
-		position.y = GetValueParameter('Y', code);
-		position.z = GetValueParameter('Z', code);
+		position.x = HasValueParameter('X', code) ? GetValueParameter('X', code) : currentPosition.x;
+		position.y = HasValueParameter('Y', code) ? GetValueParameter('Y', code) : currentPosition.y;
+		position.z = HasValueParameter('Z', code) ? GetValueParameter('Z', code) : currentPosition.z;
 	}
 	else
 	{
@@ -463,28 +478,25 @@ void LinearMove(stepsPosition_t targetStepPosition, unsigned long xFreq, unsigne
 void MoveToOrigin()
 {
 	// seteamos posicion actual como la mas lejana posible
-	stepsPosition_t fakeFinalPosition = CreateStepsPosition(ULONG_MAX, ULONG_MAX, ULONG_MAX);
-	currentSteps = CreateStepsPositionFrom(fakeFinalPosition);
+	stepsPosition_t fakeFinalSteps = CreateStepsPosition(ULONG_MAX, ULONG_MAX, ULONG_MAX);
+	currentSteps = CreateStepsPositionFrom(fakeFinalSteps);
 
 	while( (interruptionX == 0) || (interruptionY == 0) || (interruptionZ == 0) )
 	{
-		stepsPosition_t fakeFinalSteps = CreateStepsPosition(ULONG_MAX, ULONG_MAX, ULONG_MAX);
-		currentSteps = CreateStepsPositionFrom(fakeFinalPosition);
-
 		// Primero movemos solo el eje z hacia su punto 0...
-		fakeFinalPosition.z = 0;
-		LinearMove(fakeFinalPosition, ULONG_MAX, ULONG_MAX, 50);
-		currentPosition.z = 0;
+		fakeFinalSteps.z = 0;
+		LinearMove(fakeFinalSteps, ULONG_MAX, ULONG_MAX, 50);
+		currentSteps.z = 0;
 		
 		// Luego el eje y hasta su origen...
-		fakeFinalPosition.y = 0;
-		LinearMove(fakeFinalPosition, ULONG_MAX, 50, ULONG_MAX);
-		currentPosition.y = 0;
+		fakeFinalSteps.y = 0;
+		LinearMove(fakeFinalSteps, ULONG_MAX, 50, ULONG_MAX);
+		currentSteps.y = 0;
 		
 		// por ultimo, el eje x hacia su posicion inicial.
-		fakeFinalPosition.x = 0;
-		LinearMove(fakeFinalPosition, 50, ULONG_MAX, ULONG_MAX);
-		currentPosition.x = 0;
+		fakeFinalSteps.x = 0;
+		LinearMove(fakeFinalSteps, 50, ULONG_MAX, ULONG_MAX);
+		currentSteps.x = 0;
 	}
 }
 

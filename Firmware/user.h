@@ -1,7 +1,7 @@
 #ifndef USER_H
 #define USER_H
 
-#define PI 3.14
+/*#define PI 3.14*/
 
 /* Type of function's vector - G & M codes*/
 typedef void (*_func)(char[]);
@@ -74,6 +74,7 @@ position_t ToPositionFrom(stepsPosition_t);
 /******************************************/
 bool_t ConfigureMachine(char[]);
 double GetValueParameter(char, char[]);
+bool_t HasValueParameter(char, char[]);
 position_t GetTargetPosition(char[]);
 position_t GetCenterPosition(char[]);
 

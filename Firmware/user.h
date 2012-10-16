@@ -20,8 +20,8 @@ typedef enum {
 
 typedef enum
 {
-	FALSE,
-	TRUE
+	false,
+	true
 } bool_t;
 
 typedef struct 
@@ -82,8 +82,6 @@ position_t GetCenterPosition(char[]);
 /* 								Movement Functions 								*/
 /********************************************************************************/
 void ProcessCurveMovement(position_t, position_t, unsigned char, bool_t);
-void ProcessLinearMovement(position_t, unsigned char);
-void LinearMove(stepsPosition_t, unsigned long, unsigned long, unsigned long);
+void ProcessLinearMovement(position_t, int);
 void MoveToOrigin(void);
-
 #endif

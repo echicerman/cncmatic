@@ -3,26 +3,21 @@
 #include "./USB/usb_function_cdc.h"
 #include "main.h"
 #include "user.h"
+#include "myDelays.h"
 #include <string.h>
 #include <math.h>
 #include <delays.h>
 #include <limits.h>
 #include <stdio.h>
 
-volatile state_t machineState = SERIALPORTCONNECTED;
+state_t machineState = SERIALPORTCONNECTED;
 
 char gCode = -1, mCode = -1, freeCode = -1;
 char commandReceived[64];
 int interruptionX = 0, interruptionY = 0, interruptionZ = 0;
 
-// absolute programming mode
-bool_t absoluteProgramming = TRUE;
-// units programming - milimeters : inches
-bool_t mmUnitProgramming = TRUE;
-// Configuration: milimeters - inches - curveSection
+// Configuration: milimeters
 enginesConfig_t mmConfiguration;
-enginesConfig_t inchesConfiguration;
-curvesConfig_t curvesConfiguration;
 
 // Actual Position & Actual Steps
 position_t currentPosition;
@@ -42,6 +37,53 @@ stepsPosition_t CreateStepsPositionFrom(stepsPosition_t position)
 {
 	return CreateStepsPosition(position.x, position.y, position.z);
 }
+position_t CreatePosition(double x, double y, double z)
+{
+	position_t result;
+	
+	result.x = x;
+	result.y = y;
+	result.z = z;
+	
+	return result;
+}
+position_t CreatePositionFrom(position_t position)
+{
+	return CreatePosition(position.x, position.y, position.z);
+}
+
+/********************************************************************/
+/*				Vectors of G & M functions supported				*/
+/********************************************************************/
+// G functions Supported
+void G00(char code[])
+{
+	ProcessLinearMovement(GetTargetPosition(code), 50);
+}
+
+void G01(char code[])
+{
+	ProcessLinearMovement(GetTargetPosition(code), 100);
+}
+void G04(char code[])
+{
+	;
+}
+
+// function array of GCode commands
+_func gCodes[5] = {	G00,	G01,	NULL,	NULL,	G04	};
+
+// M functions Supported
+void M00(char code[])
+{
+	;
+}
+void M02(char code[])
+{
+	;
+}
+// function array of MCode commands
+_func mCodes[3] = {	M00,	NULL,	M02	};
 
 /********************************************************************/
 /*	 Get the number right after the lette <name> inside <command>	*/
@@ -72,10 +114,10 @@ bool_t HasValueParameter(char name, char command[])
 	{
 		if(command[i] == name)
 		{
-			return TRUE;
+			return true;
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 /********************************************************************/
@@ -84,18 +126,11 @@ bool_t HasValueParameter(char name, char command[])
 stepsPosition_t ToSteps(double x, double y, double z)
 {
 	stepsPosition_t result;
-	if(mmUnitProgramming)
-	{
-		result.x = (unsigned long) ceil(x * mmConfiguration.step_units_axisX);
-		result.y = (unsigned long) ceil(y * mmConfiguration.step_units_axisY);
-		result.z = (unsigned long) ceil(z * mmConfiguration.step_units_axisZ);
-	}
-	else
-	{
-		result.x = (unsigned long) ceil(x * inchesConfiguration.step_units_axisX);
-		result.y = (unsigned long) ceil(y * inchesConfiguration.step_units_axisY);
-		result.z = (unsigned long) ceil(z * inchesConfiguration.step_units_axisZ);
-	}
+	
+	result.x = (unsigned long) ceil(x * mmConfiguration.step_units_axisX);
+	result.y = (unsigned long) ceil(y * mmConfiguration.step_units_axisY);
+	result.z = (unsigned long) ceil(z * mmConfiguration.step_units_axisZ);
+	
 	return result;
 }
 stepsPosition_t ToStepsFrom(position_t position)
@@ -107,18 +142,11 @@ stepsPosition_t ToStepsFrom(position_t position)
 position_t ToPosition(unsigned long x, unsigned long y, unsigned long z)
 {
 	position_t result;
-	if(mmUnitProgramming)
-	{
-		result.x = (double) (x / mmConfiguration.step_units_axisX);
-		result.y = (double) (y / mmConfiguration.step_units_axisY);
-		result.z = (double) (z / mmConfiguration.step_units_axisZ);
-	}
-	else
-	{
-		result.x = (double) (x / inchesConfiguration.step_units_axisX);
-		result.y = (double) (y / inchesConfiguration.step_units_axisY);
-		result.z = (double) (z / inchesConfiguration.step_units_axisZ);
-	}
+	
+	result.x = (double) (x / mmConfiguration.step_units_axisX);
+	result.y = (double) (y / mmConfiguration.step_units_axisY);
+	result.z = (double) (z / mmConfiguration.step_units_axisZ);
+		
 	return result;
 }
 position_t ToPositionFrom(stepsPosition_t steps)
@@ -129,7 +157,7 @@ position_t ToPositionFrom(stepsPosition_t steps)
 }
 
 /************************************************************************/
-/*																		*/
+/*					Configure the axis of the CNC						*/
 /************************************************************************/
 bool_t ConfigureMachine(char configurationString[])
 {
@@ -137,324 +165,111 @@ bool_t ConfigureMachine(char configurationString[])
 	
 	// MM configuration
 	configPtr = strtokpgmram(USB_In_Buffer, (const rom char far *)";");
-	if(configPtr == NULL) return FALSE;
+	if(configPtr == NULL) return false;
 	mmConfiguration.step_units_axisX = atof(configPtr);
-	if(mmConfiguration.step_units_axisX == 0) return FALSE;
+	if(mmConfiguration.step_units_axisX == 0) return false;
 	
 	configPtr = strtokpgmram(NULL, (const rom char far *)";");
-	if(configPtr == NULL) return FALSE;
+	if(configPtr == NULL) return false;
 	mmConfiguration.step_units_axisY = atof(configPtr);
-	if(mmConfiguration.step_units_axisY == 0) return FALSE;
+	if(mmConfiguration.step_units_axisY == 0) return false;
 	
 	configPtr = strtokpgmram(NULL, (const rom char far *)";");
-	if(configPtr == NULL) return FALSE;
+	if(configPtr == NULL) return false;
 	mmConfiguration.step_units_axisZ = atof(configPtr);
-	if(mmConfiguration.step_units_axisZ == 0) return FALSE;
+	if(mmConfiguration.step_units_axisZ == 0) return false;
 	
-	// inches configuration
-	configPtr = strtokpgmram(NULL, (const rom char far *)";");
-	if(configPtr == NULL) return FALSE;
-	inchesConfiguration.step_units_axisX = atof(configPtr);
-	if(inchesConfiguration.step_units_axisX == 0) return FALSE;
-	
-	configPtr = strtokpgmram(NULL, (const rom char far *)";");
-	if(configPtr == NULL) return FALSE;
-	inchesConfiguration.step_units_axisY = atof(configPtr);
-	if(inchesConfiguration.step_units_axisY == 0) return FALSE;
-	
-	configPtr = strtokpgmram(NULL, (const rom char far *)";");
-	if(configPtr == NULL) return FALSE;
-	inchesConfiguration.step_units_axisZ = atof(configPtr);
-	if(inchesConfiguration.step_units_axisZ == 0) return FALSE;
-
-	// curveSection
-	configPtr = strtokpgmram(NULL, (const rom char far *)";");
-	if(configPtr == NULL) return FALSE;
-	curvesConfiguration.mmSections = atof(configPtr);
-	if(curvesConfiguration.mmSections == 0) return FALSE;
-	
-	configPtr = strtokpgmram(NULL, (const rom char far *)";");
-	if(configPtr == NULL) return FALSE;
-	curvesConfiguration.inchesSections = atof(configPtr);
-	if(curvesConfiguration.inchesSections == 0) return FALSE;
-	
-	return TRUE;
+	return true;
 }
 
-void ProcessCurveMovement(position_t finalPosition, position_t centerPosition, unsigned char speed, bool_t clockwiseRotation)
+/************************************************************************************/
+/*							Validate the command received							*/
+/************************************************************************************/
+bool_t isNumber(char string[])
 {
-	float angleA, angleB, angle, radius, length, aX, aY, bX, bY;
-	int steps, step, s;
-	position_t stepPosition; 	// each one of the points over the curve that will be joined
-	
-	aX = currentPosition.x - centerPosition.x;
-	aY = currentPosition.y - centerPosition.y;
-	bX = finalPosition.x - centerPosition.x;
-	bY = finalPosition.y - centerPosition.y;
-	
-	angleA = clockwiseRotation ? atan2(bY, bX) : atan2(aY, aX);
-	angleB = clockwiseRotation ? atan2(aY, aX) : atan2(bY, bX);
-
-	if(angleB <= angleA) angleB += 2 * 3.14;
-	angle = angleB - angleA;
-	
-	radius = sqrt(aX * aX + aY * aY);
-	length = radius * angle;
-	steps = (int) ceil(length / (mmUnitProgramming ? curvesConfiguration.mmSections : curvesConfiguration.inchesSections));
-	
-	for(s = 1; s <= steps; s++)
+	int i, count = strlen(string);
+	for(i = 0; i < count; i++)
 	{
-		step = clockwiseRotation ? steps - s : s;
-		stepPosition.x = centerPosition.x + radius * cos(angleA + angle * ((float)step / steps));
-		stepPosition.y = centerPosition.y + radius * sin(angleA + angle * ((float)step / steps));
-		stepPosition.z = currentPosition.z;
-		ProcessLinearMovement(stepPosition, 50);
+		if( (string[i] < 48) || (string[i] > 57) ) return false; // si < '0' o > '9'
 	}
+	return true;
 }
-
-void ProcessLinearMovement(position_t targetPosition, unsigned char speed)
+bool_t ValidateCommandReceived(char type, char code[], char result[])
 {
-	unsigned long xClock, yClock, zClock, totalSteps;
-	double totalDistance, xDelta, yDelta, zDelta;
-	stepsPosition_t deltaSteps;
-	
-	// Target Steps -> after this movement
-	stepsPosition_t targetSteps = ToStepsFrom(targetPosition);
-	
-	// Delta Position & Delta Steps -> with this movement
-	xDelta = (targetPosition.x - currentPosition.x) > 0 ? targetPosition.x - currentPosition.x : currentPosition.x - targetPosition.x;
-	yDelta = (targetPosition.y - currentPosition.y) > 0 ? targetPosition.y - currentPosition.y : currentPosition.y - targetPosition.y;
-	zDelta = (targetPosition.z - currentPosition.z) > 0 ? targetPosition.z - currentPosition.z : currentPosition.z - targetPosition.z;
-	deltaSteps = ToSteps(xDelta, yDelta, zDelta);
-	
-	// Total Distance & Total Steps -> in this movement
-	totalDistance = sqrt( xDelta * xDelta + yDelta * yDelta + zDelta * zDelta);
-	totalSteps = sqrt( deltaSteps.x * deltaSteps.x + deltaSteps.y * deltaSteps.y + deltaSteps.z * deltaSteps.z);
-	
-	// Clock per each axis
-	xClock = ceil( speed * totalSteps / deltaSteps.x );
-	yClock = ceil( speed * totalSteps / deltaSteps.y );
-	zClock = ceil( speed * totalSteps / deltaSteps.z );
-	
-	LinearMove(targetSteps, xClock, yClock, zClock);
-}
-
-// G functions Supported
-void G00(char code[])
-{
-	ProcessLinearMovement(GetTargetPosition(code), 50);
-}
-
-void G01(char code[])
-{
-	ProcessLinearMovement(GetTargetPosition(code), 100);
-}
-
-void G02(char code[])
-{
-	ProcessCurveMovement(GetTargetPosition(code), GetCenterPosition(code), 50, TRUE);
-}
-
-void G03(char code[])
-{
-	ProcessCurveMovement(GetTargetPosition(code), GetCenterPosition(code), 50, FALSE);
-}
-
-void G04(char code[])
-{
-	;
-}
-void G17(char code[])
-{
-	;
-}
-void G18(char code[])
-{
-	;
-}
-void G19(char code[])
-{
-	;
-}
-void G20(char code[])
-{
-	mmUnitProgramming = FALSE;
-}
-void G21(char code[])
-{
-	mmUnitProgramming = TRUE;
-}
-void G90(char code[])
-{
-	absoluteProgramming = TRUE;
-}
-void G91(char code[])
-{
-	absoluteProgramming = FALSE;
-}
-// function array of GCode commands
-_func gCodes[100] = {	G00, 	G01, 	G02, 	G03, 	G04, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL,
-						NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	G17, 	G18, 	G19, 
-						G20, 	G21, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
-						NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
-						NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
-						NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
-						NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
-						NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
-						NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 
-						G90, 	G91, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL, 	NULL};
-
-// M functions Supported
-void M00(char code[])
-{
-	;
-}
-void M02(char code[])
-{
-	;
-}
-// function array of MCode commands
-_func mCodes[3] = {	M00,		NULL,	M02	};
-
-/*********************************************************************************/
-/*				Get the final position considering the <code> received			 */
-/*********************************************************************************/
-position_t GetTargetPosition(char code[])
-{
-	position_t position;
-	
-	if(absoluteProgramming)
+	if(isNumber(code))
 	{
-		position.x = HasValueParameter('X', code) ? GetValueParameter('X', code) : currentPosition.x;
-		position.y = HasValueParameter('Y', code) ? GetValueParameter('Y', code) : currentPosition.y;
-		position.z = HasValueParameter('Z', code) ? GetValueParameter('Z', code) : currentPosition.z;
-	}
-	else
-	{
-		position.x = GetValueParameter('X', code) + currentPosition.x;
-		position.y = GetValueParameter('Y', code) + currentPosition.y;
-		position.z = GetValueParameter('Z', code) + currentPosition.z;
-	}
-	
-	return position;
-}
-position_t GetCenterPosition(char code[])
-{
-	position_t position;
-	
-	position.x = GetValueParameter('I', code) + currentPosition.x;
-	position.y = GetValueParameter('J', code) + currentPosition.y;
-	position.z = GetValueParameter('K', code) + currentPosition.z;
-	
-	return position;
-}
-
-void limitSensorAxisX()
-{
-	PORTAbits.RA1 = ~PORTAbits.RA1;
-	// tiro un paso
-	PORTAbits.RA2 = 1;
-	Delay100TCYx(120);	// Delay 1ms
-	PORTAbits.RA2 = 0;
-
-	machineState = LIMITSENSOR;
-	interruptionX = 1;
-}
-void limitSensorAxisY()
-{
-	PORTCbits.RC1 = ~PORTCbits.RC1;
-	// tiro un paso
-	PORTCbits.RC2 = 1;
-	Delay100TCYx(120);	// Delay 1ms
-	PORTAbits.RA2 = 0;
-
-	machineState = LIMITSENSOR;
-	interruptionY = 1;
-}
-void limitSensorAxisZ()
-{
-	// invierto el sentido de giro
-	PORTDbits.RD2 = ~PORTDbits.RD2;
-	// tiro un paso
-	PORTDbits.RD4 = 1;
-	Delay100TCYx(120);	// Delay 1ms
-	PORTDbits.RD4 = 0;
-
-	machineState = LIMITSENSOR;
-	interruptionZ = 1;
-}
-void emergencyStop()
-{
-	machineState = EMERGENCYSTOP;
-}
-
-void LinearMove(stepsPosition_t targetStepPosition, unsigned long xFreq, unsigned long yFreq, unsigned long zFreq)
-{
-	unsigned long clock = 0, xNextStep = 0, yNextStep = 0, zNextStep = 0;
-	
-	// Seteamos bit de sentido de giro
-	PORTAbits.RA1 = (targetStepPosition.x > currentSteps.x) ? 1 : 0;
-	PORTCbits.RC1 = (targetStepPosition.y > currentSteps.y) ? 1 : 0;
-	PORTDbits.RD2 = (targetStepPosition.z > currentSteps.z) ? 1 : 0;
-	
-	// Mientras no lleguemos a la posicion final en los 3 ejes, tenemos que hacer girar algún motor
-	while( (targetStepPosition.x != currentSteps.x) || (targetStepPosition.y != currentSteps.y) || (targetStepPosition.z != currentSteps.z) )
-	{
-		// emergency stop
-		if( PORTBbits.RB7 ) { goto emergencyStop; }
-		
-		// si el clock es mayor o igual al clock del próximo paso del motor y si no llegué a la posición final
-		if( (clock >= xNextStep) && (currentSteps.x != targetStepPosition.x) )
+		if( (type == 'G') )
 		{
-			if( PORTAbits.RA2 )
+			// CHEQUEAR QUE PASA SI SE SOBREPASA DEL TAMAÑO DEL ARRAY
+			if(gCodes[atoi(code)] != NULL)
 			{
-				PORTAbits.RA2 = 0;
-				// limit sensor AXIS X
-				if( !PORTBbits.RB4 ) { goto limitSensorAxisX; }
-				
-				currentSteps.x += PORTAbits.RA1 ? 1 : -1;
+				strcpypgm2ram(result, (const rom char far *)"CMDS");
+				return true;
 			}
 			else
 			{
-				PORTAbits.RA2 = 1;
+				strcpypgm2ram(result, (const rom char far *)"CMDNS");
+				return false;
 			}
-			xNextStep += xFreq;
 		}
-		
-		if( (clock >= yNextStep) && (currentSteps.y != targetStepPosition.y) )
+		if( (type == 'M') )
 		{
-			if( PORTCbits.RC2 )
+			// CHEQUEAR QUE PASA SI SE SOBREPASA DEL TAMAÑO DEL ARRAY
+			if(mCodes[atoi(code)] != NULL)
 			{
-				PORTCbits.RC2 = 0;
-				// limit sensor AXIS y
-				if( !PORTBbits.RB5 ) { goto limitSensorAxisY; }
-				
-				currentSteps.y += PORTCbits.RC1 ? 1 : -1;
+				strcpypgm2ram(result, (const rom char far *)"CMDS");
+				return true;
 			}
 			else
 			{
-				PORTCbits.RC2 = 1;
+				strcpypgm2ram(result, (const rom char far *)"CMDNS");
+				return false;
 			}
-			yNextStep += yFreq;
 		}
-		
-		if( (clock >= zNextStep) && (currentSteps.z != targetStepPosition.z) )
-		{
-			if( PORTDbits.RD4 )
-			{
-				PORTDbits.RD4 = 0;
-				// limit sensor AXIS z
-				if( !PORTBbits.RB6 ) { goto limitSensorAxisZ; }
-				
-				currentSteps.z += PORTDbits.RD2 ? 1 : -1;
-			}
-			else
-			{
-				PORTDbits.RD4 = 1;
-			}
-			zNextStep += zFreq;
-		}
-		clock++;
+	}
+	strcpypgm2ram(result, (const rom char far *)"CMDE");
+	return false;
+}
+
+void StepOn(char axis, bool_t clockwise)
+{
+	switch(axis)
+	{
+		case 'X':
+			PORTAbits.RA1 = clockwise;
+			// tiro un paso
+			PORTAbits.RA2 = 1;
+			Delay1MS();
+			PORTAbits.RA2 = 0;
+			
+			// limit sensor AXIS X
+			if( !PORTBbits.RB4 ) { goto limitSensorAxisX; }
+			break;
+
+		case 'Y':	
+			PORTCbits.RC1 = clockwise;
+			// tiro un paso
+			PORTCbits.RC2 = 1;
+			Delay1MS();
+			PORTCbits.RC2 = 0;
+			
+			// limit sensor AXIS Y
+			if( !PORTBbits.RB5 ) { goto limitSensorAxisY; }
+			break;
+
+		case 'Z':
+			PORTDbits.RD2 = clockwise;
+			// tiro un paso
+			PORTDbits.RD4 = 1;
+			Delay1MS();
+			PORTDbits.RD4 = 0;
+			
+			// limit sensor AXIS Y
+			if( !PORTBbits.RB6 ) { goto limitSensorAxisZ; }
+			break;
+
+		default:
+			break;
 	}
 	goto end;
 	
@@ -475,28 +290,213 @@ void LinearMove(stepsPosition_t targetStepPosition, unsigned long xFreq, unsigne
 		currentPosition = ToPositionFrom(currentSteps);
 }
 
+/************************************************************************************/
+/*							Process the Linear Movement								*/
+/************************************************************************************/
+void ProcessLinearMovement(position_t targetPosition, int delay)
+{
+	unsigned long xCounter, yCounter, zCounter, totalSteps;
+	long maxDelta;
+	double totalDistance, xDelta, yDelta, zDelta;
+	stepsPosition_t deltaStateChangesPosition;
+	
+	// Target Steps -> after this movement
+	stepsPosition_t targetStepsPosition = ToStepsFrom(targetPosition);
+	
+	// Delta Position & Delta Steps -> with this movement
+	xDelta = ( (targetPosition.x - currentPosition.x) > 0 ? targetPosition.x - currentPosition.x : currentPosition.x - targetPosition.x);
+	yDelta = ( (targetPosition.y - currentPosition.y) > 0 ? targetPosition.y - currentPosition.y : currentPosition.y - targetPosition.y);
+	zDelta = ( (targetPosition.z - currentPosition.z) > 0 ? targetPosition.z - currentPosition.z : currentPosition.z - targetPosition.z);
+	
+	deltaStateChangesPosition = ToSteps(xDelta * 2, yDelta * 2, zDelta * 2);
+	maxDelta = ( (deltaStateChangesPosition.x > deltaStateChangesPosition.y) ? deltaStateChangesPosition.x : deltaStateChangesPosition.y);
+	maxDelta = ( (maxDelta > deltaStateChangesPosition.z) ? maxDelta : deltaStateChangesPosition.z);
+	
+	xCounter = -maxDelta / 2;
+	yCounter = -maxDelta / 2;
+	zCounter = -maxDelta / 2;
+	
+	// Seteamos bit de sentido de giro
+	PORTAbits.RA1 = (targetStepsPosition.x > currentSteps.x) ? 1 : 0;
+	PORTCbits.RC1 = (targetStepsPosition.y > currentSteps.y) ? 1 : 0;
+	PORTDbits.RD2 = (targetStepsPosition.z > currentSteps.z) ? 1 : 0;
+	
+	// HAY QUE MULTIPLICAR POR 2 PARA TENER EN CUENTA LOS 2 CAMBIOS DE ETADOQUE DAN UN PASO
+	
+	while( (targetStepsPosition.x != currentSteps.x) || (targetStepsPosition.y != currentSteps.y) || (targetStepsPosition.z != currentSteps.z) )
+	{
+		// emergency stop
+		if( PORTBbits.RB7 ) { goto emergencyStop; }
+		
+		if(targetStepsPosition.x != currentSteps.x)
+		{
+			xCounter += deltaStateChangesPosition.x;
+			if(xCounter > 0)
+			{
+				if( PORTAbits.RA2 )
+				{
+					PORTAbits.RA2 = 0;
+					// limit sensor AXIS X
+					if( !PORTBbits.RB4 ) { goto limitSensorAxisX; }
+					
+					xCounter -= maxDelta;
+					currentSteps.x += PORTAbits.RA1 ? 1 : -1;
+				}
+				else
+				{
+					xCounter -= maxDelta;
+					PORTAbits.RA2 = 1;
+				}
+			}			
+		}
+		
+		if(targetStepsPosition.y != currentSteps.y)
+		{
+			yCounter += deltaStateChangesPosition.y;
+			if(yCounter > 0)
+			{
+				if( PORTCbits.RC2 )
+				{
+					PORTCbits.RC2 = 0;
+					// limit sensor AXIS Y
+					if( !PORTBbits.RB5 ) { goto limitSensorAxisY; }
+					
+					yCounter -= maxDelta;
+					currentSteps.y += PORTCbits.RC1 ? 1 : -1;
+				}
+				else
+				{
+					yCounter -= maxDelta;
+					PORTCbits.RC2 = 1;
+				}
+			}			
+		}
+		
+		if(targetStepsPosition.z != currentSteps.z)
+		{
+			zCounter += deltaStateChangesPosition.z;
+			if(zCounter > 0)
+			{
+				if( PORTDbits.RD4 )
+				{
+					PORTDbits.RD4 = 0;
+					// limit sensor AXIS Y
+					if( !PORTBbits.RB6 ) { goto limitSensorAxisZ; }
+					
+					zCounter -= maxDelta;
+					currentSteps.z += PORTDbits.RD2 ? 1 : -1;
+				}
+				else
+				{
+					zCounter -= maxDelta;
+					PORTDbits.RD4 = 1;
+				}
+			}	
+		}
+		
+		//wait for next step.
+		if(delay > 10)
+			Delay10MSx((int)delay/10);
+		else
+			Delay1MSx(delay);
+	}
+	goto end;
+	
+	/* Handle LimitSensors and EmergencyStop button */
+	limitSensorAxisX:
+		limitSensorAxisX();
+		goto end;
+	limitSensorAxisY:
+		limitSensorAxisY();
+		goto end;
+	limitSensorAxisZ:
+		limitSensorAxisZ();
+		goto end;
+	emergencyStop:
+		emergencyStop();
+		goto end;
+	end:
+		currentPosition = ToPositionFrom(currentSteps);
+}
+
+/*********************************************************************************/
+/*				Get the final position considering the <code> received			 */
+/*********************************************************************************/
+position_t GetTargetPosition(char code[])
+{
+	position_t position;
+	
+	position.x = HasValueParameter('X', code) ? GetValueParameter('X', code) : currentPosition.x;
+	position.y = HasValueParameter('Y', code) ? GetValueParameter('Y', code) : currentPosition.y;
+	position.z = HasValueParameter('Z', code) ? GetValueParameter('Z', code) : currentPosition.z;
+	
+	return position;
+}
+
+/********************************************************/
+/*		Functions to handle limitSensors activation		*/
+/********************************************************/
+void limitSensorAxisX()
+{
+	PORTAbits.RA1 = ~PORTAbits.RA1;
+	// tiro un paso
+	PORTAbits.RA2 = 1;
+	Delay1MS();
+	PORTAbits.RA2 = 0;
+	
+	machineState = LIMITSENSOR;
+	interruptionX = 1;
+}
+void limitSensorAxisY()
+{
+	PORTCbits.RC1 = ~PORTCbits.RC1;
+	// tiro un paso
+	PORTCbits.RC2 = 1;
+	Delay1MS();
+	PORTAbits.RA2 = 0;
+
+	machineState = LIMITSENSOR;
+	interruptionY = 1;
+}
+void limitSensorAxisZ()
+{
+	// invierto el sentido de giro
+	PORTDbits.RD2 = ~PORTDbits.RD2;
+	// tiro un paso
+	PORTDbits.RD4 = 1;
+	Delay1MS();
+	PORTDbits.RD4 = 0;
+
+	machineState = LIMITSENSOR;
+	interruptionZ = 1;
+}
+void emergencyStop()
+{
+	machineState = EMERGENCYSTOP;
+}
+
 void MoveToOrigin()
 {
 	// seteamos posicion actual como la mas lejana posible
-	stepsPosition_t fakeFinalSteps = CreateStepsPosition(ULONG_MAX, ULONG_MAX, ULONG_MAX);
-	currentSteps = CreateStepsPositionFrom(fakeFinalSteps);
+	position_t fakeFinalPosition = CreatePosition(HUGE_VAL, HUGE_VAL, HUGE_VAL);
+	currentPosition = CreatePositionFrom(fakeFinalPosition);
 
 	while( (interruptionX == 0) || (interruptionY == 0) || (interruptionZ == 0) )
 	{
 		// Primero movemos solo el eje z hacia su punto 0...
-		fakeFinalSteps.z = 0;
-		LinearMove(fakeFinalSteps, ULONG_MAX, ULONG_MAX, 50);
-		currentSteps.z = 0;
+		fakeFinalPosition.z = 0;
+		ProcessLinearMovement(fakeFinalPosition, 20);
+		currentPosition.z = 0;
 		
 		// Luego el eje y hasta su origen...
-		fakeFinalSteps.y = 0;
-		LinearMove(fakeFinalSteps, ULONG_MAX, 50, ULONG_MAX);
-		currentSteps.y = 0;
+		fakeFinalPosition.y = 0;
+		ProcessLinearMovement(fakeFinalPosition, 20);
+		currentPosition.y = 0;
 		
 		// por ultimo, el eje x hacia su posicion inicial.
-		fakeFinalSteps.x = 0;
-		LinearMove(fakeFinalSteps, 50, ULONG_MAX, ULONG_MAX);
-		currentSteps.x = 0;
+		fakeFinalPosition.x = 0;
+		ProcessLinearMovement(fakeFinalPosition, 20);
+		currentPosition.x = 0;
 	}
 }
 
@@ -608,42 +608,12 @@ void user(void)
 					movementCommandCode[1] = USB_In_Buffer[2];
 					movementCommandCode[2] = '\0';
 					
-					// Chequeamos si el comando es G
-					if(movementCommandType == 'G')
-					{						
-						gCode = atoi(movementCommandCode);
-						if(gCodes[gCode] != NULL)
-						{
-							strcpy(commandReceived, USB_In_Buffer);
-							strcpypgm2ram(message, (const rom char far *)"CMDS");
-							machineState = PROCESSINGCOMMAND;
-						}
-						else
-						{
-							strcpypgm2ram(message, (const rom char far *)"CMDNS");
-						}
-					}
-					// Chequeamos si el comando es M
-					else if(movementCommandType == 'M')
+					// Validamos el comando
+					if( ValidateCommandReceived(movementCommandType, movementCommandCode, message) )
 					{
-						mCode = atoi(movementCommandCode);
-						if(mCodes[mCode] != NULL)
-						{
-							strcpy(commandReceived, USB_In_Buffer);
-							strcpypgm2ram(message, (const rom char far *)"CMDS");
-							machineState = PROCESSINGCOMMAND;
-						}
-						else
-						{
-							strcpypgm2ram(message, (const rom char far *)"CMDNS");
-						}
+						strcpy(commandReceived, USB_In_Buffer);
+						machineState = PROCESSINGCOMMAND;
 					}
-					// El comando no era ni G ni M
-					else
-					{
-						strcpypgm2ram(message, (const rom char far *)"CMDE");
-					}
-					
 					// mandamos el mensaje correspondiente a la PC
 					putUSBUSART(message, strlen(message));
 					break;
@@ -661,12 +631,12 @@ void user(void)
 					{
 						stepsPosition_t freeTargetSteps = CreateStepsPositionFrom(currentSteps);
 						
-							 if( freeCode == 0)	{ freeTargetSteps.x++; LinearMove(freeTargetSteps, 50, ULONG_MAX, ULONG_MAX); }
-						else if( freeCode == 1) { freeTargetSteps.x--; LinearMove(freeTargetSteps, 50, ULONG_MAX, ULONG_MAX); }
-						else if( freeCode == 2) { freeTargetSteps.y++; LinearMove(freeTargetSteps, ULONG_MAX, 50, ULONG_MAX); }
-						else if( freeCode == 3) { freeTargetSteps.y--; LinearMove(freeTargetSteps, ULONG_MAX, 50, ULONG_MAX); }
-						else if( freeCode == 4) { freeTargetSteps.z++; LinearMove(freeTargetSteps, ULONG_MAX, ULONG_MAX, 50); }
-						else if( freeCode == 5) { freeTargetSteps.z--; LinearMove(freeTargetSteps, ULONG_MAX, ULONG_MAX, 50); }
+							 if( freeCode == 0)	{ StepOn('X', true);  }
+						else if( freeCode == 1) { StepOn('X', false); }
+						else if( freeCode == 2) { StepOn('Y', true);  }
+						else if( freeCode == 3) { StepOn('Y', false); }
+						else if( freeCode == 4) { StepOn('Z', true);  }
+						else if( freeCode == 5) { StepOn('Z', false); }
 						
 						if(machineState == LIMITSENSOR)
 						{

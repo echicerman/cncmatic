@@ -38,9 +38,9 @@ typedef struct
 
 typedef struct 
 {
-	unsigned long x;
-	unsigned long y;
-	unsigned long z;
+	unsigned int x;
+	unsigned int y;
+	unsigned int z;
 } stepsPosition_t;
 typedef struct 
 {
@@ -62,11 +62,11 @@ void emergencyStop(void);
 /********************************************************************************/
 /*								Steps <-> Position								*/
 /********************************************************************************/
-stepsPosition_t CreateStepsPosition(unsigned long, unsigned long, unsigned long);
+stepsPosition_t CreateStepsPosition(unsigned int, unsigned int, unsigned int);
 stepsPosition_t CreateStepsPositionFrom(stepsPosition_t);
 stepsPosition_t ToSteps(double, double, double);
 stepsPosition_t ToStepsFrom(position_t);
-position_t ToPosition(unsigned long, unsigned long, unsigned long);
+position_t ToPosition(unsigned int, unsigned int, unsigned int);
 position_t ToPositionFrom(stepsPosition_t);
 
 /******************************************/

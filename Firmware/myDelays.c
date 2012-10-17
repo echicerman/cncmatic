@@ -1,4 +1,9 @@
 #include "myDelays.h"
+void Delay10msx(int x)
+{
+	int i;
+	for(i = 0; i < x; i++) Delay10TCYx(12);
+}
 void Delay1MS()
 {
 	Delay1MSx(1);

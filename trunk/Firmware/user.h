@@ -1,7 +1,7 @@
 #ifndef USER_H
 #define USER_H
 
-/*#define PI 3.14*/
+#include "myDelays.h"
 
 /* Type of function's vector - G & M codes*/
 typedef void (*_func)(char[]);
@@ -49,39 +49,53 @@ typedef struct
 	double z;
 } position_t;
 
-void user(void);
+/********************************************************************************/
+/* 								Movement Functions 								*/
+/********************************************************************************/
+void G00(char[]);
+void G01(char[]);
+void G04(char[]);
+void M00(char[]);
+void M02(char[]);
+void ProcessLinearMovement(position_t, double);
+void MoveToOrigin(void);
 
-/****************************/
-/*	 Handle Interruptions	*/
-/****************************/
-void limitSensorAxisX(void);
-void limitSensorAxisY(void);
-void limitSensorAxisZ(void);
-void emergencyStop(void);
+/******************************************/
+/*   	  Process String Functions	      */
+/******************************************/
+double GetValueParameter(char, char[]);
+bool_t HasValueParameter(char, char[]);
+bool_t ConfigureMachine(char[]);
+bool_t isNumber(char[]);
+bool_t ValidateCommandReceived(char, char[], char[], char*, char*);
+position_t GetTargetPosition(char[]);
 
 /********************************************************************************/
 /*								Steps <-> Position								*/
 /********************************************************************************/
 stepsPosition_t CreateStepsPosition(unsigned int, unsigned int, unsigned int);
 stepsPosition_t CreateStepsPositionFrom(stepsPosition_t);
-stepsPosition_t ToSteps(double, double, double);
-stepsPosition_t ToStepsFrom(position_t);
+position_t CreatePosition(double, double, double);
+position_t CreatePositionFrom(position_t);
+stepsPosition_t ToStepsPosition(double, double, double);
+stepsPosition_t ToStepsPositionFrom(position_t);
 position_t ToPosition(unsigned int, unsigned int, unsigned int);
 position_t ToPositionFrom(stepsPosition_t);
 
-/******************************************/
-/*   	  Process String Functions	      */
-/******************************************/
-bool_t ConfigureMachine(char[]);
-double GetValueParameter(char, char[]);
-bool_t HasValueParameter(char, char[]);
-position_t GetTargetPosition(char[]);
-position_t GetCenterPosition(char[]);
+/****************************************/
+/*	 		Handle Interruptions		*/
+/****************************************/
+void limitSensorAxisXHandler(void);
+void limitSensorAxisYHandler(void);
+void limitSensorAxisZHandler(void);
+void emergencyStopHandler(void);
 
-/********************************************************************************/
-/* 								Movement Functions 								*/
-/********************************************************************************/
-void ProcessCurveMovement(position_t, position_t, unsigned char, bool_t);
-void ProcessLinearMovement(position_t, int);
-void MoveToOrigin(void);
+/****************************/
+/*	Step on Specific Axis	*/
+/****************************/
+void StepOnX(bool_t);
+void StepOnY(bool_t);
+void StepOnZ(bool_t);
+
+void user(void);
 #endif

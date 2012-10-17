@@ -3,18 +3,20 @@
 #include "./USB/usb_function_cdc.h"
 #include "main.h"
 #include "user.h"
-#include "myDelays.h"
 #include <string.h>
 #include <math.h>
 #include <delays.h>
 #include <limits.h>
 #include <stdio.h>
 
+#define MAXFEEDRATE 60 
+
 state_t machineState = SERIALPORTCONNECTED;
 
 char gCode = -1, mCode = -1, freeCode = -1;
 char commandReceived[64];
-int originX = 0, originY = 0, originZ = 0;
+bool_t limitSensorX = false, limitSensorY = false, limitSensorZ = false;
+bool_t programPaused = false;
 
 // Configuration: milimeters
 enginesConfig_t mmConfiguration;
@@ -23,51 +25,32 @@ enginesConfig_t mmConfiguration;
 position_t currentPosition;
 stepsPosition_t currentSteps;
 
-stepsPosition_t CreateStepsPosition(unsigned int x, unsigned int y, unsigned int z)
-{
-	stepsPosition_t result;
-	
-	result.x = x;
-	result.y = y;
-	result.z = z;
-	
-	return result;
-}
-stepsPosition_t CreateStepsPositionFrom(stepsPosition_t position)
-{
-	return CreateStepsPosition(position.x, position.y, position.z);
-}
-position_t CreatePosition(double x, double y, double z)
-{
-	position_t result;
-	
-	result.x = x;
-	result.y = y;
-	result.z = z;
-	
-	return result;
-}
-position_t CreatePositionFrom(position_t position)
-{
-	return CreatePosition(position.x, position.y, position.z);
-}
-
 /********************************************************************/
 /*				Vectors of G & M functions supported				*/
 /********************************************************************/
 // G functions Supported
 void G00(char code[])
 {
-	ProcessLinearMovement(GetTargetPosition(code), 50);
+	double f = HasValueParameter('F', code) ? GetValueParameter('F', code) : MAXFEEDRATE;
+	ProcessLinearMovement(GetTargetPosition(code), f);
 }
 
 void G01(char code[])
 {
-	ProcessLinearMovement(GetTargetPosition(code), 100);
+	double f = HasValueParameter('F', code) ? GetValueParameter('F', code) : MAXFEEDRATE;
+	ProcessLinearMovement(GetTargetPosition(code), f);
 }
 void G04(char code[])
 {
-	;
+	double miliseconds = GetValueParameter('P', code);
+	if(miliseconds < 1000)
+	{
+		Delay1MSx(miliseconds);
+	}
+	else
+	{
+		Delay1Sx((int)miliseconds/1000);
+	}
 }
 
 // function array of GCode commands
@@ -76,11 +59,11 @@ _func gCodes[5] = {	G00,	G01,	NULL,	NULL,	G04	};
 // M functions Supported
 void M00(char code[])
 {
-	;
+	programPaused = true;
 }
 void M02(char code[])
 {
-	;
+	machineState = CNCMATICCONNECTED;
 }
 // function array of MCode commands
 _func mCodes[3] = {	M00,	NULL,	M02	};
@@ -118,42 +101,6 @@ bool_t HasValueParameter(char name, char command[])
 		}
 	}
 	return false;
-}
-
-/********************************************************************/
-/*			Conversions between Steps & Position units			 	*/
-/********************************************************************/
-stepsPosition_t ToSteps(double x, double y, double z)
-{
-	stepsPosition_t result;
-	
-	result.x = (unsigned int) ceil(x * mmConfiguration.step_units_axisX);
-	result.y = (unsigned int) ceil(y * mmConfiguration.step_units_axisY);
-	result.z = (unsigned int) ceil(z * mmConfiguration.step_units_axisZ);
-	
-	return result;
-}
-stepsPosition_t ToStepsFrom(position_t position)
-{
-	stepsPosition_t result;
-	result = ToSteps(position.x, position.y, position.z);
-	return result;
-}
-position_t ToPosition(unsigned int x, unsigned int y, unsigned int z)
-{
-	position_t result;
-	
-	result.x = (double) (x / mmConfiguration.step_units_axisX);
-	result.y = (double) (y / mmConfiguration.step_units_axisY);
-	result.z = (double) (z / mmConfiguration.step_units_axisZ);
-		
-	return result;
-}
-position_t ToPositionFrom(stepsPosition_t steps)
-{
-	position_t result;
-	result = ToPosition(steps.x, steps.y, steps.z);
-	return result;
 }
 
 /************************************************************************/
@@ -234,116 +181,108 @@ bool_t ValidateCommandReceived(char type, char code[], char result[], char* g, c
 	return false;
 }
 
-void StepOn(char axis, bool_t clockwise)
+/********************************************************************/
+/*			Conversion / Creation of Steps & Position units		 	*/
+/********************************************************************/
+stepsPosition_t CreateStepsPosition(unsigned int x, unsigned int y, unsigned int z)
 {
-	switch(axis)
-	{
-		case 'X':
-			PORTAbits.RA1 = clockwise;
-			// tiro un paso
-			PORTAbits.RA2 = 1;
-			Delay1MS();
-			PORTAbits.RA2 = 0;
-			
-			// limit sensor AXIS X
-			if( !PORTBbits.RB4 ) { goto limitSensorAxisX; }
-			break;
-
-		case 'Y':	
-			PORTCbits.RC1 = clockwise;
-			// tiro un paso
-			PORTCbits.RC2 = 1;
-			Delay1MS();
-			PORTCbits.RC2 = 0;
-			
-			// limit sensor AXIS Y
-			if( !PORTBbits.RB5 ) { goto limitSensorAxisY; }
-			break;
-
-		case 'Z':
-			PORTDbits.RD2 = clockwise;
-			// tiro un paso
-			PORTDbits.RD4 = 1;
-			Delay1MS();
-			PORTDbits.RD4 = 0;
-			
-			// limit sensor AXIS Y
-			if( !PORTBbits.RB6 ) { goto limitSensorAxisZ; }
-			break;
-
-		default:
-			break;
-	}
-	goto end;
+	stepsPosition_t result;
 	
-	/* Handle LimitSensors and EmergencyStop button */
-	limitSensorAxisX:
-		limitSensorAxisX();
-		goto end;
-	limitSensorAxisY:
-		limitSensorAxisY();
-		goto end;
-	limitSensorAxisZ:
-		limitSensorAxisZ();
-		goto end;
-	emergencyStop:
-		emergencyStop();
-		goto end;
-	end:
-		;
+	result.x = x;
+	result.y = y;
+	result.z = z;
+	
+	return result;
+}
+stepsPosition_t CreateStepsPositionFrom(stepsPosition_t position)
+{
+	return CreateStepsPosition(position.x, position.y, position.z);
+}
+position_t CreatePosition(double x, double y, double z)
+{
+	position_t result;
+	
+	result.x = x;
+	result.y = y;
+	result.z = z;
+	
+	return result;
+}
+position_t CreatePositionFrom(position_t position)
+{
+	return CreatePosition(position.x, position.y, position.z);
+}
+stepsPosition_t ToStepsPosition(double x, double y, double z)
+{
+	stepsPosition_t result;
+	
+	result.x = (unsigned int) ceil(x * mmConfiguration.step_units_axisX);
+	result.y = (unsigned int) ceil(y * mmConfiguration.step_units_axisY);
+	result.z = (unsigned int) ceil(z * mmConfiguration.step_units_axisZ);
+	
+	return result;
+}
+stepsPosition_t ToStepsPositionFrom(position_t position)
+{
+	stepsPosition_t result;
+	result = ToStepsPosition(position.x, position.y, position.z);
+	return result;
+}
+position_t ToPosition(unsigned int x, unsigned int y, unsigned int z)
+{
+	position_t result;
+	
+	result.x = (double) (x / mmConfiguration.step_units_axisX);
+	result.y = (double) (y / mmConfiguration.step_units_axisY);
+	result.z = (double) (z / mmConfiguration.step_units_axisZ);
+		
+	return result;
+}
+position_t ToPositionFrom(stepsPosition_t steps)
+{
+	position_t result;
+	result = ToPosition(steps.x, steps.y, steps.z);
+	return result;
 }
 
 /************************************************************************************/
 /*							Process the Linear Movement								*/
 /************************************************************************************/
-long MaxDelta(stepsPosition_t position)
+void ProcessLinearMovement(position_t targetPosition, double feedrate)
 {
-	if(position.x > position.y)
-	{
-		if(position.x > position.z)
-		{
-			return position.x;
-		}
-		return position.z;
-	}
-	if(position.z > position.y)
-	{
-		return position.z;
-	}
-	return position.y;
-}
-void ProcessLinearMovement(position_t targetPosition, int delay)
-{
-	unsigned int xCounter, yCounter, zCounter, totalSteps;
-	long maxDelta;
+	long xCounter, yCounter, zCounter;
+	long maxDeltaSteps, delay;
 	double totalDistance, xDelta, yDelta, zDelta;
 	stepsPosition_t deltaStateChangesPosition;
 	
 	// Target Steps -> after this movement
-	stepsPosition_t targetStepsPosition = ToStepsFrom(targetPosition);
+	stepsPosition_t targetStepsPosition = ToStepsPositionFrom(targetPosition);
 	
 	// Delta Position & Delta Steps -> with this movement
 	xDelta = targetPosition.x - currentPosition.x > 0 ? targetPosition.x - currentPosition.x : currentPosition.x - targetPosition.x;
 	yDelta = targetPosition.y - currentPosition.y > 0 ? targetPosition.y - currentPosition.y : currentPosition.y - targetPosition.y;
 	zDelta = targetPosition.z - currentPosition.z > 0 ? targetPosition.z - currentPosition.z : currentPosition.z - targetPosition.z;
 	
-	deltaStateChangesPosition = ToSteps(xDelta, yDelta, zDelta);
+	deltaStateChangesPosition = ToStepsPosition(xDelta, yDelta, zDelta);
 	deltaStateChangesPosition.x *= 2;
 	deltaStateChangesPosition.y *= 2;
 	deltaStateChangesPosition.z *= 2;
 	
-	maxDelta = MaxDelta(deltaStateChangesPosition);
+	maxDeltaSteps = deltaStateChangesPosition.x > deltaStateChangesPosition.y ? deltaStateChangesPosition.x : deltaStateChangesPosition.y;
+	maxDeltaSteps = maxDeltaSteps > deltaStateChangesPosition.z ? maxDeltaSteps : deltaStateChangesPosition.z;
 	
-	xCounter = -maxDelta / 2;
-	yCounter = -maxDelta / 2;
-	zCounter = -maxDelta / 2;
+	// Calculating delay
+	totalDistance = sqrt(xDelta * xDelta + yDelta * yDelta + zDelta * zDelta);
+	delay = ((totalDistance * 60000000) / feedrate) / maxDeltaSteps; // time between steps for most dinamyc axis - microseconds
+	
+	xCounter = -maxDeltaSteps / 2;
+	yCounter = -maxDeltaSteps / 2;
+	zCounter = -maxDeltaSteps / 2;
 	
 	// Seteamos bit de sentido de giro
 	PORTAbits.RA1 = (targetStepsPosition.x > currentSteps.x) ? 1 : 0;
 	PORTCbits.RC1 = (targetStepsPosition.y > currentSteps.y) ? 1 : 0;
 	PORTDbits.RD2 = (targetStepsPosition.z > currentSteps.z) ? 1 : 0;
-	
-	// HAY QUE MULTIPLICAR POR 2 PARA TENER EN CUENTA LOS 2 CAMBIOS DE ETADOQUE DAN UN PASO
 	
 	while( (targetStepsPosition.x != currentSteps.x) || (targetStepsPosition.y != currentSteps.y) || (targetStepsPosition.z != currentSteps.z) )
 	{
@@ -361,12 +300,12 @@ void ProcessLinearMovement(position_t targetPosition, int delay)
 					// limit sensor AXIS X
 					if( !PORTBbits.RB4 ) { goto limitSensorAxisX; }
 					
-					xCounter -= maxDelta;
+					xCounter -= maxDeltaSteps;
 					currentSteps.x += PORTAbits.RA1 ? 1 : -1;
 				}
 				else
 				{
-					xCounter -= maxDelta;
+					xCounter -= maxDeltaSteps;
 					PORTAbits.RA2 = 1;
 				}
 			}			
@@ -383,12 +322,12 @@ void ProcessLinearMovement(position_t targetPosition, int delay)
 					// limit sensor AXIS Y
 					if( !PORTBbits.RB5 ) { goto limitSensorAxisY; }
 					
-					yCounter -= maxDelta;
+					yCounter -= maxDeltaSteps;
 					currentSteps.y += PORTCbits.RC1 ? 1 : -1;
 				}
 				else
 				{
-					yCounter -= maxDelta;
+					yCounter -= maxDeltaSteps;
 					PORTCbits.RC2 = 1;
 				}
 			}			
@@ -405,37 +344,37 @@ void ProcessLinearMovement(position_t targetPosition, int delay)
 					// limit sensor AXIS Y
 					if( !PORTBbits.RB6 ) { goto limitSensorAxisZ; }
 					
-					zCounter -= maxDelta;
+					zCounter -= maxDeltaSteps;
 					currentSteps.z += PORTDbits.RD2 ? 1 : -1;
 				}
 				else
 				{
-					zCounter -= maxDelta;
+					zCounter -= maxDeltaSteps;
 					PORTDbits.RD4 = 1;
 				}
 			}	
 		}
 		
 		//wait for next step.
-		if(delay > 10)
-			Delay10MSx((int)delay/10);
+		if(delay > 1000)
+			Delay1MSx((int)delay/1000);
 		else
-			Delay1MSx(delay);
+			Delay10msx((int)delay/10);
 	}
 	goto end;
 	
 	/* Handle LimitSensors and EmergencyStop button */
 	limitSensorAxisX:
-		limitSensorAxisX();
+		limitSensorAxisXHandler();
 		goto end;
 	limitSensorAxisY:
-		limitSensorAxisY();
+		limitSensorAxisYHandler();
 		goto end;
 	limitSensorAxisZ:
-		limitSensorAxisZ();
+		limitSensorAxisZHandler();
 		goto end;
 	emergencyStop:
-		emergencyStop();
+		emergencyStopHandler();
 		goto end;
 	end:
 		currentPosition = ToPositionFrom(currentSteps);
@@ -458,7 +397,7 @@ position_t GetTargetPosition(char code[])
 /********************************************************/
 /*		Functions to handle limitSensors activation		*/
 /********************************************************/
-void limitSensorAxisX()
+void limitSensorAxisXHandler()
 {
 	PORTAbits.RA1 = ~PORTAbits.RA1;
 	// tiro un paso
@@ -467,9 +406,9 @@ void limitSensorAxisX()
 	PORTAbits.RA2 = 0;
 	
 	machineState = LIMITSENSOR;
-	originX = 1;
+	limitSensorX = true;
 }
-void limitSensorAxisY()
+void limitSensorAxisYHandler()
 {
 	PORTCbits.RC1 = ~PORTCbits.RC1;
 	// tiro un paso
@@ -478,9 +417,9 @@ void limitSensorAxisY()
 	PORTAbits.RA2 = 0;
 
 	machineState = LIMITSENSOR;
-	originY = 1;
+	limitSensorY = true;
 }
-void limitSensorAxisZ()
+void limitSensorAxisZHandler()
 {
 	// invierto el sentido de giro
 	PORTDbits.RD2 = ~PORTDbits.RD2;
@@ -490,26 +429,68 @@ void limitSensorAxisZ()
 	PORTDbits.RD4 = 0;
 
 	machineState = LIMITSENSOR;
-	originZ = 1;
+	limitSensorZ = true;
 }
-void emergencyStop()
+void emergencyStopHandler()
 {
 	machineState = EMERGENCYSTOP;
 }
 
+/********************************************************/
+/*		Functions to move over a specified axis 		*/
+/********************************************************/
+void StepOnX(bool_t clockwise)
+{
+	PORTAbits.RA1 = clockwise;
+	// tiro un paso
+	PORTAbits.RA2 = 1;
+	Delay1MS();
+	PORTAbits.RA2 = 0;
+	
+	// limit sensor AXIS X
+	if( !PORTBbits.RB4 ) { limitSensorAxisXHandler(); }
+}
+
+void StepOnY(bool_t clockwise)
+{
+	PORTCbits.RC1 = clockwise;
+	// tiro un paso
+	PORTCbits.RC2 = 1;
+	Delay1MS();
+	PORTCbits.RC2 = 0;
+	
+	// limit sensor AXIS Y
+	if( !PORTBbits.RB5 ) { limitSensorAxisYHandler(); }
+}
+
+void StepOnZ(bool_t clockwise)
+{
+	PORTDbits.RD2 = clockwise;
+	// tiro un paso
+	PORTDbits.RD4 = 1;
+	Delay1MS();
+	PORTDbits.RD4 = 0;
+	
+	// limit sensor AXIS Z
+	if( !PORTBbits.RB6 ) { limitSensorAxisZHandler(); }
+}
+
+/********************************************************/
+/*		Function to move to origin axis by axis 		*/
+/********************************************************/
 void MoveToOrigin()
 {
-	while(!originZ)
+	while(!limitSensorZ)
 	{
-		StepOn('Z', false);
+		StepOnZ(false);
 	}
-	while(!originY)
+	while(!limitSensorY)
 	{
-		StepOn('Y', false);
+		StepOnY(false);
 	}
-	while(!originX)
+	while(!limitSensorX)
 	{
-		StepOn('X', false);
+		StepOnX(false);
 	}
 	currentSteps = CreateStepsPosition(0, 0, 0);
 	currentPosition = CreatePosition(0.0, 0.0, 0.0);
@@ -559,10 +540,19 @@ void user(void)
 			
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"freemoves"))
 			{
-				strcpypgm2ram(message, (const rom char far *)"CNCFM");
-				putUSBUSART(message, strlen(message));
-				machineState = FREEMOVES;
-				goto endUser;
+				if(programPaused)
+				{
+					strcpypgm2ram(message, (const rom char far *)"PP");
+					putUSBUSART(message, strlen(message));
+					goto endUser;
+				}
+				else
+				{
+					strcpypgm2ram(message, (const rom char far *)"CNCFM");
+					putUSBUSART(message, strlen(message));
+					machineState = FREEMOVES;
+					goto endUser;
+				}
 			}
 			
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"stop"))
@@ -646,12 +636,12 @@ void user(void)
 					{
 						stepsPosition_t freeTargetSteps = CreateStepsPositionFrom(currentSteps);
 						
-							 if( freeCode == 0)	{ StepOn('X', true);  }
-						else if( freeCode == 1) { StepOn('X', false); }
-						else if( freeCode == 2) { StepOn('Y', true);  }
-						else if( freeCode == 3) { StepOn('Y', false); }
-						else if( freeCode == 4) { StepOn('Z', true);  }
-						else if( freeCode == 5) { StepOn('Z', false); }
+							 if( freeCode == 0)	{ StepOnX(true);  }
+						else if( freeCode == 1) { StepOnX(false); }
+						else if( freeCode == 2) { StepOnY(true);  }
+						else if( freeCode == 3) { StepOnY(false); }
+						else if( freeCode == 4) { StepOnZ(true);  }
+						else if( freeCode == 5) { StepOnZ(false); }
 						
 						if(machineState == LIMITSENSOR)
 						{

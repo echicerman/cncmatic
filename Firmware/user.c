@@ -16,7 +16,7 @@ state_t machineState = SERIALPORTCONNECTED;
 char gCode = -1, mCode = -1, freeCode = -1;
 char commandReceived[64];
 bool_t limitSensorX = false, limitSensorY = false, limitSensorZ = false;
-bool_t programPaused = false;
+bool_t programPaused = false, configured = false;
 
 // Configuration: milimeters
 enginesConfig_t mmConfiguration;
@@ -126,6 +126,7 @@ bool_t ConfigureMachine(char configurationString[])
 	mmConfiguration.step_units_axisZ = atof(configPtr);
 	if(mmConfiguration.step_units_axisZ == 0) return false;
 	
+	configured = true;
 	return true;
 }
 
@@ -184,7 +185,7 @@ bool_t ValidateCommandReceived(char type, char code[], char result[], char* g, c
 /********************************************************************/
 /*			Conversion / Creation of Steps & Position units		 	*/
 /********************************************************************/
-stepsPosition_t CreateStepsPosition(unsigned int x, unsigned int y, unsigned int z)
+stepsPosition_t CreateStepsPosition(unsigned long x, unsigned long y, unsigned long z)
 {
 	stepsPosition_t result;
 	
@@ -216,9 +217,9 @@ stepsPosition_t ToStepsPosition(double x, double y, double z)
 {
 	stepsPosition_t result;
 	
-	result.x = (unsigned int) ceil(x * mmConfiguration.step_units_axisX);
-	result.y = (unsigned int) ceil(y * mmConfiguration.step_units_axisY);
-	result.z = (unsigned int) ceil(z * mmConfiguration.step_units_axisZ);
+	result.x = (unsigned long) ceil(x * mmConfiguration.step_units_axisX);
+	result.y = (unsigned long) ceil(y * mmConfiguration.step_units_axisY);
+	result.z = (unsigned long) ceil(z * mmConfiguration.step_units_axisZ);
 	
 	return result;
 }
@@ -228,7 +229,7 @@ stepsPosition_t ToStepsPositionFrom(position_t position)
 	result = ToStepsPosition(position.x, position.y, position.z);
 	return result;
 }
-position_t ToPosition(unsigned int x, unsigned int y, unsigned int z)
+position_t ToPosition(unsigned long x, unsigned long y, unsigned long z)
 {
 	position_t result;
 	
@@ -273,7 +274,7 @@ void ProcessLinearMovement(position_t targetPosition, double feedrate)
 	
 	// Calculating delay
 	totalDistance = sqrt(xDelta * xDelta + yDelta * yDelta + zDelta * zDelta);
-	delay = ((totalDistance * 60000000) / feedrate) / maxDeltaSteps; // time between steps for most dinamyc axis - microseconds
+	delay = ((60000000 / feedrate) / maxDeltaSteps) * totalDistance; // time between steps for most dinamyc axis - microseconds
 	
 	xCounter = -maxDeltaSteps / 2;
 	yCounter = -maxDeltaSteps / 2;
@@ -524,6 +525,7 @@ void user(void)
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"reset"))
 			{
 				// Resetear la maquina si recibimos el comando 'reset'
+				limitSensorX = limitSensorY = limitSensorZ = configured = false;
 				strcpypgm2ram(message, (const rom char far *)"CNCR");
 				putUSBUSART(message, strlen(message));
 				machineState = SERIALPORTCONNECTED;
@@ -560,7 +562,13 @@ void user(void)
 				freeCode = -1;
 				strcpypgm2ram(message, (const rom char far *)"CNCSFM");
 				putUSBUSART(message, strlen(message));
-				machineState = SERIALPORTCONNECTED;
+				if(configured){
+					machineState = WAITINGCOMMAND;
+				}
+				else
+				{
+					machineState = SERIALPORTCONNECTED;
+				}
 				goto endUser;
 			}
 			

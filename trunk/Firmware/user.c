@@ -55,6 +55,7 @@ void G04(char code[])
 
 // function array of GCode commands
 _func gCodes[5] = {	G00,	G01,	NULL,	NULL,	G04	};
+int gCodesCount = sizeof(gCodes) / sizeof(gCodes[0]);
 
 // M functions Supported
 void M00(char code[])
@@ -67,6 +68,7 @@ void M02(char code[])
 }
 // function array of MCode commands
 _func mCodes[3] = {	M00,	NULL,	M02	};
+int mCodesCount = sizeof(mCodes) / sizeof(mCodes[0]);
 
 /********************************************************************/
 /*	 Get the number right after the lette <name> inside <command>	*/
@@ -150,7 +152,7 @@ bool_t ValidateCommandReceived(char type, char code[], char result[], char* g, c
 		if( (type == 'G') )
 		{
 			// CHEQUEAR QUE PASA SI SE SOBREPASA DEL TAMAÑO DEL ARRAY
-			if(gCodes[cmd] != NULL)
+			if( (cmd < gCodesCount) && (gCodes[cmd] != NULL) )
 			{
 				strcpypgm2ram(result, (const rom char far *)"CMDS");
 				*g = cmd;
@@ -165,7 +167,7 @@ bool_t ValidateCommandReceived(char type, char code[], char result[], char* g, c
 		if( (type == 'M') )
 		{
 			// CHEQUEAR QUE PASA SI SE SOBREPASA DEL TAMAÑO DEL ARRAY
-			if(mCodes[atoi(code)] != NULL)
+			if( (cmd < mCodesCount) && (mCodes[cmd] != NULL) )
 			{
 				strcpypgm2ram(result, (const rom char far *)"CMDS");
 				*m = cmd;

@@ -216,7 +216,7 @@ namespace CNC
                     enviar(stringConfiguracion);
 
                     //recibimos respuesta
-                    string recep = recibir(true);
+                    string recep = recibir(1000);
 
                     //vemos el estado de la respuesta
                     if (recep == CNC_Mensajes_Recep.ConfigStringOK)
@@ -293,7 +293,7 @@ namespace CNC
                 enviar(CNC_Mensajes_Send.HandShake);
 
                 //recibimos respuesta
-                string recep = recibir(true);
+                string recep = recibir(1000);
 
                 estadoActual = CNC_Estados.HandShakeRecibido;
 
@@ -333,7 +333,7 @@ namespace CNC
             try
             {
                 //recibimos respuesta
-                string recep = recibir(true);
+                string recep = recibir(1000);
 
                 //si se recibe mensaje de posicion de origen
                 if (CNC_Mensajes_Recep.PosicionOrigen == recep)
@@ -427,14 +427,14 @@ namespace CNC
             this.loteInstrucciones = loteInstrucciones;
         }
 
-        private string recibir(bool esperar)
+        private string recibir(int tiempoEspera)
         {
             try
             {
-                if (esperar)
+                if (tiempoEspera!=0)
                 {
                     //esperamos para que llegue la respuesta
-                    System.Threading.Thread.Sleep(10000);
+                    System.Threading.Thread.Sleep(tiempoEspera);
                 }
 
                 string mensaje = "";
@@ -514,7 +514,7 @@ namespace CNC
                     this.Label.Text = "Comando enviado...esperando respuesta";
 
                     //esperamos la respuesta sobre el comando
-                    string recep = recibir(true);
+                    string recep = recibir(1000);
 
                     if (recep == CNC_Mensajes_Recep.ComandoSoportado)
                     {
@@ -564,7 +564,7 @@ namespace CNC
                 if (transmision)
                 {
                     //leemos la respuesta
-                    string recep = recibir(false);
+                    string recep = recibir(0);
 
                     //vuelve a estado de WAITINGCOMMAND
                     estadoActual = CNC_Estados.EsperandoComando;

@@ -5,13 +5,6 @@ E:\Mis Dcocumentos\Facultad UTN\Proyecto\CNCMatic\CNCMatic\PrevisualizadorContro
 E:\Mis Dcocumentos\Facultad UTN\Proyecto\CNCMatic\CNCMatic\PrevisualizadorControl\obj\Debug\PrevisualizadorControl.csproj.GenerateResource.Cache
 E:\Mis Dcocumentos\Facultad UTN\Proyecto\CNCMatic\CNCMatic\PrevisualizadorControl\obj\Debug\CSharpBasicViewerControl.dll
 E:\Mis Dcocumentos\Facultad UTN\Proyecto\CNCMatic\CNCMatic\PrevisualizadorControl\obj\Debug\CSharpBasicViewerControl.pdb
-D:\UTNProyecto\CNCMatic\CNCMatic\PrevisualizadorControl\bin\Debug\CSharpBasicViewerControl.dll
-D:\UTNProyecto\CNCMatic\CNCMatic\PrevisualizadorControl\bin\Debug\CSharpBasicViewerControl.pdb
-D:\UTNProyecto\CNCMatic\CNCMatic\PrevisualizadorControl\obj\Debug\ResolveAssemblyReference.cache
-D:\UTNProyecto\CNCMatic\CNCMatic\PrevisualizadorControl\obj\Debug\MacGen.MG_CS_BasicViewer.resources
-D:\UTNProyecto\CNCMatic\CNCMatic\PrevisualizadorControl\obj\Debug\PrevisualizadorControl.csproj.GenerateResource.Cache
-D:\UTNProyecto\CNCMatic\CNCMatic\PrevisualizadorControl\obj\Debug\CSharpBasicViewerControl.dll
-D:\UTNProyecto\CNCMatic\CNCMatic\PrevisualizadorControl\obj\Debug\CSharpBasicViewerControl.pdb
 E:\Mis Dcocumentos\Facultad UTN\Proyecto\Descargas SVN\CNCMatic\PrevisualizadorControl\bin\Debug\CSharpBasicViewerControl.dll
 E:\Mis Dcocumentos\Facultad UTN\Proyecto\Descargas SVN\CNCMatic\PrevisualizadorControl\bin\Debug\CSharpBasicViewerControl.pdb
 E:\Mis Dcocumentos\Facultad UTN\Proyecto\Descargas SVN\CNCMatic\PrevisualizadorControl\obj\Debug\ResolveAssemblyReference.cache

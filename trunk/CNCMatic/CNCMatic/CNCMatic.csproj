@@ -209,6 +209,12 @@
     <None Include="Resources\Pause-Normal-Red-icon.png" />
     <None Include="Resources\circle-icon.png" />
     <None Include="img\stop.gif" />
+    <None Include="Samples\LATHE.cnc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Samples\MILL.CNC">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

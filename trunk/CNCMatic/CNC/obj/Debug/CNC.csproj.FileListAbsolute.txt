@@ -8,3 +8,7 @@ D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\CNC\bin\Debug\CNC.pdb
 D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\CNC\obj\Debug\ResolveAssemblyReference.cache
 D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\CNC\obj\Debug\CNC.dll
 D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\CNC\obj\Debug\CNC.pdb
+D:\UTNProyecto\CNCMatic\CNCMatic\CNC\bin\Debug\Configuracion.dll
+D:\UTNProyecto\CNCMatic\CNCMatic\CNC\bin\Debug\Configuracion.pdb
+D:\UTNProyecto\CNCMatic\CNCMatic\CNC\bin\Debug\VirtualSerial.dll
+D:\UTNProyecto\CNCMatic\CNCMatic\CNC\bin\Debug\VirtualSerial.pdb

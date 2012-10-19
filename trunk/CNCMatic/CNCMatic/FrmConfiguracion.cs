@@ -171,7 +171,7 @@ namespace CNCMatic
                 config.MaxX = float.Parse(txtMaxX.Text);
                 config.MaxY = float.Parse(txtMaxY.Text);
                 config.MaxZ = float.Parse(txtMaxZ.Text);
-                config.PuertoCom = portComboBox.SelectedText;
+                config.PuertoCom = portComboBox.Text;
 
                 if (rbtAbsoluta.Checked)
                     config.TipoProg = "abs";
@@ -257,7 +257,11 @@ namespace CNCMatic
                 //seleccionamos el puerto
                 if (portComboBox.Items.Contains(config.PuertoCom))
                 {
-                    portComboBox.SelectedItem = config.PuertoCom;
+                    portComboBox.Text = config.PuertoCom;
+                }
+                else
+                {
+                    portComboBox.Text = "";
                 }
 
                 grdConfigMatMot.DataSource = config.ConfigMatMot;

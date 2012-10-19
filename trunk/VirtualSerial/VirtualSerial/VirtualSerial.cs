@@ -50,6 +50,9 @@ namespace VirtualSerial
         }
         #endregion
 
+        /// <summary>
+        /// Limpia los buffers de IN/OUT y Cierra la conexion
+        /// </summary>
         public static void CloseConnection()
         {
             try
@@ -76,6 +79,27 @@ namespace VirtualSerial
             else
             {
                 DataReceivedCallback("Handshake response received OK!");
+            }
+        }
+
+        /// <summary>
+        /// Abre la conexion con el puerto
+        /// </summary>
+        /// <param name="portName"></param>
+        public static void OpenConnection(string portName)
+        {
+            try
+            {
+                VirtualPort = new SerialPort(portName);
+                virtualPort.Open(); // ojo que TIENE que usar la property directamente y no el metodo
+
+                VirtualPort.DataReceived += new SerialDataReceivedEventHandler(Port_DataReceived);
+
+                connected = true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
@@ -122,6 +146,10 @@ namespace VirtualSerial
             }
         }
 
+        /// <summary>
+        /// Escribe en el puerto la cadena recibida, en caso de error cierra la conexion
+        /// </summary>
+        /// <param name="text"></param>
         public static void Write(string text)
         {
             try

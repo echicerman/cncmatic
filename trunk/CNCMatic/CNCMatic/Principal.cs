@@ -15,6 +15,7 @@ using MacGen;
 using DXF.Objetos;
 using Configuracion;
 
+
 namespace CNCMatic
 {
     public partial class Principal : Form
@@ -994,25 +995,41 @@ namespace CNCMatic
                 //List<string> lineas = Metodos.CilindroCentrado(20, 30, 5, 1,5);
                 //List<string> lineas = Metodos.GastarPlano(0,0,20, 20, 1);
                 //List<string> lineas = Metodos.Escalera(50, 50, 50, 10, 10);
-                List<string> lineas = Metodos.Escalera(15, 15, 15, 5, 5);
+                //List<string> lineas = Metodos.Escalera(15, 15, 15, 5, 5);
 
-                this.txtPreview.Text += ("G00 Z15" + Environment.NewLine);
+                //this.txtPreview.Text += ("G00 Z15" + Environment.NewLine);
 
-                foreach (string s in lineas)
-                    this.txtPreview.Text += (s + Environment.NewLine);
+                //foreach (string s in lineas)
+                //    this.txtPreview.Text += (s + Environment.NewLine);
 
                 this.LimpiarPrevisualizador();
                 PrevisualizarFigurasManual();
 
-                ////bloqueamos controles
-                //btnPlay.Enabled = false;
-                //btnInicio.Enabled = false;
-                //btnStop2.Enabled = false;
-                //gbMovXY.Enabled = false;
-                //gbMovZ.Enabled = false;
-                //txtLineaManual.Enabled = false;
-                //btnLimpiar.Enabled = false;
-                //toolStrip1.Enabled = false;
+                
+                DialogResult dr = MessageBox.Show("Se procederá a conectar y enviar las instrucciones al CNC, ¿Desea Continuar?", "Transferencia CNC", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                if (dr == DialogResult.Yes)
+                {
+                    if (Interfaz.ConectarCNC(ref lblEstado))
+                    {
+                        List<string> loteInstrucciones = txtPreview.Lines.ToList();
+
+                        Interfaz.EnviarSetDeInstrucciones(loteInstrucciones);
+
+                        
+                        //MessageBox.Show(Interfaz.EnviarSetDeInstrucciones(loteInstrucciones).ToString());
+                        
+                    }
+
+                    ////bloqueamos controles
+                    //btnPlay.Enabled = false;
+                    //btnInicio.Enabled = false;
+                    //btnStop2.Enabled = false;
+                    //gbMovXY.Enabled = false;
+                    //gbMovZ.Enabled = false;
+                    //txtLineaManual.Enabled = false;
+                    //btnLimpiar.Enabled = false;
+                    //toolStrip1.Enabled = false;
+                }
             }
             catch (Exception ex)
             {

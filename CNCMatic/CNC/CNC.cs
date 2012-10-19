@@ -206,9 +206,9 @@ namespace CNC
                         Valor = 360 / (GxP * TamV);
                         switch (i)
                         {
-                            case 0: stringConfiguracion += "X" + Valor.ToString().Replace(",", ".") + ";"; break;
-                            case 1: stringConfiguracion += "Y" + Valor.ToString().Replace(",", ".") + ";"; break;
-                            case 2: stringConfiguracion += "Z" + Valor.ToString().Replace(",", "."); break;
+                            case 0: stringConfiguracion += Valor.ToString().Replace(",", ".") + ";"; break;
+                            case 1: stringConfiguracion += Valor.ToString().Replace(",", ".") + ";"; break;
+                            case 2: stringConfiguracion += Valor.ToString().Replace(",", "."); break;
                         }
                     }
 
@@ -216,7 +216,7 @@ namespace CNC
                     enviar(stringConfiguracion);
 
                     //recibimos respuesta
-                    string recep = recibir(10000);
+                    string recep = recibir(1000);
 
                     //vemos el estado de la respuesta
                     if (recep == CNC_Mensajes_Recep.ConfigStringOK)
@@ -293,7 +293,7 @@ namespace CNC
                 enviar(CNC_Mensajes_Send.HandShake);
 
                 //recibimos respuesta
-                string recep = recibir(10000);
+                string recep = recibir(1000);
 
                 estadoActual = CNC_Estados.HandShakeRecibido;
 
@@ -333,7 +333,7 @@ namespace CNC
             try
             {
                 //recibimos respuesta
-                string recep = recibir(10000);
+                string recep = recibir(1000);
 
                 //si se recibe mensaje de posicion de origen
                 if (CNC_Mensajes_Recep.PosicionOrigen == recep)
@@ -514,7 +514,7 @@ namespace CNC
                     this.Label.Text = "Comando enviado...esperando respuesta";
 
                     //esperamos la respuesta sobre el comando
-                    string recep = recibir(10000);
+                    string recep = recibir(1000);
 
                     if (recep == CNC_Mensajes_Recep.ComandoSoportado)
                     {

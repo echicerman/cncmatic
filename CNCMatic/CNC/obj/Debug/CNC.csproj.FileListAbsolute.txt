@@ -1,0 +1,9 @@
+D:\UTNProyecto\CNCMatic\CNCMatic\CNC\bin\Debug\CNC.dll
+D:\UTNProyecto\CNCMatic\CNCMatic\CNC\bin\Debug\CNC.pdb
+D:\UTNProyecto\CNCMatic\CNCMatic\CNC\bin\Debug\Configuracion.dll
+D:\UTNProyecto\CNCMatic\CNCMatic\CNC\bin\Debug\VirtualSerial.dll
+D:\UTNProyecto\CNCMatic\CNCMatic\CNC\bin\Debug\VirtualSerial.pdb
+D:\UTNProyecto\CNCMatic\CNCMatic\CNC\bin\Debug\Configuracion.pdb
+D:\UTNProyecto\CNCMatic\CNCMatic\CNC\obj\Debug\ResolveAssemblyReference.cache
+D:\UTNProyecto\CNCMatic\CNCMatic\CNC\obj\Debug\CNC.dll
+D:\UTNProyecto\CNCMatic\CNCMatic\CNC\obj\Debug\CNC.pdb

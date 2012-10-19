@@ -524,6 +524,14 @@ void user(void)
 			}
 			USB_In_Buffer[i] = '\0';
 			
+			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"position"))
+			{
+				// Return currentSteps position
+				sprintf(message, "X%l Y%l Z%l", currentSteps.x, currentSteps.y, currentSteps.z);
+				putUSBUSART(message, strlen(message));
+				goto endUser;
+			}
+			
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"reset"))
 			{
 				// Resetear la maquina si recibimos el comando 'reset'

@@ -172,7 +172,7 @@ namespace CNC
         public System.Windows.Forms.ToolStripStatusLabel Label { get; set; }
 
         //variable que indica si estamos transmitiendo comandos
-        private bool transmision = false;
+        private bool transmision;
 
         private string estadoActual;
         public string EstadoActual
@@ -216,7 +216,7 @@ namespace CNC
                     enviar(stringConfiguracion);
 
                     //recibimos respuesta
-                    string recep = recibir(1000);
+                    string recep = recibir(10000);
 
                     //vemos el estado de la respuesta
                     if (recep == CNC_Mensajes_Recep.ConfigStringOK)
@@ -293,7 +293,7 @@ namespace CNC
                 enviar(CNC_Mensajes_Send.HandShake);
 
                 //recibimos respuesta
-                string recep = recibir(1000);
+                string recep = recibir(10000);
 
                 estadoActual = CNC_Estados.HandShakeRecibido;
 
@@ -333,7 +333,7 @@ namespace CNC
             try
             {
                 //recibimos respuesta
-                string recep = recibir(1000);
+                string recep = recibir(10000);
 
                 //si se recibe mensaje de posicion de origen
                 if (CNC_Mensajes_Recep.PosicionOrigen == recep)
@@ -514,7 +514,7 @@ namespace CNC
                     this.Label.Text = "Comando enviado...esperando respuesta";
 
                     //esperamos la respuesta sobre el comando
-                    string recep = recibir(1000);
+                    string recep = recibir(10000);
 
                     if (recep == CNC_Mensajes_Recep.ComandoSoportado)
                     {

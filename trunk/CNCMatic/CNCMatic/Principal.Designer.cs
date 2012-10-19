@@ -639,7 +639,7 @@
             // 
             this.txtLineaManual.Location = new System.Drawing.Point(110, 385);
             this.txtLineaManual.Name = "txtLineaManual";
-            this.txtLineaManual.Size = new System.Drawing.Size(328, 20);
+            this.txtLineaManual.Size = new System.Drawing.Size(316, 20);
             this.txtLineaManual.TabIndex = 29;
             this.txtLineaManual.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtLineaManual_KeyPress);
             // 

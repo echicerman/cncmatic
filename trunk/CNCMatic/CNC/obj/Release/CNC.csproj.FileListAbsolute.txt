@@ -1,5 +1,0 @@
-D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\CNC\bin\Release\CNC.dll
-D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\CNC\bin\Release\CNC.pdb
-D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\CNC\obj\Release\ResolveAssemblyReference.cache
-D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\CNC\obj\Release\CNC.dll
-D:\Documentos\Facultad\Proyecto\Descargas SVN\CNCMatic\CNC\obj\Release\CNC.pdb

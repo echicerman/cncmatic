@@ -217,7 +217,7 @@
     <None Include="Samples\LATHE.cnc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Samples\Limpia.cnc">
+    <None Include="Samples\Limpiar.cnc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Samples\MILL.CNC">

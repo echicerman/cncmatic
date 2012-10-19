@@ -88,11 +88,26 @@ namespace CommandPreprocessor
         internal Position GetCenterPosition(string command)
         {
             Position result = new Position();
-            
-            // The center point is relative to the start position... Translate to absolute programming mode
-            result.X = GetValueParameter('I', command) + this.currentPosition.X;
-            result.Y = GetValueParameter('J', command) + this.currentPosition.Y;
-            result.Z = GetValueParameter('K', command) + this.currentPosition.Z;
+
+            if (HasValueParameter('R', command))
+            {
+                double r = GetValueParameter('R', command);
+                if (r > 0)
+                {
+
+                }
+                else
+                { 
+
+                }
+            }
+            else
+            {
+                // The center point is relative to the start position... Translate to absolute programming mode
+                result.X = GetValueParameter('I', command) + this.currentPosition.X;
+                result.Y = GetValueParameter('J', command) + this.currentPosition.Y;
+                result.Z = GetValueParameter('K', command) + this.currentPosition.Z;
+            }
 
             return result;
         }

@@ -1,5 +1,0 @@
-D:\UTNProyecto\CNCMatic\CNCMatic\CommandPreprocessor\bin\Debug\CommandPreprocessor.dll
-D:\UTNProyecto\CNCMatic\CNCMatic\CommandPreprocessor\bin\Debug\CommandPreprocessor.pdb
-D:\UTNProyecto\CNCMatic\CNCMatic\CommandPreprocessor\obj\Debug\ResolveAssemblyReference.cache
-D:\UTNProyecto\CNCMatic\CNCMatic\CommandPreprocessor\obj\Debug\CommandPreprocessor.dll
-D:\UTNProyecto\CNCMatic\CNCMatic\CommandPreprocessor\obj\Debug\CommandPreprocessor.pdb

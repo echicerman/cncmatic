@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using VirtualSerial;
 using System.IO.Ports;
 using System.Timers;
 using CNC;
@@ -46,26 +45,26 @@ namespace CNCMatic
             buscarPuertos();
         }
 
-        private void DataReceivedCallback(string text)
-        {
-            if (receivedTextBox.InvokeRequired)
-            {
-                Port.DataReceivedCallbackDelegate d = new Port.DataReceivedCallbackDelegate(DataReceivedCallback);
-                Invoke(d, new object[] { text });
-            }
-            else
-            {
-                receivedTextBox.AppendText("\n" + text);
-            }
-        }
+        //private void DataReceivedCallback(string text)
+        //{
+        //    if (receivedTextBox.InvokeRequired)
+        //    {
+        //        Port.DataReceivedCallbackDelegate d = new Port.DataReceivedCallbackDelegate(DataReceivedCallback);
+        //        Invoke(d, new object[] { text });
+        //    }
+        //    else
+        //    {
+        //        receivedTextBox.AppendText("\n" + text);
+        //    }
+        //}
 
 
         private void connectButton_Click(object sender, EventArgs e)
         {
             try
             {
-                Port.DataReceivedCallback = new Port.DataReceivedCallbackDelegate(DataReceivedCallback);
-                Port.Connect(portComboBox.Items[portComboBox.SelectedIndex].ToString());
+                //Port.DataReceivedCallback = new Port.DataReceivedCallbackDelegate(DataReceivedCallback);
+                //Port.Connect(portComboBox.Items[portComboBox.SelectedIndex].ToString());
                 connectButton.Enabled = false;
                 disconnectButton.Enabled = true;
             }
@@ -79,7 +78,7 @@ namespace CNCMatic
         {
             try
             {
-                Port.CloseConnection();
+                //Port.CloseConnection();
                 disconnectButton.Enabled = false;
                 connectButton.Enabled = true;
             }
@@ -91,19 +90,15 @@ namespace CNCMatic
 
         private void sendButton_Click(object sender, EventArgs e)
         {
-            //string[] comandos;
-
-            //comandos = this.txtPreview.Lines;
-
-            Port.Write(sendTextBox.Text);
-            //Port.Write(comandos[i]);
-            //i++;
+            
+            //Port.Write(sendTextBox.Text);
+            
         }
 
         public void IniciarTransmision()
         {
 
-            conectar("COM1");
+            //conectar("COM1");
 
             enviarConfiguracion();
 
@@ -114,12 +109,12 @@ namespace CNCMatic
 
         }
 
-        private void conectar(string puerto)
-        {
-            Port.DataReceivedCallback = new Port.DataReceivedCallbackDelegate(DataReceivedCallback);
-            Port.Connect(puerto);
+        //private void conectar(string puerto)
+        //{
+        //    Port.DataReceivedCallback = new Port.DataReceivedCallbackDelegate(DataReceivedCallback);
+        //    Port.Connect(puerto);
 
-        }
+        //}
         private void enviarConfiguracion()
         {
 
@@ -133,7 +128,7 @@ namespace CNCMatic
             */
 
             this.ultimaInstruccion = (this.Owner as Principal).proximaInstruccion();
-            Port.Write(ultimaInstruccion);
+            //Port.Write(ultimaInstruccion);
             timer.Start();
 
             //while (this.ultimaInstruccion != "")
@@ -154,7 +149,7 @@ namespace CNCMatic
 
             if (ultimaInstruccion != "")
             {
-                Port.Write(ultimaInstruccion);
+                //Port.Write(ultimaInstruccion);
 
                 ultimaInstruccion = (this.Owner as Principal).proximaInstruccion();
 
@@ -162,12 +157,12 @@ namespace CNCMatic
             }
             else
             {
-                desconectar();
+                //desconectar();
             }
         }
-        private void desconectar()
-        {
-            Port.CloseConnection();
-        }
+        //private void desconectar()
+        //{
+        //    Port.CloseConnection();
+        //}
     }
 }

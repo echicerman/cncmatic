@@ -75,6 +75,7 @@
     <Compile Include="FrmDibujoParams.Designer.cs">
       <DependentUpon>FrmDibujoParams.cs</DependentUpon>
     </Compile>
+    <Compile Include="Interfaz.cs" />
     <Compile Include="Principal.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,10 +122,6 @@
     <Compile Include="XML\XMLdb.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\VirtualSerial\VirtualSerial\VirtualSerial.csproj">
-      <Project>{0ADE2784-D0C2-49F2-95CF-DE67C97C8BE2}</Project>
-      <Name>VirtualSerial</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CNC\CNC.csproj">
       <Project>{7808BA58-15F0-4FF3-A1DE-58DF3B898C08}</Project>
       <Name>CNC</Name>

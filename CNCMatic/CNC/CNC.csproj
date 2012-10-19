@@ -35,6 +35,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -47,6 +48,16 @@
   <ItemGroup>
     <Compile Include="CNC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\VirtualSerial\VirtualSerial\VirtualSerial.csproj">
+      <Project>{0ADE2784-D0C2-49F2-95CF-DE67C97C8BE2}</Project>
+      <Name>VirtualSerial</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Configuracion\Configuracion.csproj">
+      <Project>{5FB8E387-D096-4A98-8158-368D43664730}</Project>
+      <Name>Configuracion</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

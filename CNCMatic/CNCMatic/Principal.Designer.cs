@@ -79,10 +79,11 @@
             this.btnPlay = new System.Windows.Forms.Button();
             this.btnPause = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.prgBar = new System.Windows.Forms.ToolStripProgressBar();
             this.lblUserName = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblMachName = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblOsVersion = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblEstado = new System.Windows.Forms.ToolStripStatusLabel();
+            this.prgBar = new System.Windows.Forms.ToolStripProgressBar();
             this.txtLineaManual = new System.Windows.Forms.TextBox();
             this.grpPrev = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -590,27 +591,22 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.prgBar,
             this.lblUserName,
             this.lblMachName,
-            this.lblOsVersion});
+            this.lblOsVersion,
+            this.prgBar,
+            this.lblEstado});
             this.statusStrip1.Location = new System.Drawing.Point(78, 675);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1084, 22);
             this.statusStrip1.TabIndex = 27;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // prgBar
-            // 
-            this.prgBar.Name = "prgBar";
-            this.prgBar.Size = new System.Drawing.Size(250, 16);
-            // 
             // lblUserName
             // 
-            this.lblUserName.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
             this.lblUserName.BorderStyle = System.Windows.Forms.Border3DStyle.Bump;
             this.lblUserName.Name = "lblUserName";
-            this.lblUserName.Size = new System.Drawing.Size(4, 17);
+            this.lblUserName.Size = new System.Drawing.Size(0, 17);
             // 
             // lblMachName
             // 
@@ -621,10 +617,23 @@
             // 
             // lblOsVersion
             // 
-            this.lblOsVersion.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.lblOsVersion.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)));
             this.lblOsVersion.BorderStyle = System.Windows.Forms.Border3DStyle.Bump;
             this.lblOsVersion.Name = "lblOsVersion";
             this.lblOsVersion.Size = new System.Drawing.Size(4, 17);
+            // 
+            // lblEstado
+            // 
+            this.lblEstado.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.lblEstado.BorderStyle = System.Windows.Forms.Border3DStyle.Bump;
+            this.lblEstado.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblEstado.Name = "lblEstado";
+            this.lblEstado.Size = new System.Drawing.Size(4, 17);
+            // 
+            // prgBar
+            // 
+            this.prgBar.Name = "prgBar";
+            this.prgBar.Size = new System.Drawing.Size(250, 16);
             // 
             // txtLineaManual
             // 
@@ -1121,6 +1130,7 @@
         internal System.Windows.Forms.ToolStripMenuItem mnuRight;
         internal System.Windows.Forms.ToolStripMenuItem mnuIsometric;
         private System.Windows.Forms.ToolStripMenuItem acercaDeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel lblEstado;
     }
 }
 

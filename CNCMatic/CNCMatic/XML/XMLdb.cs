@@ -173,7 +173,7 @@ namespace CNCMatic.XML
                     //sino actualizamos
                     foreach (DataRow row in dt.Rows)
                     {
-                        if (Convert.ToInt32(row["Id"]) == config.IdConfigMatMot && 
+                        if (Convert.ToInt32(row["Id"]) == config.IdConfigMatMot &&
                             Convert.ToInt32(row["IdConfig"]) == idConfig
                             )
                         {
@@ -312,54 +312,6 @@ namespace CNCMatic.XML
         public List<XML_Config> LeeConfiguracion()
         {
 
-            //XmlReader reader = XmlReader.Create(this.filePath, this.settings);
-            //reader.MoveToContent();
-            //reader.ReadToDescendant("Configuraciones");
-            //reader.MoveToFirstAttribute();
-            //this.ultConfigId = Convert.ToInt32(reader.Value);
-
-            //XML_Config c;
-            //List<XML_Config> cs = new List<XML_Config>();
-
-            //while (reader.ReadToFollowing("Configuracion"))
-            //{
-            //    //XmlReader motor=motores.ReadSubtree();
-            //    c = new XML_Config();
-
-            //    reader.ReadToFollowing("idConfig");
-            //    c.Id = reader.ReadElementContentAsInt();
-            //    c.Descripcion = reader.ReadElementContentAsString();
-            //    c.PuertoCom = reader.ReadElementContentAsString();
-            //    c.UnidadMedida = reader.ReadElementContentAsString();
-            //    c.TipoProg = reader.ReadElementContentAsString();
-            //    c.MaxX = reader.ReadElementContentAsFloat();
-            //    c.MaxY = reader.ReadElementContentAsFloat();
-            //    c.MaxZ = reader.ReadElementContentAsFloat();
-            //    //
-            //    XML_ConfigMatMot configMatMot;
-            //    while (reader.ReadToFollowing("ConfigMatMot"))
-            //    {
-            //        //XmlReader motor=motores.ReadSubtree();
-            //        configMatMot = new XML_ConfigMatMot();
-
-            //        reader.ReadToFollowing("idMaterial");
-
-            //        //configMatMot.IdConfig = c.Id;
-            //        configMatMot.IdMaterial = reader.ReadElementContentAsInt();
-            //        configMatMot.IdMotor = reader.ReadElementContentAsInt();
-            //        configMatMot.TamVuelta = reader.ReadElementContentAsDecimal();
-            //        configMatMot.GradosPaso = reader.ReadElementContentAsDecimal();
-
-            //        c.ConfigMatMot.Add(configMatMot);
-
-            //    }
-
-            //    cs.Add(c);
-            //}
-
-            //reader.Close();
-
-            //return cs;
 
             //seteamos el tipo de culture para grabar bien los decimales
             CultureInfo actual = Thread.CurrentThread.CurrentCulture;
@@ -476,6 +428,71 @@ namespace CNCMatic.XML
                 }
             }
             return ms;
+        }
+
+        public XML_Config LeeConfiguracionActual(int idConfig)
+        {
+
+
+            //seteamos el tipo de culture para grabar bien los decimales
+            CultureInfo actual = Thread.CurrentThread.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("es-AR");
+
+            DataSet ds = new DataSet();
+            ds.ReadXml(this.filePath);
+
+            DataTable dtConfig = ds.Tables["configuracion"];
+            DataTable dtConfigMatMot = ds.Tables["configuracionMatMot"];
+
+            XML_Config c = null;
+
+            if (dtConfig != null)
+            {
+                foreach (DataRow dr in dtConfig.Rows)
+                {
+                    //leemos la configuracion general
+                    if (Convert.ToInt32(dr["Id"]) == idConfig)
+                    {
+
+                        c = new XML_Config();
+
+                        c.Id = Convert.ToInt32(dr["Id"]);
+                        c.Descripcion = dr["Descripcion"].ToString();
+                        c.PuertoCom = dr["PuertoCom"].ToString();
+                        c.UnidadMedida = dr["UnidadMedida"].ToString();
+                        c.TipoProg = dr["TipoProg"].ToString();
+                        c.MaxX = float.Parse(dr["MaxX"].ToString());
+                        c.MaxY = float.Parse(dr["MaxY"].ToString());
+                        c.MaxZ = float.Parse(dr["MaxZ"].ToString());
+                        c.ConfigMatMot = new List<XML_ConfigMatMot>();
+
+                        if (dtConfigMatMot != null)
+                        {
+                            XML_ConfigMatMot configMatMot;
+                            foreach (DataRow dr2 in dtConfigMatMot.Rows)
+                            {
+                                if (dr2["IdConfig"].ToString() == c.Id.ToString())
+                                {
+                                    configMatMot = new XML_ConfigMatMot();
+
+                                    configMatMot.IdConfigMatMot = Convert.ToInt32(dr2["Id"]);
+                                    configMatMot.IdMaterial = Convert.ToInt32(dr2["IdMaterial"]);
+                                    configMatMot.IdMotor = Convert.ToInt32(dr2["IdMotor"]);
+                                    configMatMot.GradosPaso = Convert.ToDecimal(dr2["GradosPaso"]);
+                                    configMatMot.TamVuelta = Convert.ToDecimal(dr2["TamVuelta"]);
+
+                                    c.ConfigMatMot.Add(configMatMot);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            //devolvemos al thread el formato actual
+            Thread.CurrentThread.CurrentCulture = actual;
+
+            return c;
         }
     }
 

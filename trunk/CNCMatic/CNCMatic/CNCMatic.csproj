@@ -149,10 +149,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="ClassDiagram1.cd" />
     <None Include="img\flecha_IZQ.jpg" />
+    <Content Include="config.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Data\Lathe.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -196,6 +198,7 @@
     <Content Include="Resources\viewzoom.bmp" />
     <Content Include="Resources\web.bmp" />
     <Content Include="xmlDB.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\Actions-layer-visible-on-icon2.png" />
     <None Include="Resources\Actions-layer-visible-on-icon.png" />

@@ -43,5 +43,20 @@ namespace CommandPreprocessor
             this.X = this.Y = this.Z = 0;
         }
         #endregion
+    
+        #region public
+        public string ToString(int code)
+        {
+            StringBuilder result = new StringBuilder();
+
+            result
+                .AppendFormat("G{0} ", code)
+                .AppendFormat("X{0:0.0000} ", this.X)
+                .AppendFormat("Y{0:0.0000} ", this.Y)
+                .AppendFormat("Z{0:0.0000} ", this.Z);
+
+            return result.ToString();
+        }
+        #endregion
     }
 }

@@ -11,6 +11,7 @@ namespace CommandPreprocessor
         public static bool absoluteProgamming;
         public static bool millimetersProgramming;
         public static double millimetersCurveSection;
+        public static double defaultFeedrate;
         #endregion
     }
 }

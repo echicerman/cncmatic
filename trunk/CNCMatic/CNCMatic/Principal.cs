@@ -1005,30 +1005,33 @@ namespace CNCMatic
                 this.LimpiarPrevisualizador();
                 PrevisualizarFigurasManual();
 
-                
+
                 DialogResult dr = MessageBox.Show("Se procederá a conectar y enviar las instrucciones al CNC, ¿Desea Continuar?", "Transferencia CNC", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
                 if (dr == DialogResult.Yes)
                 {
-                    if (Interfaz.ConectarCNC(ref lblEstado))
+                    //obtenemos las lineas del previsualizador y removemos los blancos
+                    List<string> loteInstrucciones = txtPreview.Lines.ToList();
+                    while (loteInstrucciones.Contains(""))
                     {
-                        List<string> loteInstrucciones = txtPreview.Lines.ToList();
+                        loteInstrucciones.Remove("");
+                    }
 
-                        Interfaz.EnviarSetDeInstrucciones(loteInstrucciones);
-
+                    if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual))
+                    {
                         
                         //MessageBox.Show(Interfaz.EnviarSetDeInstrucciones(loteInstrucciones).ToString());
                         
                     }
 
                     ////bloqueamos controles
-                    //btnPlay.Enabled = false;
-                    //btnInicio.Enabled = false;
-                    //btnStop2.Enabled = false;
-                    //gbMovXY.Enabled = false;
-                    //gbMovZ.Enabled = false;
-                    //txtLineaManual.Enabled = false;
-                    //btnLimpiar.Enabled = false;
-                    //toolStrip1.Enabled = false;
+                    btnPlay.Enabled = false;
+                    btnInicio.Enabled = false;
+                    btnStop2.Enabled = false;
+                    gbMovXY.Enabled = false;
+                    gbMovZ.Enabled = false;
+                    txtLineaManual.Enabled = false;
+                    btnLimpiar.Enabled = false;
+                    toolStrip1.Enabled = false;
                 }
             }
             catch (Exception ex)

@@ -24,30 +24,30 @@ namespace CNCMatic
             return config;
         }
 
-        public static bool EnviaConfiguracion()
-        {
-            try
-            {
-                //traemos la instancia de la maquina
-                var cnc = CNC.CNC.Cnc;
+        //public static bool EnviaConfiguracion()
+        //{
+        //    try
+        //    {
+        //        //traemos la instancia de la maquina
+        //        var cnc = CNC.CNC.Cnc;
 
-                //validamos que este en estado Conectado para transferir configuracion
-                if (cnc.EstadoActual == CNC.CNC_Estados.Conectado)
-                {
-                    cnc.EnviarConfiguracion(ConfiguracionActual());
-                }
+        //        //validamos que este en estado Conectado para transferir configuracion
+        //        if (cnc.EstadoActual == CNC.CNC_Estados.Conectado)
+        //        {
+        //            cnc.EnviarConfiguracion(ConfiguracionActual());
+        //        }
 
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw (new Exception("EnviaConfiguracion: " + ex.Message));
-            }
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw (new Exception("EnviaConfiguracion: " + ex.Message));
+        //    }
 
 
-        }
+        //}
 
-        public static bool ConectarCNC(ref ToolStripStatusLabel lblEstado)
+        public static bool ConectarCNC(ref ToolStripStatusLabel lblEstado, List<string> loteInstrucciones, ref ToolStripStatusLabel lblPosicActual)
         {
             try
             {
@@ -56,36 +56,23 @@ namespace CNCMatic
 
                 cnc.Label = lblEstado;
                 cnc.PuertoConexion = ConfiguracionActual().PuertoCom;
-                
+                cnc.Configuracion = ConfiguracionActual();
+                cnc.LblPosicionActual = lblPosicActual;
+
+                //ya cargamos el lote de instrucciones del CNC
+                cnc.CargaLoteInstrucciones(loteInstrucciones);
+
                 bool resultado = true;
 
                 //1: establecemos conexion    
                 resultado = cnc.EstablecerConexion();
                 if (resultado)
                 {
-                    //lblEstado.Text = "Enviando Configuracion";
-
-                    //2: enviamos la configuracion
-                    resultado = cnc.EnviarConfiguracion(ConfiguracionActual());
-
-                    if (resultado)
-                    {
-                        //lblEstado.Text = "Dirigiendose al origen";
-
-                        //3: revisamos si llego a posicion de origen
-                        resultado = cnc.PosicionOrigen();
-
-                        //lblEstado.Text = "Conexion establecida";
-                    }
-                    else
-                    {
-                        //lblEstado.Text = "Error al enviar Configuracion";
-                    }
 
                 }
                 else
                 {
-                    //lblEstado.Text = "Error al establecer la conexion";
+
                 }
 
                 return resultado;
@@ -97,31 +84,31 @@ namespace CNCMatic
 
         }
 
-        public static bool EnviarSetDeInstrucciones(List<string> loteInstrucciones)
-        {
-            try
-            {
-                bool resultado = false;
-                
-                //traemos la instancia de la maquina
-                var cnc = CNC.CNC.Cnc;
+        //public static bool EnviarSetDeInstrucciones(List<string> loteInstrucciones)
+        //{
+        //    try
+        //    {
+        //        bool resultado = false;
 
-                //validamos que este en estado WAITINGCOMMAND para transferir configuracion
-                if (cnc.EstadoActual == CNC.CNC_Estados.EsperandoComando)
-                {
-                    cnc.CargaLoteInstrucciones(loteInstrucciones);
-                    
-                    cnc.IniciarTransmision();
-                }
+        //        //traemos la instancia de la maquina
+        //        var cnc = CNC.CNC.Cnc;
 
-                return resultado;
-            }
-            catch (Exception ex)
-            {
-                throw (new Exception("EnviarSetDeInstrucciones: " + ex.Message));
-            }
+        //        //validamos que este en estado WAITINGCOMMAND para transferir configuracion
+        //        if (cnc.EstadoActual == CNC.CNC_Estados.EsperandoComando)
+        //        {
+        //            cnc.CargaLoteInstrucciones(loteInstrucciones);
 
-        }
+        //            cnc.IniciarTransmision();
+        //        }
+
+        //        return resultado;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw (new Exception("EnviarSetDeInstrucciones: " + ex.Message));
+        //    }
+
+        //}
 
     }
 }

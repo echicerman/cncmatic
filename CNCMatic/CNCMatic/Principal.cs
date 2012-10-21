@@ -21,7 +21,7 @@ namespace CNCMatic
     public partial class Principal : Form
     {
         Boolean flag = true;
-        int i = 0;
+        //int i = 0;
         private string mCncFile;
         private clsProcessor mProcessor = clsProcessor.Instance();
         private clsSettings mSetup = clsSettings.Instance();
@@ -693,14 +693,14 @@ namespace CNCMatic
             }
         }
 
-        private void IniciarFresado(object sender, EventArgs e)
-        {
-            this.Refresh();
-            if (OpenFileDialog1.FileName.Length > 0)
-            {
-                OpenFile(OpenFileDialog1.FileName);
-            }
-        }
+        //private void IniciarFresado(object sender, EventArgs e)
+        //{
+        //    this.Refresh();
+        //    if (OpenFileDialog1.FileName.Length > 0)
+        //    {
+        //        OpenFile(OpenFileDialog1.FileName);
+        //    }
+        //}
 
         private bool guardaGfile(string path)
         {
@@ -957,15 +957,15 @@ namespace CNCMatic
             mViewer.Redraw(true);
         }
 
-        private void tsbOpen_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog1.ShowDialog();
-            this.Refresh();
-            if (OpenFileDialog1.FileName.Length > 0)
-            {
-                OpenFile(OpenFileDialog1.FileName);
-            }
-        }
+        //private void tsbOpen_Click(object sender, EventArgs e)
+        //{
+        //    OpenFileDialog1.ShowDialog();
+        //    this.Refresh();
+        //    if (OpenFileDialog1.FileName.Length > 0)
+        //    {
+        //        OpenFile(OpenFileDialog1.FileName);
+        //    }
+        //}
 
         private void OpenFile(string fileName)
         {
@@ -1020,23 +1020,25 @@ namespace CNCMatic
                     {
                         
                         //MessageBox.Show(Interfaz.EnviarSetDeInstrucciones(loteInstrucciones).ToString());
-                        
+
+
+                        ////bloqueamos controles
+                        btnPlay.Enabled = false;
+                        btnInicio.Enabled = false;
+                        btnStop2.Enabled = false;
+                        gbMovXY.Enabled = false;
+                        gbMovZ.Enabled = false;
+                        txtLineaManual.Enabled = false;
+                        btnLimpiar.Enabled = false;
+                        toolStrip1.Enabled = false;
                     }
 
-                    ////bloqueamos controles
-                    btnPlay.Enabled = false;
-                    btnInicio.Enabled = false;
-                    btnStop2.Enabled = false;
-                    gbMovXY.Enabled = false;
-                    gbMovZ.Enabled = false;
-                    txtLineaManual.Enabled = false;
-                    btnLimpiar.Enabled = false;
-                    toolStrip1.Enabled = false;
+                    
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show("Error: " + ex.Message,"Error", MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
         }
 

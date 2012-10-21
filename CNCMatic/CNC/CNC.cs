@@ -190,9 +190,6 @@ namespace CNC
         public System.Windows.Forms.ToolStripStatusLabel Label { get; set; }
         public System.Windows.Forms.ToolStripStatusLabel LblPosicionActual { get; set; }
 
-        //variable que indica si estamos transmitiendo comandos
-        private bool transmision;
-
         //variable que indica si en una transmision debe pausar el envio de comandos al cnc
         public bool PausarTransmision
         {
@@ -243,9 +240,6 @@ namespace CNC
 
                     return true;
 
-                    //recibimos respuesta
-                    //string recep = recibir(1000);
-
                 }
                 else
                 {
@@ -255,7 +249,7 @@ namespace CNC
             }
             catch (Exception ex)
             {
-                throw (new Exception("EnviarConfiguracion: " + ex.Message));
+                throw (new Exception("CNC.EnviarConfiguracion: " + ex.Message));
             }
 
 
@@ -284,7 +278,7 @@ namespace CNC
             }
             catch (Exception ex)
             {
-                throw (ex);
+                throw (new Exception("CNC.PedirEstadoCNC: " + ex.Message));
             }
 
         }
@@ -305,35 +299,6 @@ namespace CNC
                 enviar(CNC_Mensajes_Send.HandShake);
 
                 return true;
-
-                ////recibimos respuesta
-                //string recep = recibir(1000);
-
-                //estadoActual = CNC_Estados.HandShakeRecibido;
-
-                ////si coincide longitud recibida con la enviada
-                //if (CNC_Mensajes_Send.HandShake.Length == Convert.ToInt32(recep))
-                //{
-                //    //enviar: CNC_Mensajes_Send.HandShakeOk 
-                //    enviar(CNC_Mensajes_Send.HandShakeOk);
-
-                //    estadoActual = CNC_Estados.Conectado;
-
-                //    this.Label.Text = "Conexion establecida";
-
-                //    return true;
-                //}
-                //else
-                //{
-                //    //enviar: CNC_Mensajes_Send.HandShakeBad 
-                //    enviar(CNC_Mensajes_Send.HandShakeBad);
-
-                //    estadoActual = CNC_Estados.SerialPortConectado;
-
-                //    this.Label.Text = "Error en el handshake";
-
-                //    return false;
-                //}
 
             }
             catch (Exception ex)
@@ -378,6 +343,9 @@ namespace CNC
                 //limpiamos espacios del texto
                 texto = texto.Trim();
 
+                //guardamos el ultimo mensaje enviado
+                this.UltimoMensajeSend = texto;
+
                 Port.Write(texto);
             }
             catch (Exception ex)
@@ -394,6 +362,18 @@ namespace CNC
                 //agregamos el mensaje a la cola de mensajes
                 colaMensajes.Add(texto.Trim());
 
+                //si pedimos la posicion actual
+                if (this.UltimoMensajeSend == CNC_Mensajes_Send.PosicionActual)
+                {
+                    string recep = recibir();
+
+                    //actualizamos la posicion actual del CNC
+                    actualizarPosicionActual(recep);
+
+                    return;
+                }
+                
+                
                 //SERIALPORTCONNECTED
                 if (this.estadoActual == CNC_Estados.SerialPortConectado)
                 {
@@ -468,6 +448,8 @@ namespace CNC
 
                         //queda esperando instrucciones
                         estadoActual = CNC_Estados.EsperandoComando;
+
+                        //aca tendriamos que pedir la posicion del cero de la pieza??
 
                         //iniciamos la transmision
                         this.Transmision();
@@ -546,16 +528,10 @@ namespace CNC
                     return;
                 }
 
-                ////si estamos transmitiendo, entonces llamamos a la funcion que lee
-                //if (transmision)
-                //{
-                //    //llamamos a la funcion que interpreta la respuesta
-                //    RespuestaInstruccion();
-                //}
             }
             catch (Exception ex)
             {
-                throw (new Exception("CNC.recibir: " + ex.Message));
+                throw (new Exception("CNC.atenderPuerto: " + ex.Message));
             }
         }
 
@@ -613,12 +589,6 @@ namespace CNC
         {
             try
             {
-                //if (tiempoEspera!=0)
-                //{
-                //    //esperamos para que llegue la respuesta
-                //    System.Threading.Thread.Sleep(tiempoEspera);
-                //}
-
                 string mensaje = "";
 
                 //si hay mensajes
@@ -629,11 +599,14 @@ namespace CNC
                     colaMensajes.RemoveAt(0);
                 }
 
+                //guardamos el ultimo mensaje recibido
+                this.UltimoMensajeRecep = mensaje;
+
                 return mensaje;
             }
             catch (Exception ex)
             {
-                throw (new Exception("CNC.conectarSerialPort: " + ex.Message));
+                throw (new Exception("CNC.recibir: " + ex.Message));
             }
         }
 
@@ -663,7 +636,7 @@ namespace CNC
             }
             catch (Exception ex)
             {
-                throw (new Exception("IniciarTransmision: " + ex.Message));
+                throw (new Exception("Transmision: " + ex.Message));
             }
 
         }
@@ -701,37 +674,11 @@ namespace CNC
             }
             catch (Exception ex)
             {
-                throw (new Exception("PrepararSiguienteComando: " + ex.Message));
+                throw (new Exception("CNC.PrepararSiguienteComando: " + ex.Message));
             }
 
 
         }
-
-
-        //public void ContinuarTransmision()
-        //{
-        //    try
-        //    {
-        //        //seguimos enviando
-        //        if (proximaInstruccion < loteInstrucciones.Count)
-        //        {
-        //            if (EnviarInstruccion(loteInstrucciones[proximaInstruccion]))
-        //            {
-        //                proximaInstruccion++;
-
-        //            }
-        //            else
-        //            {
-
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw (new Exception("ContinuarTransmision: " + ex.Message));
-        //    }
-
-        //}
 
         private bool EnviarInstruccion(string comando)
         {
@@ -745,9 +692,6 @@ namespace CNC
 
                     this.Label.Text = "Comando enviado. Esperando respuesta...";
 
-                    //esperamos la respuesta sobre el comando
-                    //string recep = recibir(1000);
-
                     return true;
 
                 }
@@ -759,49 +703,9 @@ namespace CNC
             }
             catch (Exception ex)
             {
-                throw (new Exception("EnviarInstruccion: " + ex.Message));
+                throw (new Exception("CNC.EnviarInstruccion: " + ex.Message));
             }
         }
-
-        //private void RespuestaInstruccion()
-        //{
-        //    try
-        //    {
-        //        //si estamos en transmision
-        //        if (transmision)
-        //        {
-        //            //leemos la respuesta
-        //            string recep = recibir(0);
-
-        //            //vuelve a estado de WAITINGCOMMAND
-        //            estadoActual = CNC_Estados.EsperandoComando;
-
-        //            //salimos de estado de transmision
-        //            transmision = false;
-
-        //            if (recep == CNC_Mensajes_Recep.ParadaEmergencia)
-        //            {
-        //                this.Label.Text = "Se ha detenido la maquina manualmente";
-        //            }
-        //            if (recep == CNC_Mensajes_Recep.SensorFinCarrera)
-        //            {
-        //                this.Label.Text = "Se ha llegado al fin de un eje";
-        //            }
-
-        //            if (recep == CNC_Mensajes_Recep.ComandoEjecutado)
-        //            {
-        //                this.Label.Text = "Instruccion ejecutada OK";
-
-        //                //seguimos enviando las instrucciones del lote
-        //                ContinuarTransmision();
-        //            }
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw (new Exception("EnviarInstruccion: " + ex.Message));
-        //    }
-        //}
+        
     }
 }

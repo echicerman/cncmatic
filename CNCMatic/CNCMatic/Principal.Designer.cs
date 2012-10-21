@@ -83,6 +83,7 @@
             this.lblMachName = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblOsVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.prgBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.lblPosicionActual = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblEstado = new System.Windows.Forms.ToolStripStatusLabel();
             this.txtLineaManual = new System.Windows.Forms.TextBox();
             this.grpPrev = new System.Windows.Forms.GroupBox();
@@ -117,8 +118,6 @@
             this.tblScreens = new System.Windows.Forms.TableLayoutPanel();
             this.btnLimpiar = new System.Windows.Forms.Button();
             this.CodeTip = new System.Windows.Forms.ToolTip(this.components);
-            this.lbltest = new System.Windows.Forms.Label();
-            this.lblPosicionActual = new System.Windows.Forms.ToolStripStatusLabel();
             this.gbPosicionActual.SuspendLayout();
             this.gbMovZ.SuspendLayout();
             this.gbMovXY.SuspendLayout();
@@ -156,7 +155,6 @@
             // 
             // gbPosicionActual
             // 
-            this.gbPosicionActual.Controls.Add(this.lbltest);
             this.gbPosicionActual.Controls.Add(this.lblPosZ);
             this.gbPosicionActual.Controls.Add(this.txtPosZ);
             this.gbPosicionActual.Controls.Add(this.lblPosY);
@@ -223,6 +221,7 @@
             // 
             this.txtPosX.Location = new System.Drawing.Point(26, 24);
             this.txtPosX.Name = "txtPosX";
+            this.txtPosX.ReadOnly = true;
             this.txtPosX.Size = new System.Drawing.Size(63, 20);
             this.txtPosX.TabIndex = 0;
             this.txtPosX.Text = "0";
@@ -633,6 +632,13 @@
             this.prgBar.Name = "prgBar";
             this.prgBar.Size = new System.Drawing.Size(250, 16);
             // 
+            // lblPosicionActual
+            // 
+            this.lblPosicionActual.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.lblPosicionActual.BorderStyle = System.Windows.Forms.Border3DStyle.Bump;
+            this.lblPosicionActual.Name = "lblPosicionActual";
+            this.lblPosicionActual.Size = new System.Drawing.Size(4, 17);
+            // 
             // lblEstado
             // 
             this.lblEstado.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
@@ -1002,22 +1008,6 @@
             this.btnLimpiar.UseVisualStyleBackColor = true;
             this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
             // 
-            // lbltest
-            // 
-            this.lbltest.AutoSize = true;
-            this.lbltest.Location = new System.Drawing.Point(67, 31);
-            this.lbltest.Name = "lbltest";
-            this.lbltest.Size = new System.Drawing.Size(35, 13);
-            this.lbltest.TabIndex = 6;
-            this.lbltest.Text = "label1";
-            // 
-            // lblPosicionActual
-            // 
-            this.lblPosicionActual.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this.lblPosicionActual.BorderStyle = System.Windows.Forms.Border3DStyle.Bump;
-            this.lblPosicionActual.Name = "lblPosicionActual";
-            this.lblPosicionActual.Size = new System.Drawing.Size(4, 17);
-            // 
             // Principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1144,7 +1134,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
         private System.Windows.Forms.ToolStripLabel lblStatus;
         private System.Windows.Forms.ToolTip CodeTip;
-        internal System.Windows.Forms.OpenFileDialog OpenFileDialog1;
         internal System.Windows.Forms.TrackBar BreakPointSlider;
         internal System.Windows.Forms.ToolStripDropDownButton tsbView;
         internal System.Windows.Forms.ToolStripMenuItem mnuTop;
@@ -1153,7 +1142,6 @@
         internal System.Windows.Forms.ToolStripMenuItem mnuIsometric;
         private System.Windows.Forms.ToolStripMenuItem acercaDeToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel lblEstado;
-        private System.Windows.Forms.Label lbltest;
         private System.Windows.Forms.ToolStripStatusLabel lblPosicionActual;
     }
 }

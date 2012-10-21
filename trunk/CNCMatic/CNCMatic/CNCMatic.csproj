@@ -197,9 +197,6 @@
     <Content Include="Resources\ViewTop.bmp" />
     <Content Include="Resources\viewzoom.bmp" />
     <Content Include="Resources\web.bmp" />
-    <Content Include="xmlDB.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\Actions-layer-visible-on-icon2.png" />
     <None Include="Resources\Actions-layer-visible-on-icon.png" />
     <None Include="Resources\draw-circle-icon.png" />

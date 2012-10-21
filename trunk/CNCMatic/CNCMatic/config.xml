@@ -51,6 +51,6 @@
     <IdMaterial>1</IdMaterial>
     <IdMotor>3</IdMotor>
     <GradosPaso>1</GradosPaso>
-    <TamVuelta>1</TamVuelta>
+    <TamVuelta>0</TamVuelta>
   </configuracionMatMot>
 </DocumentElement>

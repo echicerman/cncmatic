@@ -24,29 +24,6 @@ namespace CNCMatic
             return config;
         }
 
-        //public static bool EnviaConfiguracion()
-        //{
-        //    try
-        //    {
-        //        //traemos la instancia de la maquina
-        //        var cnc = CNC.CNC.Cnc;
-
-        //        //validamos que este en estado Conectado para transferir configuracion
-        //        if (cnc.EstadoActual == CNC.CNC_Estados.Conectado)
-        //        {
-        //            cnc.EnviarConfiguracion(ConfiguracionActual());
-        //        }
-
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw (new Exception("EnviaConfiguracion: " + ex.Message));
-        //    }
-
-
-        //}
-
         public static bool ConectarCNC(ref ToolStripStatusLabel lblEstado, List<string> loteInstrucciones, ref ToolStripStatusLabel lblPosicActual)
         {
             try
@@ -74,7 +51,7 @@ namespace CNCMatic
 
                     //1: establecemos conexion    
                     resultado = cnc.EstablecerConexion();
-                    if (resultado)
+                    if (!resultado)
                     {
                         MessageBox.Show("No se ha podido establecer la conexión", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
@@ -128,6 +105,24 @@ namespace CNCMatic
             }
         }
 
+        public static void MoverLibre(string movimiento)
+        {
+            //maquina
+            var cnc = CNC.CNC.Cnc;
+            cnc.PuertoConexion = ConfiguracionActual().PuertoCom;
+            cnc.Configuracion = ConfiguracionActual();
+
+            cnc.EnviarMovimientoLibre(movimiento);
+        }
+
+        public static void DetenerMovimientoLibre()
+        {
+            //maquina
+            var cnc = CNC.CNC.Cnc;
+
+            cnc.DetenerMovimientoLibre();
+        }
+        
         //public static bool EnviarSetDeInstrucciones(List<string> loteInstrucciones)
         //{
         //    try

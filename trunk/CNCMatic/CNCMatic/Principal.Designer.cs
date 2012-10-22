@@ -33,16 +33,9 @@
             this.importaDXF = new System.Windows.Forms.OpenFileDialog();
             this.importaG = new System.Windows.Forms.OpenFileDialog();
             this.txtPreview = new System.Windows.Forms.TextBox();
-            this.gbPosicionActual = new System.Windows.Forms.GroupBox();
-            this.lblPosZ = new System.Windows.Forms.Label();
-            this.txtPosZ = new System.Windows.Forms.TextBox();
-            this.lblPosY = new System.Windows.Forms.Label();
-            this.txtPosY = new System.Windows.Forms.TextBox();
-            this.lblPosX = new System.Windows.Forms.Label();
-            this.txtPosX = new System.Windows.Forms.TextBox();
             this.gbMovZ = new System.Windows.Forms.GroupBox();
             this.btnMovZ_Aba = new CNCMatic.Principal.RepeatButton();
-            this.btnMovZ_Arr = new CNCMatic.Principal.RepeatButton();
+            this.btnMovZ_Arr = new System.Windows.Forms.Button();
             this.gbMovXY = new System.Windows.Forms.GroupBox();
             this.btnMovXY_Der = new CNCMatic.Principal.RepeatButton();
             this.btnMovXY_Izq = new CNCMatic.Principal.RepeatButton();
@@ -54,7 +47,6 @@
             this.dXFFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gCodeFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.guardarComoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.comunicaciónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configuracionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ayudaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.acercaDeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,7 +55,6 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.btnCirculo = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnEsfera = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
             this.dToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -118,7 +109,6 @@
             this.tblScreens = new System.Windows.Forms.TableLayoutPanel();
             this.btnLimpiar = new System.Windows.Forms.Button();
             this.CodeTip = new System.Windows.Forms.ToolTip(this.components);
-            this.gbPosicionActual.SuspendLayout();
             this.gbMovZ.SuspendLayout();
             this.gbMovXY.SuspendLayout();
             this.menu.SuspendLayout();
@@ -153,87 +143,14 @@
             this.txtPreview.Size = new System.Drawing.Size(401, 324);
             this.txtPreview.TabIndex = 6;
             // 
-            // gbPosicionActual
-            // 
-            this.gbPosicionActual.Controls.Add(this.lblPosZ);
-            this.gbPosicionActual.Controls.Add(this.txtPosZ);
-            this.gbPosicionActual.Controls.Add(this.lblPosY);
-            this.gbPosicionActual.Controls.Add(this.txtPosY);
-            this.gbPosicionActual.Controls.Add(this.lblPosX);
-            this.gbPosicionActual.Controls.Add(this.txtPosX);
-            this.gbPosicionActual.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbPosicionActual.Location = new System.Drawing.Point(275, 103);
-            this.gbPosicionActual.Name = "gbPosicionActual";
-            this.gbPosicionActual.Size = new System.Drawing.Size(103, 128);
-            this.gbPosicionActual.TabIndex = 3;
-            this.gbPosicionActual.TabStop = false;
-            this.gbPosicionActual.Text = "Posición Actual";
-            // 
-            // lblPosZ
-            // 
-            this.lblPosZ.AutoSize = true;
-            this.lblPosZ.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPosZ.Location = new System.Drawing.Point(6, 79);
-            this.lblPosZ.Name = "lblPosZ";
-            this.lblPosZ.Size = new System.Drawing.Size(15, 13);
-            this.lblPosZ.TabIndex = 5;
-            this.lblPosZ.Text = "Z";
-            // 
-            // txtPosZ
-            // 
-            this.txtPosZ.Location = new System.Drawing.Point(26, 76);
-            this.txtPosZ.Name = "txtPosZ";
-            this.txtPosZ.ReadOnly = true;
-            this.txtPosZ.Size = new System.Drawing.Size(63, 20);
-            this.txtPosZ.TabIndex = 4;
-            this.txtPosZ.Text = "0";
-            // 
-            // lblPosY
-            // 
-            this.lblPosY.AutoSize = true;
-            this.lblPosY.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPosY.Location = new System.Drawing.Point(6, 53);
-            this.lblPosY.Name = "lblPosY";
-            this.lblPosY.Size = new System.Drawing.Size(15, 13);
-            this.lblPosY.TabIndex = 3;
-            this.lblPosY.Text = "Y";
-            // 
-            // txtPosY
-            // 
-            this.txtPosY.Location = new System.Drawing.Point(26, 50);
-            this.txtPosY.Name = "txtPosY";
-            this.txtPosY.ReadOnly = true;
-            this.txtPosY.Size = new System.Drawing.Size(63, 20);
-            this.txtPosY.TabIndex = 2;
-            this.txtPosY.Text = "0";
-            // 
-            // lblPosX
-            // 
-            this.lblPosX.AutoSize = true;
-            this.lblPosX.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPosX.Location = new System.Drawing.Point(6, 27);
-            this.lblPosX.Name = "lblPosX";
-            this.lblPosX.Size = new System.Drawing.Size(15, 13);
-            this.lblPosX.TabIndex = 1;
-            this.lblPosX.Text = "X";
-            // 
-            // txtPosX
-            // 
-            this.txtPosX.Location = new System.Drawing.Point(26, 24);
-            this.txtPosX.Name = "txtPosX";
-            this.txtPosX.ReadOnly = true;
-            this.txtPosX.Size = new System.Drawing.Size(63, 20);
-            this.txtPosX.TabIndex = 0;
-            this.txtPosX.Text = "0";
-            // 
             // gbMovZ
             // 
             this.gbMovZ.Controls.Add(this.btnMovZ_Aba);
             this.gbMovZ.Controls.Add(this.btnMovZ_Arr);
             this.gbMovZ.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbMovZ.Location = new System.Drawing.Point(193, 102);
+            this.gbMovZ.Location = new System.Drawing.Point(281, 102);
             this.gbMovZ.Name = "gbMovZ";
-            this.gbMovZ.Size = new System.Drawing.Size(68, 129);
+            this.gbMovZ.Size = new System.Drawing.Size(82, 129);
             this.gbMovZ.TabIndex = 1;
             this.gbMovZ.TabStop = false;
             this.gbMovZ.Text = "Mov-Z";
@@ -242,7 +159,7 @@
             // 
             this.btnMovZ_Aba.BackColor = System.Drawing.Color.White;
             this.btnMovZ_Aba.Image = global::CNCMatic.Properties.Resources.flecha_ABA;
-            this.btnMovZ_Aba.Location = new System.Drawing.Point(13, 73);
+            this.btnMovZ_Aba.Location = new System.Drawing.Point(17, 73);
             this.btnMovZ_Aba.Name = "btnMovZ_Aba";
             this.btnMovZ_Aba.Size = new System.Drawing.Size(49, 45);
             this.btnMovZ_Aba.TabIndex = 7;
@@ -253,12 +170,14 @@
             // 
             this.btnMovZ_Arr.BackColor = System.Drawing.Color.White;
             this.btnMovZ_Arr.Image = global::CNCMatic.Properties.Resources.flecha_ARR;
-            this.btnMovZ_Arr.Location = new System.Drawing.Point(13, 19);
+            this.btnMovZ_Arr.Location = new System.Drawing.Point(17, 19);
             this.btnMovZ_Arr.Name = "btnMovZ_Arr";
             this.btnMovZ_Arr.Size = new System.Drawing.Size(48, 43);
             this.btnMovZ_Arr.TabIndex = 6;
             this.btnMovZ_Arr.UseVisualStyleBackColor = false;
             this.btnMovZ_Arr.Click += new System.EventHandler(this.btnMovZ_Arr_Click);
+            this.btnMovZ_Arr.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovZ_Arr_MouseDown);
+            this.btnMovZ_Arr.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovZ_Arr_MouseUp);
             // 
             // gbMovXY
             // 
@@ -267,19 +186,18 @@
             this.gbMovXY.Controls.Add(this.btnMovXY_Aba);
             this.gbMovXY.Controls.Add(this.btnMovXY_Arr);
             this.gbMovXY.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbMovXY.Location = new System.Drawing.Point(16, 102);
+            this.gbMovXY.Location = new System.Drawing.Point(32, 102);
             this.gbMovXY.Name = "gbMovXY";
-            this.gbMovXY.Size = new System.Drawing.Size(163, 128);
+            this.gbMovXY.Size = new System.Drawing.Size(226, 128);
             this.gbMovXY.TabIndex = 0;
             this.gbMovXY.TabStop = false;
             this.gbMovXY.Text = "Mov-XY";
-            this.gbMovXY.Enter += new System.EventHandler(this.gbMovXY_Enter);
             // 
             // btnMovXY_Der
             // 
             this.btnMovXY_Der.BackColor = System.Drawing.Color.White;
             this.btnMovXY_Der.Image = global::CNCMatic.Properties.Resources.flecha_DER;
-            this.btnMovXY_Der.Location = new System.Drawing.Point(107, 43);
+            this.btnMovXY_Der.Location = new System.Drawing.Point(153, 43);
             this.btnMovXY_Der.Name = "btnMovXY_Der";
             this.btnMovXY_Der.Size = new System.Drawing.Size(46, 50);
             this.btnMovXY_Der.TabIndex = 10;
@@ -291,7 +209,7 @@
             // 
             this.btnMovXY_Izq.BackColor = System.Drawing.Color.White;
             this.btnMovXY_Izq.Image = global::CNCMatic.Properties.Resources.flecha_IZQ;
-            this.btnMovXY_Izq.Location = new System.Drawing.Point(6, 43);
+            this.btnMovXY_Izq.Location = new System.Drawing.Point(28, 43);
             this.btnMovXY_Izq.Name = "btnMovXY_Izq";
             this.btnMovXY_Izq.Size = new System.Drawing.Size(44, 50);
             this.btnMovXY_Izq.TabIndex = 9;
@@ -302,7 +220,7 @@
             // 
             this.btnMovXY_Aba.BackColor = System.Drawing.Color.White;
             this.btnMovXY_Aba.Image = global::CNCMatic.Properties.Resources.flecha_ABA;
-            this.btnMovXY_Aba.Location = new System.Drawing.Point(56, 72);
+            this.btnMovXY_Aba.Location = new System.Drawing.Point(94, 72);
             this.btnMovXY_Aba.Name = "btnMovXY_Aba";
             this.btnMovXY_Aba.Size = new System.Drawing.Size(44, 45);
             this.btnMovXY_Aba.TabIndex = 8;
@@ -313,7 +231,7 @@
             // 
             this.btnMovXY_Arr.BackColor = System.Drawing.Color.White;
             this.btnMovXY_Arr.Image = global::CNCMatic.Properties.Resources.flecha_ARR;
-            this.btnMovXY_Arr.Location = new System.Drawing.Point(56, 15);
+            this.btnMovXY_Arr.Location = new System.Drawing.Point(95, 16);
             this.btnMovXY_Arr.Name = "btnMovXY_Arr";
             this.btnMovXY_Arr.Size = new System.Drawing.Size(44, 46);
             this.btnMovXY_Arr.TabIndex = 7;
@@ -324,7 +242,6 @@
             // 
             this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1,
-            this.comunicaciónToolStripMenuItem,
             this.configuracionToolStripMenuItem,
             this.ayudaToolStripMenuItem});
             this.menu.Location = new System.Drawing.Point(0, 0);
@@ -371,13 +288,6 @@
             this.guardarComoToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.guardarComoToolStripMenuItem.Text = "Guardar como...";
             this.guardarComoToolStripMenuItem.Click += new System.EventHandler(this.guardarComoToolStripMenuItem_Click);
-            // 
-            // comunicaciónToolStripMenuItem
-            // 
-            this.comunicaciónToolStripMenuItem.Name = "comunicaciónToolStripMenuItem";
-            this.comunicaciónToolStripMenuItem.Size = new System.Drawing.Size(97, 20);
-            this.comunicaciónToolStripMenuItem.Text = "Comunicación";
-            this.comunicaciónToolStripMenuItem.Click += new System.EventHandler(this.comunicaciónToolStripMenuItem_Click);
             // 
             // configuracionToolStripMenuItem
             // 
@@ -439,8 +349,7 @@
             // 
             this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnCirculo,
-            this.btnEsfera});
+            this.btnCirculo});
             this.toolStripDropDownButton1.Image = global::CNCMatic.Properties.Resources.circle_icon;
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -453,13 +362,6 @@
             this.btnCirculo.Size = new System.Drawing.Size(137, 22);
             this.btnCirculo.Text = "2D - Circulo";
             this.btnCirculo.Click += new System.EventHandler(this.btnCirculo_Click);
-            // 
-            // btnEsfera
-            // 
-            this.btnEsfera.Name = "btnEsfera";
-            this.btnEsfera.Size = new System.Drawing.Size(137, 22);
-            this.btnEsfera.Text = "3D - Esfera";
-            this.btnEsfera.Click += new System.EventHandler(this.btnEsfera_Click);
             // 
             // toolStripSeparator1
             // 
@@ -536,7 +438,6 @@
             this.grpOperacion.Controls.Add(this.btnPause);
             this.grpOperacion.Controls.Add(this.gbMovXY);
             this.grpOperacion.Controls.Add(this.gbMovZ);
-            this.grpOperacion.Controls.Add(this.gbPosicionActual);
             this.grpOperacion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpOperacion.Location = new System.Drawing.Point(110, 428);
             this.grpOperacion.Name = "grpOperacion";
@@ -1029,8 +930,6 @@
             this.Load += new System.EventHandler(this.Principal_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Principal_FormClosing);
             this.ResizeEnd += new System.EventHandler(this.Principal_ResizeEnd);
-            this.gbPosicionActual.ResumeLayout(false);
-            this.gbPosicionActual.PerformLayout();
             this.gbMovZ.ResumeLayout(false);
             this.gbMovXY.ResumeLayout(false);
             this.menu.ResumeLayout(false);
@@ -1060,15 +959,8 @@
         private System.Windows.Forms.TextBox txtPreview;
         private System.Windows.Forms.GroupBox gbMovXY;
         private System.Windows.Forms.GroupBox gbMovZ;
-        private System.Windows.Forms.GroupBox gbPosicionActual;
-        private System.Windows.Forms.Label lblPosZ;
-        private System.Windows.Forms.TextBox txtPosZ;
-        private System.Windows.Forms.Label lblPosY;
-        private System.Windows.Forms.TextBox txtPosY;
-        private System.Windows.Forms.Label lblPosX;
-        private System.Windows.Forms.TextBox txtPosX;
         private System.Windows.Forms.Button btnInicio;
-        private RepeatButton btnMovZ_Arr;
+        private System.Windows.Forms.Button btnMovZ_Arr;
         private RepeatButton btnMovZ_Aba;
         private RepeatButton btnMovXY_Der;
         private RepeatButton btnMovXY_Izq;
@@ -1099,7 +991,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
         private System.Windows.Forms.ToolStripMenuItem btnCirculo;
-        private System.Windows.Forms.ToolStripMenuItem btnEsfera;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton2;
         private System.Windows.Forms.ToolStripMenuItem dToolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem menuItemCubo;
@@ -1108,7 +999,6 @@
         private System.Windows.Forms.ToolStripButton btnArco;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem guardarComoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem comunicaciónToolStripMenuItem;
         private System.Windows.Forms.GroupBox grpPrev;
         internal System.Windows.Forms.ToolStrip toolStrip2;
         internal System.Windows.Forms.ToolStripDropDownButton tsbDisplay;

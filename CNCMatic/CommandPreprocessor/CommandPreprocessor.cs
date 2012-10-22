@@ -202,7 +202,8 @@ namespace CommandPreprocessor
                 sectionPosition.X = centerPosition.X + radius * Math.Cos(angleA + angle * ((float)step / steps));
                 sectionPosition.Y = centerPosition.Y + radius * Math.Sin(angleA + angle * ((float)step / steps));
                 sectionPosition.Z = (finalPosition.Z - startPosition.Z) * ((float)s / steps);
-                result.Add(sectionPosition.ToString(gCode) + string.Format("F{0} ", feedRate));
+                // Traducir la curva (G02 / G03) como varias rectas (G01)
+                result.Add(sectionPosition.ToString(1) + string.Format("F{0} ", feedRate));
             }
 
             return result;
@@ -243,7 +244,8 @@ namespace CommandPreprocessor
                 sectionPosition.X = centerPosition.X + radius * Math.Cos(angleA + angle * ((float)step / steps));
                 sectionPosition.Y = (finalPosition.Y - startPosition.Y) * ((float)s / steps);
                 sectionPosition.Z = centerPosition.Z + radius * Math.Sin(angleA + angle * ((float)step / steps));
-                result.Add(sectionPosition.ToString(gCode) + string.Format("F{0} ", feedRate));
+                // Traducir la curva (G02 / G03) como varias rectas (G01)
+                result.Add(sectionPosition.ToString(1) + string.Format("F{0} ", feedRate));
             }
 
             return result;
@@ -284,7 +286,8 @@ namespace CommandPreprocessor
                 sectionPosition.X = (finalPosition.X - startPosition.X) * ((float)s / steps);
                 sectionPosition.Y = centerPosition.Y + radius * Math.Cos(angleA + angle * ((float)step / steps));
                 sectionPosition.Z = centerPosition.Z + radius * Math.Sin(angleA + angle * ((float)step / steps));
-                result.Add(sectionPosition.ToString(gCode) + string.Format("F{0} ", feedRate));
+                // Traducir la curva (G02 / G03) como varias rectas (G01)
+                result.Add(sectionPosition.ToString(1) + string.Format("F{0} ", feedRate));
             }
 
             return result;

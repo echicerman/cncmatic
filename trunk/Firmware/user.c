@@ -502,7 +502,7 @@ void MoveToOrigin()
 void user(void)
 {
 	BYTE numBytesRead;
-	char message[8];
+	char message[50];
 	char movementCommandCode[3], movementCommandType;
 	double stepDegrees, distancePerRevolution;
 
@@ -527,7 +527,7 @@ void user(void)
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"position"))
 			{
 				// Return currentSteps position
-				sprintf(message, "X%l Y%l Z%l", currentSteps.x, currentSteps.y, currentSteps.z);
+				sprintf(message, (const rom char far *)"X%l Y%l Z%l", currentSteps.x, currentSteps.y, currentSteps.z);
 				putUSBUSART(message, strlen(message));
 				goto endUser;
 			}
@@ -545,7 +545,7 @@ void user(void)
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"status"))
 			{
 				// devolvemos el etado en el que esta la maquina
-				sprintf(message, "CNCS:%d", machineState);
+				sprintf(message, (const rom char far *)"CNCS:%d", machineState);
 				putUSBUSART(message, strlen(message));
 				goto endUser;
 			}
@@ -570,7 +570,7 @@ void user(void)
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"stop"))
 			{
 				freeCode = -1;
-				strcpypgm2ram(message, (const rom char far *)"CNCSFM");
+				sprintf(message, (const rom char far *)"CNCSFM_X%l Y%l Z%l", currentSteps.x, currentSteps.y, currentSteps.z);
 				putUSBUSART(message, strlen(message));
 				if(configured){
 					machineState = WAITINGCOMMAND;
@@ -595,7 +595,7 @@ void user(void)
 					
 				case SERIALPORTCONNECTED:
 					// Count characters received and send this number to PC
-					sprintf(message, "%d", numBytesRead);
+					sprintf(message, (const rom char far *)"%d", numBytesRead);
 					putUSBUSART(message, strlen(message));
 					machineState = HANDSHAKEACKRECEIVED;
 					break;
@@ -689,15 +689,15 @@ void user(void)
 					// Chequeamos machineState -> si se activo algun fin de carrera
 					if(machineState == LIMITSENSOR)
 					{
-						strcpypgm2ram(message, (const rom char far *)"SFC");
+						sprintf(message, (const rom char far *)"SFC_X%l Y%l Z%l", currentSteps.x, currentSteps.y, currentSteps.z);
 					}
 					else if(machineState == EMERGENCYSTOP)
 					{
-						strcpypgm2ram(message, (const rom char far *)"PE");
+						sprintf(message, (const rom char far *)"PE_X%l Y%l Z%l", currentSteps.x, currentSteps.y, currentSteps.z);
 					}
 					else
 					{
-						strcpypgm2ram(message, (const rom char far *)"CMDDONE");
+						sprintf(message, (const rom char far *)"CMDDONE_X%l Y%l Z%l", currentSteps.x, currentSteps.y, currentSteps.z);
 					}
 					putUSBUSART(message, strlen(message));
 					machineState = WAITINGCOMMAND;

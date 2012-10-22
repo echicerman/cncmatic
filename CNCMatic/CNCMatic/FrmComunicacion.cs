@@ -17,7 +17,7 @@ namespace CNCMatic
         public FrmComunicacion()
         {
             InitializeComponent();
-                        
+
             buscarPuertos();
         }
 
@@ -27,7 +27,7 @@ namespace CNCMatic
         {
             timer = new System.Timers.Timer(5000);
             timer.Enabled = true;
-            timer.Elapsed += new ElapsedEventHandler(proximaInstruccion);
+            //timer.Elapsed += new ElapsedEventHandler(proximaInstruccion);
         }
 
         private void buscarPuertos()
@@ -90,9 +90,9 @@ namespace CNCMatic
 
         private void sendButton_Click(object sender, EventArgs e)
         {
-            
+
             //Port.Write(sendTextBox.Text);
-            
+
         }
 
         public void IniciarTransmision()
@@ -100,9 +100,9 @@ namespace CNCMatic
 
             //conectar("COM1");
 
-            enviarConfiguracion();
+            //enviarConfiguracion();
 
-            enviarInstrucciones();
+            //enviarInstrucciones();
 
             //desconectar();
 
@@ -115,51 +115,51 @@ namespace CNCMatic
         //    Port.Connect(puerto);
 
         //}
-        private void enviarConfiguracion()
-        {
+        //private void enviarConfiguracion()
+        //{
 
-        }
-        private void enviarInstrucciones()
-        {
-            //armamos un Timer para el tiempo de espera entre cada instruccion enviada
-            /*System.Timers.Timer t = new System.Timers.Timer(5000);
-            t.Enabled = true;
-            t.Elapsed += new ElapsedEventHandler(proximaInstruccion);
-            */
+        //}
+        //private void enviarInstrucciones()
+        //{
+        //    //armamos un Timer para el tiempo de espera entre cada instruccion enviada
+        //    /*System.Timers.Timer t = new System.Timers.Timer(5000);
+        //    t.Enabled = true;
+        //    t.Elapsed += new ElapsedEventHandler(proximaInstruccion);
+        //    */
 
-            this.ultimaInstruccion = (this.Owner as Principal).proximaInstruccion();
-            //Port.Write(ultimaInstruccion);
-            timer.Start();
+        //    this.ultimaInstruccion = (this.Owner as Principal).proximaInstruccion();
+        //    //Port.Write(ultimaInstruccion);
+        //    timer.Start();
 
-            //while (this.ultimaInstruccion != "")
-            //{
-                
+        //    //while (this.ultimaInstruccion != "")
+        //    //{
 
-            //    //ultimaInstruccion = (this.Owner as Principal).proximaInstruccion();
 
-            //    //System.Threading.Thread.Sleep(1000);
+        //    //    //ultimaInstruccion = (this.Owner as Principal).proximaInstruccion();
 
-            //    t.Start();
-            //}
-        }
-        private void proximaInstruccion(object sender, ElapsedEventArgs e)
-        {
+        //    //    //System.Threading.Thread.Sleep(1000);
 
-            this.ultimaInstruccion = (this.Owner as Principal).proximaInstruccion();
+        //    //    t.Start();
+        //    //}
+        //}
+        //private void proximaInstruccion(object sender, ElapsedEventArgs e)
+        //{
 
-            if (ultimaInstruccion != "")
-            {
-                //Port.Write(ultimaInstruccion);
+        //    this.ultimaInstruccion = (this.Owner as Principal).proximaInstruccion();
 
-                ultimaInstruccion = (this.Owner as Principal).proximaInstruccion();
+        //    if (ultimaInstruccion != "")
+        //    {
+        //        //Port.Write(ultimaInstruccion);
 
-                timer.Start();
-            }
-            else
-            {
-                //desconectar();
-            }
-        }
+        //        ultimaInstruccion = (this.Owner as Principal).proximaInstruccion();
+
+        //        timer.Start();
+        //    }
+        //    else
+        //    {
+        //        //desconectar();
+        //    }
+        //}
         //private void desconectar()
         //{
         //    Port.CloseConnection();

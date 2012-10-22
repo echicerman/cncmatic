@@ -103,6 +103,17 @@ namespace VirtualSerial
             }
         }
 
+        public static bool Conectado(string portName)
+        {
+            if (virtualPort != null)
+            {
+                return (virtualPort.PortName == portName && connected);
+            }
+            else
+                return false;
+
+        }
+
         public static void Connect(string portName)
         {
             try

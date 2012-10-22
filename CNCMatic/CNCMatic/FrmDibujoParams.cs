@@ -16,6 +16,9 @@ namespace CNCMatic
         {
             InitializeComponent();
         }
+        
+        //object _g;
+        public bool modificado = false;
 
         public FrmDibujoParams(out G01_Lineal g)
         {
@@ -46,7 +49,7 @@ namespace CNCMatic
             InitializeComponent();
 
             g = new G02_ArcoH();
-
+            
             propiedades.SelectedObject = g;
 
             this.Text = "Parametros Arco";
@@ -80,6 +83,10 @@ namespace CNCMatic
 
         private void btnOK_Click(object sender, EventArgs e)
         {
+            //ponemos que se modifico el objeto para imprimir del lado del formulario el codigo G, de la figura
+            //si se cierra con la cruz, no se imprime el codigo g
+            this.modificado = true;
+
             this.Close();
         }
 

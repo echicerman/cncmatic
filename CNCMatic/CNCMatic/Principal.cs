@@ -26,7 +26,7 @@ namespace CNCMatic
         private clsProcessor mProcessor = clsProcessor.Instance();
         private clsSettings mSetup = clsSettings.Instance();
         private MG_CS_BasicViewer mViewer;
-        public int proxLinea;
+        public bool pausado = false;
 
         public class RepeatButton : System.Windows.Forms.Button
         {
@@ -69,6 +69,7 @@ namespace CNCMatic
             }
             private static System.Windows.Forms.Timer repeatButtonTimer = new Timer();
         }
+        
         public Principal()
         {
             InitializeComponent();
@@ -89,58 +90,42 @@ namespace CNCMatic
 
             mSetup.LoadAllMachines(System.IO.Directory.GetCurrentDirectory() + "\\Data");
             mProcessor.Init(mSetup.Machine);
-
-            //proxima linea a transmitir
-            proxLinea = 0;
-        }
-
-
-
-        private void gbMovXY_Enter(object sender, EventArgs e)
-        {
-
         }
 
         private void btnInicio_Click(object sender, EventArgs e)
         {
-            this.txtPosX.Text = "0";
-            this.txtPosY.Text = "0";
-            this.txtPosZ.Text = "0";
-
             AgregaTextoEditor(false, Metodos.IrA(0, 0, 0));
         }
 
-        public void Mov_Menos(System.Windows.Forms.TextBox txt)
-        {
-            if (Convert.ToInt32(txt.Text) > 0)
-            {
-                txt.Text = (Convert.ToInt32(txt.Text) - 1).ToString();
-            }
-        }
+        //public void Mov_Menos(System.Windows.Forms.TextBox txt)
+        //{
+        //    if (Convert.ToInt32(txt.Text) > 0)
+        //    {
+        //        txt.Text = (Convert.ToInt32(txt.Text) - 1).ToString();
+        //    }
+        //}
 
-        public void Mov_Mas(System.Windows.Forms.TextBox txt)
-        {
-            txt.Text = (Convert.ToInt32(txt.Text) + 1).ToString();
-        }
+        //public void Mov_Mas(System.Windows.Forms.TextBox txt)
+        //{
+        //    txt.Text = (Convert.ToInt32(txt.Text) + 1).ToString();
+        //}
 
         private void btnMovZ_Arr_Click(object sender, EventArgs e)
         {
-            this.Mov_Mas(this.txtPosZ);
+            
         }
 
         private void btnMovZ_Aba_Click(object sender, EventArgs e)
         {
-            this.Mov_Menos(this.txtPosZ);
         }
 
         private void btnMovXY_Izq_Click(object sender, EventArgs e)
         {
-            this.Mov_Menos(this.txtPosX);
         }
 
         private void btnMovXY_Der_Click(object sender, EventArgs e)
         {
-            this.Mov_Mas(this.txtPosX);
+            //this.Mov_Mas(this.txtPosX);
 
             if (flag == true)
             {
@@ -153,12 +138,10 @@ namespace CNCMatic
 
         private void btnMovXY_Arr_Click(object sender, EventArgs e)
         {
-            this.Mov_Mas(this.txtPosY);
         }
 
         private void btnMovXY_Aba_Click(object sender, EventArgs e)
         {
-            this.Mov_Menos(this.txtPosY);
         }
 
         private void btnMovXY_Der_MouseUp(object sender, MouseEventArgs e)
@@ -191,6 +174,7 @@ namespace CNCMatic
             txtLineaManual.Enabled = true;
             btnLimpiar.Enabled = true;
             toolStrip1.Enabled = true;
+            txtPreview.Enabled = true;
         }
 
         /// <summary>
@@ -424,9 +408,9 @@ namespace CNCMatic
         private Vector3d ObtenerDoubleTresDecimales(Vector3d num)
         {
             Vector3d d = new Vector3d();
-           d.X = (double) (int)(num.X * 1000) / 1000;
-           d.Y = (double)(int)(num.Y * 1000) / 1000;
-           d.Z = (double)(int)(num.Z * 1000) / 1000;
+            d.X = (double)(int)(num.X * 1000) / 1000;
+            d.Y = (double)(int)(num.Y * 1000) / 1000;
+            d.Z = (double)(int)(num.Z * 1000) / 1000;
             return d;
         }
 
@@ -579,10 +563,13 @@ namespace CNCMatic
             FrmDibujoParams dibujoParams = new FrmDibujoParams(out g);
             dibujoParams.ShowDialog();
 
-            AgregaTextoEditor(false, g.ToString());
+            if (dibujoParams.modificado)
+            {
+                AgregaTextoEditor(false, g.ToString());
 
-            //Muestra figura en el previsualizador
-            PrevisualizarFigurasManual();
+                //Muestra figura en el previsualizador
+                PrevisualizarFigurasManual();
+            }
         }
 
         private void btnArco_Click(object sender, EventArgs e)
@@ -592,10 +579,13 @@ namespace CNCMatic
             FrmDibujoParams dibujoParams = new FrmDibujoParams(out g);
             dibujoParams.ShowDialog();
 
-            AgregaTextoEditor(false, g.ToString());
+            if (dibujoParams.modificado)
+            {
+                AgregaTextoEditor(false, g.ToString());
 
-            //Muestra figura en el previsualizador
-            PrevisualizarFigurasManual();
+                //Muestra figura en el previsualizador
+                PrevisualizarFigurasManual();
+            }
 
         }
 
@@ -618,18 +608,15 @@ namespace CNCMatic
             FrmDibujoParams dibujoParams = new FrmDibujoParams(out g);
             dibujoParams.ShowDialog();
 
-            AgregaTextoEditor(false, g.ToString());
+            if (dibujoParams.modificado)
+            {
+                AgregaTextoEditor(false, g.ToString());
 
-            //string curTempFileName = System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Temp";
-
-            //Muestra figura en el previsualizador
-            PrevisualizarFigurasManual();
+                //Muestra figura en el previsualizador
+                PrevisualizarFigurasManual();
+            }
         }
 
-        private void btnEsfera_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void configuracionToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -730,6 +717,7 @@ namespace CNCMatic
 
         }
 
+        #region Previsualizador
         private void Principal_FormClosing(object sender, FormClosingEventArgs e)
         {
             try
@@ -932,10 +920,10 @@ namespace CNCMatic
             }
             if (!System.IO.File.Exists(fileName))
             {
-                lblStatus.Text = "File does not exist!";
+                lblStatus.Text = "Archivo no existe";
                 return;
             }
-            lblStatus.Text = "Processing...";
+            lblStatus.Text = "Procesando...";
             MG_CS_BasicViewer.MotionBlocks.Clear();
             mProcessor.Init(mSetup.Machine);
             mProcessor.ProcessFile(fileName, MG_CS_BasicViewer.MotionBlocks);
@@ -946,7 +934,7 @@ namespace CNCMatic
                 mViewer.BreakPoint = MG_CS_BasicViewer.MotionBlocks.Count - 1;
             }
             mViewer.GatherTools();
-            lblStatus.Text = "Done";
+            lblStatus.Text = "Hecho";
             prgBar.Value = 0;
 
         }
@@ -987,6 +975,7 @@ namespace CNCMatic
             MG_Viewer1.DynamicViewManipulation = (ticks[1] - ticks[0]) < 2000000;
             mViewer.Redraw(true);
         }
+        #endregion
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
@@ -1005,46 +994,62 @@ namespace CNCMatic
                 this.LimpiarPrevisualizador();
                 PrevisualizarFigurasManual();
 
+                if (!pausado)
+                {//si no reanuda ejecucion (esta pausado)
 
-                DialogResult dr = MessageBox.Show("Se procederá a conectar y enviar las instrucciones al CNC, ¿Desea Continuar?", "Transferencia CNC", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
-                if (dr == DialogResult.Yes)
-                {
-                    //obtenemos las lineas del previsualizador y removemos los blancos
-                    List<string> loteInstrucciones = txtPreview.Lines.ToList();
-                    while (loteInstrucciones.Contains(""))
+                    DialogResult dr = MessageBox.Show("Se procederá a conectar y enviar las instrucciones al CNC." + Environment.NewLine + "¿Desea Continuar?", "Transferencia CNC", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                    if (dr == DialogResult.Yes)
                     {
-                        loteInstrucciones.Remove("");
+                        //obtenemos las lineas del previsualizador y removemos los blancos
+                        List<string> loteInstrucciones = txtPreview.Lines.ToList();
+                        while (loteInstrucciones.Contains(""))
+                        {
+                            loteInstrucciones.Remove("");
+                        }
+
+                        if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual))
+                        {
+
+                            //bloqueamos controles
+                            btnPlay.Enabled = false;
+                            btnInicio.Enabled = false;
+                            btnStop2.Enabled = false;
+                            gbMovXY.Enabled = false;
+                            gbMovZ.Enabled = false;
+                            txtLineaManual.Enabled = false;
+                            btnLimpiar.Enabled = false;
+                            toolStrip1.Enabled = false;
+                            txtPreview.Enabled = false;
+                        }
+
+
                     }
-
-                    if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual))
-                    {
-                        
-                        //MessageBox.Show(Interfaz.EnviarSetDeInstrucciones(loteInstrucciones).ToString());
+                }
+                else
+                {//si reanuda ejecucion luego de pausa
 
 
-                        ////bloqueamos controles
-                        btnPlay.Enabled = false;
-                        btnInicio.Enabled = false;
-                        btnStop2.Enabled = false;
-                        gbMovXY.Enabled = false;
-                        gbMovZ.Enabled = false;
-                        txtLineaManual.Enabled = false;
-                        btnLimpiar.Enabled = false;
-                        toolStrip1.Enabled = false;
-                    }
+                    //bloqueamos controles
+                    btnPlay.Enabled = false;
+                    btnInicio.Enabled = false;
+                    btnStop2.Enabled = false;
+                    gbMovXY.Enabled = false;
+                    gbMovZ.Enabled = false;
+                    txtLineaManual.Enabled = false;
+                    btnLimpiar.Enabled = false;
+                    toolStrip1.Enabled = false;
+                    txtPreview.Enabled = false;
 
-                    
+
+
+                    //salimos de la pausa
+                    this.pausado = false;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message,"Error", MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        public string proximaInstruccion()
-        {
-            return txtPreview.Lines[this.proxLinea++];
         }
 
         private void dToolStripMenuItem2_Click(object sender, EventArgs e)
@@ -1055,12 +1060,13 @@ namespace CNCMatic
             FrmDibujoParams dibujoParams = new FrmDibujoParams(out g);
             dibujoParams.ShowDialog();
 
-            AgregaTextoEditor(false, g.ToString());
+            if (dibujoParams.modificado)
+            {
+                AgregaTextoEditor(false, g.ToString());
 
-            //string curTempFileName = System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Temp";
-
-            //Muestra figura en el previsualizador
-            PrevisualizarFigurasManual();
+                //Muestra figura en el previsualizador
+                PrevisualizarFigurasManual();
+            }
         }
 
         private void menuItemCubo_Click(object sender, EventArgs e)
@@ -1070,12 +1076,13 @@ namespace CNCMatic
             FrmDibujoParams dibujoParams = new FrmDibujoParams(out g);
             dibujoParams.ShowDialog();
 
-            AgregaTextoEditor(false, g.ToString());
+            if (dibujoParams.modificado)
+            {
+                AgregaTextoEditor(false, g.ToString());
 
-            //string curTempFileName = System.IO.Directory.GetCurrentDirectory() + "\\Samples\\Temp";
-
-            //Muestra figura en el previsualizador
-            PrevisualizarFigurasManual();
+                //Muestra figura en el previsualizador
+                PrevisualizarFigurasManual();
+            }
         }
 
         private void acercaDeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1090,12 +1097,28 @@ namespace CNCMatic
                 //habilitamos los controles permitidos en una pausa
                 btnStop2.Enabled = true;
                 btnPlay.Enabled = true;
-                btnInicio.Enabled = true;
+                btnInicio.Enabled = false;
+                txtPreview.Enabled = false;
+
+                //ponemos el modo en pausado 
+                this.pausado = true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
+        }
+
+        private void btnMovZ_Arr_MouseDown(object sender, MouseEventArgs e)
+        {
+            //avanzamos en Z
+            Interfaz.MoverLibre(CNC.CNC_Mensajes_Send.Zavance);
+        }
+
+        private void btnMovZ_Arr_MouseUp(object sender, MouseEventArgs e)
+        {
+            //detenemos movimiento
+            Interfaz.DetenerMovimientoLibre();
         }
 
 

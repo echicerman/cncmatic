@@ -21,7 +21,7 @@ namespace CNCMatic
             buscarPuertos();
         }
 
-        private string ultimaInstruccion;
+        //private string ultimaInstruccion;
         private System.Timers.Timer timer;
         private void FrmComunicacion_Load(object sender, EventArgs e)
         {

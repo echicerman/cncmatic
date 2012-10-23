@@ -110,14 +110,6 @@ namespace CNCMatic
         //    txt.Text = (Convert.ToInt32(txt.Text) + 1).ToString();
         //}
 
-        private void btnMovZ_Arr_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void btnMovZ_Aba_Click(object sender, EventArgs e)
-        {
-        }
 
         private void btnMovXY_Izq_Click(object sender, EventArgs e)
         {
@@ -1112,10 +1104,22 @@ namespace CNCMatic
         private void btnMovZ_Arr_MouseDown(object sender, MouseEventArgs e)
         {
             //avanzamos en Z
-            Interfaz.MoverLibre(CNC.CNC_Mensajes_Send.Zavance);
+            Interfaz.MoverLibre(CNC.CNC_Mensajes_Send.Zavance, ref lblPosicionActual );
         }
 
         private void btnMovZ_Arr_MouseUp(object sender, MouseEventArgs e)
+        {
+            //detenemos movimiento
+            Interfaz.DetenerMovimientoLibre();
+        }
+
+        private void btnMovZ_Aba_MouseDown(object sender, MouseEventArgs e)
+        {
+            //retrocedemos en Z
+            Interfaz.MoverLibre(CNC.CNC_Mensajes_Send.Zretroc, ref lblPosicionActual);
+        }
+
+        private void btnMovZ_Aba_MouseUp(object sender, MouseEventArgs e)
         {
             //detenemos movimiento
             Interfaz.DetenerMovimientoLibre();

@@ -105,12 +105,13 @@ namespace CNCMatic
             }
         }
 
-        public static void MoverLibre(string movimiento)
+        public static void MoverLibre(string movimiento, ref ToolStripStatusLabel lblPosicActual)
         {
             //maquina
             var cnc = CNC.CNC.Cnc;
             cnc.PuertoConexion = ConfiguracionActual().PuertoCom;
             cnc.Configuracion = ConfiguracionActual();
+            cnc.LblPosicionActual = lblPosicActual;
 
             cnc.EnviarMovimientoLibre(movimiento);
         }

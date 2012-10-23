@@ -189,6 +189,7 @@ namespace CNC
 
         public System.Windows.Forms.ToolStripStatusLabel Label { get; set; }
         public System.Windows.Forms.ToolStripStatusLabel LblPosicionActual { get; set; }
+        //public System.Windows.Forms.ToolStripProgressBar BarraProgreso { get; set; }
 
         //variable que indica si en una transmision debe pausar el envio de comandos al cnc
         private bool pausarTransmision = false;
@@ -641,6 +642,11 @@ namespace CNC
             //lote temporal para cada preprocesamiento de las instrucciones globales
             this.loteInstruccionesTemp = new List<string>();
             this.proximaInstruccionTemp = 0;
+
+            ////propiedades de la barra
+            //this.BarraProgreso.Maximum = this.loteInstrucciones.Count;
+            //this.BarraProgreso.Minimum = 0;
+            //this.BarraProgreso.Step = 1;
         }
 
         private string recibir()
@@ -734,6 +740,7 @@ namespace CNC
 
                         //pasamos a la siguiente global
                         this.proximaInstruccion++;
+                        //this.BarraProgreso.PerformStep();
                     }
 
                     return true;

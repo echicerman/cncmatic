@@ -34,7 +34,7 @@
             this.importaG = new System.Windows.Forms.OpenFileDialog();
             this.txtPreview = new System.Windows.Forms.TextBox();
             this.gbMovZ = new System.Windows.Forms.GroupBox();
-            this.btnMovZ_Aba = new CNCMatic.Principal.RepeatButton();
+            this.btnMovZ_Aba = new System.Windows.Forms.Button();
             this.btnMovZ_Arr = new System.Windows.Forms.Button();
             this.gbMovXY = new System.Windows.Forms.GroupBox();
             this.btnMovXY_Der = new CNCMatic.Principal.RepeatButton();
@@ -164,7 +164,8 @@
             this.btnMovZ_Aba.Size = new System.Drawing.Size(49, 45);
             this.btnMovZ_Aba.TabIndex = 7;
             this.btnMovZ_Aba.UseVisualStyleBackColor = false;
-            this.btnMovZ_Aba.Click += new System.EventHandler(this.btnMovZ_Aba_Click);
+            this.btnMovZ_Aba.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovZ_Aba_MouseDown);
+            this.btnMovZ_Aba.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovZ_Aba_MouseUp);
             // 
             // btnMovZ_Arr
             // 
@@ -175,7 +176,6 @@
             this.btnMovZ_Arr.Size = new System.Drawing.Size(48, 43);
             this.btnMovZ_Arr.TabIndex = 6;
             this.btnMovZ_Arr.UseVisualStyleBackColor = false;
-            this.btnMovZ_Arr.Click += new System.EventHandler(this.btnMovZ_Arr_Click);
             this.btnMovZ_Arr.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovZ_Arr_MouseDown);
             this.btnMovZ_Arr.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovZ_Arr_MouseUp);
             // 
@@ -961,7 +961,7 @@
         private System.Windows.Forms.GroupBox gbMovZ;
         private System.Windows.Forms.Button btnInicio;
         private System.Windows.Forms.Button btnMovZ_Arr;
-        private RepeatButton btnMovZ_Aba;
+        private System.Windows.Forms.Button btnMovZ_Aba;
         private RepeatButton btnMovXY_Der;
         private RepeatButton btnMovXY_Izq;
         private RepeatButton btnMovXY_Aba;

@@ -50,7 +50,7 @@ namespace CommandPreprocessor
             StringBuilder result = new StringBuilder();
 
             result
-                .AppendFormat("G{0} ", code)
+                .AppendFormat("G{0:00} ", code)
                 .AppendFormat("X{0:0.0000} ", this.X)
                 .AppendFormat("Y{0:0.0000} ", this.Y)
                 .AppendFormat("Z{0:0.0000} ", this.Z);

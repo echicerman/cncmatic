@@ -527,7 +527,7 @@ void user(void)
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"position"))
 			{
 				// Return currentSteps position
-				sprintf(message, (const rom char far *)"X%l Y%l Z%l", currentSteps.x, currentSteps.y, currentSteps.z);
+				sprintf(message, (const rom char far *)"X%ld Y%ld Z%ld", currentSteps.x, currentSteps.y, currentSteps.z);
 				putUSBUSART(message, strlen(message));
 				goto endUser;
 			}
@@ -570,7 +570,7 @@ void user(void)
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"stop"))
 			{
 				freeCode = -1;
-				sprintf(message, (const rom char far *)"CNCSFM_X%l Y%l Z%l", currentSteps.x, currentSteps.y, currentSteps.z);
+				sprintf(message, (const rom char far *)"CNCSFM_X%ld Y%ld Z%ld", currentSteps.x, currentSteps.y, currentSteps.z);
 				putUSBUSART(message, strlen(message));
 				if(configured){
 					machineState = WAITINGCOMMAND;
@@ -689,15 +689,15 @@ void user(void)
 					// Chequeamos machineState -> si se activo algun fin de carrera
 					if(machineState == LIMITSENSOR)
 					{
-						sprintf(message, (const rom char far *)"SFC_X%l Y%l Z%l", currentSteps.x, currentSteps.y, currentSteps.z);
+						sprintf(message, (const rom char far *)"SFC_X%ld Y%ld Z%ld", currentSteps.x, currentSteps.y, currentSteps.z);
 					}
 					else if(machineState == EMERGENCYSTOP)
 					{
-						sprintf(message, (const rom char far *)"PE_X%l Y%l Z%l", currentSteps.x, currentSteps.y, currentSteps.z);
+						sprintf(message, (const rom char far *)"PE_X%ld Y%ld Z%ld", currentSteps.x, currentSteps.y, currentSteps.z);
 					}
 					else
 					{
-						sprintf(message, (const rom char far *)"CMDDONE_X%l Y%l Z%l", currentSteps.x, currentSteps.y, currentSteps.z);
+						sprintf(message, (const rom char far *)"CMDDONE_X%ld Y%ld Z%ld", currentSteps.x, currentSteps.y, currentSteps.z);
 					}
 					putUSBUSART(message, strlen(message));
 					machineState = WAITINGCOMMAND;

@@ -3,7 +3,7 @@
   <configuracion>
     <Id>0</Id>
     <Descripcion>PerfilPorDefault</Descripcion>
-    <PuertoCom>COM1</PuertoCom>
+    <PuertoCom>COM3</PuertoCom>
     <UnidadMedida>mm</UnidadMedida>
     <TipoProg>abs</TipoProg>
     <MaxX>100</MaxX>

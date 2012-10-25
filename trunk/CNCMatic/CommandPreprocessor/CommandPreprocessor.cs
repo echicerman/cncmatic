@@ -101,49 +101,90 @@ namespace CommandPreprocessor
         }
         private Position GetFromRadius(double r, string command)
         {
-            double midX, midY, midZ, deltaX, deltaY, deltaZ, xToRadius, yToRadius, zToRadius;
+            double midX, midY, midZ, cat1x, cat1y, cat1z, cat1, cat2x, cat2y, cat2z, cat2;
             Position final = GetFinalPosition(command);
             Position centerPosition = new Position();
-            centerPosition.X = final.X > CurrentPosition.X ? CurrentPosition.X : final.X;
-            centerPosition.Y = final.Y > CurrentPosition.Y ? CurrentPosition.Y : final.Y;
-            centerPosition.Z = final.Z > CurrentPosition.Z ? CurrentPosition.Z : final.Z;
+
+            // componentes de Punto Medio de segmento que une Punto Inicial con Punto Final
+            midZ = (final.Z + CurrentPosition.Z) / 2;
+            midY = (final.Y + CurrentPosition.Y) / 2;
+            midX = (final.X + CurrentPosition.X) / 2;
+            // componentes de Longitud desde Punto Inicial a Punto Medio de segmento
+            cat1x = midX - CurrentPosition.X;
+            cat1y = midY - CurrentPosition.Y;
+            cat1z = midZ - CurrentPosition.Z;
 
             switch (this.WorkingPlane)
             { 
                 case WorkingPlane.XY:
-                    deltaZ = Math.Abs(final.Z - CurrentPosition.Z) / 2;
-                    midY = Math.Abs(final.Y - CurrentPosition.Y) / 2;
-                    midX = Math.Abs(final.X - CurrentPosition.X) / 2;
-                    xToRadius = Math.Sqrt(r * r - midY * midY);
+                    cat1 = Math.Sqrt(cat1x * cat1x + cat1y * cat1y);
 
-                    centerPosition.X += r > 0 ? midX + xToRadius : midX - xToRadius;
-                    centerPosition.Y += midY;
-                    centerPosition.Z += deltaZ;
-                    return centerPosition;
+                    if (cat1 > Math.Abs(r)) ;
+                        //throw Exception
+
+                    cat2 = Math.Sqrt(r * r - cat1 * cat1);
+                    cat2x = cat1y * cat2 / cat1;
+                    cat2y = -cat1x * cat2 / cat1;
+
+                    if (r > 0)
+                    {
+                        centerPosition.X = midX + cat2x;
+                        centerPosition.Y = midY + cat2y;
+                    }
+                    else
+                    {
+                        centerPosition.X = midX - cat2x;
+                        centerPosition.Y = midY - cat2y;
+                    }
+                    centerPosition.Z = midZ;
+                    break;
 
                 case WorkingPlane.XZ:
-                    deltaY = Math.Abs(final.Y - CurrentPosition.Y) / 2;
-                    midX = Math.Abs(final.X - CurrentPosition.X) / 2;
-                    midZ = Math.Abs(final.Z - CurrentPosition.Z) / 2;
-                    zToRadius = Math.Sqrt(r * r - midX * midX);
+                    cat1 = Math.Sqrt(cat1x * cat1x + cat1z * cat1z);
 
-                    centerPosition.X += midX;
-                    centerPosition.Y += deltaY;
-                    centerPosition.Z += r > 0 ? midZ + zToRadius : midZ - zToRadius;
-                    return centerPosition;
+                    if (cat1 > Math.Abs(r)) ;
+                        //throw Exception
+
+                    cat2 = Math.Sqrt(r * r - cat1 * cat1);
+                    cat2x = cat1z * cat2 / cat1;
+                    cat2z = -cat1x * cat2 / cat1;
+
+                    if (r > 0)
+                    {
+                        centerPosition.X = midX + cat2x;
+                        centerPosition.Z = midZ + cat2z;
+                    }
+                    else
+                    {
+                        centerPosition.X = midX - cat2x;
+                        centerPosition.Z = midZ - cat2z;
+                    }
+                    centerPosition.Y = midY;
+                    break;
 
                 case WorkingPlane.YZ:
-                    deltaX = Math.Abs(final.X - CurrentPosition.X) / 2;
-                    midZ = Math.Abs(final.Z - CurrentPosition.Z) / 2;
-                    midY = Math.Abs(final.Y - CurrentPosition.Y) / 2;
-                    yToRadius = Math.Sqrt(r * r - midZ * midZ);
+                    cat1 = Math.Sqrt(cat1y * cat1y + cat1z * cat1z);
 
-                    centerPosition.X += deltaX;
-                    centerPosition.Y += r > 0 ? midY + yToRadius : midY - yToRadius;
-                    centerPosition.Z += midZ;
-                    return centerPosition;
+                    if (cat1 > Math.Abs(r)) ;
+                        //throw Exception
+
+                    cat2 = Math.Sqrt(r * r - cat1 * cat1);
+                    cat2y = cat1z * cat2 / cat1;
+                    cat2z = -cat1y * cat2 / cat1;
+
+                    if (r > 0)
+                    {
+                        centerPosition.Y = midY + cat2y;
+                        centerPosition.Z = midZ + cat2z;
+                    }
+                    else
+                    {
+                        centerPosition.Y = midY - cat2y;
+                        centerPosition.Z = midZ - cat2z;
+                    }
+                    centerPosition.X = midX;
+                    break;
             }
-            //return 0 ... ( no deberia llegar nunca aca )
             return centerPosition;
         }
         private Position GetCenterPosition(string command)

@@ -535,7 +535,7 @@ void user(void)
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"reset"))
 			{
 				// Resetear la maquina si recibimos el comando 'reset'
-				limitSensorX = limitSensorY = limitSensorZ = configured = false;
+				limitSensorX = limitSensorY = limitSensorZ = configured = programPaused = false;
 				strcpypgm2ram(message, (const rom char far *)"CNCR");
 				putUSBUSART(message, strlen(message));
 				machineState = SERIALPORTCONNECTED;
@@ -636,6 +636,7 @@ void user(void)
 					{
 						strcpy(commandReceived, USB_In_Buffer);
 						machineState = PROCESSINGCOMMAND;
+						programPaused = false;
 					}
 					// mandamos el mensaje correspondiente a la PC
 					putUSBUSART(message, strlen(message));

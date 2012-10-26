@@ -608,17 +608,17 @@ void user(void)
 						machineState = SERIALPORTCONNECTED;
 					break;
 					
-				case CNCMATICCONNECTED:
+				case READYTOCONFIGURE:
 					// tokenize the configuration string
 					if( ConfigureMachine(USB_In_Buffer) )
 					{
 						strcpypgm2ram(message, (const rom char far *)"CFGOK");
-						machineState = CONFIGURED;
+						machineState = WAITINGCOMMAND;
 					}
 					else
 					{
 						strcpypgm2ram(message, (const rom char far *)"CFGE");
-						machineState = CNCMATICCONNECTED;
+						machineState = READYTOCONFIGURE;
 					}
 					putUSBUSART(message, strlen(message));
 					break;
@@ -671,12 +671,12 @@ void user(void)
 						machineState = FREEMOVES;
 					}
 					break;
-					
-				case CONFIGURED:
+
+				case CNCMATICCONNECTED:
 					MoveToOrigin();
 					strcpypgm2ram(message, (const rom char far *)"PO");
 					putUSBUSART(message, strlen(message));
-					machineState = WAITINGCOMMAND;
+					machineState = READYTOCONFIGURE;
 					break;
 					
 				case PROCESSINGCOMMAND:

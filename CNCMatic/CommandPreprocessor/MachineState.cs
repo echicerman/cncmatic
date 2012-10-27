@@ -10,7 +10,7 @@ namespace CommandPreprocessor
         SERIALPORTCONNECTED,	// 0
         HANDSHAKEACKRECEIVED,	// 1
         CNCMATICCONNECTED,		// 2
-        CONFIGURED,				// 3
+        READYTOCONFIGURE,		// 3
         WAITINGCOMMAND,			// 4
         PROCESSINGCOMMAND,		// 5
         LIMITSENSOR,			// 6

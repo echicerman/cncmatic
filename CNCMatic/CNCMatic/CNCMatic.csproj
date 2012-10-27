@@ -172,6 +172,8 @@
     <None Include="Resources\brush-icon %281%29.png" />
     <None Include="Resources\Cancel-icon.png" />
     <None Include="Resources\Cancel-icon2.png" />
+    <None Include="Resources\Captura2.png" />
+    <None Include="Resources\Captura21.png" />
     <Content Include="Resources\Color.bmp" />
     <Content Include="Resources\DisplayOpts.bmp" />
     <Content Include="Resources\EditInformation.bmp" />

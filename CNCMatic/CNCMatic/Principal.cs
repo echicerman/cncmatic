@@ -14,13 +14,13 @@ using System.IO;
 using MacGen;
 using DXF.Objetos;
 using Configuracion;
-
+using System.Reflection;
 
 namespace CNCMatic
 {
     public partial class Principal : Form
     {
-        Boolean flag = true;
+        //Boolean flag = true;
         //int i = 0;
         private string mCncFile;
         private clsProcessor mProcessor = clsProcessor.Instance();
@@ -28,48 +28,7 @@ namespace CNCMatic
         private MG_CS_BasicViewer mViewer;
         public bool pausado = false;
 
-        public class RepeatButton : System.Windows.Forms.Button
-        {
-            protected override void OnMouseDown(MouseEventArgs e)
-            {
-                base.OnMouseDown(e);
-                if (e.Button == MouseButtons.Left)
-                {
-                    OnClick(EventArgs.Empty);
-                    RepeatButton.repeatButtonTimer.Tick += new EventHandler(repeatButtonTimer_Tick);
-                    repeatButtonTimer.Start();
-                }
-            }
-            protected override void OnMouseUp(MouseEventArgs e)
-            {
-                this.mousingUp = true;
 
-                base.OnMouseUp(e);
-
-                if (e.Button == MouseButtons.Left)
-                {
-                    repeatButtonTimer.Stop();
-                    RepeatButton.repeatButtonTimer.Tick -= new EventHandler(repeatButtonTimer_Tick);
-                }
-                this.mousingUp = false;
-            }
-            protected override void OnClick(EventArgs e)
-            {
-                if (this.mousingUp) return;
-                base.OnClick(e);
-            }
-            private void repeatButtonTimer_Tick(object sender, EventArgs e)
-            {
-                OnClick(EventArgs.Empty);
-            }
-            private bool mousingUp = false;
-            static RepeatButton()
-            {
-                repeatButtonTimer.Interval = 50;
-            }
-            private static System.Windows.Forms.Timer repeatButtonTimer = new Timer();
-        }
-        
         public Principal()
         {
             InitializeComponent();
@@ -94,52 +53,15 @@ namespace CNCMatic
 
         private void btnInicio_Click(object sender, EventArgs e)
         {
-            AgregaTextoEditor(false, Metodos.IrA(0, 0, 0));
-        }
-
-        //public void Mov_Menos(System.Windows.Forms.TextBox txt)
-        //{
-        //    if (Convert.ToInt32(txt.Text) > 0)
-        //    {
-        //        txt.Text = (Convert.ToInt32(txt.Text) - 1).ToString();
-        //    }
-        //}
-
-        //public void Mov_Mas(System.Windows.Forms.TextBox txt)
-        //{
-        //    txt.Text = (Convert.ToInt32(txt.Text) + 1).ToString();
-        //}
-
-
-        private void btnMovXY_Izq_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void btnMovXY_Der_Click(object sender, EventArgs e)
-        {
-            //this.Mov_Mas(this.txtPosX);
-
-            if (flag == true)
+            try
             {
-                //////OJO ACA CAMBIAR LUEGO A LA CONFIGURACION QUE SE ESTE UTILIZANDO!! HERNAN
-                XML_Config x = new XML_Config();
-                AgregaTextoEditor(false, Metodos.IrA(x.MaxX, 0, 0));
-                flag = false;
+                //enviamos al cnc al origen
+                Interfaz.OrigenCNC(ref lblPosicionActual);
             }
-        }
-
-        private void btnMovXY_Arr_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void btnMovXY_Aba_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void btnMovXY_Der_MouseUp(object sender, MouseEventArgs e)
-        {
-            AgregaTextoEditor(false, Metodos.Stop());
-            flag = true;
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
@@ -157,16 +79,45 @@ namespace CNCMatic
         {
             //AgregaTextoEditor(false, Metodos.Stop());
 
+            //Habilita todas las funciones
+            LimpiarControles();
+            btnStop2.Enabled = false;
+            btnConnect.Enabled = true;
+            btnConnect.Visible = true;
+
+            this.lblEstado.Text = "Conexión cancelada por el usuario";
+
+            //habilitamos nuevamente el menu de configuracion
+            configuracionToolStripMenuItem.Enabled = true;
+
+            Interfaz.ReiniciarCNC();
+        }
+
+        private void LimpiarControles()
+        {
             //Habilita todas las funciones y borra el fresado actual
             btnPlay.Enabled = true;
             btnInicio.Enabled = true;
-            btnStop2.Enabled = true;
             gbMovXY.Enabled = true;
             gbMovZ.Enabled = true;
             txtLineaManual.Enabled = true;
             btnLimpiar.Enabled = true;
             toolStrip1.Enabled = true;
             txtPreview.Enabled = true;
+        }
+
+        private void LimpiarControlesSafe()
+        {
+            //Habilita todas las funciones y borra el fresado actual en modo seguro para thread
+            SetControlPropertyThreadSafe(btnPlay, "Enabled", true);
+            SetControlPropertyThreadSafe(btnInicio, "Enabled", true);
+            //SetControlPropertyThreadSafe(btnStop2, "Enabled", true);
+            SetControlPropertyThreadSafe(gbMovXY, "Enabled", true);
+            SetControlPropertyThreadSafe(gbMovZ, "Enabled", true);
+            SetControlPropertyThreadSafe(txtLineaManual, "Enabled", true);
+            SetControlPropertyThreadSafe(btnLimpiar, "Enabled", true);
+            SetControlPropertyThreadSafe(toolStrip1, "Enabled", true);
+            SetControlPropertyThreadSafe(txtPreview, "Enabled", true);
         }
 
         /// <summary>
@@ -256,7 +207,6 @@ namespace CNCMatic
                 MessageBox.Show("Se ha producido un error " + ex.Message, "Importar DXF", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private double ObtieneDistancia(DXF.Objetos.Vector3d puntoActual, DXF.Objetos.Vector3d puntoInicioFigura)
         {
@@ -472,35 +422,6 @@ namespace CNCMatic
             return lineaG.Substring(1, 3);
         }
 
-        //***************************************
-
-
-        static void crearArchivoTemp()
-        {
-
-            string curTempFileName = "";
-
-            curTempFileName = Path.GetTempFileName();
-
-            //Ahora creamos fisicamente el archivo
-
-            using (StreamWriter sw = File.CreateText(curTempFileName))
-            {
-
-                sw.WriteLine("Primera linea del archivo");
-
-                sw.Close();
-
-            }
-
-            Console.WriteLine("Se ha creado el archivo temporal satisfactoriamente!!");
-
-            Console.ReadLine();
-
-        }
-
-        //*******************************************
-
         private void gCodeFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //realizamos la busqueda del archivo
@@ -548,6 +469,39 @@ namespace CNCMatic
             a.ShowDialog();
         }
 
+        #region DibujosManuales
+        private void dToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+
+            G01_Cuadrado g;
+
+            FrmDibujoParams dibujoParams = new FrmDibujoParams(out g);
+            dibujoParams.ShowDialog();
+
+            if (dibujoParams.modificado)
+            {
+                AgregaTextoEditor(false, g.ToString());
+
+                //Muestra figura en el previsualizador
+                PrevisualizarFigurasManual();
+            }
+        }
+
+        private void menuItemCubo_Click(object sender, EventArgs e)
+        {
+            G01_Cubo g;
+
+            FrmDibujoParams dibujoParams = new FrmDibujoParams(out g);
+            dibujoParams.ShowDialog();
+
+            if (dibujoParams.modificado)
+            {
+                AgregaTextoEditor(false, g.ToString());
+
+                //Muestra figura en el previsualizador
+                PrevisualizarFigurasManual();
+            }
+        }
         private void btnLinea_Click(object sender, EventArgs e)
         {
             G01_Lineal g;
@@ -608,7 +562,7 @@ namespace CNCMatic
                 PrevisualizarFigurasManual();
             }
         }
-
+        #endregion
 
         private void configuracionToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -630,11 +584,6 @@ namespace CNCMatic
 
             SetDefaultViews();
             Properties.Settings.Default.Virgin = false;
-        }
-
-        private void comunicaciónToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            (new FrmComunicacion()).ShowDialog();
         }
 
         private void guardarComoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -672,15 +621,6 @@ namespace CNCMatic
             }
         }
 
-        //private void IniciarFresado(object sender, EventArgs e)
-        //{
-        //    this.Refresh();
-        //    if (OpenFileDialog1.FileName.Length > 0)
-        //    {
-        //        OpenFile(OpenFileDialog1.FileName);
-        //    }
-        //}
-
         private bool guardaGfile(string path)
         {
             try
@@ -710,6 +650,29 @@ namespace CNCMatic
         }
 
         #region Previsualizador
+        static void crearArchivoTemp()
+        {
+
+            string curTempFileName = "";
+
+            curTempFileName = Path.GetTempFileName();
+
+            //Ahora creamos fisicamente el archivo
+
+            using (StreamWriter sw = File.CreateText(curTempFileName))
+            {
+
+                sw.WriteLine("Primera linea del archivo");
+
+                sw.Close();
+
+            }
+
+            Console.WriteLine("Se ha creado el archivo temporal satisfactoriamente!!");
+
+            Console.ReadLine();
+
+        }
         private void Principal_FormClosing(object sender, FormClosingEventArgs e)
         {
             try
@@ -969,39 +932,79 @@ namespace CNCMatic
         }
         #endregion
 
+        //List<string> lineas = Metodos.CilindroCentrado(20, 30, 5, 1,5);
+        //List<string> lineas = Metodos.GastarPlano(0,0,20, 20, 1);
+        //List<string> lineas = Metodos.Escalera(50, 50, 50, 10, 10);
+        //List<string> lineas = Metodos.Escalera(15, 15, 15, 5, 5);
+
+        //this.txtPreview.Text += ("G00 Z15" + Environment.NewLine);
+
+        //foreach (string s in lineas)
+        //    this.txtPreview.Text += (s + Environment.NewLine);
+
+
         private void btnPlay_Click(object sender, EventArgs e)
         {
             try
             {
-                //List<string> lineas = Metodos.CilindroCentrado(20, 30, 5, 1,5);
-                //List<string> lineas = Metodos.GastarPlano(0,0,20, 20, 1);
-                //List<string> lineas = Metodos.Escalera(50, 50, 50, 10, 10);
-                //List<string> lineas = Metodos.Escalera(15, 15, 15, 5, 5);
-
-                //this.txtPreview.Text += ("G00 Z15" + Environment.NewLine);
-
-                //foreach (string s in lineas)
-                //    this.txtPreview.Text += (s + Environment.NewLine);
-
                 this.LimpiarPrevisualizador();
                 PrevisualizarFigurasManual();
 
-                if (!pausado)
-                {//si no reanuda ejecucion (esta pausado)
+                //---validamos que haya instrucciones para ser enviadas
+                //obtenemos las lineas del previsualizador y removemos los blancos
+                List<string> loteInstrucciones = txtPreview.Lines.ToList();
+                while (loteInstrucciones.Contains(""))
+                {
+                    loteInstrucciones.Remove("");
+                }
 
-                    DialogResult dr = MessageBox.Show("Se procederá a conectar y enviar las instrucciones al CNC." + Environment.NewLine + "¿Desea Continuar?", "Transferencia CNC", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
-                    if (dr == DialogResult.Yes)
+                if (loteInstrucciones.Count == 0)
+                {
+                    MessageBox.Show("No posee instrucciones para ser transferidas al CNC" , "Transferencia CNC", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                    return;
+                }
+
+
+                //sino esta en un estado válido para continuar...
+                if (lblEstado.Text != "Conexión OK (3/3): Conexión establecida" && lblEstado.Text != "Fin del procesamiento" && !pausado)
+                {
+                    //ver que hacemos...
+                }
+                else
+                {
+                    //sino venimos de una pausa
+                    if (!pausado)
                     {
-                        //obtenemos las lineas del previsualizador y removemos los blancos
-                        List<string> loteInstrucciones = txtPreview.Lines.ToList();
-                        while (loteInstrucciones.Contains(""))
+                        DialogResult dr = MessageBox.Show("Se iniciará el envío de las instrucciones al CNC." + Environment.NewLine + "¿Desea Continuar?", "Transferencia CNC", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                        if (dr == DialogResult.Yes)
                         {
-                            loteInstrucciones.Remove("");
+                            if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual))
+                            {
+                                //bloqueamos controles
+                                btnPlay.Enabled = false;
+                                btnInicio.Enabled = false;
+                                btnStop2.Enabled = false;
+                                gbMovXY.Enabled = false;
+                                gbMovZ.Enabled = false;
+                                txtLineaManual.Enabled = false;
+                                btnLimpiar.Enabled = false;
+                                toolStrip1.Enabled = false;
+                                txtPreview.Enabled = false;
+
+                                btnPause.Enabled = true;
+                            }
                         }
 
-                        if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual))
-                        {
 
+                    }
+                    else
+                    {//reanuda la ejecucion luego de una pausa
+
+                        DialogResult dr = MessageBox.Show("Se reanudará el envío de las instrucciones al CNC." + Environment.NewLine + "¿Desea Continuar?", "Reanudar Transferencia CNC", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                        if (dr == DialogResult.Yes)
+                        {
+                            Interfaz.ReaudarTransmision();
+                            
                             //bloqueamos controles
                             btnPlay.Enabled = false;
                             btnInicio.Enabled = false;
@@ -1012,30 +1015,14 @@ namespace CNCMatic
                             btnLimpiar.Enabled = false;
                             toolStrip1.Enabled = false;
                             txtPreview.Enabled = false;
+
+                            btnPause.Enabled = true;
+                            
+                            //salimos de la pausa
+                            this.pausado = false;
                         }
-
-
                     }
-                }
-                else
-                {//si reanuda ejecucion luego de pausa
-
-
-                    //bloqueamos controles
-                    btnPlay.Enabled = false;
-                    btnInicio.Enabled = false;
-                    btnStop2.Enabled = false;
-                    gbMovXY.Enabled = false;
-                    gbMovZ.Enabled = false;
-                    txtLineaManual.Enabled = false;
-                    btnLimpiar.Enabled = false;
-                    toolStrip1.Enabled = false;
-                    txtPreview.Enabled = false;
-
-
-
-                    //salimos de la pausa
-                    this.pausado = false;
+                    
                 }
             }
             catch (Exception ex)
@@ -1043,45 +1030,10 @@ namespace CNCMatic
                 MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        private void dToolStripMenuItem2_Click(object sender, EventArgs e)
-        {
-
-            G01_Cuadrado g;
-
-            FrmDibujoParams dibujoParams = new FrmDibujoParams(out g);
-            dibujoParams.ShowDialog();
-
-            if (dibujoParams.modificado)
-            {
-                AgregaTextoEditor(false, g.ToString());
-
-                //Muestra figura en el previsualizador
-                PrevisualizarFigurasManual();
-            }
-        }
-
-        private void menuItemCubo_Click(object sender, EventArgs e)
-        {
-            G01_Cubo g;
-
-            FrmDibujoParams dibujoParams = new FrmDibujoParams(out g);
-            dibujoParams.ShowDialog();
-
-            if (dibujoParams.modificado)
-            {
-                AgregaTextoEditor(false, g.ToString());
-
-                //Muestra figura en el previsualizador
-                PrevisualizarFigurasManual();
-            }
-        }
-
         private void acercaDeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             (new Acerca()).ShowDialog();
         }
-
         private void btnPause_Click(object sender, EventArgs e)
         {
             try
@@ -1090,10 +1042,151 @@ namespace CNCMatic
                 btnStop2.Enabled = true;
                 btnPlay.Enabled = true;
                 btnInicio.Enabled = false;
-                txtPreview.Enabled = false;
+                btnPause.Enabled = false;
 
                 //ponemos el modo en pausado 
                 this.pausado = true;
+
+                //enviamos pausa al cnc
+                Interfaz.PausarTransmision();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+        private void btnMovZ_Arr_MouseDown(object sender, MouseEventArgs e)
+        {
+            //avanzamos en Z
+            Interfaz.MoverLibre(CNC.CNC_Mensajes_Send.Zavance, ref lblPosicionActual);
+        }
+        private void btnMovZ_Arr_MouseUp(object sender, MouseEventArgs e)
+        {
+            //detenemos movimiento
+            Interfaz.DetenerMovimientoLibre();
+        }
+        private void btnMovZ_Aba_MouseDown(object sender, MouseEventArgs e)
+        {
+            //retrocedemos en Z
+            Interfaz.MoverLibre(CNC.CNC_Mensajes_Send.Zretroc, ref lblPosicionActual);
+        }
+        private void btnMovZ_Aba_MouseUp(object sender, MouseEventArgs e)
+        {
+            //detenemos movimiento
+            Interfaz.DetenerMovimientoLibre();
+        }
+        private void btnMovXY_Arr_MouseDown(object sender, MouseEventArgs e)
+        {
+            //avanzamos en Y
+            Interfaz.MoverLibre(CNC.CNC_Mensajes_Send.Yavance, ref lblPosicionActual);
+        }
+        private void btnMovXY_Arr_MouseUp(object sender, MouseEventArgs e)
+        {
+            //detenemos movimiento
+            Interfaz.DetenerMovimientoLibre();
+        }
+        private void btnMovXY_Aba_MouseUp(object sender, MouseEventArgs e)
+        {
+            //detenemos movimiento
+            Interfaz.DetenerMovimientoLibre();
+        }
+        private void btnMovXY_Aba_MouseDown(object sender, MouseEventArgs e)
+        {
+            //retrocedemos en Y
+            Interfaz.MoverLibre(CNC.CNC_Mensajes_Send.Yretroc, ref lblPosicionActual);
+        }
+        private void btnMovXY_Der_MouseDown(object sender, MouseEventArgs e)
+        {
+            //avanzamos en X
+            Interfaz.MoverLibre(CNC.CNC_Mensajes_Send.Xavance, ref lblPosicionActual);
+        }
+        private void btnMovXY_Izq_MouseUp(object sender, MouseEventArgs e)
+        {
+            //detenemos movimiento
+            Interfaz.DetenerMovimientoLibre();
+        }
+        private void btnMovXY_Izq_MouseDown(object sender, MouseEventArgs e)
+        {
+            //retrocedemos en X
+            Interfaz.MoverLibre(CNC.CNC_Mensajes_Send.Xretroc, ref lblPosicionActual);
+        }
+        private void btnMovXY_Der_MouseUp(object sender, MouseEventArgs e)
+        {
+            //detenemos movimiento
+            Interfaz.DetenerMovimientoLibre();
+        }
+
+        //con esta funcion controlamos los cambios de estado para replicar comportamiento en el form
+        private void lblEstado_TextChanged(object sender, EventArgs e)
+        {
+            //se termina de establecer la conexion, entones se liberan los controles
+            if (sender.ToString() == "Conexión OK (3/3): Conexión establecida")
+            {
+                LimpiarControlesSafe();
+
+                SetControlPropertyThreadSafe(btnConnect, "Visible", false);
+                SetControlPropertyThreadSafe(btnStop2, "Enabled", false);
+
+                MessageBox.Show("Conexión exitosa!", "Conexion CNC", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            //se finaliza la ejecucion de las instrucciones, entones se liberan los controles
+            if (sender.ToString() == "Fin del procesamiento")
+            {
+                LimpiarControlesSafe();
+            }
+        }
+
+        //For ThreadSafe called to edit components
+        private delegate void SetControlPropertyThreadSafeDelegate(Control control, string propertyName, object propertyValue);
+        public static void SetControlPropertyThreadSafe(Control control, string propertyName, object propertyValue)
+        {
+            if (control.InvokeRequired)
+            {
+                control.Invoke(new SetControlPropertyThreadSafeDelegate(SetControlPropertyThreadSafe), new object[] { control, propertyName, propertyValue });
+            }
+            else
+            {
+                control.GetType().InvokeMember(propertyName, BindingFlags.SetProperty, null, control, new object[] { propertyValue });
+            }
+
+        }
+
+        private void btnConnect_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DialogResult dr = MessageBox.Show("Se procederá a establecer la conexión con el CNC." + Environment.NewLine + "¿Desea Continuar?", "Conexión CNC", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+                if (dr == DialogResult.Yes)
+                {
+                    //obtenemos las lineas del previsualizador y removemos los blancos
+                    List<string> loteInstrucciones = new List<string>();
+
+                    if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual))
+                    {
+
+                        //bloqueamos controles
+                        btnPlay.Enabled = false;
+                        btnInicio.Enabled = false;
+                        btnPause.Enabled = false;
+                        gbMovXY.Enabled = false;
+                        gbMovZ.Enabled = false;
+                        txtLineaManual.Enabled = false;
+                        btnLimpiar.Enabled = false;
+                        toolStrip1.Enabled = false;
+                        txtPreview.Enabled = false;
+
+                        btnStop2.Enabled = true;
+                        btnConnect.Enabled = false;
+
+                        //bloqueamos el menu de configuracion
+                        configuracionToolStripMenuItem.Enabled = false;
+
+                    }
+
+
+                }
+
             }
             catch (Exception ex)
             {
@@ -1101,29 +1194,6 @@ namespace CNCMatic
             }
         }
 
-        private void btnMovZ_Arr_MouseDown(object sender, MouseEventArgs e)
-        {
-            //avanzamos en Z
-            Interfaz.MoverLibre(CNC.CNC_Mensajes_Send.Zavance, ref lblPosicionActual );
-        }
-
-        private void btnMovZ_Arr_MouseUp(object sender, MouseEventArgs e)
-        {
-            //detenemos movimiento
-            Interfaz.DetenerMovimientoLibre();
-        }
-
-        private void btnMovZ_Aba_MouseDown(object sender, MouseEventArgs e)
-        {
-            //retrocedemos en Z
-            Interfaz.MoverLibre(CNC.CNC_Mensajes_Send.Zretroc, ref lblPosicionActual);
-        }
-
-        private void btnMovZ_Aba_MouseUp(object sender, MouseEventArgs e)
-        {
-            //detenemos movimiento
-            Interfaz.DetenerMovimientoLibre();
-        }
 
 
     }

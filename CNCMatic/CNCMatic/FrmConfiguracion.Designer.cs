@@ -86,6 +86,10 @@
             this.grdConfigMatMot = new System.Windows.Forms.DataGridView();
             this.lblConfigs = new System.Windows.Forms.Label();
             this.btnAltaConfigMatMot = new System.Windows.Forms.Button();
+            this.lblVelocMov = new System.Windows.Forms.Label();
+            this.lblLargoSeccion = new System.Windows.Forms.Label();
+            this.txtVelocMov = new System.Windows.Forms.TextBox();
+            this.txtLargoSeccion = new System.Windows.Forms.TextBox();
             this.grpConfGral.SuspendLayout();
             this.grpTipoProgr.SuspendLayout();
             this.grpUnidadMedida.SuspendLayout();
@@ -97,6 +101,10 @@
             // 
             // grpConfGral
             // 
+            this.grpConfGral.Controls.Add(this.txtLargoSeccion);
+            this.grpConfGral.Controls.Add(this.txtVelocMov);
+            this.grpConfGral.Controls.Add(this.lblLargoSeccion);
+            this.grpConfGral.Controls.Add(this.lblVelocMov);
             this.grpConfGral.Controls.Add(this.txtMaxZ);
             this.grpConfGral.Controls.Add(this.lblMaxZ);
             this.grpConfGral.Controls.Add(this.txtMaxY);
@@ -119,7 +127,7 @@
             // txtMaxZ
             // 
             this.txtMaxZ.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMaxZ.Location = new System.Drawing.Point(393, 94);
+            this.txtMaxZ.Location = new System.Drawing.Point(243, 93);
             this.txtMaxZ.Mask = "9999999";
             this.txtMaxZ.Name = "txtMaxZ";
             this.txtMaxZ.Size = new System.Drawing.Size(48, 20);
@@ -129,7 +137,7 @@
             // 
             this.lblMaxZ.AutoSize = true;
             this.lblMaxZ.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMaxZ.Location = new System.Drawing.Point(337, 97);
+            this.lblMaxZ.Location = new System.Drawing.Point(205, 96);
             this.lblMaxZ.Name = "lblMaxZ";
             this.lblMaxZ.Size = new System.Drawing.Size(37, 13);
             this.lblMaxZ.TabIndex = 28;
@@ -138,7 +146,7 @@
             // txtMaxY
             // 
             this.txtMaxY.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMaxY.Location = new System.Drawing.Point(250, 94);
+            this.txtMaxY.Location = new System.Drawing.Point(145, 93);
             this.txtMaxY.Mask = "9999999";
             this.txtMaxY.Name = "txtMaxY";
             this.txtMaxY.Size = new System.Drawing.Size(48, 20);
@@ -148,7 +156,7 @@
             // 
             this.lblMaxY.AutoSize = true;
             this.lblMaxY.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMaxY.Location = new System.Drawing.Point(194, 97);
+            this.lblMaxY.Location = new System.Drawing.Point(106, 96);
             this.lblMaxY.Name = "lblMaxY";
             this.lblMaxY.Size = new System.Drawing.Size(37, 13);
             this.lblMaxY.TabIndex = 26;
@@ -157,7 +165,7 @@
             // txtMaxX
             // 
             this.txtMaxX.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMaxX.Location = new System.Drawing.Point(101, 94);
+            this.txtMaxX.Location = new System.Drawing.Point(47, 93);
             this.txtMaxX.Mask = "9999999";
             this.txtMaxX.Name = "txtMaxX";
             this.txtMaxX.Size = new System.Drawing.Size(48, 20);
@@ -167,7 +175,7 @@
             // 
             this.lblMaxX.AutoSize = true;
             this.lblMaxX.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMaxX.Location = new System.Drawing.Point(51, 97);
+            this.lblMaxX.Location = new System.Drawing.Point(13, 96);
             this.lblMaxX.Name = "lblMaxX";
             this.lblMaxX.Size = new System.Drawing.Size(37, 13);
             this.lblMaxX.TabIndex = 24;
@@ -177,7 +185,7 @@
             // 
             this.btnRefresh.Image = global::CNCMatic.Properties.Resources.Refresh_icon;
             this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnRefresh.Location = new System.Drawing.Point(297, 124);
+            this.btnRefresh.Location = new System.Drawing.Point(260, 123);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(31, 23);
             this.btnRefresh.TabIndex = 23;
@@ -274,7 +282,7 @@
             // 
             this.lblPuerto.AutoSize = true;
             this.lblPuerto.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPuerto.Location = new System.Drawing.Point(55, 128);
+            this.lblPuerto.Location = new System.Drawing.Point(13, 128);
             this.lblPuerto.Name = "lblPuerto";
             this.lblPuerto.Size = new System.Drawing.Size(68, 13);
             this.lblPuerto.TabIndex = 17;
@@ -284,9 +292,9 @@
             // 
             this.portComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.portComboBox.FormattingEnabled = true;
-            this.portComboBox.Location = new System.Drawing.Point(129, 125);
+            this.portComboBox.Location = new System.Drawing.Point(87, 125);
             this.portComboBox.Name = "portComboBox";
-            this.portComboBox.Size = new System.Drawing.Size(170, 21);
+            this.portComboBox.Size = new System.Drawing.Size(174, 21);
             this.portComboBox.TabIndex = 16;
             // 
             // grpConfigMaterial
@@ -685,6 +693,40 @@
             this.btnAltaConfigMatMot.UseVisualStyleBackColor = true;
             this.btnAltaConfigMatMot.Click += new System.EventHandler(this.btnAltaConfigMatMot_Click);
             // 
+            // lblVelocMov
+            // 
+            this.lblVelocMov.AutoSize = true;
+            this.lblVelocMov.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVelocMov.Location = new System.Drawing.Point(298, 96);
+            this.lblVelocMov.Name = "lblVelocMov";
+            this.lblVelocMov.Size = new System.Drawing.Size(128, 13);
+            this.lblVelocMov.TabIndex = 30;
+            this.lblVelocMov.Text = "Velocidad de movimiento:";
+            // 
+            // lblLargoSeccion
+            // 
+            this.lblLargoSeccion.AutoSize = true;
+            this.lblLargoSeccion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLargoSeccion.Location = new System.Drawing.Point(298, 128);
+            this.lblLargoSeccion.Name = "lblLargoSeccion";
+            this.lblLargoSeccion.Size = new System.Drawing.Size(92, 13);
+            this.lblLargoSeccion.TabIndex = 32;
+            this.lblLargoSeccion.Text = "Largo de sección:";
+            // 
+            // txtVelocMov
+            // 
+            this.txtVelocMov.Location = new System.Drawing.Point(432, 95);
+            this.txtVelocMov.Name = "txtVelocMov";
+            this.txtVelocMov.Size = new System.Drawing.Size(50, 20);
+            this.txtVelocMov.TabIndex = 34;
+            // 
+            // txtLargoSeccion
+            // 
+            this.txtLargoSeccion.Location = new System.Drawing.Point(432, 126);
+            this.txtLargoSeccion.Name = "txtLargoSeccion";
+            this.txtLargoSeccion.Size = new System.Drawing.Size(50, 20);
+            this.txtLargoSeccion.TabIndex = 35;
+            // 
             // FrmConfiguracion
             // 
             this.AcceptButton = this.btnGrabar;
@@ -789,5 +831,9 @@
         private System.Windows.Forms.Button btnCancelaConfigMatMot;
         private System.Windows.Forms.Button btnGrabaConfigMatMot;
         private System.Windows.Forms.Button btnAltaConfigMatMot;
+        private System.Windows.Forms.Label lblLargoSeccion;
+        private System.Windows.Forms.Label lblVelocMov;
+        private System.Windows.Forms.TextBox txtLargoSeccion;
+        private System.Windows.Forms.TextBox txtVelocMov;
     }
 }

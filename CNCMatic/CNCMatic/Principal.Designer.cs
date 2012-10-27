@@ -37,10 +37,10 @@
             this.btnMovZ_Aba = new System.Windows.Forms.Button();
             this.btnMovZ_Arr = new System.Windows.Forms.Button();
             this.gbMovXY = new System.Windows.Forms.GroupBox();
-            this.btnMovXY_Der = new CNCMatic.Principal.RepeatButton();
-            this.btnMovXY_Izq = new CNCMatic.Principal.RepeatButton();
-            this.btnMovXY_Aba = new CNCMatic.Principal.RepeatButton();
-            this.btnMovXY_Arr = new CNCMatic.Principal.RepeatButton();
+            this.btnMovXY_Der = new System.Windows.Forms.Button();
+            this.btnMovXY_Izq = new System.Windows.Forms.Button();
+            this.btnMovXY_Aba = new System.Windows.Forms.Button();
+            this.btnMovXY_Arr = new System.Windows.Forms.Button();
             this.menu = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.importaciónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,6 +65,7 @@
             this.btnArco = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.grpOperacion = new System.Windows.Forms.GroupBox();
+            this.btnConnect = new System.Windows.Forms.Button();
             this.btnInicio = new System.Windows.Forms.Button();
             this.btnStop2 = new System.Windows.Forms.Button();
             this.btnPlay = new System.Windows.Forms.Button();
@@ -107,8 +108,8 @@
             this.lblStatus = new System.Windows.Forms.ToolStripLabel();
             this.grpPrevisualizacion = new System.Windows.Forms.GroupBox();
             this.tblScreens = new System.Windows.Forms.TableLayoutPanel();
-            this.btnLimpiar = new System.Windows.Forms.Button();
             this.CodeTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btnLimpiar = new System.Windows.Forms.Button();
             this.gbMovZ.SuspendLayout();
             this.gbMovXY.SuspendLayout();
             this.menu.SuspendLayout();
@@ -202,7 +203,7 @@
             this.btnMovXY_Der.Size = new System.Drawing.Size(46, 50);
             this.btnMovXY_Der.TabIndex = 10;
             this.btnMovXY_Der.UseVisualStyleBackColor = false;
-            this.btnMovXY_Der.Click += new System.EventHandler(this.btnMovXY_Der_Click);
+            this.btnMovXY_Der.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Der_MouseDown);
             this.btnMovXY_Der.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Der_MouseUp);
             // 
             // btnMovXY_Izq
@@ -214,7 +215,8 @@
             this.btnMovXY_Izq.Size = new System.Drawing.Size(44, 50);
             this.btnMovXY_Izq.TabIndex = 9;
             this.btnMovXY_Izq.UseVisualStyleBackColor = false;
-            this.btnMovXY_Izq.Click += new System.EventHandler(this.btnMovXY_Izq_Click);
+            this.btnMovXY_Izq.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Izq_MouseDown);
+            this.btnMovXY_Izq.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Izq_MouseUp);
             // 
             // btnMovXY_Aba
             // 
@@ -225,7 +227,8 @@
             this.btnMovXY_Aba.Size = new System.Drawing.Size(44, 45);
             this.btnMovXY_Aba.TabIndex = 8;
             this.btnMovXY_Aba.UseVisualStyleBackColor = false;
-            this.btnMovXY_Aba.Click += new System.EventHandler(this.btnMovXY_Aba_Click);
+            this.btnMovXY_Aba.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Aba_MouseDown);
+            this.btnMovXY_Aba.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Aba_MouseUp);
             // 
             // btnMovXY_Arr
             // 
@@ -236,7 +239,8 @@
             this.btnMovXY_Arr.Size = new System.Drawing.Size(44, 46);
             this.btnMovXY_Arr.TabIndex = 7;
             this.btnMovXY_Arr.UseVisualStyleBackColor = false;
-            this.btnMovXY_Arr.Click += new System.EventHandler(this.btnMovXY_Arr_Click);
+            this.btnMovXY_Arr.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Arr_MouseDown);
+            this.btnMovXY_Arr.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Arr_MouseUp);
             // 
             // menu
             // 
@@ -432,6 +436,7 @@
             // 
             // grpOperacion
             // 
+            this.grpOperacion.Controls.Add(this.btnConnect);
             this.grpOperacion.Controls.Add(this.btnInicio);
             this.grpOperacion.Controls.Add(this.btnStop2);
             this.grpOperacion.Controls.Add(this.btnPlay);
@@ -445,6 +450,18 @@
             this.grpOperacion.TabIndex = 26;
             this.grpOperacion.TabStop = false;
             this.grpOperacion.Text = "Operación Manual";
+            // 
+            // btnConnect
+            // 
+            this.btnConnect.BackColor = System.Drawing.Color.White;
+            this.btnConnect.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnConnect.Image = global::CNCMatic.Properties.Resources.Captura21;
+            this.btnConnect.Location = new System.Drawing.Point(315, 19);
+            this.btnConnect.Name = "btnConnect";
+            this.btnConnect.Size = new System.Drawing.Size(71, 76);
+            this.btnConnect.TabIndex = 26;
+            this.btnConnect.UseVisualStyleBackColor = false;
+            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
             // btnInicio
             // 
@@ -460,6 +477,7 @@
             // btnStop2
             // 
             this.btnStop2.BackColor = System.Drawing.Color.White;
+            this.btnStop2.Enabled = false;
             this.btnStop2.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnStop2.Image = global::CNCMatic.Properties.Resources.Stop_Normal_Red_icon;
             this.btnStop2.Location = new System.Drawing.Point(111, 20);
@@ -484,6 +502,7 @@
             // btnPause
             // 
             this.btnPause.BackColor = System.Drawing.Color.White;
+            this.btnPause.Enabled = false;
             this.btnPause.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnPause.Image = global::CNCMatic.Properties.Resources.Pause_Normal_Red_icon;
             this.btnPause.Location = new System.Drawing.Point(214, 20);
@@ -547,6 +566,7 @@
             this.lblEstado.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblEstado.Name = "lblEstado";
             this.lblEstado.Size = new System.Drawing.Size(4, 17);
+            this.lblEstado.TextChanged += new System.EventHandler(this.lblEstado_TextChanged);
             // 
             // txtLineaManual
             // 
@@ -962,10 +982,10 @@
         private System.Windows.Forms.Button btnInicio;
         private System.Windows.Forms.Button btnMovZ_Arr;
         private System.Windows.Forms.Button btnMovZ_Aba;
-        private RepeatButton btnMovXY_Der;
-        private RepeatButton btnMovXY_Izq;
-        private RepeatButton btnMovXY_Aba;
-        private RepeatButton btnMovXY_Arr;
+        private System.Windows.Forms.Button btnMovXY_Der;
+        private System.Windows.Forms.Button btnMovXY_Izq;
+        private System.Windows.Forms.Button btnMovXY_Aba;
+        private System.Windows.Forms.Button btnMovXY_Arr;
         private System.Windows.Forms.Button btnLimpiar;
         private System.Windows.Forms.MenuStrip menu;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
@@ -1033,6 +1053,7 @@
         private System.Windows.Forms.ToolStripMenuItem acercaDeToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel lblEstado;
         private System.Windows.Forms.ToolStripStatusLabel lblPosicionActual;
+        private System.Windows.Forms.Button btnConnect;
     }
 }
 

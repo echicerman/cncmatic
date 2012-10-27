@@ -12,6 +12,8 @@ namespace Configuracion
         private string puertoCom;
         private string tipoProg;
         private string unidadMedida;
+        private string velocidadMovimiento;
+        private string largoSeccion;
         private float maxX;
         private float maxY;
         private float maxZ;
@@ -41,6 +43,16 @@ namespace Configuracion
         {
             get { return unidadMedida; }
             set { unidadMedida = value; }
+        }
+        public string LargoSeccion
+        {
+            get { return largoSeccion; }
+            set { largoSeccion = value; }
+        }
+        public string VelocidadMovimiento
+        {
+            get { return velocidadMovimiento; }
+            set { velocidadMovimiento = value; }
         }
         public float MaxX
         {

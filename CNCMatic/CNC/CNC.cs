@@ -22,11 +22,12 @@ namespace CNC
         public static string HandShakeRecibido = "HANDSHAKEACKRECEIVED";
 
         //CNCMATICCONNECTED: establecida la conexion CNC-CNCMatic
+        //se dirige a la "Posicion de Origen", retorna el mensaje
+        //y pasa a esperar la configuracion
         public static string Conectado = "CNCMATICCONNECTED";
 
-        //CONFIGURED: no espera nada, solo mueve la punta al origen y pone la maquina
-        //en el cero y responde "Posicion de Origen"
-        public static string Configurado = "CONFIGURED";
+        //READYTOCONFIGURE: espera los parametros de configuracion
+        public static string EsperandoConfig = "READYTOCONFIGURE";
 
         //WAITINGCOMMAND: se espera comando que debe iniciar con G o M,
         //sino envía "Error en Comando", sino si esta OK puede enviar "Comando Soportado"
@@ -42,7 +43,11 @@ namespace CNC
         //FREEMOVES: la maquina se mueve en según lo requerido
         public static string MovimientoLibre = "FREEMOVES";
 
+        //EMERGENCYSTOP: estado interno del CNC
+        public static string ParadaEmergencia = "EMERGENCYSTOP";
 
+        //LIMITSENSOR: estado interno del CNC
+        public static string SensorFinCarrera = "LIMITSENSOR";
     }
 
     /// <summary>
@@ -92,7 +97,11 @@ namespace CNC
         //POSITION: devuelve la posicion actual de la punta
         public static string PosicionActual = "position";
 
+        //Pausa: un M00
+        public static string Pausa = "M00";
 
+        //PosicionDeOrigen, se dirige al 0,0,0 (absoluto) de la maquina
+        public static string PosicionDeOrigen = "origin";
     }
 
     /// <summary>
@@ -100,11 +109,18 @@ namespace CNC
     /// </summary>
     public struct CNC_Mensajes_Recep
     {
+        //(-(-(-(HANDSHAKERECEIVED)-)-)-)
+        //Maquina conectada, pasa a CNCMATICCONNECTED
+        public static string MaquinaConectada = "MC";
+        //Maquina no conectada, vuelve a SERIALPORTCONNECTED
+        public static string MaquinaNoConectada = "ERR:MNC";
+
+
         //(-(-(-(CNCMATICCONNECTED)-)-)-)
         //Configuracion OK
         public static string ConfigStringOK = "CFGOK";
         //Configuracion BAD
-        public static string ConfigStringBAD = "CFGE";
+        public static string ConfigStringBAD = "ERR:CFGE";
 
         //(-(-(-(CONFIGURED)-)-)-)
         //Posicion Origen
@@ -114,17 +130,17 @@ namespace CNC
         //Comando Soportado
         public static string ComandoSoportado = "CMDS";
         //Comando No Soportado
-        public static string ComandoNoSoportado = "CMDNS";
+        public static string ComandoNoSoportado = "ERR:CMDNS";
         //Comando Erroneo
-        public static string ComandoErroneo = "CMDE";
+        public static string ComandoErroneo = "ERR:CMDE";
 
         //(-(-(-(PROCESINGCOMMAND)-)-)-)
         //Comando terminado OK
         public static string ComandoEjecutado = "CMDDONE";
         //Comando terminado por un fin de de carrera en un eje
-        public static string SensorFinCarrera = "SFC"; //<<-- tambien aplica para cuando la maquina esta en FREEMOVES
+        public static string SensorFinCarrera = "ERR:SFC"; //<<-- tambien aplica para cuando la maquina esta en FREEMOVES
         //Comando terminado por una parada de emergencia por hardware
-        public static string ParadaEmergencia = "PE";
+        public static string ParadaEmergencia = "ERR:PE";
 
         //(-(-(-(FREEMOVES)-)-)-)
         //FREEMOVE: responde OK al cambio de estado
@@ -141,7 +157,10 @@ namespace CNC
 
         //STATUS: cuando termine de procesar el comando actual devuelve el id 
         //del status actual 
-        public static string Status = "CNCS:";
+        public static string Status = "CNCS";
+
+        //PP: si recibe freemoves o origin y la maquina esta pausada (luego de un M00) responde PP
+        public static string PPausado = "ERR:PP";
     }
 
     /// <summary>
@@ -212,12 +231,15 @@ namespace CNC
         public string UltimoMensajeRecep { get; set; }
         public string PuertoConexion { get; set; }
 
+        //esta propiedad establece si la maquina recibio configuracion
+        private bool configurada = false;
+
         private bool EnviarConfiguracion()
         {
             try
             {
-                //si la maquina esta CNCMATICCONNECTED espera la configuracion
-                if (estadoActual == CNC_Estados.Conectado)
+                //si la maquina esta READYTOCOFIGURE espera la configuracion
+                if (estadoActual == CNC_Estados.EsperandoConfig)
                 {
                     string stringConfiguracion = "";
                     decimal GxP, TamV, Valor;
@@ -255,33 +277,33 @@ namespace CNC
 
         }
 
-        private void PedirEstadoCNC()
-        {
-            try
-            {
-                //conectamos y pedimos estatus
-                //CNC_Mensajes_Send.Status;
-                string recep = "";
+        //private void PedirEstadoCNC()
+        //{
+        //    try
+        //    {
+        //        //conectamos y pedimos estatus
+        //        //CNC_Mensajes_Send.Status;
+        //        string recep = "";
 
-                switch (Convert.ToInt32(recep.Trim()))
-                {
-                    case 0: estadoActual = CNC_Estados.SerialPortConectado; break; //SERIALPORTCONNECTED
-                    case 1: estadoActual = CNC_Estados.HandShakeRecibido; break; //HANDSHAKERECEIVED
-                    case 2: estadoActual = CNC_Estados.Conectado; break; //CNCMATICCONNECTED
-                    case 3: estadoActual = CNC_Estados.Configurado; break; //CONFIGURED
-                    case 4: estadoActual = CNC_Estados.EsperandoComando; break; //WAITINGCOMMAND
-                    case 5: estadoActual = CNC_Estados.ProcesandoComando; break; //PROCESSINGCOMMAND
-                    case 8: estadoActual = CNC_Estados.MovimientoLibre; break; //FREEMOVES
+        //        switch (Convert.ToInt32(recep.Trim()))
+        //        {
+        //            case 0: estadoActual = CNC_Estados.SerialPortConectado; break; //SERIALPORTCONNECTED
+        //            case 1: estadoActual = CNC_Estados.HandShakeRecibido; break; //HANDSHAKERECEIVED
+        //            case 2: estadoActual = CNC_Estados.Conectado; break; //CNCMATICCONNECTED
+        //            case 3: estadoActual = CNC_Estados.Configurado; break; //CONFIGURED
+        //            case 4: estadoActual = CNC_Estados.EsperandoComando; break; //WAITINGCOMMAND
+        //            case 5: estadoActual = CNC_Estados.ProcesandoComando; break; //PROCESSINGCOMMAND
+        //            case 8: estadoActual = CNC_Estados.MovimientoLibre; break; //FREEMOVES
 
-                }
+        //        }
 
-            }
-            catch (Exception ex)
-            {
-                throw (new Exception("CNC.PedirEstadoCNC: " + ex.Message));
-            }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw (new Exception("CNC.PedirEstadoCNC: " + ex.Message));
+        //    }
 
-        }
+        //}
 
         public bool EstablecerConexion()
         {
@@ -292,12 +314,20 @@ namespace CNC
                 //nos conectamos al puerto
                 conectarSerialPort();
 
-                this.Label.Text = "Conexión OK (1/3): enviando handshake...";
-                estadoActual = CNC_Estados.SerialPortConectado;
+                //si la maquina quedo en espera, enviamos el reset para inicializar la secuencia
+                if (this.estadoActual == CNC_Estados.EsperandoComando)
+                {
+                    enviar(CNC_Mensajes_Send.Reset);
+                }
+                else
+                {
+                    this.Label.Text = "Conexión OK (1/3): enviando handshake...";
 
-                //enviar: CNC_Mensajes_Send.HandShake;
-                enviar(CNC_Mensajes_Send.HandShake);
+                    this.estadoActual = CNC_Estados.SerialPortConectado;
 
+                    //enviar: CNC_Mensajes_Send.HandShake;
+                    enviar(CNC_Mensajes_Send.HandShake);
+                }
                 return true;
 
             }
@@ -315,6 +345,7 @@ namespace CNC
                 if (!Port.Conectado(this.PuertoConexion))
                 {
                     Port.OpenConnection(this.PuertoConexion);
+                    Port.Label = this.Label;
                     Port.DataReceivedCallback = new Port.DataReceivedCallbackDelegate(atenderPuerto);
                 }
             }
@@ -380,6 +411,50 @@ namespace CNC
                     return;
                 }
 
+                //si pedimos ir al inicio absoluto
+                if (this.UltimoMensajeSend == CNC_Mensajes_Send.PosicionDeOrigen)
+                {
+                    string recep = recibir();
+
+                    if (recep == CNC_Mensajes_Recep.PosicionOrigen)
+                    {
+                        actualizarPosicionActual("X0 Y0 Z0");
+                    }
+
+                    if (recep == CNC_Mensajes_Recep.PPausado)
+                    {
+                        //no puede irse al origen porque la maquina esta pausada
+                    }
+
+                    return;
+                }
+
+                //si pedimos el estado actual
+                if (this.UltimoMensajeSend == CNC_Mensajes_Send.Status)
+                {
+                    string recep = recibir();
+
+                    //abrimos el comando recibido, por ejemplo:
+                    //"CNCS:4"
+                    string respuesta = recep.Split(':')[0];
+                    int numero = Convert.ToInt32(recep.Split(':')[1]);
+
+                    switch (numero)
+                    {
+                        case 0: this.estadoActual = CNC_Estados.SerialPortConectado; break;
+                        case 1: this.estadoActual = CNC_Estados.HandShakeRecibido; break;
+                        case 2: this.estadoActual = CNC_Estados.Conectado; break;
+                        case 3: this.estadoActual = CNC_Estados.EsperandoConfig; break;
+                        case 4: this.estadoActual = CNC_Estados.EsperandoComando; break;
+                        case 5: this.estadoActual = CNC_Estados.ProcesandoComando; break;
+                        case 6: this.estadoActual = CNC_Estados.SensorFinCarrera; break;
+                        case 7: this.estadoActual = CNC_Estados.ParadaEmergencia; break;
+                        case 8: this.estadoActual = CNC_Estados.MovimientoLibre; break;
+                    }
+
+                    return;
+                }
+
                 //si pedimos ponernos en FREEMOVES
                 if (this.UltimoMensajeSend == CNC_Mensajes_Send.MovimientoLibre)
                 {
@@ -399,8 +474,33 @@ namespace CNC
                         }
                     }
 
+                    if (recep == CNC_Mensajes_Recep.PPausado)
+                    {
+                        //no puede ponerse en freemoves porque la maquina esta pausada
+                    }
+
                     return;
                 }
+
+                //si pedimos hacer un RESET
+                if (this.UltimoMensajeSend == CNC_Mensajes_Send.Reset)
+                {
+                    //leemos respuesta
+                    string recep = recibir();
+
+                    //si acepto el reset
+                    if (recep == CNC_Mensajes_Recep.Reset)
+                    {
+                        this.configurada = false;
+
+                        //this.Label.Text = "Conexión OK (1/3): enviando handshake...";
+                        estadoActual = CNC_Estados.SerialPortConectado;
+                    }
+
+                    return;
+                }
+
+
 
                 //********************************************************************
                 //--------------------------ESTADOS-----------------------------------
@@ -418,13 +518,17 @@ namespace CNC
 
                     if (respuesta == CNC_Mensajes_Recep.Stop)
                     {
-                       string posicion = recep.Split('_')[1];
+                        string posicion = recep.Split('_')[1];
 
                         //actualizamos la posicion actual del CNC
                         actualizarPosicionActual(posicion);
-                        
-                        //vuelve a serial SERIALPORTCONNECTED
-                        this.estadoActual = CNC_Estados.SerialPortConectado;
+
+                        //el estado al que vuelve depende de si la maquina esta configurada o no
+                        if (configurada)
+                            this.estadoActual = CNC_Estados.EsperandoComando;
+                        else
+                            this.estadoActual = CNC_Estados.EsperandoConfig;
+
                     }
 
                     return;
@@ -443,29 +547,38 @@ namespace CNC
                     {
                         //enviar: CNC_Mensajes_Send.HandShakeOk 
                         enviar(CNC_Mensajes_Send.HandShakeOk);
-
-                        estadoActual = CNC_Estados.Conectado;
-
-                        //enviamos la configuracion
-                        if (EnviarConfiguracion())
-                        {
-                            this.Label.Text = "Conexión OK (2/3): enviando configuración...";
-                        }
-
                     }
                     else
                     {
                         //enviar: CNC_Mensajes_Send.HandShakeBad 
                         enviar(CNC_Mensajes_Send.HandShakeBad);
-
-                        estadoActual = CNC_Estados.SerialPortConectado;
-
-                        this.Label.Text = "Error en el handshake. Intente nuevamente.";
-
                     }
 
                     return;
 
+                }
+
+                //HANDSHAKERECEIVED
+                if (this.estadoActual == CNC_Estados.HandShakeRecibido)
+                {
+                    //leemos
+                    string recep = recibir();
+
+                    //si recibio correcto el ok, la maquina se conecta
+                    if (recep == CNC_Mensajes_Recep.MaquinaConectada)
+                    {
+                        estadoActual = CNC_Estados.Conectado;
+
+                        this.Label.Text = "Conexión OK (1/3): handshake recibido ok...";
+                    }
+                    else if (recep == CNC_Mensajes_Recep.MaquinaNoConectada)
+                    {
+                        estadoActual = CNC_Estados.SerialPortConectado;
+
+                        this.Label.Text = "Conexión (1/3): error en el handshake. Intente nuevamente.";
+                    }
+
+                    return;
                 }
 
                 //CNCMATICCONNECTED
@@ -474,45 +587,50 @@ namespace CNC
                     //leemos la respuesta
                     string recep = recibir();
 
+                    //si llego a la PO
+                    if (recep == CNC_Mensajes_Recep.PosicionOrigen)
+                    {
+                        //nos paramos en el origen
+                        actualizarPosicionActual("X0 Y0 Z0");
+
+                        //pasamos a READYTOCONFIGURE
+                        this.estadoActual = CNC_Estados.EsperandoConfig;
+
+                        //enviamos la configuracion
+                        if (EnviarConfiguracion())
+                        {
+                            this.Label.Text = "Conexión OK (2/3): enviando configuración...";
+                        }
+                        else
+                        {
+                            this.Label.Text = "Conexión (2/3): error enviando configuración. Intente nuevamente.";
+                        }
+                    }
+
+
+                    return;
+                }
+
+                //READYTOCONFIGURE
+                if (estadoActual == CNC_Estados.EsperandoConfig)
+                {
+                    //leemos la respuesta
+                    string recep = recibir();
+
                     //vemos el estado de la respuesta
                     if (recep == CNC_Mensajes_Recep.ConfigStringOK)
                     {
-                        estadoActual = CNC_Estados.Configurado;
+                        this.configurada = true;
 
-                        this.Label.Text = "Conexión OK (3/3): finalizando conexión...";
+                        estadoActual = CNC_Estados.EsperandoComando;
+
+                        this.Label.Text = "Conexión OK (3/3): Conexión establecida";
 
                     }
                     else if (recep == CNC_Mensajes_Recep.ConfigStringBAD)
                     {
                         //seguimos en el mismo estado...
-                        this.Label.Text = "Error en la configuracion. Intente nuevamente.";
-                    }
-
-                    return;
-                }
-
-                //CONFIGURED
-                if (estadoActual == CNC_Estados.Configurado)
-                {
-                    //leemos la respuesta
-                    string recep = recibir();
-
-                    //si llego a la PO
-                    if (recep == CNC_Mensajes_Recep.PosicionOrigen)
-                    {
-                        this.Label.Text = "Conexión establecida";
-
-                        //queda esperando instrucciones
-                        estadoActual = CNC_Estados.EsperandoComando;
-
-                        //aca tendriamos que pedir la posicion del cero de la pieza??
-                        
-                        //aca actualizamos el cero de la pieza
-                        PrepararCommandPreprocessor();
-
-                        //iniciamos la transmision
-                        this.Transmision();
-
+                        this.Label.Text = "Conexión (3/3): error en la configuracion. Intente nuevamente.";
                     }
 
                     return;
@@ -531,7 +649,10 @@ namespace CNC
                         //seteamos la maquina en PROCESSINGCOMMAND
                         estadoActual = CNC_Estados.ProcesandoComando;
 
-                        this.Label.Text = "Procesando Comando...";
+                        if (this.UltimoMensajeSend == CNC_Mensajes_Send.Pausa)
+                            this.Label.Text = "Pausando Transmisión...";
+                        else
+                            this.Label.Text = "Procesando Comando...";
 
                     }
                     else
@@ -567,11 +688,14 @@ namespace CNC
                     //actualizamos la posicion actual del CNC
                     actualizarPosicionActual(posicion);
 
-                    if (respuesta == CNC_Mensajes_Recep.ComandoEjecutado && !this.pausarTransmision)
+                    if (respuesta == CNC_Mensajes_Recep.ComandoEjecutado)
                     {
-                        //continuamos la transmision
-                        this.Transmision();
-
+                        if (this.UltimoMensajeSend == CNC_Mensajes_Send.Pausa)
+                            this.Label.Text = "Transmision Pausada";
+                        
+                        if (!this.pausarTransmision)
+                            //continuamos la transmision
+                            this.Transmision();
                     }
                     else if (respuesta == CNC_Mensajes_Recep.ParadaEmergencia)
                     {
@@ -674,6 +798,45 @@ namespace CNC
             }
         }
 
+        public bool IniciarTransmision()
+        {
+            try
+            {
+                this.Label.Text = "Iniciando transmisión de movimientos...";
+
+                //aca actualizamos el cero de la pieza, con la posicion actual
+                PrepararCommandPreprocessor();
+
+                //iniciamos la transmision
+                this.Transmision();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("IniciarTransmision: " + ex.Message));
+            }
+        }
+
+        public bool ReanudarTransmision()
+        {
+            try
+            {
+                this.Label.Text = "Reiniciando transmisión de movimientos...";
+
+                this.pausarTransmision = false;
+
+                //iniciamos la transmision
+                this.Transmision();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("CNC.ReanudarTransmision: " + ex.Message));
+            }
+        }
+
         private bool Transmision()
         {
             try
@@ -709,6 +872,12 @@ namespace CNC
         {
             try
             {
+                //le pasamos la configuracion necesaria
+                CommandPreprocessor.Configuration.absoluteProgamming = (this.configuracion.TipoProg == "abs");
+                CommandPreprocessor.Configuration.millimetersProgramming = (this.configuracion.UnidadMedida == "mm");
+                CommandPreprocessor.Configuration.defaultFeedrate = Convert.ToDouble(this.configuracion.VelocidadMovimiento);
+                CommandPreprocessor.Configuration.millimetersCurveSection = Convert.ToDouble(this.configuracion.LargoSeccion);
+
                 //le pasamos al commandprocessor la posicion de referencia (0 de la pieza)
                 CommandPreprocessor.CommandPreprocessor.GetInstance().ReferencePosition = this.PosicionActual;
             }
@@ -717,7 +886,7 @@ namespace CNC
                 throw (new Exception("CNC.PrepararCommandPreprocessor: " + ex.Message));
             }
         }
-        
+
         private bool PrepararSiguienteComando()
         {
             try
@@ -744,6 +913,12 @@ namespace CNC
                     }
 
                     return true;
+                }
+                else if (loteInstrucciones.Count == proximaInstruccion)
+                {
+                    if (loteInstruccionesTemp.Count == proximaInstruccionTemp)
+                        return false;
+                    else return true;
                 }
                 else
                 {
@@ -787,7 +962,49 @@ namespace CNC
 
         public void PausarTransmision()
         {
-            this.pausarTransmision = true;
+            try
+            {
+                //enviamos la pausa M00
+                enviar(CNC_Mensajes_Send.Pausa);
+
+                //establecemos en pausa
+                this.pausarTransmision = true;
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("CNC.PausarTransmision: " + ex.Message));
+            }
+        }
+
+        public void Reiniciar()
+        {
+            try
+            {
+                this.estadoActual = CNC_Estados.SerialPortConectado;
+                //enviar(CNC_Mensajes_Send.Reset);
+
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("CNC.PausarTransmision: " + ex.Message));
+            }
+        }
+
+        public void IrAlInicio()
+        {
+            try
+            {
+                //nos conectamos al puerto
+                conectarSerialPort();
+
+                //enviamos la peticion para ir al origen
+                enviar(CNC_Mensajes_Send.PosicionDeOrigen);
+
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("CNC.PausarTransmision: " + ex.Message));
+            }
 
         }
 

@@ -77,6 +77,12 @@ namespace CNCMatic.XML
                     dc = new DataColumn("MaxZ");
                     dt.Columns.Add(dc);
 
+                    dc = new DataColumn("VelocidadMovimiento");
+                    dt.Columns.Add(dc);
+
+                    dc = new DataColumn("LargoSeccion");
+                    dt.Columns.Add(dc);
+
                     dr = dt.NewRow();
 
                     ds.Tables.Add(dt);
@@ -103,6 +109,9 @@ namespace CNCMatic.XML
                 dr["MaxX"] = config.MaxX.ToString();
                 dr["MaxY"] = config.MaxY.ToString();
                 dr["MaxZ"] = config.MaxZ.ToString();
+                dr["VelocidadMovimiento"] = config.VelocidadMovimiento.ToString();
+                dr["LargoSeccion"] = config.LargoSeccion.ToString();
+
 
                 if (!actualiza)
                     dt.Rows.Add(dr);
@@ -340,6 +349,9 @@ namespace CNCMatic.XML
                     c.MaxX = float.Parse(dr["MaxX"].ToString());
                     c.MaxY = float.Parse(dr["MaxY"].ToString());
                     c.MaxZ = float.Parse(dr["MaxZ"].ToString());
+                    c.VelocidadMovimiento = dr["VelocidadMovimiento"].ToString();
+                    c.LargoSeccion = dr["LargoSeccion"].ToString();
+
                     c.ConfigMatMot = new List<XML_ConfigMatMot>();
 
                     if (dtConfigMatMot != null)
@@ -464,6 +476,9 @@ namespace CNCMatic.XML
                         c.MaxX = float.Parse(dr["MaxX"].ToString());
                         c.MaxY = float.Parse(dr["MaxY"].ToString());
                         c.MaxZ = float.Parse(dr["MaxZ"].ToString());
+                        c.VelocidadMovimiento = dr["VelocidadMovimiento"].ToString();
+                        c.LargoSeccion = dr["LargoSeccion"].ToString();
+
                         c.ConfigMatMot = new List<XML_ConfigMatMot>();
 
                         if (dtConfigMatMot != null)

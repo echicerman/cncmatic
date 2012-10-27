@@ -493,6 +493,7 @@ void MoveToOrigin()
 	{
 		StepOnX(false);
 	}
+	limitSensorX = limitSensorY = limitSensorZ = false;
 	currentSteps = CreateStepsPosition(0, 0, 0);
 	currentPosition = CreatePosition(0.0, 0.0, 0.0);
 }
@@ -687,6 +688,7 @@ void user(void)
 						if(machineState == LIMITSENSOR)
 						{
 							freeCode = -1;
+							limitSensorX = limitSensorY = limitSensorZ = false;
 							strcpypgm2ram(message, (const rom char far *)"ERR:SFC");
 							putUSBUSART(message, strlen(message));
 						}
@@ -712,6 +714,7 @@ void user(void)
 					// Chequeamos machineState -> si se activo algun fin de carrera
 					if(machineState == LIMITSENSOR)
 					{
+						limitSensorX = limitSensorY = limitSensorZ = false;
 						sprintf(message, (const rom char far *)"ERR:SFC_X%ld Y%ld Z%ld", currentSteps.x, currentSteps.y, currentSteps.z);
 					}
 					else if(machineState == EMERGENCYSTOP)

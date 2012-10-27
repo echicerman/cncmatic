@@ -21,10 +21,10 @@ namespace CommandPreprocessor
             this.currentPosition = new Position(0, 0, 0);
             this.referencePosition = new Position(0, 0, 0);
 
-            Configuration.absoluteProgamming = true;
-            Configuration.millimetersProgramming = true;
-            Configuration.millimetersCurveSection = 0.5;
-            Configuration.defaultFeedrate = 60;
+            //Configuration.absoluteProgamming = true;
+            //Configuration.millimetersProgramming = true;
+            //Configuration.millimetersCurveSection = 0.5;
+            //Configuration.defaultFeedrate = 60;
         }
         public static CommandPreprocessor GetInstance()
         {

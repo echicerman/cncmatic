@@ -172,6 +172,8 @@ namespace CNCMatic
                 config.MaxY = float.Parse(txtMaxY.Text);
                 config.MaxZ = float.Parse(txtMaxZ.Text);
                 config.PuertoCom = portComboBox.Text;
+                config.LargoSeccion = txtLargoSeccion.Text;
+                config.VelocidadMovimiento = txtVelocMov.Text;
 
                 if (rbtAbsoluta.Checked)
                     config.TipoProg = "abs";
@@ -253,6 +255,8 @@ namespace CNCMatic
                 txtMaxX.Text = config.MaxX.ToString();
                 txtMaxY.Text = config.MaxY.ToString();
                 txtMaxZ.Text = config.MaxZ.ToString();
+                txtVelocMov.Text = config.VelocidadMovimiento.ToString();
+                txtLargoSeccion.Text = config.LargoSeccion.ToString();
 
                 //seleccionamos el puerto
                 if (portComboBox.Items.Contains(config.PuertoCom))

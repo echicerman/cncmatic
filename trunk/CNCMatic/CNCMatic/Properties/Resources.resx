@@ -169,6 +169,9 @@
   <data name="stop" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\stop.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Cancel-icon2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Cancel-icon2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="square-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\square-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -210,6 +213,9 @@
   </data>
   <data name="screens4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\screens4.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Captura2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Captura2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="screens2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\screens2.bmp;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -259,7 +265,7 @@
   <data name="draw-circle-icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\draw-circle-icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Cancel-icon2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Cancel-icon2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Captura21" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Captura21.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -14,14 +14,20 @@ namespace CNCMatic
     {
         public static XML_Config ConfiguracionActual()
         {
-            //cargamos la configuracion por default
-            string xmlPath = ConfigurationManager.AppSettings["xmlDbPath"];
-            string ultConfigId = ConfigurationManager.AppSettings["idLastConfig"];
+            try
+            { //cargamos la configuracion por default
+                string xmlPath = ConfigurationManager.AppSettings["xmlDbPath"];
+                string ultConfigId = ConfigurationManager.AppSettings["idLastConfig"];
 
-            XMLdb x = new XMLdb(xmlPath);
-            XML_Config config = x.LeeConfiguracionActual(Convert.ToInt32(ultConfigId));
+                XMLdb x = new XMLdb(xmlPath);
+                XML_Config config = x.LeeConfiguracionActual(Convert.ToInt32(ultConfigId));
 
-            return config;
+                return config;
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("Interfaz.ConfiguracionActual: " + ex.Message));
+            }
         }
 
         public static bool ConectarCNC(ref ToolStripStatusLabel lblEstado, List<string> loteInstrucciones, ref ToolStripStatusLabel lblPosicActual)
@@ -36,47 +42,81 @@ namespace CNCMatic
                 }
                 else
                 {
+                    bool resultado = true;
+
                     //traemos la instancia de la maquina
                     var cnc = CNC.CNC.Cnc;
 
-                    cnc.Label = lblEstado;
-                    cnc.PuertoConexion = ConfiguracionActual().PuertoCom;
-                    cnc.Configuracion = ConfiguracionActual();
-                    cnc.LblPosicionActual = lblPosicActual;
+                    if (cnc.EstadoActual != CNC_Estados.EsperandoComando)
+                    {//si no esta esperando comando
 
-                    //ya cargamos el lote de instrucciones del CNC
-                    cnc.CargaLoteInstrucciones(loteInstrucciones);
+                        cnc.Label = lblEstado;
+                        cnc.PuertoConexion = ConfiguracionActual().PuertoCom;
+                        cnc.Configuracion = ConfiguracionActual();
+                        cnc.LblPosicionActual = lblPosicActual;
 
-                    bool resultado = true;
+                        //ya cargamos el lote de instrucciones del CNC
+                        cnc.CargaLoteInstrucciones(loteInstrucciones);
 
-                    //1: establecemos conexion    
-                    resultado = cnc.EstablecerConexion();
-                    if (!resultado)
-                    {
-                        MessageBox.Show("No se ha podido establecer la conexión", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        //1: establecemos conexion    
+                        resultado = cnc.EstablecerConexion();
+                        if (!resultado)
+                        {
+                            MessageBox.Show("No se ha podido establecer la conexión", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else
+                        {
+
+                        }
                     }
                     else
                     {
+                        cnc.Configuracion = ConfiguracionActual();
+                        cnc.LblPosicionActual = lblPosicActual;
 
+                        //ya cargamos el lote de instrucciones del CNC
+                        cnc.CargaLoteInstrucciones(loteInstrucciones);
+
+                        //iniciamos la transmision
+                        resultado = cnc.IniciarTransmision();
+                        if (!resultado)
+                        {
+                            MessageBox.Show("No se ha podido establecer la conexión", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
-
                     return resultado;
                 }
             }
             catch (Exception ex)
             {
-                throw (new Exception("ConectarCNC: " + ex.Message));
+                throw (new Exception("Interfaz.ConectarCNC: " + ex.Message));
             }
 
+        }
+
+        public static void ReaudarTransmision()
+        {
+            try
+            {
+                //maquina
+                var cnc = CNC.CNC.Cnc;
+
+                cnc.ReanudarTransmision();
+
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("Interfaz.ReaudarTransmision: " + ex.Message));
+            }
         }
 
         private static bool validarConfiguracionActual()
         {
             try
             {
-                XML_Config config=ConfiguracionActual();
-                
-                if(config.ConfigMatMot.Count<3)
+                XML_Config config = ConfiguracionActual();
+
+                if (config.ConfigMatMot.Count < 3)
                 {
                     //no tiene la info de los tres motores
                     return false;
@@ -85,7 +125,7 @@ namespace CNCMatic
                 for (int i = 0; i < 3; i++)
                 {
 
-                    if  (
+                    if (
                         (config.ConfigMatMot[i].GradosPaso <= 0) ||
                         (config.ConfigMatMot[i].TamVuelta <= 0)
                         )
@@ -101,54 +141,92 @@ namespace CNCMatic
             }
             catch (Exception ex)
             {
-                throw (new Exception("validarConfiguracionActual: " + ex.Message));
+                throw (new Exception("Interfaz.validarConfiguracionActual: " + ex.Message));
             }
         }
 
         public static void MoverLibre(string movimiento, ref ToolStripStatusLabel lblPosicActual)
         {
-            //maquina
-            var cnc = CNC.CNC.Cnc;
-            cnc.PuertoConexion = ConfiguracionActual().PuertoCom;
-            cnc.Configuracion = ConfiguracionActual();
-            cnc.LblPosicionActual = lblPosicActual;
+            try
+            {//maquina
+                var cnc = CNC.CNC.Cnc;
+                cnc.PuertoConexion = ConfiguracionActual().PuertoCom;
+                cnc.Configuracion = ConfiguracionActual();
+                cnc.LblPosicionActual = lblPosicActual;
 
-            cnc.EnviarMovimientoLibre(movimiento);
+                cnc.EnviarMovimientoLibre(movimiento);
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("Interfaz.MoverLibre: " + ex.Message));
+            }
         }
 
         public static void DetenerMovimientoLibre()
         {
-            //maquina
-            var cnc = CNC.CNC.Cnc;
+            try
+            {//maquina
+                var cnc = CNC.CNC.Cnc;
 
-            cnc.DetenerMovimientoLibre();
+                cnc.DetenerMovimientoLibre();
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("Interfaz.DetenerMovimientoLibre: " + ex.Message));
+            }
         }
-        
-        //public static bool EnviarSetDeInstrucciones(List<string> loteInstrucciones)
-        //{
-        //    try
-        //    {
-        //        bool resultado = false;
 
-        //        //traemos la instancia de la maquina
-        //        var cnc = CNC.CNC.Cnc;
+        public static void PausarTransmision()
+        {
+            try
+            {//maquina
+                var cnc = CNC.CNC.Cnc;
 
-        //        //validamos que este en estado WAITINGCOMMAND para transferir configuracion
-        //        if (cnc.EstadoActual == CNC.CNC_Estados.EsperandoComando)
-        //        {
-        //            cnc.CargaLoteInstrucciones(loteInstrucciones);
+                if (cnc.EstadoActual == CNC_Estados.EsperandoComando || cnc.EstadoActual == CNC_Estados.ProcesandoComando)
+                {
+                    cnc.PausarTransmision();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("Interfaz.PausarTransmision: " + ex.Message));
+            }
+        }
 
-        //            cnc.IniciarTransmision();
-        //        }
+        public static void ReiniciarCNC()
+        {
+            try
+            {
+                //maquina
+                var cnc = CNC.CNC.Cnc;
 
-        //        return resultado;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw (new Exception("EnviarSetDeInstrucciones: " + ex.Message));
-        //    }
 
-        //}
+                cnc.Reiniciar();
 
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("Interfaz.ReiniciarCNC: " + ex.Message));
+            }
+        }
+
+        public static void OrigenCNC(ref ToolStripStatusLabel lblPosicActual)
+        {
+            try
+            {
+                //maquina
+                var cnc = CNC.CNC.Cnc;
+                cnc.PuertoConexion = ConfiguracionActual().PuertoCom;
+                cnc.Configuracion = ConfiguracionActual();
+                cnc.LblPosicionActual = lblPosicActual;
+
+                cnc.IrAlInicio();
+
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("Interfaz.OrigenCNC: " + ex.Message));
+            }
+        }
     }
 }

@@ -102,6 +102,20 @@ namespace CNCMatic.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Captura2 {
+            get {
+                object obj = ResourceManager.GetObject("Captura2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Captura21 {
+            get {
+                object obj = ResourceManager.GetObject("Captura21", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap circle_icon {
             get {
                 object obj = ResourceManager.GetObject("circle-icon", resourceCulture);

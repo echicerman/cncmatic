@@ -9,6 +9,8 @@
     <MaxX>100</MaxX>
     <MaxY>100</MaxY>
     <MaxZ>100</MaxZ>
+	<LargoSeccion>0.5</LargoSeccion>
+    <VelocidadMovimiento>60</VelocidadMovimiento>
   </configuracion>
   <materiales>
     <Id>1</Id>

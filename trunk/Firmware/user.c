@@ -267,16 +267,14 @@ void ProcessLinearMovement(position_t targetPosition, double feedrate)
 	zDelta = targetPosition.z - currentPosition.z > 0 ? targetPosition.z - currentPosition.z : currentPosition.z - targetPosition.z;
 	
 	deltaStateChangesPosition = ToStepsPosition(xDelta, yDelta, zDelta);
-	deltaStateChangesPosition.x *= 2;
-	deltaStateChangesPosition.y *= 2;
-	deltaStateChangesPosition.z *= 2;
 	
 	maxDeltaSteps = deltaStateChangesPosition.x > deltaStateChangesPosition.y ? deltaStateChangesPosition.x : deltaStateChangesPosition.y;
 	maxDeltaSteps = maxDeltaSteps > deltaStateChangesPosition.z ? maxDeltaSteps : deltaStateChangesPosition.z;
 	
 	// Calculating delay
 	totalDistance = sqrt(xDelta * xDelta + yDelta * yDelta + zDelta * zDelta);
-	delay = ((60000000 / feedrate) / maxDeltaSteps) * totalDistance; // time between steps for most dinamyc axis - microseconds
+	delay = ((totalDistance * 60000000.0) / feedrate) / maxDeltaSteps; // time between steps for most dinamyc axis - microseconds
+	delay /= 2; // se necesitan 2 cambios de estado por cada paso
 	
 	xCounter = -maxDeltaSteps / 2;
 	yCounter = -maxDeltaSteps / 2;
@@ -360,9 +358,9 @@ void ProcessLinearMovement(position_t targetPosition, double feedrate)
 		
 		//wait for next step.
 		if(delay > 1000)
-			Delay1MSx((int)delay/1000);
+			Delay1MSx((int)ceil(delay/1000));
 		else
-			Delay10msx((int)delay/10);
+			Delay10msx((int)ceil(delay/10));
 	}
 	goto end;
 	
@@ -548,6 +546,23 @@ void user(void)
 				sprintf(message, (const rom char far *)"CNCS:%d", machineState);
 				putUSBUSART(message, strlen(message));
 				goto endUser;
+			}
+			
+			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"origin"))
+			{
+				if(programPaused)
+				{
+					strcpypgm2ram(message, (const rom char far *)"ERR:PP");
+					putUSBUSART(message, strlen(message));
+					goto endUser;
+				}
+				else
+				{
+					MoveToOrigin();
+					strcpypgm2ram(message, (const rom char far *)"PO");
+					putUSBUSART(message, strlen(message));
+					goto endUser;
+				}
 			}
 			
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"freemoves"))

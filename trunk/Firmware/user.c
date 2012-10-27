@@ -538,7 +538,7 @@ void user(void)
 				limitSensorX = limitSensorY = limitSensorZ = configured = programPaused = false;
 				strcpypgm2ram(message, (const rom char far *)"CNCR");
 				putUSBUSART(message, strlen(message));
-				machineState = SERIALPORTCONNECTED;
+				machineState = CNCMATICCONNECTED;
 				goto endUser;
 			}
 			
@@ -577,7 +577,7 @@ void user(void)
 				}
 				else
 				{
-					machineState = SERIALPORTCONNECTED;
+					machineState = READYTOCONFIGURE;
 				}
 				goto endUser;
 			}
@@ -618,7 +618,6 @@ void user(void)
 					else
 					{
 						strcpypgm2ram(message, (const rom char far *)"CFGE");
-						machineState = READYTOCONFIGURE;
 					}
 					putUSBUSART(message, strlen(message));
 					break;

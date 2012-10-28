@@ -26,8 +26,15 @@ namespace G.Servicios
                 {
                     linea = sr.ReadLine();
                     if (ComandoValido(linea))
+                    {
                         lineas.Add(linea);
-
+                    }
+                    else
+                    {
+                        lineas.Clear();
+                        lineas.Add("archivo no valido");
+                        return lineas;
+                    }
                 }
                 sr.Close();
                 return lineas;
@@ -50,14 +57,21 @@ namespace G.Servicios
             //que no sea linea en blanco
             if (comando == "")
                 return false;
-
-            //que solo inicie con g o m  --> Por el momento no cumple ya que puede empezar con N (según ejemplo sample.cnc)
-            //if (!comando.StartsWith("g", true, null)
-            //    && !comando.StartsWith("m", true, null))
-            //    return false;
-                        
-            //todo OK
-            return true;
+            if (comando[0].ToString().ToUpper().Equals("M") || comando[0].ToString().ToUpper().Equals("G"))
+            {
+                if ("0123456789".IndexOf(comando[1].ToString()) == 0 || "0123456789".IndexOf(comando[1].ToString()) == 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

@@ -358,6 +358,7 @@ namespace CNCMatic
 
         private List<string> AgregarAccionesAG00(List<string> newList)
         {
+            double deltaSubida = 0.5;
             string linea;
             string[] valoresZ;
             int valorZ;
@@ -371,8 +372,8 @@ namespace CNCMatic
                     {
                         valoresZ = lineaG.Split('Z');
                         valorZ = Convert.ToInt16(valoresZ[1]);
-                        linea = "G00 Z" + Convert.ToString(valorZ + 0.5) + Environment.NewLine + valoresZ[0] + "Z" +
-                            Convert.ToString(valorZ + 0.5) + Environment.NewLine + "G00 Z" + Convert.ToString(valorZ);
+                        linea = "G00 Z" + Convert.ToString(valorZ + deltaSubida) + Environment.NewLine + valoresZ[0] + "Z" +
+                            Convert.ToString(valorZ + deltaSubida) + Environment.NewLine + "G00 Z" + Convert.ToString(valorZ);
                     }
                     else
                     {
@@ -429,10 +430,21 @@ namespace CNCMatic
             {
                 //importacion de codigo G
                 Importacion imp = new Importacion();
+
                 List<string> lineas = imp.leeGfile(importaG.FileName);
 
                 foreach (string s in lineas)
-                    this.txtPreview.Text += (s + Environment.NewLine);
+                {
+                    if (s.Equals("archivo no valido"))
+                    {
+                        MessageBox.Show("El archivo importado no es válido", "Error de importación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    else
+                    {
+                        this.txtPreview.Text += (s + Environment.NewLine);
+                    }
+                }
 
                 //Muestra codigo en el previsualizador
                 OpenFile(importaG.FileName);

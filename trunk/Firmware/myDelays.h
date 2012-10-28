@@ -6,7 +6,7 @@
 /********************************************************************************/
 #include <delays.h>
 void Delay10msx(int);
-void Delay1MS();
+void Delay1MS(void);
 void Delay1MSx(int);
 void Delay10MSx(int);
 void Delay100MSx(int);

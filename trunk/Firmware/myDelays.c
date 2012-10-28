@@ -6,7 +6,7 @@ void Delay10msx(int x)
 }
 void Delay1MS()
 {
-	Delay1MSx(1);
+	Delay1KTCYx(12);
 }
 void Delay1MSx(int x)
 { 

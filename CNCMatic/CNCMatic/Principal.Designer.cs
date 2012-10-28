@@ -131,9 +131,10 @@
             // 
             // importaG
             // 
-            this.importaG.DefaultExt = "*.gcode";
-            this.importaG.FileName = "*.gcode";
-            this.importaG.Filter = "Codigo G(*.gcode)|*.gcode";
+            this.importaG.DefaultExt = "*.*";
+            this.importaG.FileName = "*.*";
+            this.importaG.Filter = "gcode(*.gcode)|*.gcode|cnc(*.cnc)|*.cnc|Archivos de texto(*.txt)|*.txt|Todos(*.*)" +
+                "|*.*";
             // 
             // txtPreview
             // 
@@ -250,7 +251,7 @@
             this.ayudaToolStripMenuItem});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
-            this.menu.Size = new System.Drawing.Size(1162, 24);
+            this.menu.Size = new System.Drawing.Size(1149, 24);
             this.menu.TabIndex = 21;
             this.menu.Text = "menuStrip1";
             // 
@@ -333,7 +334,7 @@
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip1.Size = new System.Drawing.Size(78, 673);
+            this.toolStrip1.Size = new System.Drawing.Size(78, 665);
             this.toolStrip1.TabIndex = 22;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -521,9 +522,9 @@
             this.prgBar,
             this.lblPosicionActual,
             this.lblEstado});
-            this.statusStrip1.Location = new System.Drawing.Point(78, 675);
+            this.statusStrip1.Location = new System.Drawing.Point(78, 667);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1084, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1071, 22);
             this.statusStrip1.TabIndex = 27;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -933,8 +934,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.ClientSize = new System.Drawing.Size(1162, 697);
+            this.ClientSize = new System.Drawing.Size(1149, 689);
             this.Controls.Add(this.btnLimpiar);
             this.Controls.Add(this.grpPrev);
             this.Controls.Add(this.txtLineaManual);
@@ -944,6 +946,8 @@
             this.Controls.Add(this.txtPreview);
             this.Controls.Add(this.menu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximumSize = new System.Drawing.Size(1165, 727);
+            this.MinimumSize = new System.Drawing.Size(1165, 727);
             this.Name = "Principal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CNC Matic";

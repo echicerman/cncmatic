@@ -235,6 +235,7 @@ namespace CommandPreprocessor
             radius = Math.Sqrt(aX * aX + aY * aY);
             length = radius * angle;
             steps = (int)(length / Configuration.millimetersCurveSection);
+            steps = steps == 0 ? 1 : steps;
 
             Position sectionPosition = new Position();
             for (int s = 1; s <= steps; s++)

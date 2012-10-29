@@ -16,7 +16,7 @@ state_t machineState = SERIALPORTCONNECTED;
 char gCode = -1, mCode = -1, freeCode = -1;
 char commandReceived[64];
 bool_t limitSensorX = false, limitSensorY = false, limitSensorZ = false;
-bool_t programPaused = false, configured = false;
+bool_t programPaused = false;//, configured = false;
 
 // Configuration: milimeters
 enginesConfig_t mmConfiguration;
@@ -73,6 +73,17 @@ int mCodesCount = sizeof(mCodes) / sizeof(mCodes[0]);
 /********************************************************************/
 /*	 Get the number right after the lette <name> inside <command>	*/
 /********************************************************************/
+int GetFreeCode(char string[])
+{
+	if( strstrrampgm(string, (const rom char far *)"+X") ) return 0;
+	if( strstrrampgm(string, (const rom char far *)"-X") ) return 1;
+	if( strstrrampgm(string, (const rom char far *)"+Y") ) return 2;
+	if( strstrrampgm(string, (const rom char far *)"-Y") ) return 3;
+	if( strstrrampgm(string, (const rom char far *)"+Z") ) return 4;
+	if( strstrrampgm(string, (const rom char far *)"-Z") ) return 5;
+	
+	return -1;
+}
 double GetValueParameter(char name, char command[])
 {
 	int i, count = strlen(command);
@@ -128,7 +139,7 @@ bool_t ConfigureMachine(char configurationString[])
 	mmConfiguration.step_units_axisZ = atof(configPtr);
 	if(mmConfiguration.step_units_axisZ == 0) return false;
 	
-	configured = true;
+	//configured = true;
 	return true;
 }
 
@@ -534,10 +545,10 @@ void user(void)
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"reset"))
 			{
 				// Resetear la maquina si recibimos el comando 'reset'
-				limitSensorX = limitSensorY = limitSensorZ = configured = programPaused = false;
+				limitSensorX = limitSensorY = limitSensorZ = programPaused = false; //configured = programPaused = false;
 				strcpypgm2ram(message, (const rom char far *)"CNCR");
 				putUSBUSART(message, strlen(message));
-				machineState = CNCMATICCONNECTED;
+				machineState = SERIALPORTCONNECTED;
 				goto endUser;
 			}
 			
@@ -566,7 +577,7 @@ void user(void)
 				}
 			}
 			
-			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"freemoves"))
+			if(strstrrampgm(USB_In_Buffer, (const rom char far *)"FM:"))
 			{
 				if(programPaused)
 				{
@@ -576,9 +587,17 @@ void user(void)
 				}
 				else
 				{
-					strcpypgm2ram(message, (const rom char far *)"CNCFM");
+					freeCode = GetFreeCode(USB_In_Buffer);
+					if(freeCode != -1)
+					{
+						strcpypgm2ram(message, (const rom char far *)"CNCFM");
+						machineState = FREEMOVES;
+					}
+					else
+					{
+						strcpypgm2ram(message, (const rom char far *)"ERR:CNCFM");
+					}
 					putUSBUSART(message, strlen(message));
-					machineState = FREEMOVES;
 					goto endUser;
 				}
 			}
@@ -588,6 +607,8 @@ void user(void)
 				freeCode = -1;
 				sprintf(message, (const rom char far *)"CNCSFM_X%ld Y%ld Z%ld", currentSteps.x, currentSteps.y, currentSteps.z);
 				putUSBUSART(message, strlen(message));
+				machineState = READYTOCONFIGURE;
+				/*
 				if(configured){
 					machineState = WAITINGCOMMAND;
 				}
@@ -595,20 +616,12 @@ void user(void)
 				{
 					machineState = READYTOCONFIGURE;
 				}
+				*/
 				goto endUser;
 			}
 			
 			switch(machineState)
 			{
-				case FREEMOVES:
-					if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"+X")) { freeCode = 0; goto endUser; }
-					if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"-X")) { freeCode = 1; goto endUser; }
-					if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"+Y")) { freeCode = 2; goto endUser; }
-					if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"-Y")) { freeCode = 3; goto endUser; }
-					if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"+Z")) { freeCode = 4; goto endUser; }
-					if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"-Z")) { freeCode = 5; goto endUser; }
-					break;
-					
 				case SERIALPORTCONNECTED:
 					// Count characters received and send this number to PC
 					sprintf(message, (const rom char far *)"%d", numBytesRead);
@@ -676,8 +689,6 @@ void user(void)
 				case FREEMOVES:
 					if(freeCode != -1)
 					{
-						stepsPosition_t freeTargetSteps = CreateStepsPositionFrom(currentSteps);
-						
 							 if( freeCode == 0)	{ StepOnX(true);  }
 						else if( freeCode == 1) { StepOnX(false); }
 						else if( freeCode == 2) { StepOnY(true);  }
@@ -689,10 +700,10 @@ void user(void)
 						{
 							freeCode = -1;
 							limitSensorX = limitSensorY = limitSensorZ = false;
-							strcpypgm2ram(message, (const rom char far *)"ERR:SFC");
+							sprintf(message, (const rom char far *)"ERR:SFC_X%ld Y%ld Z%ld", currentSteps.x, currentSteps.y, currentSteps.z);
 							putUSBUSART(message, strlen(message));
+							machineState = READYTOCONFIGURE;
 						}
-						machineState = FREEMOVES;
 					}
 					break;
 

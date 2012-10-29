@@ -39,7 +39,7 @@ namespace CNCMatic
             this.lblMachName.Text = "PC: " + Environment.MachineName;
 
             mViewer = this.MG_Viewer1;
-            mProcessor.OnAddBlock += new clsProcessor.OnAddBlockEventHandler(mProcessor_OnAddBlock);
+            //mProcessor.OnAddBlock += new clsProcessor.OnAddBlockEventHandler(mProcessor_OnAddBlock);
 
             MG_CS_BasicViewer.OnSelection += new MG_CS_BasicViewer.OnSelectionEventHandler(mViewer_OnSelection);
             MG_CS_BasicViewer.MouseLocation += new MG_CS_BasicViewer.MouseLocationEventHandler(mViewer_MouseLocation);
@@ -56,7 +56,8 @@ namespace CNCMatic
             try
             {
                 //enviamos al cnc al origen
-                Interfaz.OrigenCNC(ref lblPosicionActual);
+                Interfaz.OrigenCNC(ref lblEstado,ref lblPosicionActual);
+                
             }
             catch (Exception ex)
             {
@@ -157,7 +158,7 @@ namespace CNCMatic
                     doc.Cargar(importaDXF.FileName);
 
                     //Analizamos las figuras
-                    if (!doc.AnalizarFiguras())
+                    if (!doc.AnalizarFiguras(Interfaz.ConfiguracionActual()))
                     {
                         MessageBox.Show("Error: Se han encontrado figuras que superan el área de trabajo definido", "Importar DXF", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -694,9 +695,13 @@ namespace CNCMatic
                     Properties.Settings.Default.ViewFormLocation = this.Location;
                     Properties.Settings.Default.ViewFormSize = this.Size;
                 }
+
+                //mandamos a desconectar el puerto
+                Interfaz.DesconectarCNC();
             }
-            catch
+            catch(Exception ex)
             {
+                MessageBox.Show("Error al cerrar: " + ex.Message, "Salir", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -990,7 +995,7 @@ namespace CNCMatic
                         DialogResult dr = MessageBox.Show("Se iniciará el envío de las instrucciones al CNC." + Environment.NewLine + "¿Desea Continuar?", "Transferencia CNC", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
                         if (dr == DialogResult.Yes)
                         {
-                            if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual))
+                            if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual, ref this.prgBar))
                             {
                                 //bloqueamos controles
                                 btnPlay.Enabled = false;
@@ -1070,62 +1075,86 @@ namespace CNCMatic
         private void btnMovZ_Arr_MouseDown(object sender, MouseEventArgs e)
         {
             //avanzamos en Z
-            Interfaz.MoverLibre(CNC.CNC_Mensajes_Send.Zavance, ref lblPosicionActual);
+            MoverLibre(CNC.CNC_Mensajes_Send.Zavance);
         }
         private void btnMovZ_Arr_MouseUp(object sender, MouseEventArgs e)
         {
             //detenemos movimiento
-            Interfaz.DetenerMovimientoLibre();
+            DetenerMovimientoLibre();
         }
         private void btnMovZ_Aba_MouseDown(object sender, MouseEventArgs e)
         {
             //retrocedemos en Z
-            Interfaz.MoverLibre(CNC.CNC_Mensajes_Send.Zretroc, ref lblPosicionActual);
+            MoverLibre(CNC.CNC_Mensajes_Send.Zretroc);
         }
         private void btnMovZ_Aba_MouseUp(object sender, MouseEventArgs e)
         {
             //detenemos movimiento
-            Interfaz.DetenerMovimientoLibre();
+            DetenerMovimientoLibre();
         }
         private void btnMovXY_Arr_MouseDown(object sender, MouseEventArgs e)
         {
             //avanzamos en Y
-            Interfaz.MoverLibre(CNC.CNC_Mensajes_Send.Yavance, ref lblPosicionActual);
+            MoverLibre(CNC.CNC_Mensajes_Send.Yavance);
         }
         private void btnMovXY_Arr_MouseUp(object sender, MouseEventArgs e)
         {
             //detenemos movimiento
-            Interfaz.DetenerMovimientoLibre();
+            DetenerMovimientoLibre();
         }
         private void btnMovXY_Aba_MouseUp(object sender, MouseEventArgs e)
         {
             //detenemos movimiento
-            Interfaz.DetenerMovimientoLibre();
+            DetenerMovimientoLibre();
         }
         private void btnMovXY_Aba_MouseDown(object sender, MouseEventArgs e)
         {
             //retrocedemos en Y
-            Interfaz.MoverLibre(CNC.CNC_Mensajes_Send.Yretroc, ref lblPosicionActual);
+            MoverLibre(CNC.CNC_Mensajes_Send.Yretroc);
         }
         private void btnMovXY_Der_MouseDown(object sender, MouseEventArgs e)
         {
             //avanzamos en X
-            Interfaz.MoverLibre(CNC.CNC_Mensajes_Send.Xavance, ref lblPosicionActual);
+            MoverLibre(CNC.CNC_Mensajes_Send.Xavance);
         }
         private void btnMovXY_Izq_MouseUp(object sender, MouseEventArgs e)
         {
             //detenemos movimiento
-            Interfaz.DetenerMovimientoLibre();
+            DetenerMovimientoLibre();
         }
         private void btnMovXY_Izq_MouseDown(object sender, MouseEventArgs e)
         {
             //retrocedemos en X
-            Interfaz.MoverLibre(CNC.CNC_Mensajes_Send.Xretroc, ref lblPosicionActual);
+            MoverLibre(CNC.CNC_Mensajes_Send.Xretroc);
         }
         private void btnMovXY_Der_MouseUp(object sender, MouseEventArgs e)
         {
             //detenemos movimiento
-            Interfaz.DetenerMovimientoLibre();
+            DetenerMovimientoLibre();
+        }
+
+        private void MoverLibre(string movimiento)
+        {
+            try
+            {
+                Interfaz.MoverLibre(movimiento, ref lblPosicionActual);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("CNCMatic.MoverLibre: " + ex.Message,"Movimiento Libre",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
+        }
+
+        private void DetenerMovimientoLibre()
+        {
+            try
+            {
+                Interfaz.DetenerMovimientoLibre();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("CNCMatic.DetenerMovimientoLibre: " + ex.Message, "Movimiento Libre", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         //con esta funcion controlamos los cambios de estado para replicar comportamiento en el form
@@ -1139,14 +1168,34 @@ namespace CNCMatic
                 SetControlPropertyThreadSafe(btnConnect, "Visible", false);
                 SetControlPropertyThreadSafe(btnStop2, "Enabled", false);
 
-                MessageBox.Show("Conexión exitosa!", "Conexion CNC", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //MessageBox.Show("Conexión exitosa!", "Conexion CNC", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                return;
+            }
+
+            //si hubo error en el handshake, liberamos la pantalla
+            if (sender.ToString() == "Conexión (1/3): error en el handshake. Intente nuevamente.")
+            {
+                LimpiarControlesSafe();
+
+                SetControlPropertyThreadSafe(btnConnect, "Enabled", true);
+                SetControlPropertyThreadSafe(btnStop2, "Enabled", false);
+
+                return;
             }
 
             //se finaliza la ejecucion de las instrucciones, entones se liberan los controles
             if (sender.ToString() == "Fin del procesamiento")
             {
                 LimpiarControlesSafe();
+
+                SetControlPropertyThreadSafe(btnConnect, "Visible", false);
+                SetControlPropertyThreadSafe(btnStop2, "Enabled", false);
+
+                return;
             }
+
+            
         }
 
         //For ThreadSafe called to edit components
@@ -1174,7 +1223,7 @@ namespace CNCMatic
                     //obtenemos las lineas del previsualizador y removemos los blancos
                     List<string> loteInstrucciones = new List<string>();
 
-                    if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual))
+                    if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual, ref this.prgBar ))
                     {
 
                         //bloqueamos controles

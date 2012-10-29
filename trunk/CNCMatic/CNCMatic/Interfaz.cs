@@ -30,7 +30,7 @@ namespace CNCMatic
             }
         }
 
-        public static bool ConectarCNC(ref ToolStripStatusLabel lblEstado, List<string> loteInstrucciones, ref ToolStripStatusLabel lblPosicActual)
+        public static bool ConectarCNC(ref SafeControls.SafeToolStripStatusLabel lblEstado, List<string> loteInstrucciones, ref SafeControls.SafeToolStripStatusLabel lblPosicActual, ref SafeControls.SafeToolStripProgressBar pgrBar)
         {
             try
             {
@@ -54,6 +54,7 @@ namespace CNCMatic
                         cnc.PuertoConexion = ConfiguracionActual().PuertoCom;
                         cnc.Configuracion = ConfiguracionActual();
                         cnc.LblPosicionActual = lblPosicActual;
+                        cnc.BarraProgreso = pgrBar;
 
                         //ya cargamos el lote de instrucciones del CNC
                         cnc.CargaLoteInstrucciones(loteInstrucciones);
@@ -73,6 +74,7 @@ namespace CNCMatic
                     {
                         cnc.Configuracion = ConfiguracionActual();
                         cnc.LblPosicionActual = lblPosicActual;
+                        cnc.BarraProgreso = pgrBar;
 
                         //ya cargamos el lote de instrucciones del CNC
                         cnc.CargaLoteInstrucciones(loteInstrucciones);
@@ -145,7 +147,7 @@ namespace CNCMatic
             }
         }
 
-        public static void MoverLibre(string movimiento, ref ToolStripStatusLabel lblPosicActual)
+        public static void MoverLibre(string movimiento, ref SafeControls.SafeToolStripStatusLabel lblPosicActual)
         {
             try
             {//maquina
@@ -210,12 +212,13 @@ namespace CNCMatic
             }
         }
 
-        public static void OrigenCNC(ref ToolStripStatusLabel lblPosicActual)
+        public static void OrigenCNC(ref SafeControls.SafeToolStripStatusLabel lblEstado, ref SafeControls.SafeToolStripStatusLabel lblPosicActual)
         {
             try
             {
                 //maquina
                 var cnc = CNC.CNC.Cnc;
+                cnc.Label = lblEstado;
                 cnc.PuertoConexion = ConfiguracionActual().PuertoCom;
                 cnc.Configuracion = ConfiguracionActual();
                 cnc.LblPosicionActual = lblPosicActual;
@@ -226,6 +229,23 @@ namespace CNCMatic
             catch (Exception ex)
             {
                 throw (new Exception("Interfaz.OrigenCNC: " + ex.Message));
+            }
+        }
+
+        public static void DesconectarCNC()
+        {
+            try
+            {
+                //maquina
+                var cnc = CNC.CNC.Cnc;
+
+
+                cnc.Desconectar();
+
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("Interfaz.ReiniciarCNC: " + ex.Message));
             }
         }
     }

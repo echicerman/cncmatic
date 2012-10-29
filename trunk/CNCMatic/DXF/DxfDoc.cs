@@ -595,13 +595,8 @@ namespace DXF
 
         }
 
-        public bool AnalizarFiguras()
+        public bool AnalizarFiguras(XML_Config config )
         {
-            //hay que cambiar esto...
-            XML_Config config = new XML_Config();
-            config.MaxX = 1000;
-            config.MaxY = 1000;
-            config.MaxZ = 1000;
 
             //analizamos los arcos del documento
             foreach (Arco arco in this.arcos)

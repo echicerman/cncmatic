@@ -74,9 +74,9 @@
             this.lblUserName = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblMachName = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblOsVersion = new System.Windows.Forms.ToolStripStatusLabel();
-            this.prgBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.lblPosicionActual = new System.Windows.Forms.ToolStripStatusLabel();
-            this.lblEstado = new System.Windows.Forms.ToolStripStatusLabel();
+            this.prgBar = new SafeControls.SafeToolStripProgressBar();
+            this.lblPosicionActual = new SafeControls.SafeToolStripStatusLabel();
+            this.lblEstado = new SafeControls.SafeToolStripStatusLabel();
             this.txtLineaManual = new System.Windows.Forms.TextBox();
             this.grpPrev = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -550,8 +550,10 @@
             // 
             // prgBar
             // 
+            this.prgBar.MarqueeAnimationSpeed = 90;
             this.prgBar.Name = "prgBar";
             this.prgBar.Size = new System.Drawing.Size(250, 16);
+            this.prgBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             // 
             // lblPosicionActual
             // 
@@ -947,7 +949,7 @@
             this.Controls.Add(this.menu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(1165, 727);
-            this.MinimumSize = new System.Drawing.Size(1165, 727);
+            this.MinimumSize = new System.Drawing.Size(1165, 726);
             this.Name = "Principal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CNC Matic";
@@ -1005,7 +1007,7 @@
         private System.Windows.Forms.ToolStripMenuItem dXFFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gCodeFileToolStripMenuItem;
         private System.Windows.Forms.TextBox txtLineaManual;
-        private System.Windows.Forms.ToolStripProgressBar prgBar;
+        private SafeControls.SafeToolStripProgressBar prgBar;
         private System.Windows.Forms.ToolStripStatusLabel lblUserName;
         private System.Windows.Forms.ToolStripStatusLabel lblMachName;
         private System.Windows.Forms.ToolStripStatusLabel lblOsVersion;
@@ -1055,8 +1057,8 @@
         internal System.Windows.Forms.ToolStripMenuItem mnuRight;
         internal System.Windows.Forms.ToolStripMenuItem mnuIsometric;
         private System.Windows.Forms.ToolStripMenuItem acercaDeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripStatusLabel lblEstado;
-        private System.Windows.Forms.ToolStripStatusLabel lblPosicionActual;
+        private SafeControls.SafeToolStripStatusLabel lblEstado;
+        private SafeControls.SafeToolStripStatusLabel lblPosicionActual;
         private System.Windows.Forms.Button btnConnect;
     }
 }

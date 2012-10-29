@@ -30,15 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmConfiguracion));
             this.grpConfGral = new System.Windows.Forms.GroupBox();
-            this.txtLargoSeccion = new System.Windows.Forms.MaskedTextBox();
-            this.txtVelocMov = new System.Windows.Forms.MaskedTextBox();
             this.lblLargoSeccion = new System.Windows.Forms.Label();
             this.lblVelocMov = new System.Windows.Forms.Label();
-            this.txtMaxZ = new System.Windows.Forms.MaskedTextBox();
             this.lblMaxZ = new System.Windows.Forms.Label();
-            this.txtMaxY = new System.Windows.Forms.MaskedTextBox();
             this.lblMaxY = new System.Windows.Forms.Label();
-            this.txtMaxX = new System.Windows.Forms.MaskedTextBox();
             this.lblMaxX = new System.Windows.Forms.Label();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.grpTipoProgr = new System.Windows.Forms.GroupBox();
@@ -90,6 +85,11 @@
             this.btnNuevo = new System.Windows.Forms.Button();
             this.lblConfigs = new System.Windows.Forms.Label();
             this.btnAltaConfigMatMot = new System.Windows.Forms.Button();
+            this.txtMaxX = new System.Windows.Forms.NumericUpDown();
+            this.txtMaxY = new System.Windows.Forms.NumericUpDown();
+            this.txtMaxZ = new System.Windows.Forms.NumericUpDown();
+            this.txtLargoSeccion = new System.Windows.Forms.TextBox();
+            this.txtVelocMov = new System.Windows.Forms.TextBox();
             this.grpConfGral.SuspendLayout();
             this.grpTipoProgr.SuspendLayout();
             this.grpUnidadMedida.SuspendLayout();
@@ -97,19 +97,22 @@
             ((System.ComponentModel.ISupportInitialize)(this.grdConfigMatMot)).BeginInit();
             this.grpNuevoMaterial.SuspendLayout();
             this.grpNuevoMotor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMaxX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMaxY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMaxZ)).BeginInit();
             this.SuspendLayout();
             // 
             // grpConfGral
             // 
-            this.grpConfGral.Controls.Add(this.txtLargoSeccion);
             this.grpConfGral.Controls.Add(this.txtVelocMov);
+            this.grpConfGral.Controls.Add(this.txtLargoSeccion);
+            this.grpConfGral.Controls.Add(this.txtMaxZ);
+            this.grpConfGral.Controls.Add(this.txtMaxY);
+            this.grpConfGral.Controls.Add(this.txtMaxX);
             this.grpConfGral.Controls.Add(this.lblLargoSeccion);
             this.grpConfGral.Controls.Add(this.lblVelocMov);
-            this.grpConfGral.Controls.Add(this.txtMaxZ);
             this.grpConfGral.Controls.Add(this.lblMaxZ);
-            this.grpConfGral.Controls.Add(this.txtMaxY);
             this.grpConfGral.Controls.Add(this.lblMaxY);
-            this.grpConfGral.Controls.Add(this.txtMaxX);
             this.grpConfGral.Controls.Add(this.lblMaxX);
             this.grpConfGral.Controls.Add(this.btnRefresh);
             this.grpConfGral.Controls.Add(this.grpTipoProgr);
@@ -124,52 +127,25 @@
             this.grpConfGral.TabStop = false;
             this.grpConfGral.Text = "Configuración General";
             // 
-            // txtLargoSeccion
-            // 
-            this.txtLargoSeccion.Location = new System.Drawing.Point(432, 123);
-            this.txtLargoSeccion.Mask = "999";
-            this.txtLargoSeccion.Name = "txtLargoSeccion";
-            this.txtLargoSeccion.Size = new System.Drawing.Size(50, 20);
-            this.txtLargoSeccion.TabIndex = 37;
-            this.txtLargoSeccion.ValidatingType = typeof(int);
-            // 
-            // txtVelocMov
-            // 
-            this.txtVelocMov.Location = new System.Drawing.Point(432, 96);
-            this.txtVelocMov.Mask = "999";
-            this.txtVelocMov.Name = "txtVelocMov";
-            this.txtVelocMov.Size = new System.Drawing.Size(50, 20);
-            this.txtVelocMov.TabIndex = 36;
-            this.txtVelocMov.ValidatingType = typeof(int);
-            // 
             // lblLargoSeccion
             // 
             this.lblLargoSeccion.AutoSize = true;
             this.lblLargoSeccion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLargoSeccion.Location = new System.Drawing.Point(298, 128);
+            this.lblLargoSeccion.Location = new System.Drawing.Point(306, 128);
             this.lblLargoSeccion.Name = "lblLargoSeccion";
-            this.lblLargoSeccion.Size = new System.Drawing.Size(92, 13);
+            this.lblLargoSeccion.Size = new System.Drawing.Size(133, 13);
             this.lblLargoSeccion.TabIndex = 32;
-            this.lblLargoSeccion.Text = "Largo de sección:";
+            this.lblLargoSeccion.Text = "Largo de sección (curvas):";
             // 
             // lblVelocMov
             // 
             this.lblVelocMov.AutoSize = true;
             this.lblVelocMov.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVelocMov.Location = new System.Drawing.Point(298, 96);
+            this.lblVelocMov.Location = new System.Drawing.Point(306, 96);
             this.lblVelocMov.Name = "lblVelocMov";
             this.lblVelocMov.Size = new System.Drawing.Size(128, 13);
             this.lblVelocMov.TabIndex = 30;
             this.lblVelocMov.Text = "Velocidad de movimiento:";
-            // 
-            // txtMaxZ
-            // 
-            this.txtMaxZ.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMaxZ.Location = new System.Drawing.Point(243, 93);
-            this.txtMaxZ.Mask = "999";
-            this.txtMaxZ.Name = "txtMaxZ";
-            this.txtMaxZ.Size = new System.Drawing.Size(48, 20);
-            this.txtMaxZ.TabIndex = 29;
             // 
             // lblMaxZ
             // 
@@ -181,16 +157,6 @@
             this.lblMaxZ.TabIndex = 28;
             this.lblMaxZ.Text = "MaxZ:";
             // 
-            // txtMaxY
-            // 
-            this.txtMaxY.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMaxY.Location = new System.Drawing.Point(145, 93);
-            this.txtMaxY.Mask = "999";
-            this.txtMaxY.Name = "txtMaxY";
-            this.txtMaxY.Size = new System.Drawing.Size(48, 20);
-            this.txtMaxY.TabIndex = 27;
-            this.txtMaxY.ValidatingType = typeof(int);
-            // 
             // lblMaxY
             // 
             this.lblMaxY.AutoSize = true;
@@ -200,16 +166,6 @@
             this.lblMaxY.Size = new System.Drawing.Size(37, 13);
             this.lblMaxY.TabIndex = 26;
             this.lblMaxY.Text = "MaxY:";
-            // 
-            // txtMaxX
-            // 
-            this.txtMaxX.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMaxX.Location = new System.Drawing.Point(47, 93);
-            this.txtMaxX.Mask = "999";
-            this.txtMaxX.Name = "txtMaxX";
-            this.txtMaxX.Size = new System.Drawing.Size(48, 20);
-            this.txtMaxX.TabIndex = 25;
-            this.txtMaxX.ValidatingType = typeof(int);
             // 
             // lblMaxX
             // 
@@ -225,7 +181,7 @@
             // 
             this.btnRefresh.Image = global::CNCMatic.Properties.Resources.Refresh_icon;
             this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnRefresh.Location = new System.Drawing.Point(260, 123);
+            this.btnRefresh.Location = new System.Drawing.Point(260, 124);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(31, 23);
             this.btnRefresh.TabIndex = 23;
@@ -334,7 +290,7 @@
             this.portComboBox.FormattingEnabled = true;
             this.portComboBox.Location = new System.Drawing.Point(87, 125);
             this.portComboBox.Name = "portComboBox";
-            this.portComboBox.Size = new System.Drawing.Size(167, 21);
+            this.portComboBox.Size = new System.Drawing.Size(175, 21);
             this.portComboBox.TabIndex = 16;
             // 
             // grpConfigMaterial
@@ -351,7 +307,6 @@
             this.grpConfigMaterial.Controls.Add(this.lblVueltas);
             this.grpConfigMaterial.Controls.Add(this.lblMotor);
             this.grpConfigMaterial.Controls.Add(this.lblMaterial);
-            this.grpConfigMaterial.Controls.Add(this.grdConfigMatMot);
             this.grpConfigMaterial.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpConfigMaterial.Location = new System.Drawing.Point(9, 238);
             this.grpConfigMaterial.Name = "grpConfigMaterial";
@@ -388,6 +343,7 @@
             this.txtGrados.Name = "txtGrados";
             this.txtGrados.Size = new System.Drawing.Size(79, 20);
             this.txtGrados.TabIndex = 12;
+            this.txtGrados.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtGrados_KeyPress);
             // 
             // txtVueltas
             // 
@@ -396,6 +352,7 @@
             this.txtVueltas.Name = "txtVueltas";
             this.txtVueltas.Size = new System.Drawing.Size(79, 20);
             this.txtVueltas.TabIndex = 11;
+            this.txtVueltas.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtVueltas_KeyPress);
             // 
             // btnAltaMotor
             // 
@@ -478,7 +435,7 @@
             // grdConfigMatMot
             // 
             this.grdConfigMatMot.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.grdConfigMatMot.Location = new System.Drawing.Point(3, 0);
+            this.grdConfigMatMot.Location = new System.Drawing.Point(10, 239);
             this.grdConfigMatMot.Name = "grdConfigMatMot";
             this.grdConfigMatMot.Size = new System.Drawing.Size(499, 170);
             this.grdConfigMatMot.TabIndex = 11;
@@ -590,6 +547,7 @@
             this.txtMaterialLargo.Name = "txtMaterialLargo";
             this.txtMaterialLargo.Size = new System.Drawing.Size(97, 20);
             this.txtMaterialLargo.TabIndex = 17;
+            this.txtMaterialLargo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtMaterialLargo_KeyPress);
             // 
             // txtMaterialAncho
             // 
@@ -597,6 +555,7 @@
             this.txtMaterialAncho.Name = "txtMaterialAncho";
             this.txtMaterialAncho.Size = new System.Drawing.Size(97, 20);
             this.txtMaterialAncho.TabIndex = 16;
+            this.txtMaterialAncho.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtMaterialAncho_KeyPress);
             // 
             // btnGrabaMaterial
             // 
@@ -610,10 +569,11 @@
             // 
             // txtMaterialEspesor
             // 
-            this.txtMaterialEspesor.Location = new System.Drawing.Point(327, 11);
+            this.txtMaterialEspesor.Location = new System.Drawing.Point(329, 11);
             this.txtMaterialEspesor.Name = "txtMaterialEspesor";
             this.txtMaterialEspesor.Size = new System.Drawing.Size(97, 20);
             this.txtMaterialEspesor.TabIndex = 14;
+            this.txtMaterialEspesor.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtMaterialEspesor_KeyPress);
             // 
             // label1
             // 
@@ -685,11 +645,11 @@
             this.btnGrabar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGrabar.Image = global::CNCMatic.Properties.Resources.save1;
             this.btnGrabar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGrabar.Location = new System.Drawing.Point(217, 410);
+            this.btnGrabar.Location = new System.Drawing.Point(192, 410);
             this.btnGrabar.Name = "btnGrabar";
-            this.btnGrabar.Size = new System.Drawing.Size(88, 31);
+            this.btnGrabar.Size = new System.Drawing.Size(138, 31);
             this.btnGrabar.TabIndex = 1;
-            this.btnGrabar.Text = "Grabar";
+            this.btnGrabar.Text = "Grabar y Cerrar";
             this.btnGrabar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnGrabar.UseVisualStyleBackColor = true;
             this.btnGrabar.Click += new System.EventHandler(this.btnGrabar_Click);
@@ -734,14 +694,71 @@
             this.btnAltaConfigMatMot.UseVisualStyleBackColor = true;
             this.btnAltaConfigMatMot.Click += new System.EventHandler(this.btnAltaConfigMatMot_Click);
             // 
+            // txtMaxX
+            // 
+            this.txtMaxX.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMaxX.Location = new System.Drawing.Point(52, 93);
+            this.txtMaxX.Maximum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+            this.txtMaxX.Name = "txtMaxX";
+            this.txtMaxX.Size = new System.Drawing.Size(48, 20);
+            this.txtMaxX.TabIndex = 38;
+            // 
+            // txtMaxY
+            // 
+            this.txtMaxY.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMaxY.Location = new System.Drawing.Point(145, 93);
+            this.txtMaxY.Maximum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+            this.txtMaxY.Name = "txtMaxY";
+            this.txtMaxY.Size = new System.Drawing.Size(48, 20);
+            this.txtMaxY.TabIndex = 39;
+            // 
+            // txtMaxZ
+            // 
+            this.txtMaxZ.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMaxZ.Location = new System.Drawing.Point(243, 93);
+            this.txtMaxZ.Maximum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+            this.txtMaxZ.Name = "txtMaxZ";
+            this.txtMaxZ.Size = new System.Drawing.Size(48, 20);
+            this.txtMaxZ.TabIndex = 40;
+            // 
+            // txtLargoSeccion
+            // 
+            this.txtLargoSeccion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtLargoSeccion.Location = new System.Drawing.Point(440, 122);
+            this.txtLargoSeccion.Name = "txtLargoSeccion";
+            this.txtLargoSeccion.Size = new System.Drawing.Size(50, 20);
+            this.txtLargoSeccion.TabIndex = 41;
+            this.txtLargoSeccion.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtLargoSeccion_KeyPress);
+            // 
+            // txtVelocMov
+            // 
+            this.txtVelocMov.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtVelocMov.Location = new System.Drawing.Point(440, 93);
+            this.txtVelocMov.Name = "txtVelocMov";
+            this.txtVelocMov.Size = new System.Drawing.Size(50, 20);
+            this.txtVelocMov.TabIndex = 42;
+            this.txtVelocMov.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtVelocMov_KeyPress);
+            // 
             // FrmConfiguracion
             // 
             this.AcceptButton = this.btnGrabar;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(523, 444);
-            this.Controls.Add(this.btnNuevo);
             this.Controls.Add(this.grpNuevoMaterial);
+            this.Controls.Add(this.btnNuevo);
             this.Controls.Add(this.btnAltaConfigMatMot);
             this.Controls.Add(this.lblConfigs);
             this.Controls.Add(this.btnCancelar);
@@ -752,6 +769,7 @@
             this.Controls.Add(this.btnGrabar);
             this.Controls.Add(this.grpConfGral);
             this.Controls.Add(this.grpNuevoMotor);
+            this.Controls.Add(this.grdConfigMatMot);
             this.Controls.Add(this.grpConfigMaterial);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -773,6 +791,9 @@
             this.grpNuevoMaterial.PerformLayout();
             this.grpNuevoMotor.ResumeLayout(false);
             this.grpNuevoMotor.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMaxX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMaxY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtMaxZ)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -806,11 +827,8 @@
         private System.Windows.Forms.Label lblNombre;
         private System.Windows.Forms.TextBox txtNombrePerfil;
         private System.Windows.Forms.Button btnCancelar;
-        private System.Windows.Forms.MaskedTextBox txtMaxZ;
         private System.Windows.Forms.Label lblMaxZ;
-        private System.Windows.Forms.MaskedTextBox txtMaxY;
         private System.Windows.Forms.Label lblMaxY;
-        private System.Windows.Forms.MaskedTextBox txtMaxX;
         private System.Windows.Forms.Label lblMaxX;
         private System.Windows.Forms.Button btnAltaMaterial;
         private System.Windows.Forms.Button btnAltaMotor;
@@ -839,7 +857,10 @@
         private System.Windows.Forms.Button btnAltaConfigMatMot;
         private System.Windows.Forms.Label lblLargoSeccion;
         private System.Windows.Forms.Label lblVelocMov;
-        private System.Windows.Forms.MaskedTextBox txtVelocMov;
-        private System.Windows.Forms.MaskedTextBox txtLargoSeccion;
+        private System.Windows.Forms.NumericUpDown txtMaxX;
+        private System.Windows.Forms.NumericUpDown txtMaxZ;
+        private System.Windows.Forms.NumericUpDown txtMaxY;
+        private System.Windows.Forms.TextBox txtLargoSeccion;
+        private System.Windows.Forms.TextBox txtVelocMov;
     }
 }

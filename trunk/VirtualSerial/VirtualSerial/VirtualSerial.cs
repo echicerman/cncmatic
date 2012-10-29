@@ -5,6 +5,7 @@ using System.Text;
 using System.IO.Ports;
 using System.Timers;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace VirtualSerial
 {
@@ -40,7 +41,7 @@ namespace VirtualSerial
             get { return connected; }
             set { connected = value; }
         }
-        public static ToolStripStatusLabel Label { get; set; }
+        public static SafeControls.SafeToolStripStatusLabel Label { get; set; }
         public static DataReceivedCallbackDelegate DataReceivedCallback
         {
             get { return callback; }
@@ -155,6 +156,9 @@ namespace VirtualSerial
             catch(Exception ex)
             {
                 CloseConnection();
+                
+                //Invoke(d, new object[] { text });
+                
                 Label.Text = "Error: Port." + ex.Message;
                 //throw ex;
             }

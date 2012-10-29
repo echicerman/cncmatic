@@ -21,7 +21,17 @@ namespace CNCMatic
 
         private void btnGrabar_Click(object sender, EventArgs e)
         {
-            GrabaConfiguracionGeneral();
+            try
+            {
+                GrabaConfiguracionGeneral();
+
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Se ha producido un error: " + ex.Message, "Alta Configuracion", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
         private void FrmConfiguracion_Load(object sender, EventArgs e)
@@ -189,7 +199,7 @@ namespace CNCMatic
                 x.GrabaConfiguracion(config);
 
                 if (actualiza)
-                    MessageBox.Show("La configuración ha sido dado actualizada correctamete", "Configuración - Actualizacion", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("La configuración ha sido actualizada correctamete", "Configuración - Actualización", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 else
                     MessageBox.Show("La configuración ha sido dado de alta correctamete", "Configuración - Alta", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -215,7 +225,8 @@ namespace CNCMatic
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Se ha producido un error: " + ex.Message, "Alta Configuracion", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw (ex);
+                //MessageBox.Show("Se ha producido un error: " + ex.Message, "Alta Configuracion", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -539,5 +550,56 @@ namespace CNCMatic
             }
         }
 
+        private char validarCampoDouble(char keyPressed)
+        {
+            if (
+                !Char.IsDigit(keyPressed) &&
+                keyPressed != '.' &&
+                keyPressed != Convert.ToChar(Keys.Back) &&
+                keyPressed != Convert.ToChar(Keys.Tab)
+                )
+            {
+                return new char();
+            }
+            else
+            {
+                return keyPressed;
+            }
+        }
+
+        private void txtVelocMov_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.KeyChar = validarCampoDouble(e.KeyChar);
+        }
+
+        private void txtLargoSeccion_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.KeyChar = validarCampoDouble(e.KeyChar);
+        }
+
+        private void txtGrados_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.KeyChar = validarCampoDouble(e.KeyChar);
+        }
+
+        private void txtVueltas_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.KeyChar = validarCampoDouble(e.KeyChar);
+        }
+
+        private void txtMaterialEspesor_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.KeyChar = validarCampoDouble(e.KeyChar);
+        }
+
+        private void txtMaterialLargo_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.KeyChar = validarCampoDouble(e.KeyChar);
+        }
+
+        private void txtMaterialAncho_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.KeyChar = validarCampoDouble(e.KeyChar);
+        }
     }
 }

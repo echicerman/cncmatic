@@ -414,7 +414,7 @@ void limitSensorAxisXHandler()
 	PORTAbits.RA1 = ~PORTAbits.RA1;
 	// tiro un paso
 	PORTAbits.RA2 = 1;
-	Delay1MS();
+	Delay1MSx(10);
 	PORTAbits.RA2 = 0;
 	
 	machineState = LIMITSENSOR;
@@ -425,7 +425,7 @@ void limitSensorAxisYHandler()
 	PORTCbits.RC1 = ~PORTCbits.RC1;
 	// tiro un paso
 	PORTCbits.RC2 = 1;
-	Delay1MS();
+	Delay1MSx(10);
 	PORTAbits.RA2 = 0;
 
 	machineState = LIMITSENSOR;
@@ -437,7 +437,7 @@ void limitSensorAxisZHandler()
 	PORTDbits.RD2 = ~PORTDbits.RD2;
 	// tiro un paso
 	PORTDbits.RD4 = 1;
-	Delay1MS();
+	Delay1MSx(10);
 	PORTDbits.RD4 = 0;
 
 	machineState = LIMITSENSOR;
@@ -456,7 +456,7 @@ void StepOnX(bool_t clockwise)
 	PORTAbits.RA1 = clockwise;
 	// tiro un paso
 	PORTAbits.RA2 = 1;
-	Delay1MS();
+	Delay1MSx(10);
 	PORTAbits.RA2 = 0;
 	
 	// limit sensor AXIS X
@@ -468,7 +468,7 @@ void StepOnY(bool_t clockwise)
 	PORTCbits.RC1 = clockwise;
 	// tiro un paso
 	PORTCbits.RC2 = 1;
-	Delay1MS();
+	Delay1MSx(10);
 	PORTCbits.RC2 = 0;
 	
 	// limit sensor AXIS Y
@@ -480,7 +480,7 @@ void StepOnZ(bool_t clockwise)
 	PORTDbits.RD2 = clockwise;
 	// tiro un paso
 	PORTDbits.RD4 = 1;
-	Delay1MS();
+	Delay1MSx(10);
 	PORTDbits.RD4 = 0;
 	
 	// limit sensor AXIS Z

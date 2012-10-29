@@ -61,6 +61,10 @@
       <Project>{5FB8E387-D096-4A98-8158-368D43664730}</Project>
       <Name>Configuracion</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SafeControls\SafeControls.csproj">
+      <Project>{3088B7FF-A274-4D3D-BB08-3FCCA2F11D13}</Project>
+      <Name>SafeControls</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

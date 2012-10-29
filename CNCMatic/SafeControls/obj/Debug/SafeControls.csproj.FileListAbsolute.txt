@@ -1,0 +1,5 @@
+D:\UTNProyecto\CNCMatic\CNCMatic\SafeControls\obj\Debug\ResolveAssemblyReference.cache
+D:\UTNProyecto\CNCMatic\CNCMatic\SafeControls\bin\Debug\SafeControls.dll
+D:\UTNProyecto\CNCMatic\CNCMatic\SafeControls\bin\Debug\SafeControls.pdb
+D:\UTNProyecto\CNCMatic\CNCMatic\SafeControls\obj\Debug\SafeControls.dll
+D:\UTNProyecto\CNCMatic\CNCMatic\SafeControls\obj\Debug\SafeControls.pdb

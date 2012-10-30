@@ -110,8 +110,7 @@ namespace CNCMatic
             toolStrip1.Enabled = true;
             txtPreview.Enabled = true;
 
-            //reiniciamos la barra
-            prgBar.Value = 0;
+    
         }
 
         private void LimpiarControlesSafe()
@@ -127,8 +126,7 @@ namespace CNCMatic
             SetControlPropertyThreadSafe(toolStrip1, "Enabled", true);
             SetControlPropertyThreadSafe(txtPreview, "Enabled", true);
 
-            //reiniciamos la barra
-            prgBar.Value = 0;
+            
         }
 
         /// <summary>
@@ -1223,6 +1221,9 @@ namespace CNCMatic
                 SetControlPropertyThreadSafe(btnConnect, "Enabled", true);
                 SetControlPropertyThreadSafe(btnStop2, "Enabled", false);
 
+                //reiniciamos la barra
+                prgBar.Value = 0;
+
                 return;
             }
 
@@ -1248,6 +1249,9 @@ namespace CNCMatic
                 SetControlPropertyThreadSafe(btnConnect, "Enabled", true);
                 SetControlPropertyThreadSafe(btnStop2, "Enabled", false);
                 SetControlPropertyThreadSafe(btnRestart, "Enabled", false);
+
+                //reiniciamos la barra
+                prgBar.Value = 0;
 
                 return;
             }

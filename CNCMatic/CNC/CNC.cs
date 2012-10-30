@@ -644,6 +644,15 @@ namespace CNC
                         }
                     }
 
+                    //si se apreto el stop de emergencia mientras iba al origen
+                    if (recep == CNC_Mensajes_Recep.ParadaEmergencia)
+                    {
+                        //volvemos a serial port
+                        estadoActual = CNC_Estados.SerialPortConectado;
+
+                        //vemos que hacemos...
+                        this.Label.Text = "Parada de Emergencia";
+                    }
 
                     return;
                 }
@@ -734,7 +743,11 @@ namespace CNC
                         estadoActual = CNC_Estados.EsperandoComando;
 
                         if (this.UltimoMensajeSend == CNC_Mensajes_Send.G_Pausa)
+                        {
                             this.Label.Text = "Transmision Pausada";
+                            
+                            return;
+                        }
 
                         //caso especial al recibir un M02
                         if (this.UltimoMensajeSend == CNC_Mensajes_Send.G_Stop)
@@ -747,6 +760,9 @@ namespace CNC
                             //no continuamos con la ejecucion...
                             return;
                         }
+
+                        //actualizamos la barra, indicando avance en el comando ejecutado
+                        this.BarraProgreso.Value = (100 / loteInstruccionesTemp.Count) * (this.proximaInstruccionTemp);
 
                         if (!this.pausarTransmision)
                             //continuamos la transmision
@@ -878,6 +894,12 @@ namespace CNC
                 //aca actualizamos el cero de la pieza, con la posicion actual
                 PrepararCommandPreprocessor();
 
+                //preparamos los comandos para enviar
+                PrepararComandos();
+
+                //iniciamos la barra
+                this.BarraProgreso.Value = 0;
+
                 //iniciamos la transmision
                 this.Transmision();
 
@@ -912,9 +934,11 @@ namespace CNC
         {
             try
             {
-                //preparamos el siguiente comando temporal para enviar
-                if (PrepararSiguienteComando())
+                //mientras haya instrucciones para enviar
+                if (loteInstruccionesTemp.Count > proximaInstruccionTemp)
                 {
+                    
+
                     if (EnviarInstruccion(loteInstruccionesTemp[proximaInstruccionTemp]))
                     {
                         proximaInstruccionTemp++;
@@ -971,50 +995,15 @@ namespace CNC
             }
         }
 
-        private bool PrepararSiguienteComando()
+        private void PrepararComandos()
         {
             try
             {
-                //seguimos mientras haya instrucciones globales
-                if (loteInstrucciones.Count > proximaInstruccion)
-                {
-                    //si llegamos a enviar todas las temporales, procesamos el siguiente global
-                    if (loteInstruccionesTemp.Count == proximaInstruccionTemp)
-                    {
-                        //actualizamos la barra
-                        this.BarraProgreso.Value = (100 / loteInstrucciones.Count) * (this.proximaInstruccion + 1);
-                        //this.BarraProgreso.Value = 33;
-                        //tomamos el proximo comando global
-                        string sgteComando = loteInstrucciones[proximaInstruccion];
-
-                        //le pasamos al commandprocessor la posicion actual
-                        CommandPreprocessor.CommandPreprocessor.GetInstance().CurrentPosition = this.PosicionActual;
-
-                        //cargamos el lote de instrucciones temp
-                        this.loteInstruccionesTemp = CommandPreprocessor.CommandPreprocessor.GetInstance().ProcessCommand(sgteComando);
-                        this.proximaInstruccionTemp = 0;
-
-                        //pasamos a la siguiente global
-                        this.proximaInstruccion++;
-
-                    }
-
-                    return true;
-                }
-                else if (loteInstrucciones.Count == proximaInstruccion)
-                {
-                    if (loteInstruccionesTemp.Count == proximaInstruccionTemp)
-                        return false;
-                    else return true;
-                }
-                else
-                {
-                    return false;
-                }
+                this.loteInstruccionesTemp = CommandPreprocessor.CommandPreprocessor.GetInstance().ProcessProgram(this.loteInstrucciones);
             }
             catch (Exception ex)
             {
-                throw (new Exception("CNC.PrepararSiguienteComando: " + ex.Message));
+                throw (new Exception("CNC.PrepararComandos: " + ex.Message));
             }
 
 

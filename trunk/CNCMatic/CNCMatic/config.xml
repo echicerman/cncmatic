@@ -11,6 +11,7 @@
     <MaxZ>100</MaxZ>
 	<LargoSeccion>0.5</LargoSeccion>
     <VelocidadMovimiento>60</VelocidadMovimiento>
+	<AlturaAscenso>1</AlturaAscenso>
   </configuracion>
   <materiales>
     <Id>1</Id>

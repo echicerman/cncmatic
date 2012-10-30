@@ -179,7 +179,7 @@ namespace CNCMatic
                     sl.AddRange(Traduce.Lineas(doc.Lineas));
                     sl.AddRange(Traduce.Arcos(doc.Arcos));
                     sl.AddRange(Traduce.Circulos(doc.Circulos));
-                    sl.AddRange(Traduce.Elipses(doc.Elipses));
+                    //sl.AddRange(Traduce.Elipses(doc.Elipses));
                     sl.AddRange(Traduce.Puntos(doc.Puntos));
                     sl.AddRange(Traduce.Polilineas(doc.Polilineas));
 
@@ -369,30 +369,35 @@ namespace CNCMatic
 
         private List<string> AgregarAccionesAG00(List<string> newList)
         {
-            double deltaSubida = 0.5;
+            //double deltaSubida = 0.5;
+            double deltaSubida = Convert.ToDouble(Interfaz.ConfiguracionActual().AltoAscenso);
+            
             string linea;
             string[] valoresZ;
             int valorZ;
-            if (newList.Count > 0)
+            if (newList != null)
             {
-                List<string> lista = new List<string>();
-                foreach (string lineaG in newList)
+                if (newList.Count > 0)
                 {
+                    List<string> lista = new List<string>();
+                    foreach (string lineaG in newList)
+                    {
 
-                    if (lineaG.Substring(0, 3).Equals("G00"))
-                    {
-                        valoresZ = lineaG.Split('Z');
-                        valorZ = Convert.ToInt16(valoresZ[1]);
-                        linea = "G00 Z" + Convert.ToString(valorZ + deltaSubida) + Environment.NewLine + valoresZ[0] + "Z" +
-                            Convert.ToString(valorZ + deltaSubida) + Environment.NewLine + "G00 Z" + Convert.ToString(valorZ);
+                        if (lineaG.Substring(0, 3).Equals("G00"))
+                        {
+                            valoresZ = lineaG.Split('Z');
+                            valorZ = Convert.ToInt16(valoresZ[1]);
+                            linea = "G00 Z" + Convert.ToString(valorZ + deltaSubida) + Environment.NewLine + valoresZ[0] + "Z" +
+                                Convert.ToString(valorZ + deltaSubida) + Environment.NewLine + "G00 Z" + Convert.ToString(valorZ);
+                        }
+                        else
+                        {
+                            linea = lineaG;
+                        }
+                        lista.Add(linea);
                     }
-                    else
-                    {
-                        linea = lineaG;
-                    }
-                    lista.Add(linea);
+                    return lista;
                 }
-                return lista;
             }
             return null;
         }
@@ -1337,7 +1342,10 @@ namespace CNCMatic
 
         private void salirMenuItem_Click(object sender, EventArgs e)
         {
-            this.Close();
+            DialogResult dr = MessageBox.Show("¿Desea salir?", "Salir", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+
+            if (dr == DialogResult.Yes)
+                this.Close();
         }
 
 

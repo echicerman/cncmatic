@@ -14,6 +14,7 @@ namespace Configuracion
         private string unidadMedida;
         private string velocidadMovimiento;
         private string largoSeccion;
+        private string altoAscenso;
         private float maxX;
         private float maxY;
         private float maxZ;
@@ -53,6 +54,11 @@ namespace Configuracion
         {
             get { return velocidadMovimiento; }
             set { velocidadMovimiento = value; }
+        }
+        public string AltoAscenso
+        {
+            get { return altoAscenso; }
+            set { altoAscenso = value; }
         }
         public float MaxX
         {

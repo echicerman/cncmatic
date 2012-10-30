@@ -296,6 +296,8 @@ void ProcessLinearMovement(position_t targetPosition, double feedrate)
 	PORTCbits.RC1 = (targetStepsPosition.y > currentSteps.y) ? 1 : 0;
 	PORTDbits.RD2 = (targetStepsPosition.z > currentSteps.z) ? 1 : 0;
 	
+	// seteo a 1 el enable de los motores
+	PORTEbits.RE2 = 1;
 	while( (targetStepsPosition.x != currentSteps.x) || (targetStepsPosition.y != currentSteps.y) || (targetStepsPosition.z != currentSteps.z) )
 	{
 		// emergency stop
@@ -389,6 +391,8 @@ void ProcessLinearMovement(position_t targetPosition, double feedrate)
 		emergencyStopHandler();
 		goto end;
 	end:
+		// seteo a 0 el enable de los motores
+		PORTEbits.RE2 = 0;
 		currentPosition = ToPositionFrom(currentSteps);
 }
 
@@ -492,21 +496,27 @@ void StepOnZ(bool_t clockwise)
 /********************************************************/
 void MoveToOrigin()
 {
-	while(!limitSensorZ)
+	while(!limitSensorZ && !PORTBbits.RB7)
 	{
 		StepOnZ(false);
 	}
-	while(!limitSensorY)
+	while(!limitSensorY && !PORTBbits.RB7)
 	{
 		StepOnY(false);
 	}
-	while(!limitSensorX)
+	while(!limitSensorX && !PORTBbits.RB7)
 	{
 		StepOnX(false);
 	}
+	// emergency stop
+	if( PORTBbits.RB7 ) { goto emergencyStop; }
+	
 	limitSensorX = limitSensorY = limitSensorZ = false;
 	currentSteps = CreateStepsPosition(0, 0, 0);
 	currentPosition = CreatePosition(0.0, 0.0, 0.0);
+	
+	emergencyStop:
+		emergencyStopHandler();
 }
 
 void user(void)
@@ -608,15 +618,6 @@ void user(void)
 				sprintf(message, (const rom char far *)"CNCSFM_X%ld Y%ld Z%ld", currentSteps.x, currentSteps.y, currentSteps.z);
 				putUSBUSART(message, strlen(message));
 				machineState = READYTOCONFIGURE;
-				/*
-				if(configured){
-					machineState = WAITINGCOMMAND;
-				}
-				else
-				{
-					machineState = READYTOCONFIGURE;
-				}
-				*/
 				goto endUser;
 			}
 			
@@ -709,9 +710,19 @@ void user(void)
 
 				case CNCMATICCONNECTED:
 					MoveToOrigin();
-					strcpypgm2ram(message, (const rom char far *)"PO");
+					
+					if(machineState == EMERGENCYSTOP)
+					{
+						sprintf(message, (const rom char far *)"ERR:PE");
+						machineState = SERIALPORTCONNECTED;
+					}
+					else
+					{
+						strcpypgm2ram(message, (const rom char far *)"PO");
+						machineState = READYTOCONFIGURE;
+					}
+					
 					putUSBUSART(message, strlen(message));
-					machineState = READYTOCONFIGURE;
 					break;
 					
 				case PROCESSINGCOMMAND:

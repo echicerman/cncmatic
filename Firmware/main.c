@@ -463,6 +463,8 @@ int main(void)
     PORTC = 0x00;
 	TRISD = 0x00;	// pines de D son salida - eje Z
     PORTD = 0x00;
+	TRISEbits.RE2 = 0;	// pin 2 de puerto E es salida - habilita motores
+    PORTEbits.RE2 = 0;
 	
 	TRISB = 0xFF;	// pines de B son entrada - sensores
 	//********************************************

@@ -581,7 +581,17 @@ void user(void)
 				else
 				{
 					MoveToOrigin();
-					strcpypgm2ram(message, (const rom char far *)"PO");
+					
+					if(machineState == EMERGENCYSTOP)
+					{
+						sprintf(message, (const rom char far *)"ERR:PE");
+						machineState = SERIALPORTCONNECTED;
+					}
+					else
+					{
+						strcpypgm2ram(message, (const rom char far *)"PO");
+					}
+					
 					putUSBUSART(message, strlen(message));
 					goto endUser;
 				}

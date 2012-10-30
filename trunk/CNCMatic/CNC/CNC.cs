@@ -440,6 +440,16 @@ namespace CNC
                         this.Label.Text = "Error: maquina en estado de movimiento libre";
                     }
 
+                    //si se apreto el stop de emergencia mientras iba al origen
+                    if (recep == CNC_Mensajes_Recep.ParadaEmergencia)
+                    {
+                        //volvemos a serial port
+                        estadoActual = CNC_Estados.SerialPortConectado;
+
+                        //vemos que hacemos...
+                        this.Label.Text = "Parada de Emergencia";
+                    }
+
                     return;
                 }
 

@@ -184,9 +184,11 @@
     <None Include="Resources\New-icon.png" />
     <None Include="Resources\New-icon2.png" />
     <None Include="Resources\Ok-icon2.png" />
+    <None Include="Resources\iSync-icon.png" />
     <Content Include="Resources\OpenFolder.bmp" />
     <Content Include="Resources\Refresh.png" />
     <None Include="Resources\save1.png" />
+    <None Include="Resources\Reload-icon.png" />
     <Content Include="Resources\screens1.bmp" />
     <Content Include="Resources\screens2.bmp" />
     <Content Include="Resources\screens4.bmp" />

@@ -200,6 +200,13 @@ namespace CNCMatic.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap iSync_icon {
+            get {
+                object obj = ResourceManager.GetObject("iSync-icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap logo_teCNoC {
             get {
                 object obj = ResourceManager.GetObject("logo teCNoC", resourceCulture);
@@ -266,6 +273,13 @@ namespace CNCMatic.Properties {
         internal static System.Drawing.Bitmap Refresh_icon {
             get {
                 object obj = ResourceManager.GetObject("Refresh-icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Reload_icon {
+            get {
+                object obj = ResourceManager.GetObject("Reload-icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

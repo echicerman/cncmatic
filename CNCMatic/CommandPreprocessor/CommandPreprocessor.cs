@@ -435,7 +435,7 @@ namespace CommandPreprocessor
                         break;
 
                     default:
-                        //controlamos o mandamos lo que venga?
+                        throw new Exception("Comando no soportado: " + code + ".");
                         break;
                 }
             }

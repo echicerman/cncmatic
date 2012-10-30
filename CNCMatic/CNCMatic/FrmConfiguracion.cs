@@ -184,6 +184,7 @@ namespace CNCMatic
                 config.PuertoCom = portComboBox.Text;
                 config.LargoSeccion = txtLargoSeccion.Text;
                 config.VelocidadMovimiento = txtVelocMov.Text;
+                config.AltoAscenso = txtAltura.Text;
 
                 if (rbtAbsoluta.Checked)
                     config.TipoProg = "abs";
@@ -203,6 +204,9 @@ namespace CNCMatic
                 else
                     MessageBox.Show("La configuración ha sido dado de alta correctamete", "Configuración - Alta", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                
+                //this.Hide();
+
                 this.cmbConfiguracion.SelectedValueChanged -= new System.EventHandler(this.cmbConfiguracion_SelectedValueChanged);
 
                 lblNombre.Visible = false;
@@ -221,7 +225,7 @@ namespace CNCMatic
                 appconfig.Save(ConfigurationSaveMode.Modified, true);
                 ConfigurationManager.RefreshSection("appSettings");
 
-                CargaConfiguracionGeneral();
+                //CargaConfiguracionGeneral();
             }
             catch (Exception ex)
             {
@@ -268,6 +272,7 @@ namespace CNCMatic
                 txtMaxZ.Text = config.MaxZ.ToString();
                 txtVelocMov.Text = config.VelocidadMovimiento.ToString();
                 txtLargoSeccion.Text = config.LargoSeccion.ToString();
+                txtAltura.Text = config.AltoAscenso.ToString();
 
                 //seleccionamos el puerto
                 if (portComboBox.Items.Contains(config.PuertoCom))
@@ -366,6 +371,9 @@ namespace CNCMatic
             txtGrados.Text = "";
             txtNombrePerfil.Text = "";
             txtVueltas.Text = "";
+            txtAltura.Text = "";
+            txtLargoSeccion.Text = "";
+            txtVelocMov.Text = "";
             grdConfigMatMot.DataSource = null;
 
             //lblVueltas.Location = new Point(21, 65);
@@ -598,6 +606,11 @@ namespace CNCMatic
         }
 
         private void txtMaterialAncho_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.KeyChar = validarCampoDouble(e.KeyChar);
+        }
+
+        private void txtAltura_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.KeyChar = validarCampoDouble(e.KeyChar);
         }

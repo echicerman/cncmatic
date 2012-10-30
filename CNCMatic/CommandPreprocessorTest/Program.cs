@@ -15,19 +15,35 @@ namespace CommandPreprocessor
             Console.WriteLine();
             
             string input = Console.ReadLine();
-            CommandPreprocessor.GetInstance();
+
+            //Configuracion del preprocesador
+            CommandPreprocessor.GetInstance().ReferencePosition = new Position();
+            Configuration.absoluteProgamming = true;
+            Configuration.defaultFeedrate = 60;
+            Configuration.millimetersCurveSection = 0.5;
+            Configuration.millimetersProgramming = true;
+
             while (input != "exit")
             {
-                Console.WriteLine("Comandos a enviar a la maquina:");
-                List<string> result = CommandPreprocessor.GetInstance().ProcessCommand(input);
-                for(int i = 0; i < result.Count; i++)
+                try
                 {
-                    Console.WriteLine("Comando " + i.ToString("00") + ": " + result[i]);
+                    Console.WriteLine("Comandos a enviar a la maquina:");
+                    List<string> result = CommandPreprocessor.GetInstance().ProcessProgram(new List<string> { input });
+                    for (int i = 0; i < result.Count; i++)
+                    {
+                        Console.WriteLine("Comando " + i.ToString("00") + ": " + result[i]);
+                    }
                 }
-
-                Console.WriteLine();
-                Console.WriteLine("Escriba nuevo comando o 'exit' para salir");
-                input = Console.ReadLine();
+                catch (Exception ex)
+                {
+                    Console.WriteLine("ERROR AL PROCESAR COMANDO: " + ex);
+                }
+                finally
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Escriba nuevo comando o 'exit' para salir");
+                    input = Console.ReadLine();
+                }
             }
             
         }

@@ -11,6 +11,7 @@ namespace CommandPreprocessor
         private WorkingPlane workingPlane;
         private Position currentPosition;
         private Position referencePosition; // Origen de la pieza a fresar
+        private double maxZ;
         #endregion
 
         #region Constructor
@@ -20,6 +21,7 @@ namespace CommandPreprocessor
             this.workingPlane = WorkingPlane.XY;
             this.currentPosition = new Position(0, 0, 0);
             this.referencePosition = new Position(0, 0, 0);
+            this.maxZ = 0;
 
             //Configuration.absoluteProgamming = true;
             //Configuration.millimetersProgramming = true;
@@ -36,7 +38,7 @@ namespace CommandPreprocessor
         }
         #endregion
 
-        #region Getters & Setter
+        #region Getters & Setters
         public WorkingPlane WorkingPlane
         {
             get { return this.workingPlane; }
@@ -51,6 +53,11 @@ namespace CommandPreprocessor
         {
             get { return this.referencePosition; }
             set { this.referencePosition = value; }
+        }
+        public double MaxZ
+        {
+            get { return this.maxZ; }
+            set { this.maxZ = value; }
         }
         #endregion
 
@@ -75,18 +82,19 @@ namespace CommandPreprocessor
         {
             Position result = new Position();
 
+            // Restar a MaxZ invierte las alturas... el techo pasa a ser 0
             if (Configuration.absoluteProgamming)
             {
                 result.X = GetValueParameter('X', command) + this.ReferencePosition.X;
                 result.Y = GetValueParameter('Y', command) + this.ReferencePosition.Y;
-                result.Z = GetValueParameter('Z', command) + this.ReferencePosition.Z;
+                result.Z = this.MaxZ - GetValueParameter('Z', command) + this.ReferencePosition.Z;
             }
             else
             {
-                // Translate to absolute programming mode
+                // Translate to relative programming mode
                 result.X = GetValueParameter('X', command) + this.CurrentPosition.X;
                 result.Y = GetValueParameter('Y', command) + this.CurrentPosition.Y;
-                result.Z = GetValueParameter('Z', command) + this.CurrentPosition.Z;
+                result.Z = this.MaxZ - GetValueParameter('Z', command) + this.CurrentPosition.Z;
             }
 
             // If the values are in inches, convert to millimeters
@@ -119,8 +127,8 @@ namespace CommandPreprocessor
                 case WorkingPlane.XY:
                     cat1 = Math.Sqrt(cat1x * cat1x + cat1y * cat1y);
 
-                    if (cat1 > Math.Abs(r)) ;
-                        //throw Exception
+                    if (cat1 > Math.Abs(r))
+                        throw new Exception("Imposible realizar arco: " + command + ". (Distancia media entre punto inicial y final es mayor al radio)");
 
                     cat2 = Math.Sqrt(r * r - cat1 * cat1);
                     cat2x = cat1y * cat2 / cat1;
@@ -142,8 +150,8 @@ namespace CommandPreprocessor
                 case WorkingPlane.XZ:
                     cat1 = Math.Sqrt(cat1x * cat1x + cat1z * cat1z);
 
-                    if (cat1 > Math.Abs(r)) ;
-                        //throw Exception
+                    if (cat1 > Math.Abs(r))
+                        throw new Exception("Imposible realizar arco: " + command + ". (Distancia media entre punto inicial y final es mayor al radio)");
 
                     cat2 = Math.Sqrt(r * r - cat1 * cat1);
                     cat2x = cat1z * cat2 / cat1;
@@ -165,8 +173,8 @@ namespace CommandPreprocessor
                 case WorkingPlane.YZ:
                     cat1 = Math.Sqrt(cat1y * cat1y + cat1z * cat1z);
 
-                    if (cat1 > Math.Abs(r)) ;
-                        //throw Exception
+                    if (cat1 > Math.Abs(r)) 
+                        throw new Exception("Imposible realizar arco: " + command + ". (Distancia media entre punto inicial y final es mayor al radio)");
 
                     cat2 = Math.Sqrt(r * r - cat1 * cat1);
                     cat2y = cat1z * cat2 / cat1;
@@ -244,6 +252,12 @@ namespace CommandPreprocessor
                 sectionPosition.X = centerPosition.X + radius * Math.Cos(angleA + angle * ((float)step / steps));
                 sectionPosition.Y = centerPosition.Y + radius * Math.Sin(angleA + angle * ((float)step / steps));
                 sectionPosition.Z = (finalPosition.Z - startPosition.Z) * ((float)s / steps);
+
+                if ((sectionPosition.X < 0) || (sectionPosition.Y < 0) || (sectionPosition.Z < 0))
+                {
+                    throw new Exception("Underflow procesando: " + code + ". (PuntoDestino: X" + sectionPosition.X + " Y" + sectionPosition.Y + " Z" + sectionPosition.Z);
+                }
+                
                 // Traducir la curva (G02 / G03) como varias rectas (G01)
                 result.Add(sectionPosition.ToString(1) + string.Format("F{0} ", feedRate));
             }
@@ -286,6 +300,12 @@ namespace CommandPreprocessor
                 sectionPosition.X = centerPosition.X + radius * Math.Cos(angleA + angle * ((float)step / steps));
                 sectionPosition.Y = (finalPosition.Y - startPosition.Y) * ((float)s / steps);
                 sectionPosition.Z = centerPosition.Z + radius * Math.Sin(angleA + angle * ((float)step / steps));
+
+                if ((sectionPosition.X < 0) || (sectionPosition.Y < 0) || (sectionPosition.Z < 0))
+                {
+                    throw new Exception("Underflow procesando: " + code + ".");
+                }
+                
                 // Traducir la curva (G02 / G03) como varias rectas (G01)
                 result.Add(sectionPosition.ToString(1) + string.Format("F{0} ", feedRate));
             }
@@ -328,6 +348,12 @@ namespace CommandPreprocessor
                 sectionPosition.X = (finalPosition.X - startPosition.X) * ((float)s / steps);
                 sectionPosition.Y = centerPosition.Y + radius * Math.Cos(angleA + angle * ((float)step / steps));
                 sectionPosition.Z = centerPosition.Z + radius * Math.Sin(angleA + angle * ((float)step / steps));
+
+                if ((sectionPosition.X < 0) || (sectionPosition.Y < 0) || (sectionPosition.Z < 0))
+                {
+                    throw new Exception("Underflow procesando: " + code + ".");
+                }
+
                 // Traducir la curva (G02 / G03) como varias rectas (G01)
                 result.Add(sectionPosition.ToString(1) + string.Format("F{0} ", feedRate));
             }
@@ -354,80 +380,105 @@ namespace CommandPreprocessor
         #endregion
 
         #region Public Methods
+        //private List<string> ProcessCommand(string command)
         public List<string> ProcessCommand(string command)
         {
+            int code;
+            List<string> result = new List<string>();
+            double feedRate = HasValueParameter('F', command) ? GetValueParameter('F', command) : Configuration.defaultFeedrate; // Ver qué valor va cuando no hay valor - CONFIGURACION? -
+
+            if (HasValueParameter('G', command))
+            {
+                code = Convert.ToInt32(GetValueParameter('G', command));
+                switch (code)
+                {
+                    case 0:
+                    case 1:
+                        result.Add(this.GetFinalPosition(command).ToString(code) + string.Format("F{0} ", feedRate));
+                        break;
+
+                    case 4:
+                        result.Add(command);
+                        break;
+
+                    case 2:
+                    case 3:
+                        result.AddRange(this.ProcessCurveCommand(command));
+                        break;
+
+                    case 17:
+                        this.WorkingPlane = WorkingPlane.XY;
+                        break;
+
+                    case 18:
+                        this.WorkingPlane = WorkingPlane.XZ;
+                        break;
+
+                    case 19:
+                        this.WorkingPlane = WorkingPlane.YZ;
+                        break;
+
+                    case 20:
+                        Configuration.millimetersProgramming = false;
+                        break;
+
+                    case 21:
+                        Configuration.millimetersProgramming = true;
+                        break;
+
+                    case 90:
+                        Configuration.absoluteProgamming = true;
+                        break;
+
+                    case 91:
+                        Configuration.absoluteProgamming = false;
+                        break;
+
+                    default:
+                        //controlamos o mandamos lo que venga?
+                        break;
+                }
+            }
+            else if (HasValueParameter('M', command))
+            {
+                result.Add(command);
+            }
+
+            return result;
+        }
+        public List<string> ProcessProgram(List<string> program)
+        {
+            List<string> result = new List<string>();
             try
             {
-                int code;
-                List<string> result = new List<string>();
-                double feedRate = HasValueParameter('F', command) ? GetValueParameter('F', command) : Configuration.defaultFeedrate; // Ver qué valor va cuando no hay valor - CONFIGURACION? -
-
-                if (HasValueParameter('G', command))
+                this.MaxZ = 0;
+                // Get max Z looking into every command
+                foreach (string cmd in program)
                 {
-                    code = Convert.ToInt32(GetValueParameter('G', command));
-                    switch (code)
+                    if (!string.IsNullOrEmpty(cmd))
                     {
-                        case 0:
-                        case 1:
-                            result.Add(this.GetFinalPosition(command).ToString(code) + string.Format("F{0} ", feedRate));
-                            break;
-
-                        case 4:
-                            result.Add(command);
-                            break;
-
-                        case 2:
-                        case 3:
-                            result.AddRange(this.ProcessCurveCommand(command));
-                            break;
-
-                        case 17:
-                            this.WorkingPlane = WorkingPlane.XY;
-                            break;
-
-                        case 18:
-                            this.WorkingPlane = WorkingPlane.XZ;
-                            break;
-
-                        case 19:
-                            this.WorkingPlane = WorkingPlane.YZ;
-                            break;
-
-                        case 20:
-                            Configuration.millimetersProgramming = false;
-                            break;
-
-                        case 21:
-                            Configuration.millimetersProgramming = true;
-                            break;
-
-                        case 90:
-                            Configuration.absoluteProgamming = true;
-                            break;
-
-                        case 91:
-                            Configuration.absoluteProgamming = false;
-                            break;
-
-                        default:
-                            //controlamos o mandamos lo que venga?
-                            break;
+                        double newZ = GetValueParameter('Z', cmd);
+                        this.MaxZ = newZ > this.MaxZ ? newZ : this.MaxZ;
                     }
                 }
-                else if (HasValueParameter('M', command))
+
+                // Process every command in the program
+                foreach (string cmd in program)
                 {
-                    result.Add(command);
+                    if (!string.IsNullOrEmpty(cmd))
+                    {
+                        result.AddRange(this.ProcessCommand(cmd));
+                        this.CurrentPosition = this.GetFinalPosition(cmd);
+                    }
                 }
 
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw (ex);
+                throw;
             }
         }
-        
         #endregion
     }
 }
-

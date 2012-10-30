@@ -144,11 +144,13 @@
             this.txtPreview.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtPreview.Size = new System.Drawing.Size(401, 324);
             this.txtPreview.TabIndex = 6;
+            this.txtPreview.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPreview_KeyPress);
             // 
             // gbMovZ
             // 
             this.gbMovZ.Controls.Add(this.btnMovZ_Aba);
             this.gbMovZ.Controls.Add(this.btnMovZ_Arr);
+            this.gbMovZ.Enabled = false;
             this.gbMovZ.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbMovZ.Location = new System.Drawing.Point(281, 102);
             this.gbMovZ.Name = "gbMovZ";
@@ -187,6 +189,7 @@
             this.gbMovXY.Controls.Add(this.btnMovXY_Izq);
             this.gbMovXY.Controls.Add(this.btnMovXY_Aba);
             this.gbMovXY.Controls.Add(this.btnMovXY_Arr);
+            this.gbMovXY.Enabled = false;
             this.gbMovXY.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gbMovXY.Location = new System.Drawing.Point(32, 102);
             this.gbMovXY.Name = "gbMovXY";
@@ -467,6 +470,7 @@
             // btnInicio
             // 
             this.btnInicio.BackColor = System.Drawing.Color.White;
+            this.btnInicio.Enabled = false;
             this.btnInicio.Image = global::CNCMatic.Properties.Resources.HomeButton;
             this.btnInicio.Location = new System.Drawing.Point(10, 20);
             this.btnInicio.Name = "btnInicio";

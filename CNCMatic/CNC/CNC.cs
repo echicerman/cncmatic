@@ -99,7 +99,10 @@ namespace CNC
         public static string PosicionActual = "position";
 
         //Pausa: un M00
-        public static string Pausa = "M00";
+        public static string G_Pausa = "M00";
+
+        //Stop: un M02
+        public static string G_Stop = "M02";
 
         //PosicionDeOrigen, se dirige al 0,0,0 (absoluto) de la maquina
         public static string PosicionDeOrigen = "origin";
@@ -146,6 +149,8 @@ namespace CNC
         //(-(-(-(FREEMOVES)-)-)-)
         //FREEMOVE: responde OK al cambio de estado
         public static string MovimientoLibreOK = "CNCFM";
+        //Error Freemoves: responde error si recibe un sentido de avance/retroceso invalido
+        public static string MovimientoLibreMAL = "ERR:CNCFM";
 
         //(-(-(-(MENSAJES VARIOS)-)-)-)-)
         //RESET: cuando termine de procesar el comando actual pone en estado 
@@ -432,6 +437,7 @@ namespace CNC
                     if (recep == CNC_Mensajes_Recep.PPausado)
                     {
                         //no puede irse al origen porque la maquina esta pausada
+                        this.Label.Text = "Error: maquina en estado de movimiento libre";
                     }
 
                     return;
@@ -473,18 +479,26 @@ namespace CNC
                     {
                         //ponemos la maquina en FREEMOVES
                         this.estadoActual = CNC_Estados.MovimientoLibre;
+                    }
 
-                        //if (this.movimientoLibrePendiente != "")
-                        //{
-                        //    //enviamos la ultima instruccion de movimiento libre
-                        //    enviar(this.movimientoLibrePendiente);
-                        //    this.movimientoLibrePendiente = "";
-                        //}
+                    //no se reconocio el sentido de avance/retroceso
+                    if (recep == CNC_Mensajes_Recep.MovimientoLibreMAL)
+                    {
+                        //mantiene el estado?
+                        if (this.UltimoMensajeSend.Split(':').Count() == 2)
+                        {
+                            this.Label.Text = "Error: " + this.UltimoMensajeSend.Split(':')[1] + " no es un sentido válido";
+                        }
+                        else
+                        {
+                            this.Label.Text = "Error: sentido informado no válido";
+                        }
                     }
 
                     if (recep == CNC_Mensajes_Recep.PPausado)
                     {
                         //no puede ponerse en freemoves porque la maquina esta pausada
+                        this.Label.Text = "Error: maquina en estado de movimiento libre";
                     }
 
                     return;
@@ -531,13 +545,20 @@ namespace CNC
                         //actualizamos la posicion actual del CNC
                         actualizarPosicionActual(posicion);
 
-                        //el estado al que vuelve depende de si la maquina esta configurada o no
-                        if (configurada)
-                            this.estadoActual = CNC_Estados.EsperandoComando;
-                        else
-                            this.estadoActual = CNC_Estados.EsperandoConfig;
-
+                        //queda en estado READYTOCONFIGURE
+                        this.estadoActual = CNC_Estados.EsperandoConfig;
                     }
+
+                    //se llego al fin de carreras
+                    if (respuesta == CNC_Mensajes_Recep.SensorFinCarrera)
+                    {
+                        //vemos que hacemos...
+                        this.Label.Text = "Fin de Carrera alcanzado";
+                        
+                        //queda en estado READYTOCONFIGURE
+                        this.estadoActual = CNC_Estados.EsperandoConfig;
+                    }
+
 
                     return;
                 }
@@ -667,8 +688,10 @@ namespace CNC
                         //seteamos la maquina en PROCESSINGCOMMAND
                         estadoActual = CNC_Estados.ProcesandoComando;
 
-                        if (this.UltimoMensajeSend == CNC_Mensajes_Send.Pausa)
+                        if (this.UltimoMensajeSend == CNC_Mensajes_Send.G_Pausa)
                             this.Label.Text = "Pausando Transmisión...";
+                        else if (this.UltimoMensajeSend == CNC_Mensajes_Send.G_Stop)
+                            this.Label.Text = "Deteniendo Ejecución...";
                         else
                             this.Label.Text = "Procesando Comando...";
 
@@ -695,21 +718,35 @@ namespace CNC
                 {
                     string recep = recibir();
 
-                    //volvemos a esperar comando
-                    estadoActual = CNC_Estados.EsperandoComando;
-
+                    
                     //abrimos el comando recibido, por ejemplo:
                     //"CMDDONE_X12 Y28 Z4"
                     string respuesta = recep.Split('_')[0];
-                    string posicion = recep.Split('_')[1];
-
-                    //actualizamos la posicion actual del CNC
-                    actualizarPosicionActual(posicion);
 
                     if (respuesta == CNC_Mensajes_Recep.ComandoEjecutado)
                     {
-                        if (this.UltimoMensajeSend == CNC_Mensajes_Send.Pausa)
+                        string posicion = recep.Split('_')[1];
+
+                        //actualizamos la posicion actual del CNC
+                        actualizarPosicionActual(posicion);
+
+                        //volvemos a esperar comando
+                        estadoActual = CNC_Estados.EsperandoComando;
+                        
+                        if (this.UltimoMensajeSend == CNC_Mensajes_Send.G_Pausa)
                             this.Label.Text = "Transmision Pausada";
+
+                        //caso especial al recibir un M02
+                        if (this.UltimoMensajeSend == CNC_Mensajes_Send.G_Stop)
+                        {
+                            this.Label.Text = "Ejecución Detenida";
+                            
+                            //queda en CNCMATICCONNECTED
+                            this.estadoActual = CNC_Estados.Conectado;
+
+                            //no continuamos con la ejecucion...
+                            return;
+                        }
 
                         if (!this.pausarTransmision)
                             //continuamos la transmision
@@ -717,11 +754,27 @@ namespace CNC
                     }
                     else if (respuesta == CNC_Mensajes_Recep.ParadaEmergencia)
                     {
+                        string posicion = recep.Split('_')[1];
+
+                        //actualizamos la posicion actual del CNC
+                        actualizarPosicionActual(posicion);
+
+                        //volvemos a esperar comando
+                        estadoActual = CNC_Estados.EsperandoComando;
+                        
                         //vemos que hacemos...
                         this.Label.Text = "Parada de Emergencia";
                     }
                     else if (respuesta == CNC_Mensajes_Recep.SensorFinCarrera)
                     {
+                        string posicion = recep.Split('_')[1];
+
+                        //actualizamos la posicion actual del CNC
+                        actualizarPosicionActual(posicion);
+
+                        //volvemos a esperar comando
+                        estadoActual = CNC_Estados.EsperandoComando;
+                        
                         //vemos que hacemos...
                         this.Label.Text = "Fin de Carrera alcanzado";
                     }
@@ -999,7 +1052,7 @@ namespace CNC
             try
             {
                 //enviamos la pausa M00
-                enviar(CNC_Mensajes_Send.Pausa);
+                enviar(CNC_Mensajes_Send.G_Pausa);
 
                 //establecemos en pausa
                 this.pausarTransmision = true;
@@ -1014,8 +1067,19 @@ namespace CNC
         {
             try
             {
-                this.estadoActual = CNC_Estados.SerialPortConectado;
-                //enviar(CNC_Mensajes_Send.Reset);
+                
+                if (
+                    this.estadoActual == CNC_Estados.EsperandoComando ||
+                    this.estadoActual == CNC_Estados.ProcesandoComando
+                  )
+                {
+                    //enviamos M02 mientras este en ejecucion
+                    enviar(CNC_Mensajes_Send.G_Stop);
+                }
+                else
+                {
+                    this.estadoActual = CNC_Estados.SerialPortConectado;
+                }
 
             }
             catch (Exception ex)

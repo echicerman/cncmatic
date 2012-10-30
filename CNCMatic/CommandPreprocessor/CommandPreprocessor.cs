@@ -356,69 +356,77 @@ namespace CommandPreprocessor
         #region Public Methods
         public List<string> ProcessCommand(string command)
         {
-            int code;
-            List<string> result = new List<string>();
-            double feedRate = HasValueParameter('F', command) ? GetValueParameter('F', command) : Configuration.defaultFeedrate; // Ver qué valor va cuando no hay valor - CONFIGURACION? -
-
-            if (HasValueParameter('G', command))
+            try
             {
-                code = Convert.ToInt32(GetValueParameter('G', command));
-                switch (code)
+                int code;
+                List<string> result = new List<string>();
+                double feedRate = HasValueParameter('F', command) ? GetValueParameter('F', command) : Configuration.defaultFeedrate; // Ver qué valor va cuando no hay valor - CONFIGURACION? -
+
+                if (HasValueParameter('G', command))
                 {
-                    case 0:
-                    case 1:
-                        result.Add(this.GetFinalPosition(command).ToString(code) + string.Format("F{0} ", feedRate));
-                        break;
+                    code = Convert.ToInt32(GetValueParameter('G', command));
+                    switch (code)
+                    {
+                        case 0:
+                        case 1:
+                            result.Add(this.GetFinalPosition(command).ToString(code) + string.Format("F{0} ", feedRate));
+                            break;
 
-                    case 4:
-                        result.Add(command);
-                        break;
+                        case 4:
+                            result.Add(command);
+                            break;
 
-                    case 2:
-                    case 3:
-                        result.AddRange(this.ProcessCurveCommand(command));
-                        break;
+                        case 2:
+                        case 3:
+                            result.AddRange(this.ProcessCurveCommand(command));
+                            break;
 
-                    case 17:
-                        this.WorkingPlane = WorkingPlane.XY;
-                        break;
+                        case 17:
+                            this.WorkingPlane = WorkingPlane.XY;
+                            break;
 
-                    case 18:
-                        this.WorkingPlane = WorkingPlane.XZ;
-                        break;
+                        case 18:
+                            this.WorkingPlane = WorkingPlane.XZ;
+                            break;
 
-                    case 19:
-                        this.WorkingPlane = WorkingPlane.YZ;
-                        break;
+                        case 19:
+                            this.WorkingPlane = WorkingPlane.YZ;
+                            break;
 
-                    case 20:
-                        Configuration.millimetersProgramming = false;
-                        break;
+                        case 20:
+                            Configuration.millimetersProgramming = false;
+                            break;
 
-                    case 21:
-                        Configuration.millimetersProgramming = true;
-                        break;
+                        case 21:
+                            Configuration.millimetersProgramming = true;
+                            break;
 
-                    case 90:
-                        Configuration.absoluteProgamming = true;
-                        break;
+                        case 90:
+                            Configuration.absoluteProgamming = true;
+                            break;
 
-                    case 91:
-                        Configuration.absoluteProgamming = false;
-                        break;
+                        case 91:
+                            Configuration.absoluteProgamming = false;
+                            break;
 
-                    default:
-                        //controlamos o mandamos lo que venga?
-                        break;
+                        default:
+                            //controlamos o mandamos lo que venga?
+                            break;
+                    }
                 }
-            }
-            else if (HasValueParameter('M', command))
-            {
-                result.Add(command);
-            }
+                else if (HasValueParameter('M', command))
+                {
+                    result.Add(command);
+                }
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
         }
+        
         #endregion
     }
 }

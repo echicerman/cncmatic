@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic; 
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Text;
 using MacGen;
@@ -435,170 +435,178 @@ public class clsProcessor
         mGfxRecs.Add(mGrfxRec);
     }
 
-    private float FormatAxis(string sVal, int precision) 
-    { 
+    private float FormatAxis(string sVal, int precision)
+    {
         //decimal place 
-        if (sVal.Contains(".")) { 
-            return float.Parse(sVal); 
-        } 
-        else { 
-            return (float)(float.Parse(sVal) * (Math.Pow(10,  - precision)));//convert a number from a 4 place 
-        } 
+        if (sVal.Contains("."))
+        {
+            return float.Parse(sVal);
+        }
+        else
+        {
+            return (float)(float.Parse(sVal) * (Math.Pow(10, -precision)));//convert a number from a 4 place 
+        }
     }
 
     public void ProcessFile(string ncFile, List<clsMotionRecord> gfxRecs)
     {
-        mGfxRecs = gfxRecs;
-        mCodefile = ncFile;
+        try
         {
-            mMotion.SubCall.Label = mCurMachine.Subcall[0];
-            mMotion.SubCall.Value = int.Parse(mCurMachine.Subcall.Substring(1));
-
-            mMotion.SubReturn.Label = mCurMachine.SubReturn[0];
-            mMotion.SubReturn.Value = int.Parse(mCurMachine.SubReturn.Substring(1));
-
-            mMotion.Abs.Label = mCurMachine.Absolute[0];
-            mMotion.Abs.Value = int.Parse(mCurMachine.Absolute.Substring(1));
-            mMotion.CCArc.Label = mCurMachine.CCArc[0];
-            mMotion.CCArc.Value = int.Parse(mCurMachine.CCArc.Substring(1));
-            mMotion.CWArc.Label = mCurMachine.CWArc[0];
-            mMotion.CWArc.Value = int.Parse(mCurMachine.CWArc.Substring(1));
-
-            mMotion.Inc.Label = mCurMachine.Incremental[0];
-            mMotion.Inc.Value = int.Parse(mCurMachine.Incremental.Substring(1));
-
-            mMotion.Linear.Label = mCurMachine.Linear[0];
-            mMotion.Linear.Value = int.Parse(mCurMachine.Linear.Substring(1));
-
-            mMotion.Rapid.Label = mCurMachine.Rapid[0];
-            mMotion.Rapid.Value = int.Parse(mCurMachine.Rapid.Substring(1));
-
-            mMotion.Rotary.Label = mCurMachine.Rotary[0];
-            mMotion.Rotary.Value = 0;
-
-            mMotion.DrillRapid.Label = mCurMachine.DrillRapid[0];
-            mMotion.DrillRapid.Value = 0;
-
-            mMotion.Plane[0].Label = mCurMachine.XYplane[0];
-            mMotion.Plane[0].Value = int.Parse(mCurMachine.XYplane.Substring(1));
-            mMotion.Plane[1].Label = mCurMachine.XZplane[0];
-            mMotion.Plane[1].Value = int.Parse(mCurMachine.XZplane.Substring(1));
-            mMotion.Plane[2].Label = mCurMachine.YZplane[0];
-            mMotion.Plane[2].Value = int.Parse(mCurMachine.YZplane.Substring(1));
-
-            mMotion.ReturnLevel[0].Label = mCurMachine.ReturnLevel[0][0];
-            mMotion.ReturnLevel[0].Value = int.Parse(mCurMachine.ReturnLevel[0].Substring(1));
-            mMotion.ReturnLevel[1].Label = mCurMachine.ReturnLevel[1][0];
-            mMotion.ReturnLevel[1].Value = int.Parse(mCurMachine.ReturnLevel[1].Substring(1));
-
-            for (int r = 0; r <= mMotion.Drills.Length - 1; r++)
+            mGfxRecs = gfxRecs;
+            mCodefile = ncFile;
             {
-                if (mCurMachine.Drills[r].Length > 2)
+                mMotion.SubCall.Label = mCurMachine.Subcall[0];
+                mMotion.SubCall.Value = int.Parse(mCurMachine.Subcall.Substring(1));
+
+                mMotion.SubReturn.Label = mCurMachine.SubReturn[0];
+                mMotion.SubReturn.Value = int.Parse(mCurMachine.SubReturn.Substring(1));
+
+                mMotion.Abs.Label = mCurMachine.Absolute[0];
+                mMotion.Abs.Value = int.Parse(mCurMachine.Absolute.Substring(1));
+                mMotion.CCArc.Label = mCurMachine.CCArc[0];
+                mMotion.CCArc.Value = int.Parse(mCurMachine.CCArc.Substring(1));
+                mMotion.CWArc.Label = mCurMachine.CWArc[0];
+                mMotion.CWArc.Value = int.Parse(mCurMachine.CWArc.Substring(1));
+
+                mMotion.Inc.Label = mCurMachine.Incremental[0];
+                mMotion.Inc.Value = int.Parse(mCurMachine.Incremental.Substring(1));
+
+                mMotion.Linear.Label = mCurMachine.Linear[0];
+                mMotion.Linear.Value = int.Parse(mCurMachine.Linear.Substring(1));
+
+                mMotion.Rapid.Label = mCurMachine.Rapid[0];
+                mMotion.Rapid.Value = int.Parse(mCurMachine.Rapid.Substring(1));
+
+                mMotion.Rotary.Label = mCurMachine.Rotary[0];
+                mMotion.Rotary.Value = 0;
+
+                mMotion.DrillRapid.Label = mCurMachine.DrillRapid[0];
+                mMotion.DrillRapid.Value = 0;
+
+                mMotion.Plane[0].Label = mCurMachine.XYplane[0];
+                mMotion.Plane[0].Value = int.Parse(mCurMachine.XYplane.Substring(1));
+                mMotion.Plane[1].Label = mCurMachine.XZplane[0];
+                mMotion.Plane[1].Value = int.Parse(mCurMachine.XZplane.Substring(1));
+                mMotion.Plane[2].Label = mCurMachine.YZplane[0];
+                mMotion.Plane[2].Value = int.Parse(mCurMachine.YZplane.Substring(1));
+
+                mMotion.ReturnLevel[0].Label = mCurMachine.ReturnLevel[0][0];
+                mMotion.ReturnLevel[0].Value = int.Parse(mCurMachine.ReturnLevel[0].Substring(1));
+                mMotion.ReturnLevel[1].Label = mCurMachine.ReturnLevel[1][0];
+                mMotion.ReturnLevel[1].Value = int.Parse(mCurMachine.ReturnLevel[1].Substring(1));
+
+                for (int r = 0; r <= mMotion.Drills.Length - 1; r++)
                 {
-                    mMotion.Drills[r].Label = mCurMachine.Drills[r][0];
-                    mMotion.Drills[r].Value = int.Parse(mCurMachine.Drills[r].Substring(1));
-                }
-            }
-        }
-
-
-        //Reset all positions. 
-        mGfxRecs.Clear();
-        mCurrentColor = 0;
-        mPrevTool = -1;
-        mXpos = 0;
-        mYpos = 0;
-        mZpos = 0;
-        mPrevX = 0;
-        mPrevY = 0;
-        mPrevZ = 0;
-        mPrevABC = 0;
-        mABC = 0;
-        mRpoint = 0;
-        mSpeed = 0;
-        mFeed = 0;
-        mDrillClear = 0;
-        mInitialZBeforeDrill = 0;
-        mRotDir = 1;
-        mAbsolute = true;
-        mMode = Motion.RAPID;
-        mDrillReturnMode = Motion.I_PLN;
-
-        if (mCurMachine.MachineType == MachineType.MILL)
-        {
-            mPlane = Motion.XY_PLN; //Mill 
-        }
-        else
-        {
-            mPlane = Motion.XZ_PLN;//Lathe 
-        }
-
-        mEndmain = mCurMachine.Endmain.Trim();
-        mSubcall = mCurMachine.Subcall.Trim();
-        mSubRepeats = mCurMachine.SubRepeats.Trim();
-
-        string sFileContents = null;
-        using (System.IO.StreamReader MyReader = new System.IO.StreamReader(ncFile))
-        {
-            sFileContents = FilterJunk(MyReader.ReadToEnd());
-        }
-        mNcProgs.Clear();
-        int lastIndex = -1;
-        int thisIndex = -1;
-        clsProg p = default(clsProg);
-        foreach (Match m in this.mRegSubs.Matches(sFileContents))
-        {
-            if (mCurMachine.ProgramId.Contains(m.Value[0].ToString()))
-            {
-                thisIndex = m.Index;
-                //Each program 
-                if (lastIndex > -1)
-                {
-                    mNcProgs[mNcProgs.Count - 1].Contents = sFileContents.Substring(lastIndex, thisIndex - lastIndex).TrimEnd();
-                    if (mNcProgs[mNcProgs.Count - 1].Contents.Contains(mCurMachine.Endmain))
+                    if (mCurMachine.Drills[r].Length > 2)
                     {
-                        mNcProgs[mNcProgs.Count - 1].Main = true;
+                        mMotion.Drills[r].Label = mCurMachine.Drills[r][0];
+                        mMotion.Drills[r].Value = int.Parse(mCurMachine.Drills[r].Substring(1));
                     }
                 }
+            }
+
+
+            //Reset all positions. 
+            mGfxRecs.Clear();
+            mCurrentColor = 0;
+            mPrevTool = -1;
+            mXpos = 0;
+            mYpos = 0;
+            mZpos = 0;
+            mPrevX = 0;
+            mPrevY = 0;
+            mPrevZ = 0;
+            mPrevABC = 0;
+            mABC = 0;
+            mRpoint = 0;
+            mSpeed = 0;
+            mFeed = 0;
+            mDrillClear = 0;
+            mInitialZBeforeDrill = 0;
+            mRotDir = 1;
+            mAbsolute = true;
+            mMode = Motion.RAPID;
+            mDrillReturnMode = Motion.I_PLN;
+
+            if (mCurMachine.MachineType == MachineType.MILL)
+            {
+                mPlane = Motion.XY_PLN; //Mill 
+            }
+            else
+            {
+                mPlane = Motion.XZ_PLN;//Lathe 
+            }
+
+            mEndmain = mCurMachine.Endmain.Trim();
+            mSubcall = mCurMachine.Subcall.Trim();
+            mSubRepeats = mCurMachine.SubRepeats.Trim();
+
+            string sFileContents = null;
+            using (System.IO.StreamReader MyReader = new System.IO.StreamReader(ncFile))
+            {
+                sFileContents = FilterJunk(MyReader.ReadToEnd());
+            }
+            mNcProgs.Clear();
+            int lastIndex = -1;
+            int thisIndex = -1;
+            clsProg p = default(clsProg);
+            foreach (Match m in this.mRegSubs.Matches(sFileContents))
+            {
+                if (mCurMachine.ProgramId.Contains(m.Value[0].ToString()))
+                {
+                    thisIndex = m.Index;
+                    //Each program 
+                    if (lastIndex > -1)
+                    {
+                        mNcProgs[mNcProgs.Count - 1].Contents = sFileContents.Substring(lastIndex, thisIndex - lastIndex).TrimEnd();
+                        if (mNcProgs[mNcProgs.Count - 1].Contents.Contains(mCurMachine.Endmain))
+                        {
+                            mNcProgs[mNcProgs.Count - 1].Main = true;
+                        }
+                    }
+                    p = new clsProg();
+                    p.Main = false;
+                    p.Index = thisIndex;
+                    p.Label = Char.ToUpper(m.Value[0]).ToString();
+                    p.Value = int.Parse(m.Groups[1].Value);
+                    mNcProgs.Add(p);
+                    lastIndex = m.Index;
+                }
+            }
+
+            mTotalLines = 1;
+            if (mNcProgs.Count == 0)
+            {
+                //Just add all the text we found in the file 
                 p = new clsProg();
-                p.Main = false;
-                p.Index = thisIndex;
-                p.Label = Char.ToUpper(m.Value[0]).ToString();
-                p.Value = int.Parse(m.Groups[1].Value);
+                p.Main = true;
+                p.Index = 0;
+                p.Label = "MAIN";
+                p.Value = 0;
+                p.Contents = sFileContents;
                 mNcProgs.Add(p);
-                lastIndex = m.Index;
+                mTotalBites = sFileContents.Length;
+                ProcessSubWords(p);
             }
-        }
-
-        mTotalLines = 1;
-        if (mNcProgs.Count == 0)
-        {
-            //Just add all the text we found in the file 
-            p = new clsProg();
-            p.Main = true;
-            p.Index = 0;
-            p.Label = "MAIN";
-            p.Value = 0;
-            p.Contents = sFileContents;
-            mNcProgs.Add(p);
-            mTotalBites = sFileContents.Length;
-            ProcessSubWords(p);
-        }
-        else
-        {
-            mNcProgs[mNcProgs.Count - 1].Contents = sFileContents.Substring(lastIndex).TrimEnd();
-            if (mNcProgs[mNcProgs.Count - 1].Contents.Contains(mCurMachine.Endmain))
+            else
             {
-                mNcProgs[mNcProgs.Count - 1].Main = true;
+                mNcProgs[mNcProgs.Count - 1].Contents = sFileContents.Substring(lastIndex).TrimEnd();
+                if (mNcProgs[mNcProgs.Count - 1].Contents.Contains(mCurMachine.Endmain))
+                {
+                    mNcProgs[mNcProgs.Count - 1].Main = true;
+                }
+                foreach (clsProg pr in mNcProgs)
+                {
+                    mTotalBites = pr.Contents.Length;
+                    ProcessSubWords(pr);
+                }
             }
-            foreach (clsProg pr in mNcProgs)
-            {
-                mTotalBites = pr.Contents.Length;
-                ProcessSubWords(pr);
-            }
+
         }
-
-
+        catch (Exception ex)
+        {
+            throw (new Exception("clsProcessor.ProcessFile:" + ex.Message));
+        }
     }
 
     private clsProg FindSubByValue(int val)
@@ -612,55 +620,62 @@ public class clsProcessor
 
     private void ProcessSubWords(clsProg p)
     {
-        p.TimesCalled += 1;
-        int lastIndex = 0;
-        foreach (Match ncWord in this.mRegWords.Matches(p.Contents))
+        try
         {
-            //Each word 
-            //Is this a newline 
-            if (ncWord.Value == "\n")
+            p.TimesCalled += 1;
+            int lastIndex = 0;
+            foreach (Match ncWord in this.mRegWords.Matches(p.Contents))
             {
-                mTotalLines += 1;
-                mCodeText = p.Contents.Substring(lastIndex, ncWord.Index - lastIndex - 1);
-                CreateGcodeBlock();
-                if (OnAddBlock != null)
+                //Each word 
+                //Is this a newline 
+                if (ncWord.Value == "\n")
                 {
-                    OnAddBlock(ncWord.Index, mTotalBites);
-                }
-                Array.Clear(mBlockAddresses, 0, 26);
-                lastIndex = ncWord.Index + 1;
-            }
-            else if (MatchIsComment(ncWord))
-            {
-                //Comment 
-                mTotalLines += ncWord.Value.Split('\n').Length - 1;
-            }
-            else if (mCurMachine.BlockSkip.Contains(ncWord.Value[0].ToString()))
-            {
-                //Blockskip. 
-                mTotalLines += 1;
-            }
-            else
-            {
-                //Word 
-                mCurAddress.Label = Char.ToUpper(ncWord.Value[0]);
-                mCurAddress.StringValue = ncWord.Groups[1].Value;
-                mCurAddress.Value = float.Parse(ncWord.Groups[1].Value);
-                if (mCurAddress.Matches(mMotion.SubCall))
-                {
-                    //M98 P. Use the next word value as the sub name 
-                    clsProg retProg = FindSubByValue(int.Parse(ncWord.NextMatch().Groups[1].Value));
-                    if ((retProg != null))
+                    mTotalLines += 1;
+                    mCodeText = p.Contents.Substring(lastIndex, ncWord.Index - lastIndex - 1);
+                    CreateGcodeBlock();
+                    if (OnAddBlock != null)
                     {
-                        if (retProg.TimesCalled > 100) return;//Prevent infinate loop 
-                        ProcessSubWords(retProg);//Call this subagain 
+                        OnAddBlock(ncWord.Index, mTotalBites);
                     }
+                    Array.Clear(mBlockAddresses, 0, 26);
+                    lastIndex = ncWord.Index + 1;
+                }
+                else if (MatchIsComment(ncWord))
+                {
+                    //Comment 
+                    mTotalLines += ncWord.Value.Split('\n').Length - 1;
+                }
+                else if (mCurMachine.BlockSkip.Contains(ncWord.Value[0].ToString()))
+                {
+                    //Blockskip. 
+                    mTotalLines += 1;
                 }
                 else
                 {
-                    EvaluateWord();
+                    //Word 
+                    mCurAddress.Label = Char.ToUpper(ncWord.Value[0]);
+                    mCurAddress.StringValue = ncWord.Groups[1].Value;
+                    mCurAddress.Value = float.Parse(ncWord.Groups[1].Value);
+                    if (mCurAddress.Matches(mMotion.SubCall))
+                    {
+                        //M98 P. Use the next word value as the sub name 
+                        clsProg retProg = FindSubByValue(int.Parse(ncWord.NextMatch().Groups[1].Value));
+                        if ((retProg != null))
+                        {
+                            if (retProg.TimesCalled > 100) return;//Prevent infinate loop 
+                            ProcessSubWords(retProg);//Call this subagain 
+                        }
+                    }
+                    else
+                    {
+                        EvaluateWord();
+                    }
                 }
             }
+        }
+        catch (Exception ex)
+        {
+            throw (new Exception("clsProcessor.ProcessSubWords:" + ex.Message));
         }
     }
 
@@ -688,7 +703,7 @@ public class clsProcessor
             if (mAbsolute == false) mZpos = mZpos + mPrevZ;
         }
 
-        if (mBlockAddresses[(int)mMotion.Rotary.Letter]==true)
+        if (mBlockAddresses[(int)mMotion.Rotary.Letter] == true)
         {
             mRotating = true;
             //0>360 sign determines dir 
@@ -1052,7 +1067,7 @@ public class clsProcessor
             //[:\$O]+([0-9]+) This will return the label and value of each program. 
             string progId = Regex.Escape(mCurMachine.ProgramId);
             mRegSubs = new Regex(InsertCommment() + "[" + progId + "]([0-9]+)", RegexOptions.Compiled);
-        } 
+        }
     }
 
     private string InsertCommment()
@@ -1065,7 +1080,7 @@ public class clsProcessor
         {
             return "";
         }
-    } 
+    }
 
     private void BuildCommentMatch()
     {
@@ -1121,7 +1136,7 @@ public class clsProcessor
         {
             mCommentMatch = "(?<Comment>" + mCommentMatch + ")";
         }
-    } 
+    }
 
     public string FilterJunk(string sText)
     {

@@ -56,12 +56,14 @@ namespace CNCMatic
             try
             {
                 //enviamos al cnc al origen
-                Interfaz.OrigenCNC(ref lblEstado,ref lblPosicionActual);
-                
+                Interfaz.OrigenCNC(ref lblEstado, ref lblPosicionActual);
+
+                //bloqueamos el inicio
+                SetControlPropertyThreadSafe(btnInicio, "Enabled", false);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show("Error: " + ex.Message, "Conectar", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -98,27 +100,33 @@ namespace CNCMatic
         {
             //Habilita todas las funciones y borra el fresado actual
             btnPlay.Enabled = true;
-            btnInicio.Enabled = true;
-            gbMovXY.Enabled = true;
-            gbMovZ.Enabled = true;
+            btnInicio.Enabled = false;
+            gbMovXY.Enabled = false;
+            gbMovZ.Enabled = false;
             txtLineaManual.Enabled = true;
             btnLimpiar.Enabled = true;
             toolStrip1.Enabled = true;
             txtPreview.Enabled = true;
+
+            //reiniciamos la barra
+            prgBar.Value = 0;
         }
 
         private void LimpiarControlesSafe()
         {
             //Habilita todas las funciones y borra el fresado actual en modo seguro para thread
             SetControlPropertyThreadSafe(btnPlay, "Enabled", true);
-            SetControlPropertyThreadSafe(btnInicio, "Enabled", true);
+            SetControlPropertyThreadSafe(btnInicio, "Enabled", false);
             //SetControlPropertyThreadSafe(btnStop2, "Enabled", true);
-            SetControlPropertyThreadSafe(gbMovXY, "Enabled", true);
-            SetControlPropertyThreadSafe(gbMovZ, "Enabled", true);
+            SetControlPropertyThreadSafe(gbMovXY, "Enabled", false);
+            SetControlPropertyThreadSafe(gbMovZ, "Enabled", false);
             SetControlPropertyThreadSafe(txtLineaManual, "Enabled", true);
             SetControlPropertyThreadSafe(btnLimpiar, "Enabled", true);
             SetControlPropertyThreadSafe(toolStrip1, "Enabled", true);
             SetControlPropertyThreadSafe(txtPreview, "Enabled", true);
+
+            //reiniciamos la barra
+            prgBar.Value = 0;
         }
 
         /// <summary>
@@ -473,6 +481,22 @@ namespace CNCMatic
             {
                 AgregaTextoEditor(false, this.txtLineaManual.Text.Trim());
                 this.txtLineaManual.Text = "";
+
+                //Muestra figura en el previsualizador
+                PrevisualizarFigurasManual();
+            }
+        }
+
+
+        private void txtPreview_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //si la tecla presionada es Enter, agregamos la linea al editor
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                AgregaTextoEditor(false, this.txtLineaManual.Text.Trim());
+
+                //Muestra figura en el previsualizador
+                PrevisualizarFigurasManual();
             }
         }
 
@@ -699,7 +723,7 @@ namespace CNCMatic
                 //mandamos a desconectar el puerto
                 Interfaz.DesconectarCNC();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Error al cerrar: " + ex.Message, "Salir", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -886,29 +910,36 @@ namespace CNCMatic
 
         private void ProcessFile(string fileName)
         {
-            if (fileName == null)
+            try
             {
-                return;
-            }
-            if (!System.IO.File.Exists(fileName))
-            {
-                lblStatus.Text = "Archivo no existe";
-                return;
-            }
-            lblStatus.Text = "Procesando...";
-            MG_CS_BasicViewer.MotionBlocks.Clear();
-            mProcessor.Init(mSetup.Machine);
-            mProcessor.ProcessFile(fileName, MG_CS_BasicViewer.MotionBlocks);
+                if (fileName == null)
+                {
+                    return;
+                }
+                if (!System.IO.File.Exists(fileName))
+                {
+                    lblStatus.Text = "Archivo no existe";
+                    return;
+                }
+                lblStatus.Text = "Procesando...";
+                MG_CS_BasicViewer.MotionBlocks.Clear();
+                mProcessor.Init(mSetup.Machine);
+                mProcessor.ProcessFile(fileName, MG_CS_BasicViewer.MotionBlocks);
 
-            BreakPointSlider.Maximum = MG_CS_BasicViewer.MotionBlocks.Count - 1;
-            if (mViewer.BreakPoint > MG_CS_BasicViewer.MotionBlocks.Count - 1)
-            {
-                mViewer.BreakPoint = MG_CS_BasicViewer.MotionBlocks.Count - 1;
+                BreakPointSlider.Maximum = MG_CS_BasicViewer.MotionBlocks.Count - 1;
+                if (mViewer.BreakPoint > MG_CS_BasicViewer.MotionBlocks.Count - 1)
+                {
+                    mViewer.BreakPoint = MG_CS_BasicViewer.MotionBlocks.Count - 1;
+                }
+                mViewer.GatherTools();
+                lblStatus.Text = "Hecho";
+                prgBar.Value = 0;
             }
-            mViewer.GatherTools();
-            lblStatus.Text = "Hecho";
-            prgBar.Value = 0;
-
+            catch (Exception ex)
+            {
+                lblStatus.Text = "";
+                MessageBox.Show("Se ha producido un error:" + ex.Message,"Previsualizar comandos",MessageBoxButtons.OK,MessageBoxIcon.Error );
+            }
         }
 
         private void BreakPointSlider_ValueChanged(object sender, EventArgs e)
@@ -977,7 +1008,7 @@ namespace CNCMatic
 
                 if (loteInstrucciones.Count == 0)
                 {
-                    MessageBox.Show("No posee instrucciones para ser transferidas al CNC" , "Transferencia CNC", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+                    MessageBox.Show("No posee instrucciones para ser transferidas al CNC", "Transferencia CNC", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
                     return;
                 }
 
@@ -1000,7 +1031,7 @@ namespace CNCMatic
                                 //bloqueamos controles
                                 btnPlay.Enabled = false;
                                 btnInicio.Enabled = false;
-                                btnStop2.Enabled = false;
+                                btnStop2.Enabled = true;
                                 gbMovXY.Enabled = false;
                                 gbMovZ.Enabled = false;
                                 txtLineaManual.Enabled = false;
@@ -1021,11 +1052,11 @@ namespace CNCMatic
                         if (dr == DialogResult.Yes)
                         {
                             Interfaz.ReaudarTransmision();
-                            
+
                             //bloqueamos controles
                             btnPlay.Enabled = false;
                             btnInicio.Enabled = false;
-                            btnStop2.Enabled = false;
+                            btnStop2.Enabled = true;
                             gbMovXY.Enabled = false;
                             gbMovZ.Enabled = false;
                             txtLineaManual.Enabled = false;
@@ -1034,12 +1065,12 @@ namespace CNCMatic
                             txtPreview.Enabled = false;
 
                             btnPause.Enabled = true;
-                            
+
                             //salimos de la pausa
                             this.pausado = false;
                         }
                     }
-                    
+
                 }
             }
             catch (Exception ex)
@@ -1141,7 +1172,7 @@ namespace CNCMatic
             }
             catch (Exception ex)
             {
-                MessageBox.Show("CNCMatic.MoverLibre: " + ex.Message,"Movimiento Libre",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show("CNCMatic.MoverLibre: " + ex.Message, "Movimiento Libre", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1167,6 +1198,9 @@ namespace CNCMatic
 
                 SetControlPropertyThreadSafe(btnConnect, "Visible", false);
                 SetControlPropertyThreadSafe(btnStop2, "Enabled", false);
+                SetControlPropertyThreadSafe(btnInicio, "Enabled", true);
+                SetControlPropertyThreadSafe(gbMovXY, "Enabled", true);
+                SetControlPropertyThreadSafe(gbMovZ, "Enabled", true);
 
                 //MessageBox.Show("Conexión exitosa!", "Conexion CNC", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -1191,11 +1225,14 @@ namespace CNCMatic
 
                 SetControlPropertyThreadSafe(btnConnect, "Visible", false);
                 SetControlPropertyThreadSafe(btnStop2, "Enabled", false);
+                SetControlPropertyThreadSafe(btnInicio, "Enabled", true);
+                SetControlPropertyThreadSafe(gbMovXY, "Enabled", true);
+                SetControlPropertyThreadSafe(gbMovZ, "Enabled", true);
 
                 return;
             }
 
-            
+
         }
 
         //For ThreadSafe called to edit components
@@ -1223,7 +1260,7 @@ namespace CNCMatic
                     //obtenemos las lineas del previsualizador y removemos los blancos
                     List<string> loteInstrucciones = new List<string>();
 
-                    if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual, ref this.prgBar ))
+                    if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual, ref this.prgBar))
                     {
 
                         //bloqueamos controles
@@ -1241,7 +1278,7 @@ namespace CNCMatic
                         btnConnect.Enabled = false;
 
                         //bloqueamos el menu de configuracion
-                        configuracionToolStripMenuItem.Enabled = false;
+                        //configuracionToolStripMenuItem.Enabled = false;
 
                     }
 
@@ -1251,9 +1288,15 @@ namespace CNCMatic
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                if (ex.Message.Contains("no existe."))
+                {
+                    this.lblEstado.Text = "";
+                }
+
+                MessageBox.Show("Error: " + ex.Message, "Conectar", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
 
 

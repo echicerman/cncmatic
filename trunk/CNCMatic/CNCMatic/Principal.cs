@@ -93,7 +93,9 @@ namespace CNCMatic
             //habilitamos nuevamente el menu de configuracion
             configuracionToolStripMenuItem.Enabled = true;
 
-            Interfaz.ReiniciarCNC();
+            Interfaz.DetenerCNC();
+
+            btnRestart.Enabled = false;
         }
 
         private void LimpiarControles()
@@ -938,7 +940,7 @@ namespace CNCMatic
             catch (Exception ex)
             {
                 lblStatus.Text = "";
-                MessageBox.Show("Se ha producido un error:" + ex.Message,"Previsualizar comandos",MessageBoxButtons.OK,MessageBoxIcon.Error );
+                MessageBox.Show("Se ha producido un error:" + ex.Message, "Previsualizar comandos", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1197,7 +1199,8 @@ namespace CNCMatic
                 LimpiarControlesSafe();
 
                 SetControlPropertyThreadSafe(btnConnect, "Visible", false);
-                SetControlPropertyThreadSafe(btnStop2, "Enabled", false);
+                SetControlPropertyThreadSafe(btnStop2, "Enabled", true);
+
                 SetControlPropertyThreadSafe(btnInicio, "Enabled", true);
                 SetControlPropertyThreadSafe(gbMovXY, "Enabled", true);
                 SetControlPropertyThreadSafe(gbMovZ, "Enabled", true);
@@ -1232,6 +1235,17 @@ namespace CNCMatic
                 return;
             }
 
+            //reiniciado
+            if (sender.ToString() == "CNC restarted")
+            {
+                LimpiarControlesSafe();
+
+                SetControlPropertyThreadSafe(btnConnect, "Enabled", true);
+                SetControlPropertyThreadSafe(btnStop2, "Enabled", false);
+                SetControlPropertyThreadSafe(btnRestart, "Enabled", false);
+
+                return;
+            }
 
         }
 
@@ -1277,6 +1291,9 @@ namespace CNCMatic
                         btnStop2.Enabled = true;
                         btnConnect.Enabled = false;
 
+
+                        btnRestart.Enabled = true;
+
                         //bloqueamos el menu de configuracion
                         //configuracionToolStripMenuItem.Enabled = false;
 
@@ -1291,10 +1308,36 @@ namespace CNCMatic
                 if (ex.Message.Contains("no existe."))
                 {
                     this.lblEstado.Text = "";
-                }
 
-                MessageBox.Show("Error: " + ex.Message, "Conectar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Error: la maquina no está conectada", "Conectar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("Error: " + ex.Message, "Conectar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
+        }
+
+        private void btnRestart_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.lblEstado.Text = "CNC restarting...";
+
+                Interfaz.ReiniciarCNC();
+            }
+
+            catch (Exception ex)
+            {
+
+                MessageBox.Show("Error: " + ex.Message, "Reiniciar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+        }
+
+        private void salirMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
 

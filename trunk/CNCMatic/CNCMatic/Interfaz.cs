@@ -212,6 +212,23 @@ namespace CNCMatic
             }
         }
 
+        public static void DetenerCNC()
+        {
+            try
+            {
+                //maquina
+                var cnc = CNC.CNC.Cnc;
+
+
+                cnc.Detener();
+
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("Interfaz.DetenerCNC: " + ex.Message));
+            }
+        }
+
         public static void OrigenCNC(ref SafeControls.SafeToolStripStatusLabel lblEstado, ref SafeControls.SafeToolStripStatusLabel lblPosicActual)
         {
             try

@@ -515,7 +515,7 @@ namespace CNC
                     {
                         this.configurada = false;
 
-                        //this.Label.Text = "Conexión OK (1/3): enviando handshake...";
+                        this.Label.Text = "CNC restarted";
                         estadoActual = CNC_Estados.SerialPortConectado;
                     }
 
@@ -554,7 +554,7 @@ namespace CNC
                     {
                         //vemos que hacemos...
                         this.Label.Text = "Fin de Carrera alcanzado";
-                        
+
                         //queda en estado READYTOCONFIGURE
                         this.estadoActual = CNC_Estados.EsperandoConfig;
                     }
@@ -603,7 +603,7 @@ namespace CNC
                         estadoActual = CNC_Estados.Conectado;
 
                         this.Label.Text = "Conexión OK (1/3): handshake recibido ok...";
-                        
+
                         this.BarraProgreso.Value = 50;
                     }
                     else if (recep == CNC_Mensajes_Recep.MaquinaNoConectada)
@@ -718,7 +718,7 @@ namespace CNC
                 {
                     string recep = recibir();
 
-                    
+
                     //abrimos el comando recibido, por ejemplo:
                     //"CMDDONE_X12 Y28 Z4"
                     string respuesta = recep.Split('_')[0];
@@ -732,7 +732,7 @@ namespace CNC
 
                         //volvemos a esperar comando
                         estadoActual = CNC_Estados.EsperandoComando;
-                        
+
                         if (this.UltimoMensajeSend == CNC_Mensajes_Send.G_Pausa)
                             this.Label.Text = "Transmision Pausada";
 
@@ -740,7 +740,7 @@ namespace CNC
                         if (this.UltimoMensajeSend == CNC_Mensajes_Send.G_Stop)
                         {
                             this.Label.Text = "Ejecución Detenida";
-                            
+
                             //queda en CNCMATICCONNECTED
                             this.estadoActual = CNC_Estados.Conectado;
 
@@ -761,7 +761,7 @@ namespace CNC
 
                         //volvemos a esperar comando
                         estadoActual = CNC_Estados.EsperandoComando;
-                        
+
                         //vemos que hacemos...
                         this.Label.Text = "Parada de Emergencia";
                     }
@@ -774,7 +774,7 @@ namespace CNC
 
                         //volvemos a esperar comando
                         estadoActual = CNC_Estados.EsperandoComando;
-                        
+
                         //vemos que hacemos...
                         this.Label.Text = "Fin de Carrera alcanzado";
                     }
@@ -996,7 +996,7 @@ namespace CNC
 
                         //pasamos a la siguiente global
                         this.proximaInstruccion++;
-                        
+
                     }
 
                     return true;
@@ -1063,11 +1063,11 @@ namespace CNC
             }
         }
 
-        public void Reiniciar()
+        public void Detener()
         {
             try
             {
-                
+
                 if (
                     this.estadoActual == CNC_Estados.EsperandoComando ||
                     this.estadoActual == CNC_Estados.ProcesandoComando
@@ -1081,6 +1081,19 @@ namespace CNC
                     this.estadoActual = CNC_Estados.SerialPortConectado;
                 }
 
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("CNC.Detener: " + ex.Message));
+            }
+        }
+
+        public void Reiniciar()
+        {
+            try
+            {
+                //enviamos reset
+                enviar(CNC_Mensajes_Send.Reset);
             }
             catch (Exception ex)
             {
@@ -1125,7 +1138,7 @@ namespace CNC
             {
                 //nos conectamos al puerto
                 conectarSerialPort();
-                
+
                 //MovimientoLibre = "FM:"
                 //comando = "+Z"
                 enviar(CNC_Mensajes_Send.MovimientoLibre + comando);
@@ -1162,8 +1175,8 @@ namespace CNC
                 //si la maquina esta en movimiento libre enviamos el STOP
                 //if (this.estadoActual == CNC_Estados.MovimientoLibre)
                 //{
-                    //como ya estamos en FREEMOVES enviamos directamente
-                    enviar(CNC_Mensajes_Send.Stop);
+                //como ya estamos en FREEMOVES enviamos directamente
+                enviar(CNC_Mensajes_Send.Stop);
                 //}
 
             }

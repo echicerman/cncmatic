@@ -496,6 +496,9 @@ void StepOnZ(bool_t clockwise)
 /********************************************************/
 void MoveToOrigin()
 {
+	// seteo a 1 el enable de los motores
+	PORTEbits.RE2 = 1;
+	
 	while(!limitSensorZ && !PORTBbits.RB7)
 	{
 		StepOnZ(false);
@@ -514,9 +517,14 @@ void MoveToOrigin()
 	limitSensorX = limitSensorY = limitSensorZ = false;
 	currentSteps = CreateStepsPosition(0, 0, 0);
 	currentPosition = CreatePosition(0.0, 0.0, 0.0);
+	goto end;
 	
 	emergencyStop:
 		emergencyStopHandler();
+		goto end;
+	end:
+		// seteo a 0 el enable de los motores
+		PORTEbits.RE2 = 0;
 }
 
 void user(void)
@@ -700,6 +708,9 @@ void user(void)
 				case FREEMOVES:
 					if(freeCode != -1)
 					{
+						// seteo a 1 el enable de los motores
+						PORTEbits.RE2 = 1;
+						
 							 if( freeCode == 0)	{ StepOnX(true);  }
 						else if( freeCode == 1) { StepOnX(false); }
 						else if( freeCode == 2) { StepOnY(true);  }
@@ -715,6 +726,8 @@ void user(void)
 							putUSBUSART(message, strlen(message));
 							machineState = READYTOCONFIGURE;
 						}
+						// seteo a 0 el enable de los motores
+						PORTEbits.RE2 = 0;
 					}
 					break;
 

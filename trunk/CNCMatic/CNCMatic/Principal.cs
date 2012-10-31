@@ -80,22 +80,24 @@ namespace CNCMatic
 
         private void btnStop2_Click(object sender, EventArgs e)
         {
-            //AgregaTextoEditor(false, Metodos.Stop());
+            this.lblEstado.Text = "Conexión cancelada por el usuario";
+
+            Interfaz.DetenerCNC();
 
             //Habilita todas las funciones
             LimpiarControles();
             btnStop2.Enabled = false;
             btnConnect.Enabled = true;
             btnConnect.Visible = true;
-
-            this.lblEstado.Text = "Conexión cancelada por el usuario";
+            btnPause.Enabled = false;
 
             //habilitamos nuevamente el menu de configuracion
             configuracionToolStripMenuItem.Enabled = true;
 
-            Interfaz.DetenerCNC();
-
             btnRestart.Enabled = false;
+
+            //reiniciamos la barra
+            prgBar.Value = 0;
         }
 
         private void LimpiarControles()
@@ -110,7 +112,7 @@ namespace CNCMatic
             toolStrip1.Enabled = true;
             txtPreview.Enabled = true;
 
-    
+
         }
 
         private void LimpiarControlesSafe()
@@ -126,7 +128,7 @@ namespace CNCMatic
             SetControlPropertyThreadSafe(toolStrip1, "Enabled", true);
             SetControlPropertyThreadSafe(txtPreview, "Enabled", true);
 
-            
+
         }
 
         /// <summary>
@@ -166,11 +168,11 @@ namespace CNCMatic
                     doc.Cargar(importaDXF.FileName);
 
                     //Analizamos las figuras
-                    if (!doc.AnalizarFiguras(Interfaz.ConfiguracionActual()))
-                    {
-                        MessageBox.Show("Error: Se han encontrado figuras que superan el área de trabajo definido", "Importar DXF", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
+                    //if (!doc.AnalizarFiguras(Interfaz.ConfiguracionActual()))
+                    //{
+                    //    MessageBox.Show("Error: Se han encontrado figuras que superan el área de trabajo definido", "Importar DXF", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //    return;
+                    //}
 
                     //Realizamos la traduccion de las figuras a código G
                     List<string> sl = new List<string>();
@@ -369,7 +371,7 @@ namespace CNCMatic
         {
             //double deltaSubida = 0.5;
             double deltaSubida = Convert.ToDouble(Interfaz.ConfiguracionActual().AltoAscenso);
-            
+
             string linea;
             string[] valoresZ;
             int valorZ;
@@ -484,12 +486,30 @@ namespace CNCMatic
             //si la tecla presionada es Enter, agregamos la linea al editor
             if (e.KeyChar == (char)Keys.Enter)
             {
+                string linea = this.txtLineaManual.Text.Trim();
+                
+                if (Char.ToUpper(linea[0]) != 'G' && Char.ToUpper(linea[0]) != 'M')
+                {
+                    ////limpiamos el enter ingresado
+                    //e.KeyChar = new char();
+                    MessageBox.Show("Instrucción \"" + linea + "\" no válida, por favor corregir", "Ingreso manual de instrucciones", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                else if (!Char.IsNumber(linea[1]))
+                {
+                    ////limpiamos el enter ingresado
+                    //e.KeyChar = new char();
+                    MessageBox.Show("Instrucción \"" + linea + "\" no válida, por favor corregir", "Ingreso manual de instrucciones", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                
                 AgregaTextoEditor(false, this.txtLineaManual.Text.Trim());
                 this.txtLineaManual.Text = "";
 
                 //Muestra figura en el previsualizador
                 PrevisualizarFigurasManual();
             }
+
         }
 
 
@@ -498,7 +518,41 @@ namespace CNCMatic
             //si la tecla presionada es Enter, agregamos la linea al editor
             if (e.KeyChar == (char)Keys.Enter)
             {
-                AgregaTextoEditor(false, this.txtLineaManual.Text.Trim());
+                ////limpiamos el enter ingresado
+                e.KeyChar = new char();
+
+                //removemos los blancos
+                List<string> lineas = txtPreview.Lines.ToList();
+                while (lineas.Contains(""))
+                {
+                    lineas.Remove("");
+                }
+                
+                txtPreview.Text = "";
+                foreach (string linea in lineas)
+                {
+                    txtPreview.Text += linea + Environment.NewLine;
+                }
+
+                foreach (string linea in lineas)
+                {
+                    if (Char.ToUpper(linea[0]) != 'G' && Char.ToUpper(linea[0]) != 'M')
+                    {
+                        ////limpiamos el enter ingresado
+                        //e.KeyChar = new char();
+                        MessageBox.Show("Instrucción \"" + linea + "\" no válida, por favor corregir", "Ingreso manual de instrucciones", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    else if (!Char.IsNumber(linea[1]))
+                    {
+                        ////limpiamos el enter ingresado
+                        //e.KeyChar = new char();
+                        MessageBox.Show("Instrucción \"" + linea + "\" no válida, por favor corregir", "Ingreso manual de instrucciones", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+
+                txtPreview.Select(txtPreview.Text.Length, 0);
 
                 //Muestra figura en el previsualizador
                 PrevisualizarFigurasManual();
@@ -1045,6 +1099,9 @@ namespace CNCMatic
                                 txtPreview.Enabled = false;
 
                                 btnPause.Enabled = true;
+
+                                //bloqueamos el menu para que no modifiquen la configuracion
+                                configuracionToolStripMenuItem.Enabled = false;
                             }
                         }
 
@@ -1073,6 +1130,9 @@ namespace CNCMatic
 
                             //salimos de la pausa
                             this.pausado = false;
+
+                            //bloqueamos el menu para que no modifiquen la configuracion
+                            configuracionToolStripMenuItem.Enabled = false;
                         }
                     }
 
@@ -1080,7 +1140,17 @@ namespace CNCMatic
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (ex.Message.Contains("Interfaz.ConectarCNC: IniciarTransmision: CNC.PrepararComandos: Comando no soportado:"))
+                {
+                    string mensaje = ex.Message.Replace("Interfaz.ConectarCNC: IniciarTransmision: CNC.PrepararComandos: ","");
+                    
+                    //existen comandos no válidos
+                    MessageBox.Show("Error: " + mensaje, "Comando no soportado", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
         private void acercaDeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1202,7 +1272,7 @@ namespace CNCMatic
                 LimpiarControlesSafe();
 
                 SetControlPropertyThreadSafe(btnConnect, "Visible", false);
-                SetControlPropertyThreadSafe(btnStop2, "Enabled", true);
+                SetControlPropertyThreadSafe(btnStop2, "Enabled", false);
 
                 SetControlPropertyThreadSafe(btnInicio, "Enabled", true);
                 SetControlPropertyThreadSafe(gbMovXY, "Enabled", true);
@@ -1214,12 +1284,13 @@ namespace CNCMatic
             }
 
             //si hubo error en el handshake, liberamos la pantalla
-            if (sender.ToString() == "Conexión (1/3): error en el handshake. Intente nuevamente.")
+            if (sender.ToString() == "Conexión (2/3): error en el handshake. Intente nuevamente.")
             {
                 LimpiarControlesSafe();
 
                 SetControlPropertyThreadSafe(btnConnect, "Enabled", true);
                 SetControlPropertyThreadSafe(btnStop2, "Enabled", false);
+                SetControlPropertyThreadSafe(btnRestart, "Enabled", false);
 
                 //reiniciamos la barra
                 prgBar.Value = 0;
@@ -1234,9 +1305,14 @@ namespace CNCMatic
 
                 SetControlPropertyThreadSafe(btnConnect, "Visible", false);
                 SetControlPropertyThreadSafe(btnStop2, "Enabled", false);
-                SetControlPropertyThreadSafe(btnInicio, "Enabled", true);
-                SetControlPropertyThreadSafe(gbMovXY, "Enabled", true);
-                SetControlPropertyThreadSafe(gbMovZ, "Enabled", true);
+                SetControlPropertyThreadSafe(btnInicio, "Enabled", false);
+                SetControlPropertyThreadSafe(gbMovXY, "Enabled", false);
+                SetControlPropertyThreadSafe(gbMovZ, "Enabled", false);
+                SetControlPropertyThreadSafe(btnPause, "Enabled", false);
+                SetControlPropertyThreadSafe(btnPlay, "Enabled", false);
+
+                //habilitamos el menu de configuracion
+                configuracionToolStripMenuItem.Enabled = true;
 
                 return;
             }
@@ -1247,8 +1323,10 @@ namespace CNCMatic
                 LimpiarControlesSafe();
 
                 SetControlPropertyThreadSafe(btnConnect, "Enabled", true);
+                SetControlPropertyThreadSafe(btnConnect, "Visible", true);
                 SetControlPropertyThreadSafe(btnStop2, "Enabled", false);
                 SetControlPropertyThreadSafe(btnRestart, "Enabled", false);
+                SetControlPropertyThreadSafe(btnPause, "Enabled", false);
 
                 //reiniciamos la barra
                 prgBar.Value = 0;
@@ -1256,6 +1334,23 @@ namespace CNCMatic
                 return;
             }
 
+            //stop de emergencia yendo al inicio
+            if (sender.ToString() == "Parada de Emergencia presionado")
+            {
+
+                LimpiarControlesSafe();
+
+                SetControlPropertyThreadSafe(btnConnect, "Enabled", true);
+                SetControlPropertyThreadSafe(btnConnect, "Visible", true);
+                SetControlPropertyThreadSafe(btnStop2, "Enabled", false);
+                SetControlPropertyThreadSafe(btnRestart, "Enabled", false);
+                SetControlPropertyThreadSafe(btnPause, "Enabled", false);
+
+                //reiniciamos la barra
+                prgBar.Value = 0;
+
+                return;
+            }
         }
 
         //For ThreadSafe called to edit components
@@ -1280,6 +1375,10 @@ namespace CNCMatic
                 DialogResult dr = MessageBox.Show("Se procederá a establecer la conexión con el CNC." + Environment.NewLine + "¿Desea Continuar?", "Conexión CNC", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
                 if (dr == DialogResult.Yes)
                 {
+
+                    //mensaje de advertencia al usuario
+                    MessageBox.Show("Asegurese por favor de quitar todo objeto del área de trabajo, la herramienta procederá a trasladarse al origen", "Importante", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
                     //obtenemos las lineas del previsualizador y removemos los blancos
                     List<string> loteInstrucciones = new List<string>();
 
@@ -1331,7 +1430,8 @@ namespace CNCMatic
         {
             try
             {
-                this.lblEstado.Text = "CNC restarting...";
+                //limipiamos el estado
+                this.lblEstado.Text = "";
 
                 Interfaz.ReiniciarCNC();
             }

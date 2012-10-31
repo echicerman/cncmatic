@@ -47,8 +47,8 @@ namespace CNCMatic
                     //traemos la instancia de la maquina
                     var cnc = CNC.CNC.Cnc;
 
-                    if (cnc.EstadoActual != CNC_Estados.EsperandoComando)
-                    {//si no esta esperando comando
+                    if (cnc.EstadoActual != CNC_Estados.EsperandoComando && cnc.EstadoActual != CNC_Estados.EsperandoConfig)
+                    {//si no esta esperando comando -> conectamos
 
                         cnc.Label = lblEstado;
                         cnc.PuertoConexion = ConfiguracionActual().PuertoCom;
@@ -203,7 +203,7 @@ namespace CNCMatic
                 var cnc = CNC.CNC.Cnc;
 
 
-                cnc.Reiniciar();
+                cnc.ReiniciarCNC();
 
             }
             catch (Exception ex)

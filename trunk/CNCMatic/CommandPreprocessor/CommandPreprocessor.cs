@@ -436,7 +436,7 @@ namespace CommandPreprocessor
 
                     default:
                         throw new Exception("Comando no soportado: " + code + ".");
-                        break;
+                        
                 }
             }
             else if (HasValueParameter('M', command))

@@ -973,7 +973,7 @@
             // 
             // toolStripContainer1.ContentPanel
             // 
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1149, 1);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1149, 0);
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 666);
             this.toolStripContainer1.Name = "toolStripContainer1";
             this.toolStripContainer1.Size = new System.Drawing.Size(1149, 23);

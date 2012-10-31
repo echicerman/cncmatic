@@ -638,6 +638,10 @@ namespace CNC
                         //pasamos directo a READYTOCONFIGURE
                         this.estadoActual = CNC_Estados.EsperandoConfig;
 
+                        //como desconocemos la posicion actual y la necesitamos para luego actualizar
+                        //el referenceposition del commandpreproc la pedimos
+                        enviar(CNC_Mensajes_Send.PosicionActual);
+
                         this.Label.Text = "Conexión OK (3/3): Conexión establecida";
 
                         this.BarraProgreso.Value = 100;
@@ -690,6 +694,10 @@ namespace CNC
                     {
                         //pasamos directo a READYTOCONFIGURE
                         this.estadoActual = CNC_Estados.EsperandoConfig;
+
+                        //como desconocemos la posicion actual y la necesitamos para luego actualizar
+                        //el referenceposition del commandpreproc la pedimos
+                        enviar(CNC_Mensajes_Send.PosicionActual);
 
                         this.Label.Text = "Conexión OK (3/3): Conexión establecida";
 

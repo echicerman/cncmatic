@@ -67,6 +67,7 @@ namespace CNCMatic
             this.cmbMotor.SelectedValueChanged += new System.EventHandler(this.cmbMotor_SelectedValueChanged);
 
         }
+
         private void CargaMateriales()
         {
             //cargar configuraciones
@@ -83,6 +84,7 @@ namespace CNCMatic
             this.cmbMaterial.SelectedValueChanged += new System.EventHandler(this.cmbMaterial_SelectedValueChanged);
 
         }
+
         private void CargaConfiguracionGeneral()
         {
             //cargar configuraciones

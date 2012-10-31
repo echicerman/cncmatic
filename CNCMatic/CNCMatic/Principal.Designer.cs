@@ -34,7 +34,13 @@
             this.importaG = new System.Windows.Forms.OpenFileDialog();
             this.txtPreview = new System.Windows.Forms.TextBox();
             this.gbMovZ = new System.Windows.Forms.GroupBox();
+            this.btnMovZ_Aba = new System.Windows.Forms.Button();
+            this.btnMovZ_Arr = new System.Windows.Forms.Button();
             this.gbMovXY = new System.Windows.Forms.GroupBox();
+            this.btnMovXY_Der = new System.Windows.Forms.Button();
+            this.btnMovXY_Izq = new System.Windows.Forms.Button();
+            this.btnMovXY_Aba = new System.Windows.Forms.Button();
+            this.btnMovXY_Arr = new System.Windows.Forms.Button();
             this.menu = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.importaciónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,14 +50,28 @@
             this.configuracionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ayudaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.acercaDeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.salirMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.btnCirculo = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.dToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemCubo = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnLinea = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnArco = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.grpOperacion = new System.Windows.Forms.GroupBox();
+            this.btnRestart = new System.Windows.Forms.Button();
+            this.btnConnect = new System.Windows.Forms.Button();
+            this.btnInicio = new System.Windows.Forms.Button();
+            this.btnStop2 = new System.Windows.Forms.Button();
+            this.btnPlay = new System.Windows.Forms.Button();
+            this.btnPause = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblUserName = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblMachName = new System.Windows.Forms.ToolStripStatusLabel();
@@ -66,8 +86,24 @@
             this.BreakPointSlider = new System.Windows.Forms.TrackBar();
             this.MG_Viewer1 = new MacGen.MG_CS_BasicViewer();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.tsbDisplay = new System.Windows.Forms.ToolStripDropDownButton();
+            this.mnuRapidLines = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuRapidPoints = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuAxisLines = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuAxisindicator = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbPan = new System.Windows.Forms.ToolStripButton();
+            this.tsbZoom = new System.Windows.Forms.ToolStripButton();
+            this.tsbRotate = new System.Windows.Forms.ToolStripButton();
+            this.tsbFence = new System.Windows.Forms.ToolStripButton();
+            this.tsbFit = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbSelect = new System.Windows.Forms.ToolStripButton();
+            this.tsbView = new System.Windows.Forms.ToolStripDropDownButton();
+            this.mnuTop = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuFront = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuRight = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuIsometric = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.Coordinates = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
@@ -76,42 +112,7 @@
             this.tblScreens = new System.Windows.Forms.TableLayoutPanel();
             this.CodeTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnLimpiar = new System.Windows.Forms.Button();
-            this.tsbDisplay = new System.Windows.Forms.ToolStripDropDownButton();
-            this.mnuRapidLines = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuRapidPoints = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuAxisLines = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuAxisindicator = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsbPan = new System.Windows.Forms.ToolStripButton();
-            this.tsbZoom = new System.Windows.Forms.ToolStripButton();
-            this.tsbRotate = new System.Windows.Forms.ToolStripButton();
-            this.tsbFence = new System.Windows.Forms.ToolStripButton();
-            this.tsbFit = new System.Windows.Forms.ToolStripButton();
-            this.tsbSelect = new System.Windows.Forms.ToolStripButton();
-            this.tsbView = new System.Windows.Forms.ToolStripDropDownButton();
-            this.mnuTop = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuFront = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuRight = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuIsometric = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnRestart = new System.Windows.Forms.Button();
-            this.btnConnect = new System.Windows.Forms.Button();
-            this.btnInicio = new System.Windows.Forms.Button();
-            this.btnStop2 = new System.Windows.Forms.Button();
-            this.btnPlay = new System.Windows.Forms.Button();
-            this.btnPause = new System.Windows.Forms.Button();
-            this.btnMovXY_Der = new System.Windows.Forms.Button();
-            this.btnMovXY_Izq = new System.Windows.Forms.Button();
-            this.btnMovXY_Aba = new System.Windows.Forms.Button();
-            this.btnMovXY_Arr = new System.Windows.Forms.Button();
-            this.btnMovZ_Aba = new System.Windows.Forms.Button();
-            this.btnMovZ_Arr = new System.Windows.Forms.Button();
-            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.btnCirculo = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.dToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuItemCubo = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnLinea = new System.Windows.Forms.ToolStripButton();
-            this.btnArco = new System.Windows.Forms.ToolStripButton();
-            this.salirMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.gbMovZ.SuspendLayout();
             this.gbMovXY.SuspendLayout();
             this.menu.SuspendLayout();
@@ -123,6 +124,8 @@
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BreakPointSlider)).BeginInit();
             this.toolStrip2.SuspendLayout();
+            this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
+            this.toolStripContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // importaDXF
@@ -145,7 +148,7 @@
             this.txtPreview.Name = "txtPreview";
             this.txtPreview.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtPreview.Size = new System.Drawing.Size(401, 324);
-            this.txtPreview.TabIndex = 6;
+            this.txtPreview.TabIndex = 1;
             this.txtPreview.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPreview_KeyPress);
             // 
             // gbMovZ
@@ -157,9 +160,33 @@
             this.gbMovZ.Location = new System.Drawing.Point(234, 102);
             this.gbMovZ.Name = "gbMovZ";
             this.gbMovZ.Size = new System.Drawing.Size(82, 129);
-            this.gbMovZ.TabIndex = 1;
+            this.gbMovZ.TabIndex = 5;
             this.gbMovZ.TabStop = false;
             this.gbMovZ.Text = "Mov-Z";
+            // 
+            // btnMovZ_Aba
+            // 
+            this.btnMovZ_Aba.BackColor = System.Drawing.Color.White;
+            this.btnMovZ_Aba.Image = global::CNCMatic.Properties.Resources.flecha_ABA;
+            this.btnMovZ_Aba.Location = new System.Drawing.Point(17, 73);
+            this.btnMovZ_Aba.Name = "btnMovZ_Aba";
+            this.btnMovZ_Aba.Size = new System.Drawing.Size(49, 45);
+            this.btnMovZ_Aba.TabIndex = 1;
+            this.btnMovZ_Aba.UseVisualStyleBackColor = false;
+            this.btnMovZ_Aba.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovZ_Aba_MouseDown);
+            this.btnMovZ_Aba.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovZ_Aba_MouseUp);
+            // 
+            // btnMovZ_Arr
+            // 
+            this.btnMovZ_Arr.BackColor = System.Drawing.Color.White;
+            this.btnMovZ_Arr.Image = global::CNCMatic.Properties.Resources.flecha_ARR;
+            this.btnMovZ_Arr.Location = new System.Drawing.Point(17, 19);
+            this.btnMovZ_Arr.Name = "btnMovZ_Arr";
+            this.btnMovZ_Arr.Size = new System.Drawing.Size(48, 43);
+            this.btnMovZ_Arr.TabIndex = 0;
+            this.btnMovZ_Arr.UseVisualStyleBackColor = false;
+            this.btnMovZ_Arr.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovZ_Arr_MouseDown);
+            this.btnMovZ_Arr.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovZ_Arr_MouseUp);
             // 
             // gbMovXY
             // 
@@ -172,9 +199,57 @@
             this.gbMovXY.Location = new System.Drawing.Point(32, 102);
             this.gbMovXY.Name = "gbMovXY";
             this.gbMovXY.Size = new System.Drawing.Size(181, 128);
-            this.gbMovXY.TabIndex = 0;
+            this.gbMovXY.TabIndex = 4;
             this.gbMovXY.TabStop = false;
             this.gbMovXY.Text = "Mov-XY";
+            // 
+            // btnMovXY_Der
+            // 
+            this.btnMovXY_Der.BackColor = System.Drawing.Color.White;
+            this.btnMovXY_Der.Image = global::CNCMatic.Properties.Resources.flecha_DER;
+            this.btnMovXY_Der.Location = new System.Drawing.Point(119, 43);
+            this.btnMovXY_Der.Name = "btnMovXY_Der";
+            this.btnMovXY_Der.Size = new System.Drawing.Size(46, 50);
+            this.btnMovXY_Der.TabIndex = 2;
+            this.btnMovXY_Der.UseVisualStyleBackColor = false;
+            this.btnMovXY_Der.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Der_MouseDown);
+            this.btnMovXY_Der.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Der_MouseUp);
+            // 
+            // btnMovXY_Izq
+            // 
+            this.btnMovXY_Izq.BackColor = System.Drawing.Color.White;
+            this.btnMovXY_Izq.Image = global::CNCMatic.Properties.Resources.flecha_IZQ;
+            this.btnMovXY_Izq.Location = new System.Drawing.Point(20, 43);
+            this.btnMovXY_Izq.Name = "btnMovXY_Izq";
+            this.btnMovXY_Izq.Size = new System.Drawing.Size(44, 50);
+            this.btnMovXY_Izq.TabIndex = 0;
+            this.btnMovXY_Izq.UseVisualStyleBackColor = false;
+            this.btnMovXY_Izq.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Izq_MouseDown);
+            this.btnMovXY_Izq.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Izq_MouseUp);
+            // 
+            // btnMovXY_Aba
+            // 
+            this.btnMovXY_Aba.BackColor = System.Drawing.Color.White;
+            this.btnMovXY_Aba.Image = global::CNCMatic.Properties.Resources.flecha_ABA;
+            this.btnMovXY_Aba.Location = new System.Drawing.Point(69, 72);
+            this.btnMovXY_Aba.Name = "btnMovXY_Aba";
+            this.btnMovXY_Aba.Size = new System.Drawing.Size(44, 45);
+            this.btnMovXY_Aba.TabIndex = 3;
+            this.btnMovXY_Aba.UseVisualStyleBackColor = false;
+            this.btnMovXY_Aba.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Aba_MouseDown);
+            this.btnMovXY_Aba.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Aba_MouseUp);
+            // 
+            // btnMovXY_Arr
+            // 
+            this.btnMovXY_Arr.BackColor = System.Drawing.Color.White;
+            this.btnMovXY_Arr.Image = global::CNCMatic.Properties.Resources.flecha_ARR;
+            this.btnMovXY_Arr.Location = new System.Drawing.Point(70, 16);
+            this.btnMovXY_Arr.Name = "btnMovXY_Arr";
+            this.btnMovXY_Arr.Size = new System.Drawing.Size(44, 46);
+            this.btnMovXY_Arr.TabIndex = 1;
+            this.btnMovXY_Arr.UseVisualStyleBackColor = false;
+            this.btnMovXY_Arr.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Arr_MouseDown);
+            this.btnMovXY_Arr.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Arr_MouseUp);
             // 
             // menu
             // 
@@ -186,7 +261,7 @@
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
             this.menu.Size = new System.Drawing.Size(1149, 24);
-            this.menu.TabIndex = 21;
+            this.menu.TabIndex = 0;
             this.menu.Text = "menuStrip1";
             // 
             // toolStripMenuItem1
@@ -250,6 +325,13 @@
             this.acercaDeToolStripMenuItem.Text = "Acerca De";
             this.acercaDeToolStripMenuItem.Click += new System.EventHandler(this.acercaDeToolStripMenuItem_Click);
             // 
+            // salirMenuItem
+            // 
+            this.salirMenuItem.Name = "salirMenuItem";
+            this.salirMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.salirMenuItem.Text = "Salir";
+            this.salirMenuItem.Click += new System.EventHandler(this.salirMenuItem_Click);
+            // 
             // toolStrip1
             // 
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Left;
@@ -265,11 +347,12 @@
             this.toolStripSeparator4,
             this.btnArco,
             this.toolStripSeparator5});
+            this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.toolStrip1.Size = new System.Drawing.Size(78, 665);
-            this.toolStrip1.TabIndex = 22;
+            this.toolStrip1.TabIndex = 5;
             this.toolStrip1.Text = "toolStrip1";
             // 
             // toolStripLabel1
@@ -284,20 +367,85 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(75, 6);
             // 
+            // toolStripDropDownButton1
+            // 
+            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnCirculo});
+            this.toolStripDropDownButton1.Image = global::CNCMatic.Properties.Resources.circle_icon;
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(75, 68);
+            this.toolStripDropDownButton1.Text = "Circulo/Esfera";
+            // 
+            // btnCirculo
+            // 
+            this.btnCirculo.Name = "btnCirculo";
+            this.btnCirculo.Size = new System.Drawing.Size(137, 22);
+            this.btnCirculo.Text = "2D - Circulo";
+            this.btnCirculo.Click += new System.EventHandler(this.btnCirculo_Click);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(75, 6);
+            // 
+            // toolStripDropDownButton2
+            // 
+            this.toolStripDropDownButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripDropDownButton2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dToolStripMenuItem2,
+            this.menuItemCubo});
+            this.toolStripDropDownButton2.Image = global::CNCMatic.Properties.Resources.square_icon;
+            this.toolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
+            this.toolStripDropDownButton2.Size = new System.Drawing.Size(75, 68);
+            this.toolStripDropDownButton2.Text = "toolStripDropDownButton2";
+            this.toolStripDropDownButton2.ToolTipText = "Cuadrado/Cubo";
+            // 
+            // dToolStripMenuItem2
+            // 
+            this.dToolStripMenuItem2.Name = "dToolStripMenuItem2";
+            this.dToolStripMenuItem2.Size = new System.Drawing.Size(151, 22);
+            this.dToolStripMenuItem2.Text = "2D - Cuadrado";
+            this.dToolStripMenuItem2.Click += new System.EventHandler(this.dToolStripMenuItem2_Click);
+            // 
+            // menuItemCubo
+            // 
+            this.menuItemCubo.Name = "menuItemCubo";
+            this.menuItemCubo.Size = new System.Drawing.Size(151, 22);
+            this.menuItemCubo.Text = "3D - Cubo";
+            this.menuItemCubo.Click += new System.EventHandler(this.menuItemCubo_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(75, 6);
             // 
+            // btnLinea
+            // 
+            this.btnLinea.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnLinea.Image = global::CNCMatic.Properties.Resources.draw_line_icon;
+            this.btnLinea.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnLinea.Name = "btnLinea";
+            this.btnLinea.Size = new System.Drawing.Size(75, 68);
+            this.btnLinea.Text = "Linea";
+            this.btnLinea.Click += new System.EventHandler(this.btnLinea_Click);
+            // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(75, 6);
+            // 
+            // btnArco
+            // 
+            this.btnArco.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnArco.Image = global::CNCMatic.Properties.Resources.Actions_layer_visible_on_icon2;
+            this.btnArco.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnArco.Name = "btnArco";
+            this.btnArco.Size = new System.Drawing.Size(75, 68);
+            this.btnArco.Text = "Arco";
+            this.btnArco.Click += new System.EventHandler(this.btnArco_Click);
             // 
             // toolStripSeparator5
             // 
@@ -318,12 +466,87 @@
             this.grpOperacion.Location = new System.Drawing.Point(110, 428);
             this.grpOperacion.Name = "grpOperacion";
             this.grpOperacion.Size = new System.Drawing.Size(396, 237);
-            this.grpOperacion.TabIndex = 26;
+            this.grpOperacion.TabIndex = 4;
             this.grpOperacion.TabStop = false;
             this.grpOperacion.Text = "Operación Manual";
             // 
+            // btnRestart
+            // 
+            this.btnRestart.BackColor = System.Drawing.Color.White;
+            this.btnRestart.Enabled = false;
+            this.btnRestart.Image = global::CNCMatic.Properties.Resources.Reload_icon;
+            this.btnRestart.Location = new System.Drawing.Point(331, 145);
+            this.btnRestart.Name = "btnRestart";
+            this.btnRestart.Size = new System.Drawing.Size(45, 44);
+            this.btnRestart.TabIndex = 6;
+            this.btnRestart.UseVisualStyleBackColor = false;
+            this.btnRestart.Click += new System.EventHandler(this.btnRestart_Click);
+            // 
+            // btnConnect
+            // 
+            this.btnConnect.BackColor = System.Drawing.Color.White;
+            this.btnConnect.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnConnect.Image = global::CNCMatic.Properties.Resources.Captura21;
+            this.btnConnect.Location = new System.Drawing.Point(315, 19);
+            this.btnConnect.Name = "btnConnect";
+            this.btnConnect.Size = new System.Drawing.Size(71, 76);
+            this.btnConnect.TabIndex = 3;
+            this.btnConnect.UseVisualStyleBackColor = false;
+            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            // 
+            // btnInicio
+            // 
+            this.btnInicio.BackColor = System.Drawing.Color.White;
+            this.btnInicio.Enabled = false;
+            this.btnInicio.Image = global::CNCMatic.Properties.Resources.HomeButton;
+            this.btnInicio.Location = new System.Drawing.Point(10, 20);
+            this.btnInicio.Name = "btnInicio";
+            this.btnInicio.Size = new System.Drawing.Size(71, 76);
+            this.btnInicio.TabIndex = 0;
+            this.btnInicio.UseVisualStyleBackColor = false;
+            this.btnInicio.Click += new System.EventHandler(this.btnInicio_Click);
+            // 
+            // btnStop2
+            // 
+            this.btnStop2.BackColor = System.Drawing.Color.White;
+            this.btnStop2.Enabled = false;
+            this.btnStop2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnStop2.Image = global::CNCMatic.Properties.Resources.Stop_Normal_Red_icon;
+            this.btnStop2.Location = new System.Drawing.Point(111, 20);
+            this.btnStop2.Name = "btnStop2";
+            this.btnStop2.Size = new System.Drawing.Size(71, 76);
+            this.btnStop2.TabIndex = 1;
+            this.btnStop2.UseVisualStyleBackColor = false;
+            this.btnStop2.Click += new System.EventHandler(this.btnStop2_Click);
+            // 
+            // btnPlay
+            // 
+            this.btnPlay.BackColor = System.Drawing.Color.White;
+            this.btnPlay.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnPlay.Image = global::CNCMatic.Properties.Resources.Play_1_Normal_icon__1_;
+            this.btnPlay.Location = new System.Drawing.Point(315, 20);
+            this.btnPlay.Name = "btnPlay";
+            this.btnPlay.Size = new System.Drawing.Size(71, 76);
+            this.btnPlay.TabIndex = 23;
+            this.btnPlay.UseVisualStyleBackColor = false;
+            this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
+            // 
+            // btnPause
+            // 
+            this.btnPause.BackColor = System.Drawing.Color.White;
+            this.btnPause.Enabled = false;
+            this.btnPause.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnPause.Image = global::CNCMatic.Properties.Resources.Pause_Normal_Red_icon;
+            this.btnPause.Location = new System.Drawing.Point(214, 20);
+            this.btnPause.Name = "btnPause";
+            this.btnPause.Size = new System.Drawing.Size(71, 76);
+            this.btnPause.TabIndex = 2;
+            this.btnPause.UseVisualStyleBackColor = false;
+            this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
+            // 
             // statusStrip1
             // 
+            this.statusStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblUserName,
             this.lblMachName,
@@ -331,9 +554,9 @@
             this.prgBar,
             this.lblPosicionActual,
             this.lblEstado});
-            this.statusStrip1.Location = new System.Drawing.Point(78, 667);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 0);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1071, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1149, 22);
             this.statusStrip1.TabIndex = 27;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -385,7 +608,7 @@
             this.txtLineaManual.Location = new System.Drawing.Point(110, 385);
             this.txtLineaManual.Name = "txtLineaManual";
             this.txtLineaManual.Size = new System.Drawing.Size(316, 20);
-            this.txtLineaManual.TabIndex = 29;
+            this.txtLineaManual.TabIndex = 2;
             this.txtLineaManual.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtLineaManual_KeyPress);
             // 
             // grpPrev
@@ -396,7 +619,7 @@
             this.grpPrev.Location = new System.Drawing.Point(529, 28);
             this.grpPrev.Name = "grpPrev";
             this.grpPrev.Size = new System.Drawing.Size(618, 637);
-            this.grpPrev.TabIndex = 31;
+            this.grpPrev.TabIndex = 6;
             this.grpPrev.TabStop = false;
             this.grpPrev.Text = "Previsualización";
             // 
@@ -434,7 +657,7 @@
             this.BreakPointSlider.Margin = new System.Windows.Forms.Padding(0);
             this.BreakPointSlider.Name = "BreakPointSlider";
             this.BreakPointSlider.Size = new System.Drawing.Size(604, 20);
-            this.BreakPointSlider.TabIndex = 9;
+            this.BreakPointSlider.TabIndex = 0;
             this.BreakPointSlider.TickStyle = System.Windows.Forms.TickStyle.None;
             this.BreakPointSlider.ValueChanged += new System.EventHandler(this.BreakPointSlider_ValueChanged);
             // 
@@ -479,75 +702,8 @@
             this.toolStrip2.Location = new System.Drawing.Point(3, 16);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Size = new System.Drawing.Size(612, 25);
-            this.toolStrip2.TabIndex = 8;
+            this.toolStrip2.TabIndex = 0;
             this.toolStrip2.Text = "toolStrip2";
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripSeparator7
-            // 
-            this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripSeparator8
-            // 
-            this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 25);
-            // 
-            // Coordinates
-            // 
-            this.Coordinates.Name = "Coordinates";
-            this.Coordinates.Size = new System.Drawing.Size(0, 22);
-            // 
-            // toolStripSeparator9
-            // 
-            this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(6, 25);
-            // 
-            // lblStatus
-            // 
-            this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(0, 22);
-            // 
-            // grpPrevisualizacion
-            // 
-            this.grpPrevisualizacion.Location = new System.Drawing.Point(0, 0);
-            this.grpPrevisualizacion.Name = "grpPrevisualizacion";
-            this.grpPrevisualizacion.Size = new System.Drawing.Size(200, 100);
-            this.grpPrevisualizacion.TabIndex = 0;
-            this.grpPrevisualizacion.TabStop = false;
-            // 
-            // tblScreens
-            // 
-            this.tblScreens.BackColor = System.Drawing.Color.Black;
-            this.tblScreens.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
-            this.tblScreens.ColumnCount = 1;
-            this.tblScreens.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblScreens.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tblScreens.Location = new System.Drawing.Point(0, 0);
-            this.tblScreens.Margin = new System.Windows.Forms.Padding(0);
-            this.tblScreens.Name = "tblScreens";
-            this.tblScreens.RowCount = 1;
-            this.tblScreens.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tblScreens.Size = new System.Drawing.Size(200, 100);
-            this.tblScreens.TabIndex = 0;
-            // 
-            // btnLimpiar
-            // 
-            this.btnLimpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLimpiar.Image = global::CNCMatic.Properties.Resources.brush_icon__1_;
-            this.btnLimpiar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnLimpiar.Location = new System.Drawing.Point(432, 375);
-            this.btnLimpiar.Name = "btnLimpiar";
-            this.btnLimpiar.Size = new System.Drawing.Size(79, 39);
-            this.btnLimpiar.TabIndex = 7;
-            this.btnLimpiar.Text = "Limpiar";
-            this.btnLimpiar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnLimpiar.UseVisualStyleBackColor = true;
-            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
             // 
             // tsbDisplay
             // 
@@ -603,6 +759,11 @@
             this.mnuAxisindicator.Size = new System.Drawing.Size(194, 22);
             this.mnuAxisindicator.Text = "Ver Ejes";
             this.mnuAxisindicator.CheckedChanged += new System.EventHandler(this.DisplayCheckChanged);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbPan
             // 
@@ -668,6 +829,11 @@
             this.tsbFit.Text = "Ajustar";
             this.tsbFit.ToolTipText = "View Fit [Shift + Click All Views]";
             this.tsbFit.Click += new System.EventHandler(this.ViewButtonClicked);
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbSelect
             // 
@@ -741,223 +907,78 @@
             this.mnuIsometric.Text = "&Isometrica";
             this.mnuIsometric.Click += new System.EventHandler(this.mnuViewOrient_Click);
             // 
-            // btnRestart
+            // toolStripSeparator8
             // 
-            this.btnRestart.BackColor = System.Drawing.Color.White;
-            this.btnRestart.Enabled = false;
-            this.btnRestart.Image = global::CNCMatic.Properties.Resources.Reload_icon;
-            this.btnRestart.Location = new System.Drawing.Point(331, 145);
-            this.btnRestart.Name = "btnRestart";
-            this.btnRestart.Size = new System.Drawing.Size(45, 44);
-            this.btnRestart.TabIndex = 27;
-            this.btnRestart.UseVisualStyleBackColor = false;
-            this.btnRestart.Click += new System.EventHandler(this.btnRestart_Click);
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 25);
             // 
-            // btnConnect
+            // Coordinates
             // 
-            this.btnConnect.BackColor = System.Drawing.Color.White;
-            this.btnConnect.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnConnect.Image = global::CNCMatic.Properties.Resources.Captura21;
-            this.btnConnect.Location = new System.Drawing.Point(315, 19);
-            this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(71, 76);
-            this.btnConnect.TabIndex = 26;
-            this.btnConnect.UseVisualStyleBackColor = false;
-            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            this.Coordinates.Name = "Coordinates";
+            this.Coordinates.Size = new System.Drawing.Size(0, 22);
             // 
-            // btnInicio
+            // toolStripSeparator9
             // 
-            this.btnInicio.BackColor = System.Drawing.Color.White;
-            this.btnInicio.Enabled = false;
-            this.btnInicio.Image = global::CNCMatic.Properties.Resources.HomeButton;
-            this.btnInicio.Location = new System.Drawing.Point(10, 20);
-            this.btnInicio.Name = "btnInicio";
-            this.btnInicio.Size = new System.Drawing.Size(71, 76);
-            this.btnInicio.TabIndex = 2;
-            this.btnInicio.UseVisualStyleBackColor = false;
-            this.btnInicio.Click += new System.EventHandler(this.btnInicio_Click);
+            this.toolStripSeparator9.Name = "toolStripSeparator9";
+            this.toolStripSeparator9.Size = new System.Drawing.Size(6, 25);
             // 
-            // btnStop2
+            // lblStatus
             // 
-            this.btnStop2.BackColor = System.Drawing.Color.White;
-            this.btnStop2.Enabled = false;
-            this.btnStop2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnStop2.Image = global::CNCMatic.Properties.Resources.Stop_Normal_Red_icon;
-            this.btnStop2.Location = new System.Drawing.Point(111, 20);
-            this.btnStop2.Name = "btnStop2";
-            this.btnStop2.Size = new System.Drawing.Size(71, 76);
-            this.btnStop2.TabIndex = 25;
-            this.btnStop2.UseVisualStyleBackColor = false;
-            this.btnStop2.Click += new System.EventHandler(this.btnStop2_Click);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(0, 22);
             // 
-            // btnPlay
+            // grpPrevisualizacion
             // 
-            this.btnPlay.BackColor = System.Drawing.Color.White;
-            this.btnPlay.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnPlay.Image = global::CNCMatic.Properties.Resources.Play_1_Normal_icon__1_;
-            this.btnPlay.Location = new System.Drawing.Point(315, 20);
-            this.btnPlay.Name = "btnPlay";
-            this.btnPlay.Size = new System.Drawing.Size(71, 76);
-            this.btnPlay.TabIndex = 23;
-            this.btnPlay.UseVisualStyleBackColor = false;
-            this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
+            this.grpPrevisualizacion.Location = new System.Drawing.Point(0, 0);
+            this.grpPrevisualizacion.Name = "grpPrevisualizacion";
+            this.grpPrevisualizacion.Size = new System.Drawing.Size(200, 100);
+            this.grpPrevisualizacion.TabIndex = 0;
+            this.grpPrevisualizacion.TabStop = false;
             // 
-            // btnPause
+            // tblScreens
             // 
-            this.btnPause.BackColor = System.Drawing.Color.White;
-            this.btnPause.Enabled = false;
-            this.btnPause.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnPause.Image = global::CNCMatic.Properties.Resources.Pause_Normal_Red_icon;
-            this.btnPause.Location = new System.Drawing.Point(214, 20);
-            this.btnPause.Name = "btnPause";
-            this.btnPause.Size = new System.Drawing.Size(71, 76);
-            this.btnPause.TabIndex = 24;
-            this.btnPause.UseVisualStyleBackColor = false;
-            this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
+            this.tblScreens.BackColor = System.Drawing.Color.Black;
+            this.tblScreens.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
+            this.tblScreens.ColumnCount = 1;
+            this.tblScreens.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tblScreens.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tblScreens.Location = new System.Drawing.Point(0, 0);
+            this.tblScreens.Margin = new System.Windows.Forms.Padding(0);
+            this.tblScreens.Name = "tblScreens";
+            this.tblScreens.RowCount = 1;
+            this.tblScreens.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tblScreens.Size = new System.Drawing.Size(200, 100);
+            this.tblScreens.TabIndex = 0;
             // 
-            // btnMovXY_Der
+            // btnLimpiar
             // 
-            this.btnMovXY_Der.BackColor = System.Drawing.Color.White;
-            this.btnMovXY_Der.Image = global::CNCMatic.Properties.Resources.flecha_DER;
-            this.btnMovXY_Der.Location = new System.Drawing.Point(119, 43);
-            this.btnMovXY_Der.Name = "btnMovXY_Der";
-            this.btnMovXY_Der.Size = new System.Drawing.Size(46, 50);
-            this.btnMovXY_Der.TabIndex = 10;
-            this.btnMovXY_Der.UseVisualStyleBackColor = false;
-            this.btnMovXY_Der.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Der_MouseDown);
-            this.btnMovXY_Der.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Der_MouseUp);
+            this.btnLimpiar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLimpiar.Image = global::CNCMatic.Properties.Resources.brush_icon__1_;
+            this.btnLimpiar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnLimpiar.Location = new System.Drawing.Point(432, 375);
+            this.btnLimpiar.Name = "btnLimpiar";
+            this.btnLimpiar.Size = new System.Drawing.Size(79, 39);
+            this.btnLimpiar.TabIndex = 3;
+            this.btnLimpiar.Text = "Limpiar";
+            this.btnLimpiar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnLimpiar.UseVisualStyleBackColor = true;
+            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
             // 
-            // btnMovXY_Izq
+            // toolStripContainer1
             // 
-            this.btnMovXY_Izq.BackColor = System.Drawing.Color.White;
-            this.btnMovXY_Izq.Image = global::CNCMatic.Properties.Resources.flecha_IZQ;
-            this.btnMovXY_Izq.Location = new System.Drawing.Point(20, 43);
-            this.btnMovXY_Izq.Name = "btnMovXY_Izq";
-            this.btnMovXY_Izq.Size = new System.Drawing.Size(44, 50);
-            this.btnMovXY_Izq.TabIndex = 9;
-            this.btnMovXY_Izq.UseVisualStyleBackColor = false;
-            this.btnMovXY_Izq.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Izq_MouseDown);
-            this.btnMovXY_Izq.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Izq_MouseUp);
             // 
-            // btnMovXY_Aba
+            // toolStripContainer1.BottomToolStripPanel
             // 
-            this.btnMovXY_Aba.BackColor = System.Drawing.Color.White;
-            this.btnMovXY_Aba.Image = global::CNCMatic.Properties.Resources.flecha_ABA;
-            this.btnMovXY_Aba.Location = new System.Drawing.Point(69, 72);
-            this.btnMovXY_Aba.Name = "btnMovXY_Aba";
-            this.btnMovXY_Aba.Size = new System.Drawing.Size(44, 45);
-            this.btnMovXY_Aba.TabIndex = 8;
-            this.btnMovXY_Aba.UseVisualStyleBackColor = false;
-            this.btnMovXY_Aba.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Aba_MouseDown);
-            this.btnMovXY_Aba.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Aba_MouseUp);
+            this.toolStripContainer1.BottomToolStripPanel.Controls.Add(this.statusStrip1);
             // 
-            // btnMovXY_Arr
+            // toolStripContainer1.ContentPanel
             // 
-            this.btnMovXY_Arr.BackColor = System.Drawing.Color.White;
-            this.btnMovXY_Arr.Image = global::CNCMatic.Properties.Resources.flecha_ARR;
-            this.btnMovXY_Arr.Location = new System.Drawing.Point(70, 16);
-            this.btnMovXY_Arr.Name = "btnMovXY_Arr";
-            this.btnMovXY_Arr.Size = new System.Drawing.Size(44, 46);
-            this.btnMovXY_Arr.TabIndex = 7;
-            this.btnMovXY_Arr.UseVisualStyleBackColor = false;
-            this.btnMovXY_Arr.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Arr_MouseDown);
-            this.btnMovXY_Arr.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovXY_Arr_MouseUp);
-            // 
-            // btnMovZ_Aba
-            // 
-            this.btnMovZ_Aba.BackColor = System.Drawing.Color.White;
-            this.btnMovZ_Aba.Image = global::CNCMatic.Properties.Resources.flecha_ABA;
-            this.btnMovZ_Aba.Location = new System.Drawing.Point(17, 73);
-            this.btnMovZ_Aba.Name = "btnMovZ_Aba";
-            this.btnMovZ_Aba.Size = new System.Drawing.Size(49, 45);
-            this.btnMovZ_Aba.TabIndex = 7;
-            this.btnMovZ_Aba.UseVisualStyleBackColor = false;
-            this.btnMovZ_Aba.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovZ_Aba_MouseDown);
-            this.btnMovZ_Aba.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovZ_Aba_MouseUp);
-            // 
-            // btnMovZ_Arr
-            // 
-            this.btnMovZ_Arr.BackColor = System.Drawing.Color.White;
-            this.btnMovZ_Arr.Image = global::CNCMatic.Properties.Resources.flecha_ARR;
-            this.btnMovZ_Arr.Location = new System.Drawing.Point(17, 19);
-            this.btnMovZ_Arr.Name = "btnMovZ_Arr";
-            this.btnMovZ_Arr.Size = new System.Drawing.Size(48, 43);
-            this.btnMovZ_Arr.TabIndex = 6;
-            this.btnMovZ_Arr.UseVisualStyleBackColor = false;
-            this.btnMovZ_Arr.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnMovZ_Arr_MouseDown);
-            this.btnMovZ_Arr.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnMovZ_Arr_MouseUp);
-            // 
-            // toolStripDropDownButton1
-            // 
-            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnCirculo});
-            this.toolStripDropDownButton1.Image = global::CNCMatic.Properties.Resources.circle_icon;
-            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(75, 68);
-            this.toolStripDropDownButton1.Text = "Circulo/Esfera";
-            // 
-            // btnCirculo
-            // 
-            this.btnCirculo.Name = "btnCirculo";
-            this.btnCirculo.Size = new System.Drawing.Size(137, 22);
-            this.btnCirculo.Text = "2D - Circulo";
-            this.btnCirculo.Click += new System.EventHandler(this.btnCirculo_Click);
-            // 
-            // toolStripDropDownButton2
-            // 
-            this.toolStripDropDownButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripDropDownButton2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.dToolStripMenuItem2,
-            this.menuItemCubo});
-            this.toolStripDropDownButton2.Image = global::CNCMatic.Properties.Resources.square_icon;
-            this.toolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
-            this.toolStripDropDownButton2.Size = new System.Drawing.Size(75, 68);
-            this.toolStripDropDownButton2.Text = "toolStripDropDownButton2";
-            this.toolStripDropDownButton2.ToolTipText = "Cuadrado/Cubo";
-            // 
-            // dToolStripMenuItem2
-            // 
-            this.dToolStripMenuItem2.Name = "dToolStripMenuItem2";
-            this.dToolStripMenuItem2.Size = new System.Drawing.Size(151, 22);
-            this.dToolStripMenuItem2.Text = "2D - Cuadrado";
-            this.dToolStripMenuItem2.Click += new System.EventHandler(this.dToolStripMenuItem2_Click);
-            // 
-            // menuItemCubo
-            // 
-            this.menuItemCubo.Name = "menuItemCubo";
-            this.menuItemCubo.Size = new System.Drawing.Size(151, 22);
-            this.menuItemCubo.Text = "3D - Cubo";
-            this.menuItemCubo.Click += new System.EventHandler(this.menuItemCubo_Click);
-            // 
-            // btnLinea
-            // 
-            this.btnLinea.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnLinea.Image = global::CNCMatic.Properties.Resources.draw_line_icon;
-            this.btnLinea.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnLinea.Name = "btnLinea";
-            this.btnLinea.Size = new System.Drawing.Size(75, 68);
-            this.btnLinea.Text = "Linea";
-            this.btnLinea.Click += new System.EventHandler(this.btnLinea_Click);
-            // 
-            // btnArco
-            // 
-            this.btnArco.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnArco.Image = global::CNCMatic.Properties.Resources.Actions_layer_visible_on_icon2;
-            this.btnArco.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnArco.Name = "btnArco";
-            this.btnArco.Size = new System.Drawing.Size(75, 68);
-            this.btnArco.Text = "Arco";
-            this.btnArco.Click += new System.EventHandler(this.btnArco_Click);
-            // 
-            // salirMenuItem
-            // 
-            this.salirMenuItem.Name = "salirMenuItem";
-            this.salirMenuItem.Size = new System.Drawing.Size(41, 20);
-            this.salirMenuItem.Text = "Salir";
-            this.salirMenuItem.Click += new System.EventHandler(this.salirMenuItem_Click);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1149, 1);
+            this.toolStripContainer1.Location = new System.Drawing.Point(0, 666);
+            this.toolStripContainer1.Name = "toolStripContainer1";
+            this.toolStripContainer1.Size = new System.Drawing.Size(1149, 23);
+            this.toolStripContainer1.TabIndex = 32;
+            this.toolStripContainer1.Text = "toolStripContainer1";
             // 
             // Principal
             // 
@@ -966,10 +987,10 @@
             this.AutoSize = true;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(1149, 689);
+            this.Controls.Add(this.toolStripContainer1);
             this.Controls.Add(this.btnLimpiar);
             this.Controls.Add(this.grpPrev);
             this.Controls.Add(this.txtLineaManual);
-            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.grpOperacion);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.txtPreview);
@@ -1000,6 +1021,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.BreakPointSlider)).EndInit();
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
+            this.toolStripContainer1.BottomToolStripPanel.ResumeLayout(false);
+            this.toolStripContainer1.BottomToolStripPanel.PerformLayout();
+            this.toolStripContainer1.ResumeLayout(false);
+            this.toolStripContainer1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1089,6 +1114,7 @@
         private System.Windows.Forms.Button btnConnect;
         private System.Windows.Forms.Button btnRestart;
         private System.Windows.Forms.ToolStripMenuItem salirMenuItem;
+        private System.Windows.Forms.ToolStripContainer toolStripContainer1;
     }
 }
 

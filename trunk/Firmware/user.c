@@ -711,15 +711,26 @@ void user(void)
 						// seteo a 1 el enable de los motores
 						PORTEbits.RE2 = 1;
 						
-							 if( freeCode == 0)	{ StepOnX(true);  }
-						else if( freeCode == 1) { StepOnX(false); }
-						else if( freeCode == 2) { StepOnY(true);  }
-						else if( freeCode == 3) { StepOnY(false); }
-						else if( freeCode == 4) { StepOnZ(true);  }
-						else if( freeCode == 5) { StepOnZ(false); }
+							 if( freeCode == 0)	{ StepOnX(true);	currentSteps.x++; }
+						else if( freeCode == 1) { StepOnX(false);	currentSteps.x--; }
+						else if( freeCode == 2) { StepOnY(true);	currentSteps.y++; }
+						else if( freeCode == 3) { StepOnY(false);	currentSteps.y--; }
+						else if( freeCode == 4) { StepOnZ(true);	currentSteps.z++; }
+						else if( freeCode == 5) { StepOnZ(false);	currentSteps.z--; }
 						
 						if(machineState == LIMITSENSOR)
 						{
+							// volvemos 1 paso para atrás por haber tocado el sensor de fin de carrera
+							switch(freeCode)
+							{
+								case 0: currentSteps.x--; break;
+								case 1: currentSteps.x++; break;
+								case 2: currentSteps.y--; break;
+								case 3: currentSteps.y++; break;
+								case 4: currentSteps.z--; break;
+								case 5: currentSteps.z++; break;
+								default: break;
+							}
 							freeCode = -1;
 							limitSensorX = limitSensorY = limitSensorZ = false;
 							sprintf(message, (const rom char far *)"ERR:SFC_X%ld Y%ld Z%ld", currentSteps.x, currentSteps.y, currentSteps.z);

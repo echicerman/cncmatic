@@ -85,16 +85,16 @@ namespace CommandPreprocessor
             // Restar a MaxZ invierte las alturas... el techo pasa a ser 0
             if (Configuration.absoluteProgamming)
             {
-                result.X = GetValueParameter('X', command) + this.ReferencePosition.X;
-                result.Y = GetValueParameter('Y', command) + this.ReferencePosition.Y;
-                result.Z = this.MaxZ - GetValueParameter('Z', command) + this.ReferencePosition.Z;
+                result.X = HasValueParameter('X', command) ? GetValueParameter('X', command) + this.ReferencePosition.X : CurrentPosition.X;
+                result.Y = HasValueParameter('Y', command) ? GetValueParameter('Y', command) + this.ReferencePosition.Y : CurrentPosition.Y;
+                result.Z = HasValueParameter('Z', command) ? this.MaxZ - GetValueParameter('Z', command) + this.ReferencePosition.Z : CurrentPosition.Z;
             }
             else
             {
                 // Translate to relative programming mode
-                result.X = GetValueParameter('X', command) + this.CurrentPosition.X;
-                result.Y = GetValueParameter('Y', command) + this.CurrentPosition.Y;
-                result.Z = this.MaxZ - GetValueParameter('Z', command) + this.CurrentPosition.Z;
+                result.X = HasValueParameter('X', command) ? GetValueParameter('X', command) + this.CurrentPosition.X : CurrentPosition.X;
+                result.Y = HasValueParameter('Y', command) ? GetValueParameter('Y', command) + this.CurrentPosition.Y : CurrentPosition.Y;
+                result.Z = HasValueParameter('Z', command) ? this.MaxZ - GetValueParameter('Z', command) + this.CurrentPosition.Z : CurrentPosition.Z;
             }
 
             // If the values are in inches, convert to millimeters

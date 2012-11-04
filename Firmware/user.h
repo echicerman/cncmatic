@@ -10,12 +10,11 @@ typedef enum {
 	SERIALPORTCONNECTED,	// 0
 	HANDSHAKEACKRECEIVED,	// 1
 	CNCMATICCONNECTED,		// 2
-	READYTOCONFIGURE,		// 3
-	WAITINGCOMMAND,			// 4
-	PROCESSINGCOMMAND,		// 5
-	LIMITSENSOR,			// 6
-	EMERGENCYSTOP,			// 7
-	FREEMOVES				// 8
+	WAITINGCOMMAND,			// 3
+	PROCESSINGCOMMAND,		// 4
+	LIMITSENSOR,			// 5
+	EMERGENCYSTOP,			// 6
+	FREEMOVES				// 7
 } state_t;
 
 typedef enum
@@ -26,38 +25,22 @@ typedef enum
 
 typedef struct 
 {
-	double step_units_axisX;
-	double step_units_axisY;
-	double step_units_axisZ;
-} enginesConfig_t;
-typedef struct
-{
-	double mmSections;
-	double inchesSections;
-} curvesConfig_t;
-
-typedef struct 
-{
 	unsigned long x;
 	unsigned long y;
 	unsigned long z;
 } stepsPosition_t;
-typedef struct 
-{
-	double x;
-	double y;
-	double z;
-} position_t;
 
 /********************************************************************************/
 /* 								Movement Functions 								*/
 /********************************************************************************/
-void G00(char[]);
-void G01(char[]);
+void CustomG(char[]);
 void G04(char[]);
 void M00(char[]);
 void M02(char[]);
-void ProcessLinearMovement(position_t, double);
+void M03(char[]);
+void M04(char[]);
+void M05(char[]);
+void ProcessLinearMovement(stepsPosition_t, long);
 void MoveToOrigin(void);
 
 /******************************************/
@@ -68,19 +51,13 @@ bool_t HasValueParameter(char, char[]);
 bool_t ConfigureMachine(char[]);
 bool_t isNumber(char[]);
 bool_t ValidateCommandReceived(char, char[], char[], char*, char*);
-position_t GetTargetPosition(char[]);
+stepsPosition_t GetTargetStepsPosition(char[]);
 
 /********************************************************************************/
 /*								Steps <-> Position								*/
 /********************************************************************************/
 stepsPosition_t CreateStepsPosition(unsigned long, unsigned long, unsigned long);
 stepsPosition_t CreateStepsPositionFrom(stepsPosition_t);
-position_t CreatePosition(double, double, double);
-position_t CreatePositionFrom(position_t);
-stepsPosition_t ToStepsPosition(double, double, double);
-stepsPosition_t ToStepsPositionFrom(position_t);
-position_t ToPosition(unsigned long, unsigned long, unsigned long);
-position_t ToPositionFrom(stepsPosition_t);
 
 /****************************************/
 /*	 		Handle Interruptions		*/

@@ -466,7 +466,7 @@ int main(void)
 	TRISEbits.RE2 = 0;	// pin 2 de puerto E es salida - habilita motores
     PORTEbits.RE2 = 0;
 	
-	TRISB = 0xFF;	// pines de B son entrada - sensores
+	TRISB = 0b01001111;	// pines <0>,<1>,<2>,<3>,<6> de B son entrada - parada de emergencia, sensores, encender punta
 	//********************************************
 
     while(1)

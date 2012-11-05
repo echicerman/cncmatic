@@ -186,7 +186,7 @@ namespace CNC
                 if (instancia == null)
                 {
                     instancia = new CNC();
-                    instancia.PosicionActual = new Position();
+                    instancia.PosicionActual = new UnitsPosition();
                     instancia.PosicionActual.X = 0;
                     instancia.PosicionActual.Y = 0;
                     instancia.PosicionActual.Z = 0;
@@ -216,7 +216,7 @@ namespace CNC
         private List<string> loteInstruccionesTemp = new List<string>();
         private int proximaInstruccionTemp;
 
-        public Position PosicionActual { get; set; }
+        public UnitsPosition PosicionActual { get; set; }
 
         private int cantReenviosConfig = 0;
 

@@ -9,8 +9,8 @@ namespace CommandPreprocessor
     {
         #region Properties
         private WorkingPlane workingPlane;
-        private Position currentPosition;
-        private Position referencePosition; // Origen de la pieza a fresar
+        private UnitsPosition currentPosition;
+        private UnitsPosition referencePosition; // Origen de la pieza a fresar
         private double maxZ;
         #endregion
 
@@ -19,14 +19,9 @@ namespace CommandPreprocessor
         protected CommandPreprocessor()
         {
             this.workingPlane = WorkingPlane.XY;
-            this.currentPosition = new Position(0, 0, 0);
-            this.referencePosition = new Position(0, 0, 0);
+            this.currentPosition = new UnitsPosition(0, 0, 0);
+            this.referencePosition = new UnitsPosition(0, 0, 0);
             this.maxZ = 0;
-
-            //Configuration.absoluteProgamming = true;
-            //Configuration.millimetersProgramming = true;
-            //Configuration.millimetersCurveSection = 0.5;
-            //Configuration.defaultFeedrate = 60;
         }
         public static CommandPreprocessor GetInstance()
         {
@@ -44,12 +39,12 @@ namespace CommandPreprocessor
             get { return this.workingPlane; }
             set { this.workingPlane = value; }
         }
-        public Position CurrentPosition
+        public UnitsPosition CurrentPosition
         {
             get { return this.currentPosition; }
             set { this.currentPosition = value; }
         }
-        public Position ReferencePosition
+        public UnitsPosition ReferencePosition
         {
             get { return this.referencePosition; }
             set { this.referencePosition = value; }
@@ -78,9 +73,9 @@ namespace CommandPreprocessor
             return command.IndexOf(parameterName) != -1;
         }
 
-        private Position GetFinalPosition(string command)
+        private UnitsPosition GetFinalPosition(string command)
         {
-            Position result = new Position();
+            UnitsPosition result = new UnitsPosition();
 
             // Restar a MaxZ invierte las alturas... el techo pasa a ser 0
             if (Configuration.absoluteProgamming)
@@ -107,11 +102,11 @@ namespace CommandPreprocessor
 
             return result;
         }
-        private Position GetFromRadius(double r, string command)
+        private UnitsPosition GetFromRadius(double r, string command)
         {
             double midX, midY, midZ, cat1x, cat1y, cat1z, cat1, cat2x, cat2y, cat2z, cat2;
-            Position final = GetFinalPosition(command);
-            Position centerPosition = new Position();
+            UnitsPosition final = GetFinalPosition(command);
+            UnitsPosition centerPosition = new UnitsPosition();
 
             // componentes de Punto Medio de segmento que une Punto Inicial con Punto Final
             midZ = (final.Z + CurrentPosition.Z) / 2;
@@ -195,9 +190,9 @@ namespace CommandPreprocessor
             }
             return centerPosition;
         }
-        private Position GetCenterPosition(string command)
+        private UnitsPosition GetCenterPosition(string command)
         {
-            Position result = new Position();
+            UnitsPosition result = new UnitsPosition();
 
             if (HasValueParameter('R', command))
             {
@@ -215,14 +210,14 @@ namespace CommandPreprocessor
             return result;
         }
 
-        private List<string> ProcessCurvePlaneXY(string code)
+        private List<UnitsPosition> ProcessCurvePlaneXY(string code)
         {
-            List<string> result = new List<string>();
+            List<UnitsPosition> result = new List<UnitsPosition>();
             double feedRate = HasValueParameter('F', code) ? GetValueParameter('F', code) : Configuration.defaultFeedrate; // Ver qué valor va cuando no hay valor - CONFIGURACION? -
 
-            Position startPosition = this.CurrentPosition;
-            Position finalPosition = this.GetFinalPosition(code);
-            Position centerPosition = this.GetCenterPosition(code);
+            UnitsPosition startPosition = this.CurrentPosition;
+            UnitsPosition finalPosition = this.GetFinalPosition(code);
+            UnitsPosition centerPosition = this.GetCenterPosition(code);
             int gCode = Convert.ToInt32(GetValueParameter('G', code));
             bool clockwise = gCode == 2 ? true : false;
 
@@ -245,9 +240,9 @@ namespace CommandPreprocessor
             steps = (int)(length / Configuration.millimetersCurveSection);
             steps = steps == 0 ? 1 : steps;
 
-            Position sectionPosition = new Position();
             for (int s = 1; s <= steps; s++)
             {
+                UnitsPosition sectionPosition = new UnitsPosition();
                 int step = clockwise ? steps - s : s;
                 sectionPosition.X = centerPosition.X + radius * Math.Cos(angleA + angle * ((float)step / steps));
                 sectionPosition.Y = centerPosition.Y + radius * Math.Sin(angleA + angle * ((float)step / steps));
@@ -259,19 +254,19 @@ namespace CommandPreprocessor
                 }
                 
                 // Traducir la curva (G02 / G03) como varias rectas (G01)
-                result.Add(sectionPosition.ToString(1) + string.Format("F{0} ", feedRate));
+                result.Add(sectionPosition);
             }
 
             return result;
         }
-        private List<string> ProcessCurvePlaneXZ(string code)
+        private List<UnitsPosition> ProcessCurvePlaneXZ(string code)
         {
-            List<string> result = new List<string>();
+            List<UnitsPosition> result = new List<UnitsPosition>();
             double feedRate = HasValueParameter('F', code) ? GetValueParameter('F', code) : Configuration.defaultFeedrate; // Ver qué valor va cuando no hay valor - CONFIGURACION? -
 
-            Position startPosition = this.CurrentPosition;
-            Position finalPosition = this.GetFinalPosition(code);
-            Position centerPosition = this.GetCenterPosition(code);
+            UnitsPosition startPosition = this.CurrentPosition;
+            UnitsPosition finalPosition = this.GetFinalPosition(code);
+            UnitsPosition centerPosition = this.GetCenterPosition(code);
             int gCode = Convert.ToInt32(GetValueParameter('G', code));
             bool clockwise = gCode == 2 ? true : false;
 
@@ -293,9 +288,9 @@ namespace CommandPreprocessor
             length = radius * angle;
             steps = (int)(length / Configuration.millimetersCurveSection);
 
-            Position sectionPosition = new Position();
             for (int s = 1; s <= steps; s++)
             {
+                UnitsPosition sectionPosition = new UnitsPosition();
                 int step = clockwise ? steps - s : s;
                 sectionPosition.X = centerPosition.X + radius * Math.Cos(angleA + angle * ((float)step / steps));
                 sectionPosition.Y = (finalPosition.Y - startPosition.Y) * ((float)s / steps);
@@ -305,21 +300,20 @@ namespace CommandPreprocessor
                 {
                     throw new Exception("Underflow procesando: " + code + ".");
                 }
-                
-                // Traducir la curva (G02 / G03) como varias rectas (G01)
-                result.Add(sectionPosition.ToString(1) + string.Format("F{0} ", feedRate));
+
+                result.Add(sectionPosition);
             }
 
             return result;
         }
-        private List<string> ProcessCurvePlaneYZ(string code)
+        private List<UnitsPosition> ProcessCurvePlaneYZ(string code)
         {
-            List<string> result = new List<string>();
+            List<UnitsPosition> result = new List<UnitsPosition>();
             double feedRate = HasValueParameter('F', code) ? GetValueParameter('F', code) : Configuration.defaultFeedrate; // Ver qué valor va cuando no hay valor - CONFIGURACION? -
 
-            Position startPosition = this.CurrentPosition;
-            Position finalPosition = this.GetFinalPosition(code);
-            Position centerPosition = this.GetCenterPosition(code);
+            UnitsPosition startPosition = this.CurrentPosition;
+            UnitsPosition finalPosition = this.GetFinalPosition(code);
+            UnitsPosition centerPosition = this.GetCenterPosition(code);
             int gCode = Convert.ToInt32(GetValueParameter('G', code));
             bool clockwise = gCode == 2 ? true : false;
 
@@ -341,9 +335,9 @@ namespace CommandPreprocessor
             length = radius * angle;
             steps = (int)(length / Configuration.millimetersCurveSection);
 
-            Position sectionPosition = new Position();
             for (int s = 1; s <= steps; s++)
             {
+                UnitsPosition sectionPosition = new UnitsPosition();
                 int step = clockwise ? steps - s : s;
                 sectionPosition.X = (finalPosition.X - startPosition.X) * ((float)s / steps);
                 sectionPosition.Y = centerPosition.Y + radius * Math.Cos(angleA + angle * ((float)step / steps));
@@ -354,14 +348,13 @@ namespace CommandPreprocessor
                     throw new Exception("Underflow procesando: " + code + ".");
                 }
 
-                // Traducir la curva (G02 / G03) como varias rectas (G01)
-                result.Add(sectionPosition.ToString(1) + string.Format("F{0} ", feedRate));
+                result.Add(sectionPosition);
             }
 
             return result;
         }
 
-        private List<string> ProcessCurveCommand(string code)
+        private List<UnitsPosition> ProcessCurveCommand(string code)
         {
             switch (this.WorkingPlane)
             {
@@ -374,14 +367,13 @@ namespace CommandPreprocessor
                 case WorkingPlane.YZ:
                     return this.ProcessCurvePlaneYZ(code);
             }
-            //return empty list ... ( no deberia llegar nunca aca )
-            return new List<string>();
+            // no deberia llegar nunca aca
+            return new List<UnitsPosition>();
         }
         #endregion
 
         #region Public Methods
-        //private List<string> ProcessCommand(string command)
-        public List<string> ProcessCommand(string command)
+        private List<string> ProcessCommand(string command)
         {
             int code;
             List<string> result = new List<string>();
@@ -394,16 +386,24 @@ namespace CommandPreprocessor
                 {
                     case 0:
                     case 1:
-                        result.Add(this.GetFinalPosition(command).ToString(code) + string.Format("F{0} ", feedRate));
-                        break;
-
-                    case 4:
-                        result.Add(command);
+                        UnitsPosition line = this.GetFinalPosition(command);
+                        result.Add( line.ToStepsPosition(CurrentPosition, feedRate).ToString(-1) );
+                        CurrentPosition = line;
                         break;
 
                     case 2:
                     case 3:
-                        result.AddRange(this.ProcessCurveCommand(command));
+                        List<UnitsPosition> curveLines = this.ProcessCurveCommand(command);
+
+                        foreach (UnitsPosition curveLine in curveLines)
+                        {
+                            result.Add( curveLine.ToStepsPosition(CurrentPosition, feedRate).ToString(-1) );
+                            CurrentPosition = curveLine;
+                        }
+                        break;
+
+                    case 4:
+                        result.Add(command);
                         break;
 
                     case 17:
@@ -435,13 +435,25 @@ namespace CommandPreprocessor
                         break;
 
                     default:
-                        throw new Exception("Comando no soportado: " + code + ".");
-                        
+                        throw new Exception("Comando no soportado: " + command + ".");
                 }
             }
             else if (HasValueParameter('M', command))
             {
-                result.Add(command);
+                code = Convert.ToInt32(GetValueParameter('G', command));
+                switch(code)
+                {
+                    case 0:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                        result.Add(command);
+                        break;
+
+                    default:
+                        throw new Exception("Comando no soportado: " + command + ".");
+                }
             }
 
             return result;

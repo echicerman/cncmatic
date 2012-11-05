@@ -24,7 +24,7 @@ namespace VirtualSerial
         {
             get
             {
-                if (virtualPort != null && virtualPort.IsOpen)
+                if (virtualPort != null)// && virtualPort.IsOpen)
                 {
                     return virtualPort;
                 }
@@ -56,11 +56,11 @@ namespace VirtualSerial
             {
                 VirtualPort.DiscardInBuffer();
                 VirtualPort.DiscardOutBuffer();
-                VirtualPort.Close();
             }
-            catch { }
+            catch {}
             finally
             {
+                VirtualPort.Close();
                 Connected = false;
             }
         }

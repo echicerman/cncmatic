@@ -44,7 +44,7 @@ namespace VirtualSerialTest
                 connectButton.Enabled = false;
                 disconnectButton.Enabled = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 MessageBox.Show("Error al querer conectar.");
             }
@@ -67,6 +67,14 @@ namespace VirtualSerialTest
         private void button2_Click(object sender, EventArgs e)
         {
             VirtualSerial.Port.Write(sendTextBox.Text);
+        }
+
+        void sendTextBox_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                this.sendButton.PerformClick();
+            }
         }
     }
 }

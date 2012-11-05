@@ -28,7 +28,6 @@ void CustomG(char code[])
 {
 	double d = HasValueParameter('D', code) ? GetValueParameter('D', code) : MAXFEEDRATE;
 	ProcessLinearMovement(GetTargetStepsPosition(code), d);
-	machineState = WAITINGCOMMAND;
 }
 void G04(char code[])
 {
@@ -41,7 +40,6 @@ void G04(char code[])
 	{
 		Delay1Sx((int)miliseconds/1000);
 	}
-	machineState = WAITINGCOMMAND;
 }
 
 // function array of GCode commands
@@ -52,7 +50,6 @@ int gCodesCount = sizeof(gCodes) / sizeof(gCodes[4]);
 void M00(char code[])
 {
 	programPaused = true;
-	machineState = WAITINGCOMMAND;
 }
 void M02(char code[])
 {
@@ -61,17 +58,14 @@ void M02(char code[])
 void M03(char code[])
 {
 	PORTBbits.RB6 = 1;
-	machineState = WAITINGCOMMAND;
 }
 void M04(char code[])
 {
 	PORTBbits.RB6 = 1;
-	machineState = WAITINGCOMMAND;
 }
 void M05(char code[])
 {
 	PORTBbits.RB6 = 0;
-	machineState = WAITINGCOMMAND;
 }
 // function array of MCode commands
 _func mCodes[6] = {	M00,	NULL,	M02,	M03,	M04,	M05 };
@@ -207,8 +201,7 @@ void ProcessLinearMovement(stepsPosition_t targetStepsPosition, long delay)
 {
 	long xCounter, yCounter, zCounter;
 	long maxDeltaSteps;
-	char message1[54];
-
+	
 	stepsPosition_t deltaStepsPosition;
 	deltaStepsPosition.x = targetStepsPosition.x > currentStepsPosition.x ? targetStepsPosition.x - currentStepsPosition.x : currentStepsPosition.x - targetStepsPosition.x;
 	deltaStepsPosition.y = targetStepsPosition.y > currentStepsPosition.y ? targetStepsPosition.y - currentStepsPosition.y : currentStepsPosition.y - targetStepsPosition.y;
@@ -221,16 +214,12 @@ void ProcessLinearMovement(stepsPosition_t targetStepsPosition, long delay)
 	zCounter = (long)ceil(-maxDeltaSteps / 2);
 	
 	// Seteamos bit de sentido de giro
-	PORTDbits.RD2 = targetStepsPosition.x > currentStepsPosition.x ? 1 : 0;
-	PORTCbits.RC1 = targetStepsPosition.y > currentStepsPosition.y ? 1 : 0;
-	PORTAbits.RA1 = targetStepsPosition.z > currentStepsPosition.z ? 1 : 0;
-	
-	sprintf(message1, (const rom char far *)"C:X%ld Y%ld Z%ld_T:X%ld Y%ld Z%ld", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z,
-																				targetStepsPosition.x, targetStepsPosition.y, targetStepsPosition.z);
-	putUSBUSART(message1, strlen(message1));
+	PORTDbits.RD2 = (targetStepsPosition.x > currentStepsPosition.x) ? 1 : 0;
+	PORTCbits.RC1 = (targetStepsPosition.y > currentStepsPosition.y) ? 1 : 0;
+	PORTAbits.RA1 = (targetStepsPosition.z > currentStepsPosition.z) ? 1 : 0;
 	
 	// seteo a 1 el enable de los motores
-/*	PORTEbits.RE2 = 1;
+	PORTEbits.RE2 = 1;
 	while( (targetStepsPosition.x != currentStepsPosition.x) || (targetStepsPosition.y != currentStepsPosition.y) || (targetStepsPosition.z != currentStepsPosition.z) )
 	{
 		// emergency stop
@@ -238,7 +227,7 @@ void ProcessLinearMovement(stepsPosition_t targetStepsPosition, long delay)
 		
 		if(targetStepsPosition.x != currentStepsPosition.x)
 		{
-			xCounter += targetStepsPosition.x;
+			xCounter += deltaStepsPosition.x;
 			if(xCounter > 0)
 			{
 				if( PORTDbits.RD4 )
@@ -260,7 +249,7 @@ void ProcessLinearMovement(stepsPosition_t targetStepsPosition, long delay)
 		
 		if(targetStepsPosition.y != currentStepsPosition.y)
 		{
-			yCounter += targetStepsPosition.y;
+			yCounter += deltaStepsPosition.y;
 			if(yCounter > 0)
 			{
 				if( PORTCbits.RC2 )
@@ -282,7 +271,7 @@ void ProcessLinearMovement(stepsPosition_t targetStepsPosition, long delay)
 		
 		if(targetStepsPosition.z != currentStepsPosition.z)
 		{
-			zCounter += targetStepsPosition.z;
+			zCounter += deltaStepsPosition.z;
 			if(zCounter > 0)
 			{
 				if( PORTAbits.RA2 )
@@ -304,7 +293,7 @@ void ProcessLinearMovement(stepsPosition_t targetStepsPosition, long delay)
 		
 		//wait for next step.
 		Delay1MSx(delay);
-	}*/
+	}
 	goto end;
 	
 	/* Handle LimitSensors and EmergencyStop button */
@@ -430,7 +419,7 @@ void StepOnX(bool_t clockwise)
 	}
 	
 	// limit sensor AXIS X
-	if( PORTBbits.RB1 ) { limitSensorAxisXHandler(); }
+	//if( PORTBbits.RB1 ) { limitSensorAxisXHandler(); }
 }
 
 void StepOnY(bool_t clockwise)
@@ -447,7 +436,7 @@ void StepOnY(bool_t clockwise)
 	}
 	
 	// limit sensor AXIS Y
-	if( PORTBbits.RB2 ) { limitSensorAxisYHandler(); }
+	//if( PORTBbits.RB2 ) { limitSensorAxisYHandler(); }
 }
 
 void StepOnZ(bool_t clockwise)
@@ -460,11 +449,11 @@ void StepOnZ(bool_t clockwise)
 	
 	if(machineState != CNCMATICCONNECTED)
 	{
-		currentStepsPosition.x += clockwise ? 1 : -1;
+		currentStepsPosition.z += clockwise ? 1 : -1;
 	}
 	
 	// limit sensor AXIS Z
-	if( PORTBbits.RB3 ) { limitSensorAxisZHandler(); }
+	//if( PORTBbits.RB3 ) { limitSensorAxisZHandler(); }
 }
 
 /********************************************************/
@@ -611,7 +600,7 @@ void user(void)
 			}
 			
 			// STOP FREEMOVES
-			if((machineState == FREEMOVES) && (!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"stop")))
+			if( (machineState == FREEMOVES) && (!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"stop")) )
 			{
 				freeCode = -2;
 				sprintf(message, (const rom char far *)"CNCSFM_X%ld Y%ld Z%ld", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
@@ -661,8 +650,7 @@ void user(void)
 						programPaused = false;
 					}
 					// mandamos el mensaje correspondiente a la PC
-					//putUSBUSART(message, strlen(message));
-					putUSBUSART(commandReceived, strlen(commandReceived));
+					putUSBUSART(message, strlen(message));
 					break;
 					
 				default:
@@ -745,18 +733,17 @@ void user(void)
 					{
 						limitSensorX = limitSensorY = limitSensorZ = false;
 						sprintf(message, (const rom char far *)"ERR:SFC_X%ld Y%ld Z%ld", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
-						machineState = WAITINGCOMMAND;
 					}
 					else if(machineState == EMERGENCYSTOP)
 					{
 						sprintf(message, (const rom char far *)"ERR:PE_X%ld Y%ld Z%ld", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
-						machineState = WAITINGCOMMAND;
 					}
 					else
 					{
-				//		sprintf(message, (const rom char far *)"CMDDONE_X%ld Y%ld Z%ld", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
+						sprintf(message, (const rom char far *)"CMDDONE_X%ld Y%ld Z%ld", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
 					}
-					//putUSBUSART(message, strlen(message));
+					putUSBUSART(message, strlen(message));
+					machineState = WAITINGCOMMAND;
 					break;
 						
 				default:

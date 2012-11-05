@@ -12,6 +12,9 @@ namespace CommandPreprocessor
         public static bool millimetersProgramming;
         public static double millimetersCurveSection;
         public static double defaultFeedrate;
+        public static double configValueX;
+        public static double configValueY;
+        public static double configValueZ;
         #endregion
     }
 }

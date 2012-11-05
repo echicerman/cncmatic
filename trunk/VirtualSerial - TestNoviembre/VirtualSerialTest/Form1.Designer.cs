@@ -79,6 +79,7 @@
             this.sendTextBox.Name = "sendTextBox";
             this.sendTextBox.Size = new System.Drawing.Size(276, 20);
             this.sendTextBox.TabIndex = 4;
+            this.sendTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(sendTextBox_KeyPress);
             // 
             // sendButton
             // 

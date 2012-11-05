@@ -17,11 +17,14 @@ namespace CommandPreprocessor
             string input = Console.ReadLine();
 
             //Configuracion del preprocesador
-            CommandPreprocessor.GetInstance().ReferencePosition = new Position();
+            CommandPreprocessor.GetInstance().ReferencePosition = new UnitsPosition();
             Configuration.absoluteProgamming = true;
             Configuration.defaultFeedrate = 60;
             Configuration.millimetersCurveSection = 0.5;
             Configuration.millimetersProgramming = true;
+            Configuration.configValueX = 200;
+            Configuration.configValueY = 200;
+            Configuration.configValueZ = 200;
 
             while (input != "exit")
             {

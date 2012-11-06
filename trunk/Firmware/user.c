@@ -725,9 +725,6 @@ void user(void)
 					}
 					if(mCode != -2) { mCodes[mCode](commandReceived); }
 					
-					// reseteamos variables de comando
-					gCode = mCode = -2;
-					
 					// Chequeamos machineState -> si se activo algun fin de carrera
 					if(machineState == LIMITSENSOR)
 					{
@@ -743,7 +740,11 @@ void user(void)
 						sprintf(message, (const rom char far *)"CMDDONE_X%ld Y%ld Z%ld", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
 					}
 					putUSBUSART(message, strlen(message));
-					machineState = WAITINGCOMMAND;
+					
+					if(mCode != 2) machineState = WAITINGCOMMAND;
+					
+					// reseteamos variables de comando
+					gCode = mCode = -2;
 					break;
 						
 				default:

@@ -28,7 +28,7 @@ namespace CNC
         public static string Conectado = "CNCMATICCONNECTED";
 
         //READYTOCONFIGURE: espera los parametros de configuracion
-        public static string EsperandoConfig = "READYTOCONFIGURE";
+        //public static string EsperandoConfig = "READYTOCONFIGURE";
 
         //WAITINGCOMMAND: se espera comando que debe iniciar con G o M,
         //sino envía "Error en Comando", sino si esta OK puede enviar "Comando Soportado"
@@ -104,6 +104,12 @@ namespace CNC
         //Stop: un M02
         public static string G_Stop = "M02";
 
+        //ToolOn: un M03, enciende la herramienta
+        public static string G_ToolOn = "M03";
+
+        //ToolOff: un M05, apaga la herramienta
+        public static string G_ToolOff = "M05";
+
         //PosicionDeOrigen, se dirige al 0,0,0 (absoluto) de la maquina
         public static string PosicionDeOrigen = "origin";
     }
@@ -122,9 +128,9 @@ namespace CNC
 
         //(-(-(-(CNCMATICCONNECTED)-)-)-)
         //Configuracion OK
-        public static string ConfigStringOK = "CFGOK";
+        //public static string ConfigStringOK = "CFGOK";
         //Configuracion BAD
-        public static string ConfigStringBAD = "ERR:CFGE";
+        //public static string ConfigStringBAD = "ERR:CFGE";
 
         //(-(-(-(CONFIGURED)-)-)-)
         //Posicion Origen
@@ -246,53 +252,53 @@ namespace CNC
         public string PuertoConexion { get; set; }
 
         //esta propiedad establece si la maquina recibio configuracion
-        private bool configurada = false;
+        //private bool configurada = false;
 
-        private bool EnviarConfiguracion()
-        {
-            try
-            {
-                //si la maquina esta READYTOCOFIGURE espera la configuracion
-                if (estadoActual == CNC_Estados.EsperandoConfig)
-                {
-                    string stringConfiguracion = "";
-                    decimal GxP, TamV, Valor;
+        //private bool EnviarConfiguracion()
+        //{
+        //    try
+        //    {
+        //        //si la maquina esta READYTOCOFIGURE espera la configuracion
+        //        if (estadoActual == CNC_Estados.EsperandoConfig)
+        //        {
+        //            string stringConfiguracion = "";
+        //            decimal GxP, TamV, Valor;
 
-                    for (int i = 0; i < 3; i++)
-                    {
-                        GxP = this.configuracion.ConfigMatMot[i].GradosPaso;
-                        TamV = this.configuracion.ConfigMatMot[i].TamVuelta;
-                        Valor = 360 / (GxP * TamV);
-                        switch (i)
-                        {
-                            case 0: stringConfiguracion += Valor.ToString().Replace(",", ".") + ";"; break;
-                            case 1: stringConfiguracion += Valor.ToString().Replace(",", ".") + ";"; break;
-                            case 2: stringConfiguracion += Valor.ToString().Replace(",", "."); break;
-                        }
-                    }
+        //            for (int i = 0; i < 3; i++)
+        //            {
+        //                GxP = this.configuracion.ConfigMatMot[i].GradosPaso;
+        //                TamV = this.configuracion.ConfigMatMot[i].TamVuelta;
+        //                Valor = 360 / (GxP * TamV);
+        //                switch (i)
+        //                {
+        //                    case 0: stringConfiguracion += Valor.ToString().Replace(",", ".") + ";"; break;
+        //                    case 1: stringConfiguracion += Valor.ToString().Replace(",", ".") + ";"; break;
+        //                    case 2: stringConfiguracion += Valor.ToString().Replace(",", "."); break;
+        //                }
+        //            }
 
-                    //enviamos el string de configuracion
-                    enviar(stringConfiguracion);
+        //            //enviamos el string de configuracion
+        //            enviar(stringConfiguracion);
 
-                    //aumentamos la cantidad de veces enviada
-                    cantReenviosConfig++;
+        //            //aumentamos la cantidad de veces enviada
+        //            cantReenviosConfig++;
 
-                    return true;
+        //            return true;
 
-                }
-                else
-                {
-                    return false;
-                }
+        //        }
+        //        else
+        //        {
+        //            return false;
+        //        }
 
-            }
-            catch (Exception ex)
-            {
-                throw (new Exception("CNC.EnviarConfiguracion: " + ex.Message));
-            }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw (new Exception("CNC.EnviarConfiguracion: " + ex.Message));
+        //    }
 
 
-        }
+        //}
 
         //private void PedirEstadoCNC()
         //{
@@ -475,12 +481,11 @@ namespace CNC
                             case 0: this.estadoActual = CNC_Estados.SerialPortConectado; break;
                             case 1: this.estadoActual = CNC_Estados.HandShakeRecibido; break;
                             case 2: this.estadoActual = CNC_Estados.Conectado; break;
-                            case 3: this.estadoActual = CNC_Estados.EsperandoConfig; break;
-                            case 4: this.estadoActual = CNC_Estados.EsperandoComando; break;
-                            case 5: this.estadoActual = CNC_Estados.ProcesandoComando; break;
-                            case 6: this.estadoActual = CNC_Estados.SensorFinCarrera; break;
-                            case 7: this.estadoActual = CNC_Estados.ParadaEmergencia; break;
-                            case 8: this.estadoActual = CNC_Estados.MovimientoLibre; break;
+                            case 3: this.estadoActual = CNC_Estados.EsperandoComando; break;
+                            case 4: this.estadoActual = CNC_Estados.ProcesandoComando; break;
+                            case 5: this.estadoActual = CNC_Estados.SensorFinCarrera; break;
+                            case 6: this.estadoActual = CNC_Estados.ParadaEmergencia; break;
+                            case 7: this.estadoActual = CNC_Estados.MovimientoLibre; break;
                         }
                     }
 
@@ -531,7 +536,7 @@ namespace CNC
                     //si acepto el reset
                     if (recep == CNC_Mensajes_Recep.Reset)
                     {
-                        this.configurada = false;
+                        //this.configurada = false;
 
                         this.Label.Text = "CNC restarted";
                         estadoActual = CNC_Estados.SerialPortConectado;
@@ -563,8 +568,8 @@ namespace CNC
                         //actualizamos la posicion actual del CNC
                         actualizarPosicionActual(posicion);
 
-                        //queda en estado READYTOCONFIGURE
-                        this.estadoActual = CNC_Estados.EsperandoConfig;
+                        //queda en estado WAIINGCOMMAND
+                        this.estadoActual = CNC_Estados.EsperandoComando;
                     }
 
                     //se llego al fin de carreras
@@ -578,8 +583,8 @@ namespace CNC
                         //vemos que hacemos...
                         this.Label.Text = "Fin de Carrera alcanzado";
 
-                        //queda en estado READYTOCONFIGURE
-                        this.estadoActual = CNC_Estados.EsperandoConfig;
+                        //queda en estado WAITINGCOMMAND
+                        this.estadoActual = CNC_Estados.EsperandoComando;
                     }
 
 
@@ -589,16 +594,16 @@ namespace CNC
                 //SERIALPORTCONNECTED
                 if (this.estadoActual == CNC_Estados.SerialPortConectado)
                 {
-                   
+
                     string recep = recibir();
-                    
+
                     //validamos que el dato recibido sea numerico
-                    int i = 0; 
+                    int i = 0;
                     if (Int32.TryParse(recep, out i))
                     {
                         //pasamos la maquina a HANDSHAKERECEIVED
                         estadoActual = CNC_Estados.HandShakeRecibido;
-                        
+
                         //si coincide longitud recibida con la enviada
                         if (CNC_Mensajes_Send.HandShake.Length == Convert.ToInt32(recep))
                         {
@@ -632,34 +637,17 @@ namespace CNC
                         return;
                     }
 
-                    //la maquina ya esta en READYTOCONFIGURE
-                    if (recep == CNC_Mensajes_Recep.ConfigStringBAD)
-                    {
-                        //pasamos directo a READYTOCONFIGURE
-                        this.estadoActual = CNC_Estados.EsperandoConfig;
-
-                        //como desconocemos la posicion actual y la necesitamos para luego actualizar
-                        //el referenceposition del commandpreproc la pedimos
-                        enviar(CNC_Mensajes_Send.PosicionActual);
-
-                        this.Label.Text = "Conexión OK (3/3): Conexión establecida";
-
-                        this.BarraProgreso.Value = 100;
-
-                        return;
-                    }
-
                     //la maquina esta en WAITINGCOMMAND
-                    if (recep == CNC_Mensajes_Recep.ComandoNoSoportado || recep==CNC_Mensajes_Recep.ComandoErroneo)
+                    if (recep == CNC_Mensajes_Recep.ComandoNoSoportado || recep == CNC_Mensajes_Recep.ComandoErroneo)
                     {
                         this.Label.Text = "Error: CNC esperando instrucciones";
-                        
+
                         //reiniciamos
                         this.ReiniciarCNC();
-                        
+
                         return;
                     }
-                    
+
                 }
 
                 //HANDSHAKERECEIVED
@@ -677,31 +665,13 @@ namespace CNC
 
                         return;
                     }
-                    
+
                     //no habiamos enviado ok
                     if (recep == CNC_Mensajes_Recep.MaquinaNoConectada)
                     {
                         estadoActual = CNC_Estados.SerialPortConectado;
 
                         this.Label.Text = "Conexión (2/3): error en el handshake. Intente nuevamente.";
-
-                        return;
-                    }
-
-
-                    //la maquina ya esta en READYTOCONFIGURE
-                    if (recep == CNC_Mensajes_Recep.ConfigStringBAD)
-                    {
-                        //pasamos directo a READYTOCONFIGURE
-                        this.estadoActual = CNC_Estados.EsperandoConfig;
-
-                        //como desconocemos la posicion actual y la necesitamos para luego actualizar
-                        //el referenceposition del commandpreproc la pedimos
-                        enviar(CNC_Mensajes_Send.PosicionActual);
-
-                        this.Label.Text = "Conexión OK (3/3): Conexión establecida";
-
-                        this.BarraProgreso.Value = 100;
 
                         return;
                     }
@@ -730,13 +700,12 @@ namespace CNC
                         //nos paramos en el origen
                         actualizarPosicionActual("X0 Y0 Z0");
 
-                        //pasamos a READYTOCONFIGURE
-                        this.estadoActual = CNC_Estados.EsperandoConfig;
+                        //pasamos a WAITINGCOMMAND
+                        this.estadoActual = CNC_Estados.EsperandoComando;
 
                         this.Label.Text = "Conexión OK (3/3): Conexión establecida";
 
                         this.BarraProgreso.Value = 100;
-
 
                     }
 
@@ -754,50 +723,50 @@ namespace CNC
                 }
 
                 //READYTOCONFIGURE
-                if (estadoActual == CNC_Estados.EsperandoConfig)
-                {
-                    //leemos la respuesta
-                    string recep = recibir();
+                //if (estadoActual == CNC_Estados.EsperandoConfig)
+                //{
+                //    //leemos la respuesta
+                //    string recep = recibir();
 
-                    //vemos el estado de la respuesta
-                    if (recep == CNC_Mensajes_Recep.ConfigStringOK)
-                    {
-                        this.configurada = true;
+                //    //vemos el estado de la respuesta
+                //    if (recep == CNC_Mensajes_Recep.ConfigStringOK)
+                //    {
+                //        this.configurada = true;
 
-                        estadoActual = CNC_Estados.EsperandoComando;
+                //        estadoActual = CNC_Estados.EsperandoComando;
 
-                        //iniciamos la transmision
-                        this.Transmision();
+                //        //iniciamos la transmision
+                //        this.Transmision();
 
-                        //this.Label.Text = "Conexión OK (3/3): Conexión establecida";
+                //        //this.Label.Text = "Conexión OK (3/3): Conexión establecida";
 
-                        //this.BarraProgreso.Value = 100;
+                //        //this.BarraProgreso.Value = 100;
 
-                    }
-                    else if (recep == CNC_Mensajes_Recep.ConfigStringBAD)
-                    {
-                        //hasta tres intentos
-                        if (cantReenviosConfig < 3)
-                        {
-                            //seguimos en el mismo estado...
-                            this.Label.Text = "Error en la configuración. Intentando nuevamente (" + (cantReenviosConfig + 1).ToString() + " de 3).";
+                //    }
+                //    else if (recep == CNC_Mensajes_Recep.ConfigStringBAD)
+                //    {
+                //        //hasta tres intentos
+                //        if (cantReenviosConfig < 3)
+                //        {
+                //            //seguimos en el mismo estado...
+                //            this.Label.Text = "Error en la configuración. Intentando nuevamente (" + (cantReenviosConfig + 1).ToString() + " de 3).";
 
-                            //enviamos la configuracion
-                            if (!EnviarConfiguracion())
-                            {
-                                this.Label.Text = "Error enviando configuración. Intente nuevamente.";
-                            }
+                //            //enviamos la configuracion
+                //            if (!EnviarConfiguracion())
+                //            {
+                //                this.Label.Text = "Error enviando configuración. Intente nuevamente.";
+                //            }
 
-                        }
-                        else
-                        {
-                            this.Label.Text = "Error enviando configuración. Se ha llegado al maximo de intentos.";
-                        }
+                //        }
+                //        else
+                //        {
+                //            this.Label.Text = "Error enviando configuración. Se ha llegado al maximo de intentos.";
+                //        }
 
-                    }
+                //    }
 
-                    return;
-                }
+                //    return;
+                //}
 
                 //WAITINGCOMMAND
                 if (estadoActual == CNC_Estados.EsperandoComando)
@@ -1048,19 +1017,19 @@ namespace CNC
                 this.cantReenviosConfig = 0;
 
                 //enviamos la configuracion
-                if (EnviarConfiguracion())
-                {
-                    this.Label.Text = "Enviando configuración...";
-                    return true;
-                }
-                else
-                {
-                    this.Label.Text = "Error enviando configuración. Intente nuevamente.";
-                    return false;
-                }
+                //if (EnviarConfiguracion())
+                //{
+                //    this.Label.Text = "Enviando configuración...";
+                //    return true;
+                //}
+                //else
+                //{
+                //    this.Label.Text = "Error enviando configuración. Intente nuevamente.";
+                //    return false;
+                //}
 
                 //iniciamos la transmision
-                //this.Transmision();
+                return this.Transmision();
 
 
             }
@@ -1146,6 +1115,23 @@ namespace CNC
                 CommandPreprocessor.Configuration.millimetersProgramming = (this.configuracion.UnidadMedida == "mm");
                 CommandPreprocessor.Configuration.defaultFeedrate = Convert.ToDouble(this.configuracion.VelocidadMovimiento);
                 CommandPreprocessor.Configuration.millimetersCurveSection = Convert.ToDouble(this.configuracion.LargoSeccion);
+
+                //cargamos para cada uno la configuracion de cada motor
+                decimal GxP, TamV, Valor;
+                for (int i = 0; i < 3; i++)
+                {
+                    GxP = this.configuracion.ConfigMatMot[i].GradosPaso;
+                    TamV = this.configuracion.ConfigMatMot[i].TamVuelta;
+                    Valor = 360 / (GxP * TamV);
+                    switch (i)
+                    {
+                        case 0: CommandPreprocessor.Configuration.configValueX = Convert.ToDouble(Valor); break;
+                        case 1: CommandPreprocessor.Configuration.configValueY = Convert.ToDouble(Valor); break;
+                        case 2: CommandPreprocessor.Configuration.configValueZ = Convert.ToDouble(Valor); break;
+                    }
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -1158,6 +1144,14 @@ namespace CNC
             try
             {
                 this.loteInstruccionesTemp = CommandPreprocessor.CommandPreprocessor.GetInstance().ProcessProgram(this.loteInstrucciones);
+
+                //si el primer comando a enviar no es M03 lo agregamos
+                if (this.loteInstruccionesTemp.First() != CNC_Mensajes_Send.G_ToolOn)
+                    this.loteInstruccionesTemp.Insert(0, CNC_Mensajes_Send.G_ToolOn);
+
+                //si el ultimo comando a enviar no es M05 lo agregamos
+                if (this.loteInstruccionesTemp.Last() != CNC_Mensajes_Send.G_ToolOff)
+                    this.loteInstruccionesTemp.Add(CNC_Mensajes_Send.G_ToolOff);
 
                 //si el ultimo comando a enviar no es M02 lo agregamos
                 if (this.loteInstruccionesTemp.Last() != CNC_Mensajes_Send.G_Stop)

@@ -47,7 +47,7 @@ namespace CNCMatic
                     //traemos la instancia de la maquina
                     var cnc = CNC.CNC.Cnc;
 
-                    if (cnc.EstadoActual != CNC_Estados.EsperandoComando && cnc.EstadoActual != CNC_Estados.EsperandoConfig)
+                    if (cnc.EstadoActual != CNC_Estados.EsperandoComando && cnc.EstadoActual != CNC_Estados.EsperandoComando)
                     {//si no esta esperando comando -> conectamos
 
                         cnc.Label = lblEstado;

@@ -59,7 +59,7 @@ namespace CNCMatic
                 Interfaz.OrigenCNC(ref lblEstado, ref lblPosicionActual);
 
                 //bloqueamos el inicio
-                SetControlPropertyThreadSafe(btnInicio, "Enabled", false);
+                //SetControlPropertyThreadSafe(btnInicio, "Enabled", false);
             }
             catch (Exception ex)
             {
@@ -163,6 +163,9 @@ namespace CNCMatic
                 //realizamos la busqueda del archivo
                 if (importaDXF.ShowDialog() == DialogResult.OK)
                 {
+                    //cambiamos el cursor a waiting
+                    Cursor.Current = Cursors.WaitCursor;
+
                     //Realizamos la importacion del DXF
                     DxfDoc doc = new DxfDoc();
                     doc.Cargar(importaDXF.FileName);
@@ -206,15 +209,26 @@ namespace CNCMatic
                             sw.Close();
                             OpenFile(curTempFileName);
                         }
+
+                        //cambiamos el cursor al normal
+                        Cursor.Current = Cursors.Default;
                     }
                     else
                     {
+                        //cambiamos el cursor al normal
+                        Cursor.Current = Cursors.Default;
+
                         MessageBox.Show("No se han encontrado figuras para importar", "Importar DXF", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
+
+
                 }
             }
             catch (Exception ex)
             {
+                //cambiamos el cursor al normal
+                Cursor.Current = Cursors.Default;
+
                 MessageBox.Show("Se ha producido un error " + ex.Message, "Importar DXF", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -386,7 +400,7 @@ namespace CNCMatic
                         if (lineaG.Substring(0, 3).Equals("G00"))
                         {
                             valoresZ = lineaG.Split('Z');
-                            valorZ = Convert.ToInt16(valoresZ[1]);
+                            valorZ = Convert.ToInt32(valoresZ[1]);
                             linea = "G00 Z" + Convert.ToString(valorZ + deltaSubida) + Environment.NewLine + valoresZ[0] + "Z" +
                                 Convert.ToString(valorZ + deltaSubida) + Environment.NewLine + "G00 Z" + Convert.ToString(valorZ);
                         }
@@ -487,8 +501,8 @@ namespace CNCMatic
             if (e.KeyChar == (char)Keys.Enter)
             {
                 string linea = this.txtLineaManual.Text.Trim();
-                
-                if (Char.ToUpper(linea[0]) != 'G' && Char.ToUpper(linea[0]) != 'M')
+
+                if (Char.ToUpper(linea[0]) != 'G' && Char.ToUpper(linea[0]) != 'M' && Char.ToUpper(linea[0]) != 'T')
                 {
                     ////limpiamos el enter ingresado
                     //e.KeyChar = new char();
@@ -502,7 +516,7 @@ namespace CNCMatic
                     MessageBox.Show("Instrucción \"" + linea + "\" no válida, por favor corregir", "Ingreso manual de instrucciones", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                
+
                 AgregaTextoEditor(false, this.txtLineaManual.Text.Trim());
                 this.txtLineaManual.Text = "";
 
@@ -527,7 +541,7 @@ namespace CNCMatic
                 {
                     lineas.Remove("");
                 }
-                
+
                 txtPreview.Text = "";
                 foreach (string linea in lineas)
                 {
@@ -536,7 +550,7 @@ namespace CNCMatic
 
                 foreach (string linea in lineas)
                 {
-                    if (Char.ToUpper(linea[0]) != 'G' && Char.ToUpper(linea[0]) != 'M')
+                    if (Char.ToUpper(linea[0]) != 'G' && Char.ToUpper(linea[0]) != 'M' && Char.ToUpper(linea[0]) != 'T')
                     {
                         ////limpiamos el enter ingresado
                         //e.KeyChar = new char();
@@ -1054,6 +1068,41 @@ namespace CNCMatic
         {
             try
             {
+                //validamos los comandos    
+                //removemos los blancos
+                List<string> lineas = txtPreview.Lines.ToList();
+                while (lineas.Contains(""))
+                {
+                    lineas.Remove("");
+                }
+
+                txtPreview.Text = "";
+                foreach (string linea in lineas)
+                {
+                    txtPreview.Text += linea + Environment.NewLine;
+                }
+
+                foreach (string linea in lineas)
+                {
+                    if (Char.ToUpper(linea[0]) != 'G' && Char.ToUpper(linea[0]) != 'M' && Char.ToUpper(linea[0]) != 'T')
+                    {
+                        ////limpiamos el enter ingresado
+                        //e.KeyChar = new char();
+                        MessageBox.Show("Instrucción \"" + linea + "\" no válida, por favor corregir", "Ingreso manual de instrucciones", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    else if (!Char.IsNumber(linea[1]))
+                    {
+                        ////limpiamos el enter ingresado
+                        //e.KeyChar = new char();
+                        MessageBox.Show("Instrucción \"" + linea + "\" no válida, por favor corregir", "Ingreso manual de instrucciones", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+
+                txtPreview.Select(txtPreview.Text.Length, 0);
+
+                //Muestra figura en el previsualizador
                 this.LimpiarPrevisualizador();
                 PrevisualizarFigurasManual();
 
@@ -1142,8 +1191,8 @@ namespace CNCMatic
             {
                 if (ex.Message.Contains("Interfaz.ConectarCNC: IniciarTransmision: CNC.PrepararComandos: Comando no soportado:"))
                 {
-                    string mensaje = ex.Message.Replace("Interfaz.ConectarCNC: IniciarTransmision: CNC.PrepararComandos: ","");
-                    
+                    string mensaje = ex.Message.Replace("Interfaz.ConectarCNC: IniciarTransmision: CNC.PrepararComandos: ", "");
+
                     //existen comandos no válidos
                     MessageBox.Show("Error: " + mensaje, "Comando no soportado", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -1267,18 +1316,22 @@ namespace CNCMatic
         private void lblEstado_TextChanged(object sender, EventArgs e)
         {
             //se termina de establecer la conexion, entones se liberan los controles
-            if (sender.ToString() == "Conexión OK (3/3): Conexión establecida")
+            if (sender.ToString() == "Conexión OK (3/3): Conexión establecida" || sender.ToString() == "Error enviando configuración. Se ha llegado al maximo de intentos.")
             {
                 LimpiarControlesSafe();
 
                 SetControlPropertyThreadSafe(btnConnect, "Visible", false);
                 SetControlPropertyThreadSafe(btnStop2, "Enabled", false);
+                SetControlPropertyThreadSafe(btnPause, "Enabled", false);
 
                 SetControlPropertyThreadSafe(btnInicio, "Enabled", true);
                 SetControlPropertyThreadSafe(gbMovXY, "Enabled", true);
                 SetControlPropertyThreadSafe(gbMovZ, "Enabled", true);
 
                 //MessageBox.Show("Conexión exitosa!", "Conexion CNC", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                //habilitamos el menu de configuracion
+                configuracionToolStripMenuItem.Enabled = true;
 
                 return;
             }
@@ -1294,6 +1347,9 @@ namespace CNCMatic
 
                 //reiniciamos la barra
                 prgBar.Value = 0;
+
+                //habilitamos el menu de configuracion
+                configuracionToolStripMenuItem.Enabled = true;
 
                 return;
             }
@@ -1331,6 +1387,12 @@ namespace CNCMatic
                 //reiniciamos la barra
                 prgBar.Value = 0;
 
+                //habilitamos el menu de configuracion
+                configuracionToolStripMenuItem.Enabled = true;
+
+                //intentamos conectar nuevamente
+                ConectarCNC();
+
                 return;
             }
 
@@ -1348,6 +1410,9 @@ namespace CNCMatic
 
                 //reiniciamos la barra
                 prgBar.Value = 0;
+
+                //habilitamos el menu de configuracion
+                configuracionToolStripMenuItem.Enabled = true;
 
                 return;
             }
@@ -1379,35 +1444,8 @@ namespace CNCMatic
                     //mensaje de advertencia al usuario
                     MessageBox.Show("Asegurese por favor de quitar todo objeto del área de trabajo, la herramienta procederá a trasladarse al origen", "Importante", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                    //obtenemos las lineas del previsualizador y removemos los blancos
-                    List<string> loteInstrucciones = new List<string>();
-
-                    if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual, ref this.prgBar))
-                    {
-
-                        //bloqueamos controles
-                        btnPlay.Enabled = false;
-                        btnInicio.Enabled = false;
-                        btnPause.Enabled = false;
-                        gbMovXY.Enabled = false;
-                        gbMovZ.Enabled = false;
-                        txtLineaManual.Enabled = false;
-                        btnLimpiar.Enabled = false;
-                        toolStrip1.Enabled = false;
-                        txtPreview.Enabled = false;
-
-                        btnStop2.Enabled = true;
-                        btnConnect.Enabled = false;
-
-
-                        btnRestart.Enabled = true;
-
-                        //bloqueamos el menu de configuracion
-                        //configuracionToolStripMenuItem.Enabled = false;
-
-                    }
-
-
+                    //funcion para conectar
+                    ConectarCNC();
                 }
 
             }
@@ -1425,7 +1463,36 @@ namespace CNCMatic
                 }
             }
         }
+        private void ConectarCNC()
+        {
+            //obtenemos las lineas del previsualizador y removemos los blancos
+            List<string> loteInstrucciones = new List<string>();
 
+            if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual, ref this.prgBar))
+            {
+
+                //bloqueamos controles
+                btnPlay.Enabled = false;
+                btnInicio.Enabled = false;
+                btnPause.Enabled = false;
+                gbMovXY.Enabled = false;
+                gbMovZ.Enabled = false;
+                txtLineaManual.Enabled = false;
+                btnLimpiar.Enabled = false;
+                toolStrip1.Enabled = false;
+                txtPreview.Enabled = false;
+
+                btnStop2.Enabled = true;
+                btnConnect.Enabled = false;
+
+
+                btnRestart.Enabled = true;
+
+                //bloqueamos el menu de configuracion
+                configuracionToolStripMenuItem.Enabled = false;
+
+            }
+        }
         private void btnRestart_Click(object sender, EventArgs e)
         {
             try

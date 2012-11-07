@@ -931,20 +931,23 @@ namespace CNC
                 decimal GxP, TamV, Valor;
 
                 //para cada eje
+                //X
+                GxP = this.configuracion.GradosPasoX;
+                TamV = this.configuracion.TamVueltaX;
+                Valor = 360 / (GxP * TamV);
+                this.PosicionActual.X = Convert.ToDouble(pasosX / Valor);
 
-                for (int i = 0; i < 3; i++)
-                {
-                    GxP = this.configuracion.ConfigMatMot[i].GradosPaso;
-                    TamV = this.configuracion.ConfigMatMot[i].TamVuelta;
-                    Valor = 360 / (GxP * TamV);
+                //Y
+                GxP = this.configuracion.GradosPasoY;
+                TamV = this.configuracion.TamVueltaY;
+                Valor = 360 / (GxP * TamV);
+                this.PosicionActual.Y = Convert.ToDouble(pasosY / Valor);
 
-                    switch (i)
-                    {
-                        case 0: this.PosicionActual.X = Convert.ToDouble(pasosX / Valor); break;
-                        case 1: this.PosicionActual.Y = Convert.ToDouble(pasosY / Valor); break;
-                        case 2: this.PosicionActual.Z = Convert.ToDouble(pasosZ / Valor); break;
-                    }
-                }
+                //Z
+                GxP = this.configuracion.GradosPasoZ;
+                TamV = this.configuracion.TamVueltaZ;
+                Valor = 360 / (GxP * TamV);
+                this.PosicionActual.Z = Convert.ToDouble(pasosZ / Valor);
 
                 //actualizamos la posicion actual en el formulario
                 LblPosicionActual.Text = "X" + string.Format("{0:0.00}", this.PosicionActual.X) +
@@ -1118,19 +1121,24 @@ namespace CNC
 
                 //cargamos para cada uno la configuracion de cada motor
                 decimal GxP, TamV, Valor;
-                for (int i = 0; i < 3; i++)
-                {
-                    GxP = this.configuracion.ConfigMatMot[i].GradosPaso;
-                    TamV = this.configuracion.ConfigMatMot[i].TamVuelta;
-                    Valor = 360 / (GxP * TamV);
-                    switch (i)
-                    {
-                        case 0: CommandPreprocessor.Configuration.configValueX = Convert.ToDouble(Valor); break;
-                        case 1: CommandPreprocessor.Configuration.configValueY = Convert.ToDouble(Valor); break;
-                        case 2: CommandPreprocessor.Configuration.configValueZ = Convert.ToDouble(Valor); break;
-                    }
-                }
+                //para cada eje
+                //X
+                GxP = this.configuracion.GradosPasoX;
+                TamV = this.configuracion.TamVueltaX;
+                Valor = 360 / (GxP * TamV);
+                CommandPreprocessor.Configuration.configValueX = Convert.ToDouble(Valor);
 
+                //Y
+                GxP = this.configuracion.GradosPasoY;
+                TamV = this.configuracion.TamVueltaY;
+                Valor = 360 / (GxP * TamV);
+                CommandPreprocessor.Configuration.configValueY = Convert.ToDouble(Valor);
+
+                //Z
+                GxP = this.configuracion.GradosPasoZ;
+                TamV = this.configuracion.TamVueltaZ;
+                Valor = 360 / (GxP * TamV);
+                CommandPreprocessor.Configuration.configValueZ = Convert.ToDouble(Valor);
 
             }
             catch (Exception ex)

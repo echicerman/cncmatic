@@ -9,51 +9,14 @@
     <MaxX>100</MaxX>
     <MaxY>100</MaxY>
     <MaxZ>100</MaxZ>
-	<LargoSeccion>0.5</LargoSeccion>
+    <LargoSeccion>0.5</LargoSeccion>
     <VelocidadMovimiento>60</VelocidadMovimiento>
-	<AlturaAscenso>1</AlturaAscenso>
+    <AlturaAscenso>1</AlturaAscenso>
+    <GradosPasoX>12</GradosPasoX>
+    <TamVueltaX>1</TamVueltaX>
+    <GradosPasoY>12</GradosPasoY>
+    <TamVueltaY>1.33</TamVueltaY>
+    <GradosPasoZ>2.1</GradosPasoZ>
+    <TamVueltaZ>10</TamVueltaZ>
   </configuracion>
-  <materiales>
-    <Id>1</Id>
-    <Descripcion>MATERIAL</Descripcion>
-    <Espesor>10</Espesor>
-    <Ancho>10</Ancho>
-    <Largo>10</Largo>
-  </materiales>
-  <motores>
-    <Id>1</Id>
-    <Descripcion>MOTOR_X</Descripcion>
-  </motores>
-  <motores>
-    <Id>2</Id>
-    <Descripcion>MOTOR_Y</Descripcion>
-  </motores>
-  <motores>
-    <Id>3</Id>
-    <Descripcion>MOTOR_Z</Descripcion>
-  </motores>
-  <configuracionMatMot>
-    <Id>1</Id>
-    <IdConfig>0</IdConfig>
-    <IdMaterial>1</IdMaterial>
-    <IdMotor>1</IdMotor>
-    <GradosPaso>12</GradosPaso>
-    <TamVuelta>1</TamVuelta>
-  </configuracionMatMot>
-  <configuracionMatMot>
-    <Id>2</Id>
-    <IdConfig>0</IdConfig>
-    <IdMaterial>1</IdMaterial>
-    <IdMotor>2</IdMotor>
-    <GradosPaso>1,6</GradosPaso>
-    <TamVuelta>2</TamVuelta>
-  </configuracionMatMot>
-  <configuracionMatMot>
-    <Id>3</Id>
-    <IdConfig>0</IdConfig>
-    <IdMaterial>1</IdMaterial>
-    <IdMotor>3</IdMotor>
-    <GradosPaso>1</GradosPaso>
-    <TamVuelta>2</TamVuelta>
-  </configuracionMatMot>
 </DocumentElement>

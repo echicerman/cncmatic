@@ -118,26 +118,20 @@ namespace CNCMatic
             {
                 XML_Config config = ConfiguracionActual();
 
-                if (config.ConfigMatMot.Count < 3)
-                {
-                    //no tiene la info de los tres motores
+                //no tiene alguna info de los tres motores
+                if (config.GradosPasoX <= 0)
                     return false;
-                }
-
-                for (int i = 0; i < 3; i++)
-                {
-
-                    if (
-                        (config.ConfigMatMot[i].GradosPaso <= 0) ||
-                        (config.ConfigMatMot[i].TamVuelta <= 0)
-                        )
-                    {
-                        //no estan correcto los valores parametrizados
-                        return false;
-
-                    }
-                }
-
+                if (config.TamVueltaX <= 0)
+                    return false;
+                if (config.GradosPasoY <= 0)
+                    return false;
+                if (config.TamVueltaY <= 0)
+                    return false;
+                if (config.GradosPasoZ <= 0)
+                    return false;
+                if (config.TamVueltaZ <= 0)
+                    return false;
+                    
                 return true;
 
             }

@@ -38,52 +38,52 @@ namespace CNCMatic
         {
             buscarPuertos();
 
-            CargaMotores();
+            //CargaMotores();
 
-            CargaMateriales();
+            //CargaMateriales();
 
             CargaConfiguracionGeneral();
 
             (new ToolTip()).SetToolTip(btnNuevo, "Nuevo perfil de configuracion");
             (new ToolTip()).SetToolTip(btnCancelar, "Cancela la accion actual");
-            (new ToolTip()).SetToolTip(btnAltaMaterial, "Dar de alta un nuevo material");
-            (new ToolTip()).SetToolTip(btnAltaMotor, "Dar de alta un nuevo motor");
+            //(new ToolTip()).SetToolTip(btnAltaMaterial, "Dar de alta un nuevo material");
+            //(new ToolTip()).SetToolTip(btnAltaMotor, "Dar de alta un nuevo motor");
             (new ToolTip()).SetToolTip(btnGrabar, "Graba el nuevo perfil o los cambios sobre el perfil seleccionado");
 
         }
-        private void CargaMotores()
-        {
-            //cargar configuraciones
-            string xmlPath = ConfigurationManager.AppSettings["xmlDbPath"];
-            XMLdb x = new XMLdb(xmlPath);
-            List<XML_Motor> motores = x.LeerMotores();
+        //private void CargaMotores()
+        //{
+        //    //cargar configuraciones
+        //    string xmlPath = ConfigurationManager.AppSettings["xmlDbPath"];
+        //    XMLdb x = new XMLdb(xmlPath);
+        //    List<XML_Motor> motores = x.LeerMotores();
 
-            cmbMotor.DataSource = motores;
-            cmbMotor.DisplayMember = "Descripcion";
-            cmbMotor.ValueMember = "Id";
+        //    cmbMotor.DataSource = motores;
+        //    cmbMotor.DisplayMember = "Descripcion";
+        //    cmbMotor.ValueMember = "Id";
 
-            cmbMotor.Refresh();
+        //    cmbMotor.Refresh();
 
-            this.cmbMotor.SelectedValueChanged += new System.EventHandler(this.cmbMotor_SelectedValueChanged);
+        //    this.cmbMotor.SelectedValueChanged += new System.EventHandler(this.cmbMotor_SelectedValueChanged);
 
-        }
+        //}
 
-        private void CargaMateriales()
-        {
-            //cargar configuraciones
-            string xmlPath = ConfigurationManager.AppSettings["xmlDbPath"];
-            XMLdb x = new XMLdb(xmlPath);
-            List<XML_Material> materiales = x.LeerMateriales();
+        //private void CargaMateriales()
+        //{
+        //    //cargar configuraciones
+        //    string xmlPath = ConfigurationManager.AppSettings["xmlDbPath"];
+        //    XMLdb x = new XMLdb(xmlPath);
+        //    List<XML_Material> materiales = x.LeerMateriales();
 
-            cmbMaterial.DataSource = materiales;
-            cmbMaterial.DisplayMember = "Descripcion";
-            cmbMaterial.ValueMember = "Id";
+        //    cmbMaterial.DataSource = materiales;
+        //    cmbMaterial.DisplayMember = "Descripcion";
+        //    cmbMaterial.ValueMember = "Id";
 
-            cmbMaterial.Refresh();
+        //    cmbMaterial.Refresh();
 
-            this.cmbMaterial.SelectedValueChanged += new System.EventHandler(this.cmbMaterial_SelectedValueChanged);
+        //    this.cmbMaterial.SelectedValueChanged += new System.EventHandler(this.cmbMaterial_SelectedValueChanged);
 
-        }
+        //}
 
         private void CargaConfiguracionGeneral()
         {
@@ -93,7 +93,7 @@ namespace CNCMatic
             XMLdb x = new XMLdb(xmlPath);
             List<XML_Config> configs = x.LeeConfiguracion();
 
-            ActualizaDescripcionesMatMot(configs);
+            //ActualizaDescripcionesMatMot(configs);
 
             cmbConfiguracion.DataSource = configs;
             cmbConfiguracion.DisplayMember = "Descripcion";
@@ -110,38 +110,38 @@ namespace CNCMatic
             cmbConfiguracion_SelectedValueChanged(this, null);
 
         }
-        private void ActualizaDescripcionesMatMot(List<XML_Config> configs)
-        {
-            foreach (XML_Config config in configs)
-            {
-                foreach (XML_ConfigMatMot iconfig in config.ConfigMatMot)
-                {
-                    iconfig.Material = EncuentraMaterial(iconfig.IdMaterial);
-                    iconfig.Motor = EncuentraMotor(iconfig.IdMotor);
+        //private void ActualizaDescripcionesMatMot(List<XML_Config> configs)
+        //{
+        //    foreach (XML_Config config in configs)
+        //    {
+        //        foreach (XML_ConfigMatMot iconfig in config.ConfigMatMot)
+        //        {
+        //            iconfig.Material = EncuentraMaterial(iconfig.IdMaterial);
+        //            iconfig.Motor = EncuentraMotor(iconfig.IdMotor);
 
-                }
-            }
-        }
+        //        }
+        //    }
+        //}
 
-        private string EncuentraMaterial(int idMaterial)
-        {
-            foreach (XML_Material m in (List<XML_Material>)cmbMaterial.DataSource)
-            {
-                if (m.Id == idMaterial)
-                    return m.Descripcion;
-            }
-            return "";
-        }
+        //private string EncuentraMaterial(int idMaterial)
+        //{
+        //    foreach (XML_Material m in (List<XML_Material>)cmbMaterial.DataSource)
+        //    {
+        //        if (m.Id == idMaterial)
+        //            return m.Descripcion;
+        //    }
+        //    return "";
+        //}
 
-        private string EncuentraMotor(int idMotor)
-        {
-            foreach (XML_Motor m in (List<XML_Motor>)cmbMotor.DataSource)
-            {
-                if (m.Id == idMotor)
-                    return m.Descripcion;
-            }
-            return "";
-        }
+        //private string EncuentraMotor(int idMotor)
+        //{
+        //    foreach (XML_Motor m in (List<XML_Motor>)cmbMotor.DataSource)
+        //    {
+        //        if (m.Id == idMotor)
+        //            return m.Descripcion;
+        //    }
+        //    return "";
+        //}
 
         private void GrabaConfiguracionGeneral()
         {
@@ -187,6 +187,12 @@ namespace CNCMatic
                 config.LargoSeccion = txtLargoSeccion.Text;
                 config.VelocidadMovimiento = txtVelocMov.Text;
                 config.AltoAscenso = txtAltura.Text;
+                config.GradosPasoX = decimal.Parse(txtGradosX.Text);
+                config.GradosPasoY = decimal.Parse(txtGradosY.Text);
+                config.GradosPasoZ = decimal.Parse(txtGradosZ.Text);
+                config.TamVueltaX = decimal.Parse(txtVueltasX.Text);
+                config.TamVueltaY = decimal.Parse(txtVueltasX.Text);
+                config.TamVueltaZ = decimal.Parse(txtVueltasX.Text);
 
                 if (rbtAbsoluta.Checked)
                     config.TipoProg = "abs";
@@ -206,7 +212,7 @@ namespace CNCMatic
                 else
                     MessageBox.Show("La configuración ha sido dado de alta correctamete", "Configuración - Alta", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                
+
                 //this.Hide();
 
                 this.cmbConfiguracion.SelectedValueChanged -= new System.EventHandler(this.cmbConfiguracion_SelectedValueChanged);
@@ -216,9 +222,9 @@ namespace CNCMatic
                 lblConfig.Visible = true;
                 cmbConfiguracion.Visible = true;
 
-                lblConfigs.Enabled = true;
-                btnAltaConfigMatMot.Enabled = true;
-                grdConfigMatMot.Enabled = true;
+                //lblConfigs.Enabled = true;
+                //btnAltaConfigMatMot.Enabled = true;
+                //grdConfigMatMot.Enabled = true;
 
                 //grabamos en la configuracion que esta es la ultima configuracion seleccionada
                 //ConfigurationManager.AppSettings["idLastConfig"]=config.Id.ToString();
@@ -275,6 +281,12 @@ namespace CNCMatic
                 txtVelocMov.Text = config.VelocidadMovimiento.ToString();
                 txtLargoSeccion.Text = config.LargoSeccion.ToString();
                 txtAltura.Text = config.AltoAscenso.ToString();
+                txtGradosX.Text = config.GradosPasoX.ToString(new CultureInfo("es-AR"));
+                txtGradosY.Text = config.GradosPasoY.ToString(new CultureInfo("es-AR"));
+                txtGradosZ.Text = config.GradosPasoZ.ToString(new CultureInfo("es-AR"));
+                txtVueltasX.Text = config.TamVueltaX.ToString(new CultureInfo("es-AR"));
+                txtVueltasY.Text = config.TamVueltaY.ToString(new CultureInfo("es-AR"));
+                txtVueltasZ.Text = config.TamVueltaZ.ToString(new CultureInfo("es-AR"));
 
                 //seleccionamos el puerto
                 if (portComboBox.Items.Contains(config.PuertoCom))
@@ -286,55 +298,55 @@ namespace CNCMatic
                     portComboBox.Text = "";
                 }
 
-                grdConfigMatMot.DataSource = config.ConfigMatMot;
-                grdConfigMatMot.AutoResizeColumns();
-                grdConfigMatMot.AllowUserToAddRows = false;
-                grdConfigMatMot.AllowUserToDeleteRows = false;
-                grdConfigMatMot.ReadOnly = true;
-                grdConfigMatMot.Columns["IdMaterial"].Visible = false;
-                grdConfigMatMot.Columns["IdMotor"].Visible = false;
+                //grdConfigMatMot.DataSource = config.ConfigMatMot;
+                //grdConfigMatMot.AutoResizeColumns();
+                //grdConfigMatMot.AllowUserToAddRows = false;
+                //grdConfigMatMot.AllowUserToDeleteRows = false;
+                //grdConfigMatMot.ReadOnly = true;
+                //grdConfigMatMot.Columns["IdMaterial"].Visible = false;
+                //grdConfigMatMot.Columns["IdMotor"].Visible = false;
 
-                //tomamos la primera de las configuraciones de material/motor
-                if (config.ConfigMatMot != null && config.ConfigMatMot.Count > 0)
-                {
-                    XML_ConfigMatMot configMatMot = config.ConfigMatMot[0];
+                ////tomamos la primera de las configuraciones de material/motor
+                //if (config.ConfigMatMot != null && config.ConfigMatMot.Count > 0)
+                //{
+                //    XML_ConfigMatMot configMatMot = config.ConfigMatMot[0];
 
-                    cmbMotor.SelectedValue = configMatMot.IdMotor;
-                    cmbMaterial.SelectedValue = configMatMot.IdMaterial;
-                }
+                //    cmbMotor.SelectedValue = configMatMot.IdMotor;
+                //    cmbMaterial.SelectedValue = configMatMot.IdMaterial;
+                //}
             }
         }
 
-        private void cmbMaterial_SelectedValueChanged(object sender, EventArgs e)
-        {
-            cargaConfigMatMot((int)cmbMotor.SelectedValue, (int)cmbMaterial.SelectedValue);
-        }
+        //private void cmbMaterial_SelectedValueChanged(object sender, EventArgs e)
+        //{
+        //    cargaConfigMatMot((int)cmbMotor.SelectedValue, (int)cmbMaterial.SelectedValue);
+        //}
 
-        private void cmbMotor_SelectedValueChanged(object sender, EventArgs e)
-        {
-            cargaConfigMatMot((int)cmbMotor.SelectedValue, (int)cmbMaterial.SelectedValue);
-        }
+        //private void cmbMotor_SelectedValueChanged(object sender, EventArgs e)
+        //{
+        //    cargaConfigMatMot((int)cmbMotor.SelectedValue, (int)cmbMaterial.SelectedValue);
+        //}
 
-        private void cargaConfigMatMot(int idMotor, int idMaterial)
-        {
-            //traemos todas las configuraciones material/motor para la configuracion seleccionada
-            List<XML_ConfigMatMot> configsMatMot = ((XML_Config)cmbConfiguracion.SelectedItem).ConfigMatMot;
+        //private void cargaConfigMatMot(int idMotor, int idMaterial)
+        //{
+        //    //traemos todas las configuraciones material/motor para la configuracion seleccionada
+        //    List<XML_ConfigMatMot> configsMatMot = ((XML_Config)cmbConfiguracion.SelectedItem).ConfigMatMot;
 
-            txtGrados.Text = "";
-            txtVueltas.Text = "";
+        //    txtGradosX.Text = "";
+        //    txtVueltasX.Text = "";
 
-            //buscamos la que tenga los id seleccionados
-            foreach (XML_ConfigMatMot configMatMot in configsMatMot)
-            {
-                if (configMatMot.IdMotor == idMotor && configMatMot.IdMaterial == idMaterial)
-                {
-                    txtGrados.Text = configMatMot.GradosPaso.ToString(new CultureInfo("es-AR"));
-                    txtVueltas.Text = configMatMot.TamVuelta.ToString(new CultureInfo("es-AR"));
-                }
-            }
+        //    //buscamos la que tenga los id seleccionados
+        //    foreach (XML_ConfigMatMot configMatMot in configsMatMot)
+        //    {
+        //        if (configMatMot.IdMotor == idMotor && configMatMot.IdMaterial == idMaterial)
+        //        {
+        //            txtGradosX.Text = configMatMot.GradosPaso.ToString(new CultureInfo("es-AR"));
+        //            txtVueltasX.Text = configMatMot.TamVuelta.ToString(new CultureInfo("es-AR"));
+        //        }
+        //    }
 
 
-        }
+        //}
 
         private void btnNuevo_Click(object sender, EventArgs e)
         {
@@ -343,9 +355,9 @@ namespace CNCMatic
             lblConfig.Visible = false;
             cmbConfiguracion.Visible = false;
 
-            lblConfigs.Enabled = false;
-            btnAltaConfigMatMot.Enabled = false;
-            grdConfigMatMot.Enabled = false;
+            //lblConfigs.Enabled = false;
+            //btnAltaConfigMatMot.Enabled = false;
+            //grdConfigMatMot.Enabled = false;
 
             LimpiarControles();
 
@@ -357,9 +369,9 @@ namespace CNCMatic
             lblConfig.Visible = true;
             cmbConfiguracion.Visible = true;
 
-            lblConfigs.Enabled = true;
-            btnAltaConfigMatMot.Enabled = true;
-            grdConfigMatMot.Enabled = true;
+            //lblConfigs.Enabled = true;
+            //btnAltaConfigMatMot.Enabled = true;
+            //grdConfigMatMot.Enabled = true;
 
             LimpiarControles();
 
@@ -370,195 +382,199 @@ namespace CNCMatic
             txtMaxX.Text = "";
             txtMaxY.Text = "";
             txtMaxZ.Text = "";
-            txtGrados.Text = "";
             txtNombrePerfil.Text = "";
-            txtVueltas.Text = "";
             txtAltura.Text = "";
             txtLargoSeccion.Text = "";
             txtVelocMov.Text = "";
-            grdConfigMatMot.DataSource = null;
+            txtGradosX.Text = "";
+            txtVueltasX.Text = "";
+            txtGradosY.Text = "";
+            txtVueltasY.Text = "";
+            txtGradosZ.Text = "";
+            txtVueltasZ.Text = "";
+            //grdConfigMatMot.DataSource = null;
 
             //lblVueltas.Location = new Point(21, 65);
             //txtVueltas.Location = new Point(116, 62);
 
         }
-        private void btnAltaMaterial_Click(object sender, EventArgs e)
-        {
-            txtMaterialNombre.Text = "";
-            txtMaterialAncho.Text = "";
-            txtMaterialEspesor.Text = "";
-            txtMaterialLargo.Text = "";
+        //private void btnAltaMaterial_Click(object sender, EventArgs e)
+        //{
+        //    txtMaterialNombre.Text = "";
+        //    txtMaterialAncho.Text = "";
+        //    txtMaterialEspesor.Text = "";
+        //    txtMaterialLargo.Text = "";
 
-            grpNuevoMaterial.Visible = true;
-            this.Size = new Size(539, 578);
-        }
-        private void btnAltaMotor_Click(object sender, EventArgs e)
-        {
-            txtMotorNombre.Text = "";
+        //    grpNuevoMaterial.Visible = true;
+        //    this.Size = new Size(539, 578);
+        //}
+        //private void btnAltaMotor_Click(object sender, EventArgs e)
+        //{
+        //    txtMotorNombre.Text = "";
 
-            grpNuevoMotor.Visible = true;
-            this.Size = new Size(539, 578);
-        }
-        private void btnGrabaMaterial_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                //seteamos el tipo de culture para grabar bien los decimales
-                CultureInfo actual = Thread.CurrentThread.CurrentCulture;
-                Thread.CurrentThread.CurrentCulture = new CultureInfo("es-AR");
+        //    grpNuevoMotor.Visible = true;
+        //    this.Size = new Size(539, 578);
+        //}
+        //private void btnGrabaMaterial_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        //seteamos el tipo de culture para grabar bien los decimales
+        //        CultureInfo actual = Thread.CurrentThread.CurrentCulture;
+        //        Thread.CurrentThread.CurrentCulture = new CultureInfo("es-AR");
 
-                XML_Material mat = new XML_Material();
-                mat.Descripcion = txtMaterialNombre.Text;
-                mat.Ancho = Decimal.Parse(txtMaterialAncho.Text);
-                mat.Espesor = Decimal.Parse(txtMaterialEspesor.Text);
-                mat.Largo = Decimal.Parse(txtMaterialLargo.Text);
-                //matbuscamos.Id = 0;
+        //        //XML_Material mat = new XML_Material();
+        //        //mat.Descripcion = txtMaterialNombre.Text;
+        //        //mat.Ancho = Decimal.Parse(txtMaterialAncho.Text);
+        //        //mat.Espesor = Decimal.Parse(txtMaterialEspesor.Text);
+        //        //mat.Largo = Decimal.Parse(txtMaterialLargo.Text);
+        //        //matbuscamos.Id = 0;
 
-                // el siguiente id de la lista de materiales
-                List<XML_Material> materiales = (List<XML_Material>)cmbMaterial.DataSource;
-                int maxId = 0;
-                foreach (XML_Material material in materiales)
-                {
-                    if (material.Id > maxId)
-                    {
-                        maxId = material.Id;
-                    }
-                }
+        //        // el siguiente id de la lista de materiales
+        //        List<XML_Material> materiales = (List<XML_Material>)cmbMaterial.DataSource;
+        //        int maxId = 0;
+        //        foreach (XML_Material material in materiales)
+        //        {
+        //            if (material.Id > maxId)
+        //            {
+        //                maxId = material.Id;
+        //            }
+        //        }
 
-                mat.Id = maxId + 1;
+        //        mat.Id = maxId + 1;
 
-                string xmlPath = ConfigurationManager.AppSettings["xmlDbPath"];
+        //        string xmlPath = ConfigurationManager.AppSettings["xmlDbPath"];
 
-                //grabar material
-                XMLdb x = new XMLdb(xmlPath);
-                x.GrabaMaterial(mat);
+        //        //grabar material
+        //        XMLdb x = new XMLdb(xmlPath);
+        //        x.GrabaMaterial(mat);
 
-                MessageBox.Show("El material ha sido dado de alta correctamete", "Alta Material", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //        MessageBox.Show("El material ha sido dado de alta correctamete", "Alta Material", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                this.cmbMaterial.SelectedValueChanged -= new System.EventHandler(this.cmbMaterial_SelectedValueChanged);
+        //        this.cmbMaterial.SelectedValueChanged -= new System.EventHandler(this.cmbMaterial_SelectedValueChanged);
 
-                CargaMateriales();
+        //        CargaMateriales();
 
-                grpNuevoMaterial.Visible = false;
-                this.Size = new Size(539, 482);
-                //devolvemos al thread el formato actual
-                Thread.CurrentThread.CurrentCulture = actual;
+        //        grpNuevoMaterial.Visible = false;
+        //        this.Size = new Size(539, 482);
+        //        //devolvemos al thread el formato actual
+        //        Thread.CurrentThread.CurrentCulture = actual;
 
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Se ha producido un error: " + ex.Message, "Alta Material", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Se ha producido un error: " + ex.Message, "Alta Material", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
 
-        }
-        private void btnGrabaMotor_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                XML_Motor mot = new XML_Motor();
-                mot.Descripcion = txtMotorNombre.Text;
-                //mot.Id = 0;
+        //}
+        //private void btnGrabaMotor_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        XML_Motor mot = new XML_Motor();
+        //        mot.Descripcion = txtMotorNombre.Text;
+        //        //mot.Id = 0;
 
-                //buscamos el siguiente id de la lista de motores
-                List<XML_Motor> motores = (List<XML_Motor>)cmbMotor.DataSource;
-                int maxId = 0;
-                foreach (XML_Motor motor in motores)
-                {
-                    if (motor.Id > maxId)
-                    {
-                        maxId = motor.Id;
-                    }
-                }
+        //        //buscamos el siguiente id de la lista de motores
+        //        List<XML_Motor> motores = (List<XML_Motor>)cmbMotor.DataSource;
+        //        int maxId = 0;
+        //        foreach (XML_Motor motor in motores)
+        //        {
+        //            if (motor.Id > maxId)
+        //            {
+        //                maxId = motor.Id;
+        //            }
+        //        }
 
-                mot.Id = maxId + 1;
+        //        mot.Id = maxId + 1;
 
-                string xmlPath = ConfigurationManager.AppSettings["xmlDbPath"];
+        //        string xmlPath = ConfigurationManager.AppSettings["xmlDbPath"];
 
-                //grabar motores
-                XMLdb x = new XMLdb(xmlPath);
-                x.GrabaMotor(mot);
+        //        //grabar motores
+        //        XMLdb x = new XMLdb(xmlPath);
+        //        x.GrabaMotor(mot);
 
-                MessageBox.Show("El motor ha sido dado de alta correctamete", "Alta Motor", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //        MessageBox.Show("El motor ha sido dado de alta correctamete", "Alta Motor", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                this.cmbMotor.SelectedValueChanged -= new System.EventHandler(this.cmbMotor_SelectedValueChanged);
+        //        this.cmbMotor.SelectedValueChanged -= new System.EventHandler(this.cmbMotor_SelectedValueChanged);
 
-                CargaMotores();
+        //        CargaMotores();
 
-                grpNuevoMotor.Visible = false;
-                this.Size = new Size(539, 482);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Se ha producido un error: " + ex.Message, "Alta Motor", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        private void btnCancelaGrabaMotor_Click(object sender, EventArgs e)
-        {
-            grpNuevoMotor.Visible = false;
-            this.Size = new Size(539, 482);
-        }
-        private void btnCancelaGrabaMat_Click(object sender, EventArgs e)
-        {
-            grpNuevoMaterial.Visible = false;
-            this.Size = new Size(539, 482);
-        }
-        private void btnAltaConfigMatMot_Click(object sender, EventArgs e)
-        {
-            grdConfigMatMot.Visible = false;
-            grpConfigMaterial.Visible = true;
-        }
-        private void btnCancelaConfigMatMot_Click(object sender, EventArgs e)
-        {
-            grdConfigMatMot.Visible = true;
-            grpConfigMaterial.Visible = false;
-        }
+        //        grpNuevoMotor.Visible = false;
+        //        this.Size = new Size(539, 482);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Se ha producido un error: " + ex.Message, "Alta Motor", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //}
+        //private void btnCancelaGrabaMotor_Click(object sender, EventArgs e)
+        //{
+        //    grpNuevoMotor.Visible = false;
+        //    this.Size = new Size(539, 482);
+        //}
+        //private void btnCancelaGrabaMat_Click(object sender, EventArgs e)
+        //{
+        //    grpNuevoMaterial.Visible = false;
+        //    this.Size = new Size(539, 482);
+        //}
+        //private void btnAltaConfigMatMot_Click(object sender, EventArgs e)
+        //{
+        //    grdConfigMatMot.Visible = false;
+        //    grpMotores.Visible = true;
+        //}
+        //private void btnCancelaConfigMatMot_Click(object sender, EventArgs e)
+        //{
+        //    grdConfigMatMot.Visible = true;
+        //    grpMotores.Visible = false;
+        //}
 
-        private void btnGrabaConfigMatMot_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                XML_ConfigMatMot configItem = new XML_ConfigMatMot();
-                configItem.GradosPaso = Decimal.Parse(txtGrados.Text);
-                configItem.IdMaterial = Convert.ToInt32(cmbMaterial.SelectedValue);
-                configItem.IdMotor = Convert.ToInt32(cmbMotor.SelectedValue);
-                configItem.TamVuelta = Decimal.Parse(txtVueltas.Text);
+        //private void btnGrabaConfigMatMot_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        XML_ConfigMatMot configItem = new XML_ConfigMatMot();
+        //        configItem.GradosPaso = Decimal.Parse(txtGradosX.Text);
+        //        configItem.IdMaterial = Convert.ToInt32(cmbMaterial.SelectedValue);
+        //        configItem.IdMotor = Convert.ToInt32(cmbMotor.SelectedValue);
+        //        configItem.TamVuelta = Decimal.Parse(txtVueltasX.Text);
 
-                configItem.Material = EncuentraMaterial(configItem.IdMaterial);
-                configItem.Motor = EncuentraMotor(configItem.IdMotor);
+        //        configItem.Material = EncuentraMaterial(configItem.IdMaterial);
+        //        configItem.Motor = EncuentraMotor(configItem.IdMotor);
 
-                // el siguiente id de la lista de items de configuraciones
-                int maxId = 0;
-                foreach (XML_ConfigMatMot configuracion in ((XML_Config)cmbConfiguracion.SelectedItem).ConfigMatMot)
-                {
-                    if (configuracion.IdConfigMatMot > maxId)
-                    {
-                        maxId = configuracion.IdConfigMatMot;
-                    }
-                }
+        //        // el siguiente id de la lista de items de configuraciones
+        //        int maxId = 0;
+        //        foreach (XML_ConfigMatMot configuracion in ((XML_Config)cmbConfiguracion.SelectedItem).ConfigMatMot)
+        //        {
+        //            if (configuracion.IdConfigMatMot > maxId)
+        //            {
+        //                maxId = configuracion.IdConfigMatMot;
+        //            }
+        //        }
 
-                configItem.IdConfigMatMot = maxId + 1;
+        //        configItem.IdConfigMatMot = maxId + 1;
 
-                ((XML_Config)cmbConfiguracion.SelectedItem).ConfigMatMot.Add(configItem);
+        //        ((XML_Config)cmbConfiguracion.SelectedItem).ConfigMatMot.Add(configItem);
 
-                //cmbConfiguracion_SelectedValueChanged(this, null);
+        //        //cmbConfiguracion_SelectedValueChanged(this, null);
 
-                grdConfigMatMot.DataSource = null;
-                grdConfigMatMot.DataSource = ((XML_Config)cmbConfiguracion.SelectedItem).ConfigMatMot;
-                grdConfigMatMot.AutoResizeColumns();
-                grdConfigMatMot.AllowUserToAddRows = false;
-                grdConfigMatMot.AllowUserToDeleteRows = false;
-                grdConfigMatMot.ReadOnly = true;
-                grdConfigMatMot.Columns["IdMaterial"].Visible = false;
-                grdConfigMatMot.Columns["IdMotor"].Visible = false;
+        //        grdConfigMatMot.DataSource = null;
+        //        grdConfigMatMot.DataSource = ((XML_Config)cmbConfiguracion.SelectedItem).ConfigMatMot;
+        //        grdConfigMatMot.AutoResizeColumns();
+        //        grdConfigMatMot.AllowUserToAddRows = false;
+        //        grdConfigMatMot.AllowUserToDeleteRows = false;
+        //        grdConfigMatMot.ReadOnly = true;
+        //        grdConfigMatMot.Columns["IdMaterial"].Visible = false;
+        //        grdConfigMatMot.Columns["IdMotor"].Visible = false;
 
-                grdConfigMatMot.Visible = true;
-                grpConfigMaterial.Visible = false;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Se ha producido un error: " + ex.Message, "Nuevo Item", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+        //        grdConfigMatMot.Visible = true;
+        //        grpMotores.Visible = false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Se ha producido un error: " + ex.Message, "Nuevo Item", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //}
 
         private char validarCampoDouble(char keyPressed)
         {
@@ -587,12 +603,12 @@ namespace CNCMatic
             e.KeyChar = validarCampoDouble(e.KeyChar);
         }
 
-        private void txtGrados_KeyPress(object sender, KeyPressEventArgs e)
+        private void txtGradosX_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.KeyChar = validarCampoDouble(e.KeyChar);
         }
 
-        private void txtVueltas_KeyPress(object sender, KeyPressEventArgs e)
+        private void txtVueltasX_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.KeyChar = validarCampoDouble(e.KeyChar);
         }
@@ -616,5 +632,29 @@ namespace CNCMatic
         {
             e.KeyChar = validarCampoDouble(e.KeyChar);
         }
+
+        private void txtVueltasY_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.KeyChar = validarCampoDouble(e.KeyChar);
+        }
+
+        private void txtGradosY_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.KeyChar = validarCampoDouble(e.KeyChar);
+        }
+
+        private void txtVueltasZ_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.KeyChar = validarCampoDouble(e.KeyChar);
+        }
+
+        private void txtGradosZ_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.KeyChar = validarCampoDouble(e.KeyChar);
+        }
+
+
+
+
     }
 }

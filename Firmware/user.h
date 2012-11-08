@@ -46,7 +46,7 @@ void MoveToOrigin(void);
 /******************************************/
 /*   	  Process String Functions	      */
 /******************************************/
-double GetValueParameter(char, char[]);
+int GetValueParameter(char, char[]);
 bool_t HasValueParameter(char, char[]);
 bool_t ConfigureMachine(char[]);
 bool_t isNumber(char[]);
@@ -70,9 +70,9 @@ void emergencyStopHandler(void);
 /****************************/
 /*	Step on Specific Axis	*/
 /****************************/
-void StepOnX(bool_t);
-void StepOnY(bool_t);
-void StepOnZ(bool_t);
+void StepOnX(int);
+void StepOnY(int);
+void StepOnZ(int);
 
 void user(void);
 #endif

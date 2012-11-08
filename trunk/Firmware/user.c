@@ -26,12 +26,12 @@ stepsPosition_t currentStepsPosition;
 /********************************************************************/
 void CustomG(char code[])
 {
-	double d = HasValueParameter('D', code) ? GetValueParameter('D', code) : MAXFEEDRATE;
+	int d = HasValueParameter('D', code) ? GetValueParameter('D', code) : MAXFEEDRATE;
 	ProcessLinearMovement(GetTargetStepsPosition(code), d);
 }
 void G04(char code[])
 {
-	double miliseconds = GetValueParameter('P', code);
+	int miliseconds = GetValueParameter('P', code);
 	if(miliseconds < 1000)
 	{
 		Delay1MSx(miliseconds);
@@ -57,15 +57,15 @@ void M02(char code[])
 }
 void M03(char code[])
 {
-	PORTBbits.RB6 = 1;
+	LATBbits.LATB6 = 1;
 }
 void M04(char code[])
 {
-	PORTBbits.RB6 = 1;
+	LATBbits.LATB6 = 1;
 }
 void M05(char code[])
 {
-	PORTBbits.RB6 = 0;
+	LATBbits.LATB6 = 0;
 }
 // function array of MCode commands
 _func mCodes[6] = {	M00,	NULL,	M02,	M03,	M04,	M05 };
@@ -76,16 +76,16 @@ int mCodesCount = sizeof(mCodes) / sizeof(mCodes[0]);
 /********************************************************************/
 int GetFreeCode(char string[])
 {
-	if( strstrrampgm(string, (const rom char far *)"+X") ) return 0;
-	if( strstrrampgm(string, (const rom char far *)"-X") ) return 1;
-	if( strstrrampgm(string, (const rom char far *)"+Y") ) return 2;
-	if( strstrrampgm(string, (const rom char far *)"-Y") ) return 3;
-	if( strstrrampgm(string, (const rom char far *)"+Z") ) return 4;
-	if( strstrrampgm(string, (const rom char far *)"-Z") ) return 5;
+	if( strstrrampgm(string, (const rom char far *)"+X") != NULL ) return 1;
+	if( strstrrampgm(string, (const rom char far *)"-X") != NULL ) return 2;
+	if( strstrrampgm(string, (const rom char far *)"+Y") != NULL ) return 3;
+	if( strstrrampgm(string, (const rom char far *)"-Y") != NULL ) return 4;
+	if( strstrrampgm(string, (const rom char far *)"+Z") != NULL ) return 5;
+	if( strstrrampgm(string, (const rom char far *)"-Z") != NULL ) return 6;
 	
 	return -1;
 }
-double GetValueParameter(char name, char command[])
+int GetValueParameter(char name, char command[])
 {
 	int i, count = strlen(command);
 	char* ptr;
@@ -99,7 +99,7 @@ double GetValueParameter(char name, char command[])
 			ptr = &temp[i + 1];
 			for(++i; (temp[i] != ' ') && (i < count); i++) ;
 			temp[i] = '\0';
-			return atof(ptr);
+			return atoi(ptr);
 		}
 	}
 	return 0;
@@ -201,11 +201,48 @@ void ProcessLinearMovement(stepsPosition_t targetStepsPosition, long delay)
 {
 	long xCounter, yCounter, zCounter;
 	long maxDeltaSteps;
-	
+	bool_t xClock = false, yClock = false, zClock = false;
+	bool_t xClockwise, yClockwise, zClockwise;
 	stepsPosition_t deltaStepsPosition;
-	deltaStepsPosition.x = targetStepsPosition.x > currentStepsPosition.x ? targetStepsPosition.x - currentStepsPosition.x : currentStepsPosition.x - targetStepsPosition.x;
-	deltaStepsPosition.y = targetStepsPosition.y > currentStepsPosition.y ? targetStepsPosition.y - currentStepsPosition.y : currentStepsPosition.y - targetStepsPosition.y;
-	deltaStepsPosition.z = targetStepsPosition.z > currentStepsPosition.z ? targetStepsPosition.z - currentStepsPosition.z : currentStepsPosition.z - targetStepsPosition.z;
+	
+	if (targetStepsPosition.x > currentStepsPosition.x)
+	{
+		deltaStepsPosition.x = targetStepsPosition.x - currentStepsPosition.x;
+		xClockwise = false;
+		LATDbits.LATD2 = 0;
+	}
+	else
+	{
+		deltaStepsPosition.x = currentStepsPosition.x - targetStepsPosition.x;
+		xClockwise = true;
+		LATDbits.LATD2 = 1;
+	}
+	
+	if(targetStepsPosition.y > currentStepsPosition.y)
+	{
+		deltaStepsPosition.y = targetStepsPosition.y - currentStepsPosition.y;
+		yClockwise = true;
+		LATCbits.LATC1 = 1;
+	}
+	else
+	{
+		deltaStepsPosition.y = currentStepsPosition.y - targetStepsPosition.y;
+		yClockwise = false;
+		LATCbits.LATC1 = 0;
+	}
+	
+	if(targetStepsPosition.z > currentStepsPosition.z)
+	{
+		deltaStepsPosition.z = targetStepsPosition.z - currentStepsPosition.z;
+		zClockwise = false;
+		LATAbits.LATA1 = 0;
+	}
+	else
+	{
+		deltaStepsPosition.z = currentStepsPosition.z - targetStepsPosition.z;
+		zClockwise = true;
+		LATAbits.LATA1 = 1;
+	}
 	
 	maxDeltaSteps = deltaStepsPosition.x > deltaStepsPosition.y ? deltaStepsPosition.x : deltaStepsPosition.y;
 	maxDeltaSteps = maxDeltaSteps > deltaStepsPosition.z ? maxDeltaSteps : deltaStepsPosition.z;
@@ -213,36 +250,33 @@ void ProcessLinearMovement(stepsPosition_t targetStepsPosition, long delay)
 	yCounter = (long)ceil(-maxDeltaSteps / 2);
 	zCounter = (long)ceil(-maxDeltaSteps / 2);
 	
-	// Seteamos bit de sentido de giro
-	PORTDbits.RD2 = (targetStepsPosition.x > currentStepsPosition.x) ? 1 : 0;
-	PORTCbits.RC1 = (targetStepsPosition.y > currentStepsPosition.y) ? 1 : 0;
-	PORTAbits.RA1 = (targetStepsPosition.z > currentStepsPosition.z) ? 1 : 0;
-	
 	// seteo a 1 el enable de los motores
-	PORTEbits.RE2 = 1;
+	LATEbits.LATE2 = 1;
 	while( (targetStepsPosition.x != currentStepsPosition.x) || (targetStepsPosition.y != currentStepsPosition.y) || (targetStepsPosition.z != currentStepsPosition.z) )
 	{
 		// emergency stop
-		//if( PORTBbits.RB0 ) { goto emergencyStop; }
+		if( PORTBbits.RB0 ) { goto emergencyStop; }
 		
 		if(targetStepsPosition.x != currentStepsPosition.x)
 		{
 			xCounter += deltaStepsPosition.x;
 			if(xCounter > 0)
 			{
-				if( PORTDbits.RD4 )
+				if( xClock )
 				{
-					PORTDbits.RD4 = 0;
+					LATDbits.LATD4 = 0;
+					xClock = false;
 					// limit sensor AXIS X
-					//if( PORTBbits.RB1 ) { goto limitSensorAxisX; }
+					if( PORTBbits.RB1 ) { goto limitSensorAxisX; }
 					
 					xCounter -= maxDeltaSteps;
-					currentStepsPosition.x += PORTDbits.RD2 ? 1 : -1;
+					if(xClockwise) currentStepsPosition.x--; else currentStepsPosition.x++;
 				}
 				else
 				{
 					xCounter -= maxDeltaSteps;
-					PORTDbits.RD4 = 1;
+					LATDbits.LATD4 = 1;
+					xClock = true;
 				}
 			}			
 		}
@@ -252,21 +286,23 @@ void ProcessLinearMovement(stepsPosition_t targetStepsPosition, long delay)
 			yCounter += deltaStepsPosition.y;
 			if(yCounter > 0)
 			{
-				if( PORTCbits.RC2 )
+				if( yClock )
 				{
-					PORTCbits.RC2 = 0;
+					LATCbits.LATC2 = 0;
+					yClock = false;
 					// limit sensor AXIS Y
-					//if( PORTBbits.RB2 ) { goto limitSensorAxisY; }
+					if( PORTBbits.RB2 ) { goto limitSensorAxisY; }
 					
 					yCounter -= maxDeltaSteps;
-					currentStepsPosition.y += PORTCbits.RC1 ? 1 : -1;
+					if(yClockwise) currentStepsPosition.y++; else currentStepsPosition.y--;
 				}
 				else
 				{
 					yCounter -= maxDeltaSteps;
-					PORTCbits.RC2 = 1;
+					LATCbits.LATC2 = 1;
+					yClock = true;
 				}
-			}			
+			}
 		}
 		
 		if(targetStepsPosition.z != currentStepsPosition.z)
@@ -274,19 +310,21 @@ void ProcessLinearMovement(stepsPosition_t targetStepsPosition, long delay)
 			zCounter += deltaStepsPosition.z;
 			if(zCounter > 0)
 			{
-				if( PORTAbits.RA2 )
+				if( zClock )
 				{
-					PORTAbits.RA2 = 0;
+					LATAbits.LATA2 = 0;
+					zClock = false;
 					// limit sensor AXIS Y
-					//if( PORTBbits.RB3 ) { goto limitSensorAxisZ; }
+					if( PORTBbits.RB3 ) { goto limitSensorAxisZ; }
 					
 					zCounter -= maxDeltaSteps;
-					currentStepsPosition.z += PORTAbits.RA1 ? 1 : -1;
+					if(zClockwise) currentStepsPosition.z--; else currentStepsPosition.z++;
 				}
 				else
 				{
 					zCounter -= maxDeltaSteps;
-					PORTAbits.RA2 = 1;
+					LATAbits.LATA2 = 1;
+					zClock = true;
 				}
 			}	
 		}
@@ -311,7 +349,7 @@ void ProcessLinearMovement(stepsPosition_t targetStepsPosition, long delay)
 		goto end;
 	end:
 		// seteo a 0 el enable de los motores
-		PORTEbits.RE2 = 0;
+		LATEbits.LATE2 = 0;
 }
 
 /*********************************************************************************/
@@ -334,19 +372,26 @@ stepsPosition_t GetTargetStepsPosition(char code[])
 void limitSensorAxisXHandler()
 {
 	// invierto el sentido de giro
-	PORTDbits.RD2 = ~PORTDbits.RD2;
+	if(LATDbits.LATD2)
+	{
+		LATDbits.LATD2 = 0;
+	}
+	else
+	{
+		LATDbits.LATD2 = 1;
+	}
 
 	do
 	{
 		// tiro un paso
-		PORTDbits.RD4 = 1;
+		LATDbits.LATD4 = 1;
 		Delay1MSx(2);
-		PORTDbits.RD4 = 0;
+		LATDbits.LATD4 = 0;
 		Delay1MSx(2);
 		
 		if(machineState != CNCMATICCONNECTED)
 		{
-			currentStepsPosition.x += PORTDbits.RD2 ? 1 : -1;
+			currentStepsPosition.x += LATDbits.LATD2 ? -1 : 1;
 		}
 	} while( PORTBbits.RB1 );
 	
@@ -355,20 +400,28 @@ void limitSensorAxisXHandler()
 }
 void limitSensorAxisYHandler()
 {
+	char mesage[2];
 	// invierto el sentido de giro
-	PORTCbits.RC1 = ~PORTCbits.RC1;
+	if(LATCbits.LATC1)
+	{
+		LATCbits.LATC1 = 0;
+	}
+	else
+	{
+		LATCbits.LATC1 = 1;
+	}
 	
 	do
 	{
 		// tiro un paso
-		PORTCbits.RC2 = 1;
+		LATCbits.LATC2 = 1;
 		Delay1MSx(2);
-		PORTCbits.RC2 = 0;
+		LATCbits.LATC2 = 0;
 		Delay1MSx(2);
 		
 		if(machineState != CNCMATICCONNECTED)
 		{
-			currentStepsPosition.y += PORTCbits.RC1 ? 1 : -1;
+			currentStepsPosition.y += LATCbits.LATC1 ? 1 : -1;
 		}
 	} while(PORTBbits.RB2);
 
@@ -378,19 +431,26 @@ void limitSensorAxisYHandler()
 void limitSensorAxisZHandler()
 {
 	// invierto el sentido de giro
-	PORTAbits.RA1 = ~PORTAbits.RA1;
+	if(PORTAbits.RA1)
+	{
+		LATAbits.LATA1 = 0;
+	}
+	else
+	{
+		LATAbits.LATA1 = 1;
+	}
 	
 	do
 	{
 		// tiro un paso
-		PORTAbits.RA2 = 1;
+		LATAbits.LATA2 = 1;
 		Delay1MSx(2);
-		PORTAbits.RA2 = 0;
+		LATAbits.LATA2 = 0;
 		Delay1MSx(2);
 		
 		if(machineState != CNCMATICCONNECTED)
 		{
-			currentStepsPosition.z += PORTAbits.RA1 ? 1 : -1;
+			currentStepsPosition.z += PORTAbits.RA1 ? -1 : 1;
 		}		
 	} while(PORTBbits.RB3);
 
@@ -405,55 +465,63 @@ void emergencyStopHandler()
 /********************************************************/
 /*		Functions to move over a specified axis 		*/
 /********************************************************/
-void StepOnX(bool_t clockwise)
+void StepOnX(int clockwise)
 {
-	PORTDbits.RD2 = clockwise;
+	char mesage[2];
+	
+	if(clockwise == 1) LATDbits.LATD2 = 1; else LATDbits.LATD2 = 0;
+	
 	// tiro un paso
-	PORTDbits.RD4 = 1;
-	Delay1MSx(2);
-	PORTDbits.RD4 = 0;
+	LATDbits.LATD4 = 1;
+	Delay1MSx(1);
+	LATDbits.LATD4 = 0;
+	Delay1MSx(1);
 	
 	if(machineState != CNCMATICCONNECTED)
 	{
-		currentStepsPosition.x += clockwise ? 1 : -1;
+		if(clockwise == 1) currentStepsPosition.x--; else currentStepsPosition.x++;
 	}
 	
 	// limit sensor AXIS X
-	//if( PORTBbits.RB1 ) { limitSensorAxisXHandler(); }
+	if( PORTBbits.RB1 ) { limitSensorAxisXHandler(); }
 }
 
-void StepOnY(bool_t clockwise)
+void StepOnY(int clockwise)
 {
-	PORTCbits.RC1 = clockwise;
+	if(clockwise == 1) LATCbits.LATC1 = 1; else LATCbits.LATC1 = 0;
+	
 	// tiro un paso
-	PORTCbits.RC2 = 1;
-	Delay1MSx(2);
-	PORTCbits.RC2 = 0;
+	LATCbits.LATC2 = 1;
+	Delay1MSx(1);
+	LATCbits.LATC2 = 0;
+	Delay1MSx(1);
 	
 	if(machineState != CNCMATICCONNECTED)
 	{
-		currentStepsPosition.y += clockwise ? 1 : -1;
+		if(clockwise == 1) currentStepsPosition.y++; else currentStepsPosition.y--;
 	}
 	
 	// limit sensor AXIS Y
-	//if( PORTBbits.RB2 ) { limitSensorAxisYHandler(); }
+	if( PORTBbits.RB2 ) { limitSensorAxisYHandler(); }
 }
 
-void StepOnZ(bool_t clockwise)
+void StepOnZ(int clockwise)
 {
-	PORTAbits.RA1 = clockwise;
+	if(clockwise == 1) LATAbits.LATA1 = 1; else LATAbits.LATA1 = 0;
+	
 	// tiro un paso
-	PORTAbits.RA2 = 1;
-	Delay1MSx(2);
-	PORTAbits.RA2 = 0;
+	LATAbits.LATA2 = 1;
+	Delay1MSx(1);
+	LATAbits.LATA2 = 0;
+	Delay1MSx(1);
 	
 	if(machineState != CNCMATICCONNECTED)
 	{
-		currentStepsPosition.z += clockwise ? 1 : -1;
+		if(clockwise == 1) currentStepsPosition.z--; else currentStepsPosition.z++;
 	}
 	
 	// limit sensor AXIS Z
-	//if( PORTBbits.RB3 ) { limitSensorAxisZHandler(); }
+	if( PORTBbits.RB3 ) { limitSensorAxisZHandler(); }
 }
 
 /********************************************************/
@@ -462,36 +530,39 @@ void StepOnZ(bool_t clockwise)
 void MoveToOrigin()
 {
 	// seteo a 1 el enable de los motores
-	PORTEbits.RE2 = 1;
+	LATEbits.LATE2 = 1;
 	
 	machineState = CNCMATICCONNECTED;
-	while(!limitSensorZ && !PORTBbits.RB0)
+	/*while(!limitSensorZ && !PORTBbits.RB0)*/
+	while(!limitSensorZ)
 	{
-		StepOnZ(false);
+		StepOnZ(1);
 	}
 	machineState = CNCMATICCONNECTED;
-	while(!limitSensorY && !PORTBbits.RB0)
+	/*while(!limitSensorY && !PORTBbits.RB0)*/
+	while(!limitSensorY)
 	{
-		StepOnY(false);
+		StepOnY(0);
 	}
 	machineState = CNCMATICCONNECTED;
-	while(!limitSensorX && !PORTBbits.RB0)
+	/*while(!limitSensorX && !PORTBbits.RB0)*/
+	while(!limitSensorX)
 	{
-		StepOnX(false);
+		StepOnX(1);
 	}
 	// emergency stop
-	if( PORTBbits.RB0 ) { goto emergencyStop; }
+	/*if( PORTBbits.RB0 ) { goto emergencyStop; }*/
 	
 	limitSensorX = limitSensorY = limitSensorZ = false;
 	currentStepsPosition = CreateStepsPosition(0, 0, 0);
-	goto end;
+	/*goto end;
 	
 	emergencyStop:
 		emergencyStopHandler();
 		goto end;
-	end:
-		// seteo a 0 el enable de los motores
-		PORTEbits.RE2 = 0;
+	end:*/
+	// seteo a 0 el enable de los motores
+	LATEbits.LATE2 = 0;
 }
 
 void user(void)
@@ -502,7 +573,7 @@ void user(void)
 	double stepDegrees, distancePerRevolution;
 	
 	//Blink the LEDs according to the USB device status
-	BlinkUSBStatus();
+	//BlinkUSBStatus();
 	
 	// User Application USB tasks
 	if( (USBDeviceState < CONFIGURED_STATE) || (USBSuspendControl == 1) ) return;
@@ -566,6 +637,7 @@ void user(void)
 					else
 					{
 						strcpypgm2ram(message, (const rom char far *)"PO");
+						machineState = WAITINGCOMMAND;
 					}
 					
 					putUSBUSART(message, strlen(message));
@@ -665,14 +737,14 @@ void user(void)
 					if(freeCode != -2)
 					{
 						// seteo a 1 el enable de los motores
-						PORTEbits.RE2 = 1;
+						LATEbits.LATE2 = 1;
 						
-							 if( freeCode == 0)	{	StepOnX(true);	}
-						else if( freeCode == 1) {	StepOnX(false);	}
-						else if( freeCode == 2) {	StepOnY(true);	}
-						else if( freeCode == 3) {	StepOnY(false);	}
-						else if( freeCode == 4) {	StepOnZ(true);	}
-						else if( freeCode == 5) {	StepOnZ(false);	}
+							 if( freeCode == 1)	{	StepOnX(0);	}
+						else if( freeCode == 2) {	StepOnX(1);	}
+						else if( freeCode == 3) {	StepOnY(1);	}
+						else if( freeCode == 4) {	StepOnY(0);	}
+						else if( freeCode == 5) {	StepOnZ(0);	}
+						else if( freeCode == 6) {	StepOnZ(1);	}
 						
 						if(machineState == LIMITSENSOR)
 						{
@@ -681,31 +753,32 @@ void user(void)
 							sprintf(message, (const rom char far *)"ERR:SFC_X%ld Y%ld Z%ld", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
 							putUSBUSART(message, strlen(message));
 							machineState = WAITINGCOMMAND;
-						}
+						}						
+					
 						// seteo a 0 el enable de los motores
-						PORTEbits.RE2 = 0;
+						LATEbits.LATE2 = 0;
 					}
 					break;
 
 				case CNCMATICCONNECTED:
-					//MoveToOrigin();
-					//if(machineState == EMERGENCYSTOP)
-					//{
-					//	sprintf(message, (const rom char far *)"ERR:PE");
-					//	machineState = SERIALPORTCONNECTED;
-					//}
-					//else
-					//{
-					//	strcpypgm2ram(message, (const rom char far *)"PO");
-					//	machineState = WAITINGCOMMAND;
-					//}
+					MoveToOrigin();
+					if(machineState == EMERGENCYSTOP)
+					{
+						sprintf(message, (const rom char far *)"ERR:PE");
+						machineState = SERIALPORTCONNECTED;
+					}
+					else
+					{
+						strcpypgm2ram(message, (const rom char far *)"PO");
+						machineState = WAITINGCOMMAND;
+					}
 					
-					
+					/*
 					limitSensorX = limitSensorY = limitSensorZ = false;
 					currentStepsPosition = CreateStepsPosition(0, 0, 0);
 					strcpypgm2ram(message, (const rom char far *)"PO");
 					machineState = WAITINGCOMMAND;
-					
+					*/
 					
 					putUSBUSART(message, strlen(message));
 					break;

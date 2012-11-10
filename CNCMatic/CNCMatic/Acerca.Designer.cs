@@ -137,7 +137,7 @@
             this.textBoxDescription.Size = new System.Drawing.Size(271, 126);
             this.textBoxDescription.TabIndex = 23;
             this.textBoxDescription.TabStop = false;
-            this.textBoxDescription.Text = "Software desarrollado integramente por estudiantes de Ing. en Sistemas de Informa" +
+            this.textBoxDescription.Text = "Software desarrollado por estudiantes de Ing. en Sistemas de Informa" +
                 "ción UTN-FRBA para importación de archivos CAD y comunicación con CNC para fresa" +
                 "do.";
             // 

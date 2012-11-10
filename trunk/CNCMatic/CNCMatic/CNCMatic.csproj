@@ -156,7 +156,7 @@
     </None>
     <None Include="ClassDiagram1.cd" />
     <None Include="img\flecha_IZQ.jpg" />
-	<Content Include="config.xml">
+    <Content Include="config.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\Lathe.xml">
@@ -173,6 +173,9 @@
     <Content Include="img\gear.ico" />
     <Content Include="img\logo teCNoC.jpg" />
     <Content Include="img\stop.png" />
+    <Content Include="RegionalSettings.reg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Resources\Refresh-icon.png" />
     <None Include="Resources\brush-icon %281%29.png" />
     <None Include="Resources\Cancel-icon.png" />
@@ -198,6 +201,7 @@
     <Content Include="Resources\screens4.bmp" />
     <Content Include="Resources\Select.png" />
     <Content Include="Resources\ToolLayers.bmp" />
+    <None Include="Resources\trash-icon.png" />
     <Content Include="Resources\ViewFence.bmp" />
     <Content Include="Resources\ViewFit.bmp" />
     <Content Include="Resources\ViewFront.bmp" />

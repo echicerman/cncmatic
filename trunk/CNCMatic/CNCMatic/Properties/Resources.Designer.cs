@@ -354,6 +354,13 @@ namespace CNCMatic.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap trash_icon {
+            get {
+                object obj = ResourceManager.GetObject("trash-icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ViewFence {
             get {
                 object obj = ResourceManager.GetObject("ViewFence", resourceCulture);

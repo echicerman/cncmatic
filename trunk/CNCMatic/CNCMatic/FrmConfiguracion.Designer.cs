@@ -54,7 +54,6 @@
             this.lblMaxZ = new System.Windows.Forms.Label();
             this.lblMaxY = new System.Windows.Forms.Label();
             this.lblMaxX = new System.Windows.Forms.Label();
-            this.btnRefresh = new System.Windows.Forms.Button();
             this.grpTipoProgr = new System.Windows.Forms.GroupBox();
             this.rbtRelativa = new System.Windows.Forms.RadioButton();
             this.lblTipoProg = new System.Windows.Forms.Label();
@@ -70,8 +69,10 @@
             this.lblNombre = new System.Windows.Forms.Label();
             this.txtNombrePerfil = new System.Windows.Forms.TextBox();
             this.btnGrabar = new System.Windows.Forms.Button();
-            this.btnCancelar = new System.Windows.Forms.Button();
+            this.btnEliminar = new System.Windows.Forms.Button();
             this.btnNuevo = new System.Windows.Forms.Button();
+            this.btnCancelar = new System.Windows.Forms.Button();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.grpConfGral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtMaxZ)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMaxY)).BeginInit();
@@ -360,17 +361,6 @@
             this.lblMaxX.TabIndex = 24;
             this.lblMaxX.Text = "MaxX:";
             // 
-            // btnRefresh
-            // 
-            this.btnRefresh.Image = global::CNCMatic.Properties.Resources.Refresh_icon;
-            this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnRefresh.Location = new System.Drawing.Point(459, 51);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(31, 23);
-            this.btnRefresh.TabIndex = 6;
-            this.btnRefresh.UseVisualStyleBackColor = true;
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
-            // 
             // grpTipoProgr
             // 
             this.grpTipoProgr.Controls.Add(this.rbtRelativa);
@@ -517,7 +507,7 @@
             this.btnGrabar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGrabar.Image = global::CNCMatic.Properties.Resources.save1;
             this.btnGrabar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnGrabar.Location = new System.Drawing.Point(199, 346);
+            this.btnGrabar.Location = new System.Drawing.Point(100, 343);
             this.btnGrabar.Name = "btnGrabar";
             this.btnGrabar.Size = new System.Drawing.Size(138, 31);
             this.btnGrabar.TabIndex = 2;
@@ -526,15 +516,19 @@
             this.btnGrabar.UseVisualStyleBackColor = true;
             this.btnGrabar.Click += new System.EventHandler(this.btnGrabar_Click);
             // 
-            // btnCancelar
+            // btnEliminar
             // 
-            this.btnCancelar.Image = global::CNCMatic.Properties.Resources.Cancel_icon;
-            this.btnCancelar.Location = new System.Drawing.Point(471, 2);
-            this.btnCancelar.Name = "btnCancelar";
-            this.btnCancelar.Size = new System.Drawing.Size(40, 40);
-            this.btnCancelar.TabIndex = 4;
-            this.btnCancelar.UseVisualStyleBackColor = true;
-            this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
+            this.btnEliminar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEliminar.Image = global::CNCMatic.Properties.Resources.trash_icon;
+            this.btnEliminar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnEliminar.Location = new System.Drawing.Point(287, 343);
+            this.btnEliminar.Name = "btnEliminar";
+            this.btnEliminar.Size = new System.Drawing.Size(138, 31);
+            this.btnEliminar.TabIndex = 7;
+            this.btnEliminar.Text = "Eliminar Perfil";
+            this.btnEliminar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnEliminar.UseVisualStyleBackColor = true;
+            this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
             // 
             // btnNuevo
             // 
@@ -546,12 +540,34 @@
             this.btnNuevo.UseVisualStyleBackColor = true;
             this.btnNuevo.Click += new System.EventHandler(this.btnNuevo_Click);
             // 
+            // btnCancelar
+            // 
+            this.btnCancelar.Image = global::CNCMatic.Properties.Resources.Cancel_icon;
+            this.btnCancelar.Location = new System.Drawing.Point(471, 2);
+            this.btnCancelar.Name = "btnCancelar";
+            this.btnCancelar.Size = new System.Drawing.Size(40, 40);
+            this.btnCancelar.TabIndex = 4;
+            this.btnCancelar.UseVisualStyleBackColor = true;
+            this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Image = global::CNCMatic.Properties.Resources.Refresh_icon;
+            this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnRefresh.Location = new System.Drawing.Point(459, 51);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(31, 23);
+            this.btnRefresh.TabIndex = 6;
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
             // FrmConfiguracion
             // 
             this.AcceptButton = this.btnGrabar;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(523, 386);
+            this.Controls.Add(this.btnEliminar);
             this.Controls.Add(this.btnNuevo);
             this.Controls.Add(this.btnCancelar);
             this.Controls.Add(this.txtNombrePerfil);
@@ -628,5 +644,6 @@
         private System.Windows.Forms.TextBox txtGradosY;
         private System.Windows.Forms.TextBox txtVueltasY;
         private System.Windows.Forms.Label lblMotorX;
+        private System.Windows.Forms.Button btnEliminar;
     }
 }

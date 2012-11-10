@@ -9,6 +9,7 @@ using System.Configuration;
 using Configuracion;
 using System.Globalization;
 using System.Threading;
+using log4net;
 
 namespace CNCMatic
 {
@@ -23,9 +24,12 @@ namespace CNCMatic
         {
             try
             {
-                GrabaConfiguracionGeneral();
+                if (validamosCampos())
+                {
+                    GrabaConfiguracionGeneral();
 
-                this.Close();
+                    this.Close();
+                }
             }
             catch (Exception ex)
             {
@@ -33,9 +37,73 @@ namespace CNCMatic
             }
 
         }
+        private bool validamosCampos()
+        {
+            bool ok = true;
 
+            if (txtMaxX.Text == "" || txtMaxY.Text == "" || txtMaxZ.Text == "")
+            {
+                ok = false;
+                MessageBox.Show("Los maximos de los ejes no pueden ser cero o negativos", "Validacion", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return ok;
+            }
+
+            //si es alta
+            if (!cmbConfiguracion.Visible && txtNombrePerfil.Text.Trim() == "")
+            {
+                ok = false;
+                MessageBox.Show("Por favor ingrese un nombre para el nuevo perfil", "Validacion", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return ok;
+            }
+
+            if (txtLargoSeccion.Text.Trim() == "")
+            {
+                ok = false;
+                MessageBox.Show("Por favor ingrese un valor para el largo de la seccion de curvas", "Validacion", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return ok;
+            }
+
+            if (txtVelocMov.Text.Trim() == "")
+            {
+                ok = false;
+                MessageBox.Show("Por favor ingrese un valor para la velocidad de movimiento", "Validacion", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return ok;
+            }
+
+            if (txtAltura.Text.Trim() == "")
+            {
+                ok = false;
+                MessageBox.Show("Por favor ingrese un valor para la altura de retiro de la herramienta", "Validacion", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return ok;
+            }
+
+            if (txtGradosX.Text.Trim() == "" || txtVueltasX.Text.Trim() == "")
+            {
+                ok = false;
+                MessageBox.Show("Por favor complete los parametros para el motor del eje X", "Validacion", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return ok;
+            }
+
+            if (txtGradosY.Text.Trim() == "" || txtVueltasY.Text.Trim() == "")
+            {
+                ok = false;
+                MessageBox.Show("Por favor complete los parametros para el motor del eje Y", "Validacion", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return ok;
+            }
+
+            if (txtGradosZ.Text.Trim() == "" || txtVueltasZ.Text.Trim() == "")
+            {
+                ok = false;
+                MessageBox.Show("Por favor complete los parametros para el motor del eje Z", "Validacion", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return ok;
+            }
+
+            return ok;
+        }
         private void FrmConfiguracion_Load(object sender, EventArgs e)
         {
+            LimpiarControles();
+            
             buscarPuertos();
 
             //CargaMotores();
@@ -94,6 +162,7 @@ namespace CNCMatic
             List<XML_Config> configs = x.LeeConfiguracion();
 
             //ActualizaDescripcionesMatMot(configs);
+            this.cmbConfiguracion.SelectedValueChanged -= new System.EventHandler(this.cmbConfiguracion_SelectedValueChanged);
 
             cmbConfiguracion.DataSource = configs;
             cmbConfiguracion.DisplayMember = "Descripcion";
@@ -231,10 +300,19 @@ namespace CNCMatic
 
                 //grabamos en la configuracion que esta es la ultima configuracion seleccionada
                 //ConfigurationManager.AppSettings["idLastConfig"]=config.Id.ToString();
+                log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo(AppDomain.CurrentDomain.BaseDirectory + @"config\CNCmatic.Logger.Config.xml"));
+                ILog logFile;
+                logFile = log4net.LogManager.GetLogger("CNCmatic");
+                logFile.Info("Abriendo seccion");
+                
                 Configuration appconfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                logFile.Info("Seteando valor");
                 appconfig.AppSettings.Settings["idLastConfig"].Value = config.Id.ToString();
+                logFile.Info("grabando valor");
                 appconfig.Save(ConfigurationSaveMode.Modified, true);
+                logFile.Info("actualizando seccion");
                 ConfigurationManager.RefreshSection("appSettings");
+                logFile.Info("seccion actualizada");
 
                 //CargaConfiguracionGeneral();
 
@@ -265,7 +343,6 @@ namespace CNCMatic
                 portComboBox.Items.Add(s);
             }
         }
-
         private void cmbConfiguracion_SelectedValueChanged(object sender, EventArgs e)
         {
             XML_Config config = (XML_Config)cmbConfiguracion.SelectedItem;
@@ -585,7 +662,7 @@ namespace CNCMatic
         //        MessageBox.Show("Se ha producido un error: " + ex.Message, "Nuevo Item", MessageBoxButtons.OK, MessageBoxIcon.Error);
         //    }
         //}
-
+        #region validaciones
         private char validarCampoDouble(char keyPressed)
         {
             if (
@@ -661,6 +738,44 @@ namespace CNCMatic
         private void txtGradosZ_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.KeyChar = validarCampoDouble(e.KeyChar);
+        }
+        #endregion
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (DialogResult.Yes == MessageBox.Show("¿Esta seguro de eliminar el perfil de configuracion actual?", "Eliminar Perfil", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1))
+                {
+                    //cambiamos el cursor a waiting
+                    Cursor.Current = Cursors.WaitCursor;
+
+                    string xmlPath = ConfigurationManager.AppSettings["xmlDbPath"];
+                    XMLdb x = new XMLdb(xmlPath);
+
+                    //traemos la config seleccionada
+                    XML_Config configActual = (XML_Config)cmbConfiguracion.SelectedItem;
+
+                    //eliminamos la config
+                    x.EliminarConfiguracion(configActual);
+
+                    //cambiamos el cursor al normal
+                    Cursor.Current = Cursors.Default;
+
+                    MessageBox.Show("Perfil eliminado correctamente", "Eliminar Perfil", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    //cargamos nuevamente el formulario
+                    FrmConfiguracion_Load(this, null);
+                    
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //cambiamos el cursor al normal
+                Cursor.Current = Cursors.Default;
+
+                MessageBox.Show("Se ha producido un error:" + ex.Message, "Eliminar Perfil", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 

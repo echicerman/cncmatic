@@ -34,9 +34,15 @@
             this.importaG = new System.Windows.Forms.OpenFileDialog();
             this.txtPreview = new System.Windows.Forms.TextBox();
             this.gbMovZ = new System.Windows.Forms.GroupBox();
+            this.lblZa = new System.Windows.Forms.Label();
+            this.lblZr = new System.Windows.Forms.Label();
             this.btnMovZ_Aba = new System.Windows.Forms.Button();
             this.btnMovZ_Arr = new System.Windows.Forms.Button();
             this.gbMovXY = new System.Windows.Forms.GroupBox();
+            this.lblYr = new System.Windows.Forms.Label();
+            this.lblYa = new System.Windows.Forms.Label();
+            this.lblXr = new System.Windows.Forms.Label();
+            this.lblXa = new System.Windows.Forms.Label();
             this.btnMovXY_Der = new System.Windows.Forms.Button();
             this.btnMovXY_Izq = new System.Windows.Forms.Button();
             this.btnMovXY_Aba = new System.Windows.Forms.Button();
@@ -113,12 +119,6 @@
             this.CodeTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnLimpiar = new System.Windows.Forms.Button();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-            this.lblXa = new System.Windows.Forms.Label();
-            this.lblXr = new System.Windows.Forms.Label();
-            this.lblYa = new System.Windows.Forms.Label();
-            this.lblYr = new System.Windows.Forms.Label();
-            this.lblZr = new System.Windows.Forms.Label();
-            this.lblZa = new System.Windows.Forms.Label();
             this.gbMovZ.SuspendLayout();
             this.gbMovXY.SuspendLayout();
             this.menu.SuspendLayout();
@@ -172,6 +172,28 @@
             this.gbMovZ.TabStop = false;
             this.gbMovZ.Text = "Mov-Z";
             // 
+            // lblZa
+            // 
+            this.lblZa.AutoSize = true;
+            this.lblZa.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblZa.ForeColor = System.Drawing.Color.Green;
+            this.lblZa.Location = new System.Drawing.Point(27, 12);
+            this.lblZa.Name = "lblZa";
+            this.lblZa.Size = new System.Drawing.Size(22, 13);
+            this.lblZa.TabIndex = 9;
+            this.lblZa.Text = "+Z";
+            // 
+            // lblZr
+            // 
+            this.lblZr.AutoSize = true;
+            this.lblZr.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblZr.ForeColor = System.Drawing.Color.Red;
+            this.lblZr.Location = new System.Drawing.Point(32, 112);
+            this.lblZr.Name = "lblZr";
+            this.lblZr.Size = new System.Drawing.Size(19, 13);
+            this.lblZr.TabIndex = 8;
+            this.lblZr.Text = "-Z";
+            // 
             // btnMovZ_Aba
             // 
             this.btnMovZ_Aba.BackColor = System.Drawing.Color.White;
@@ -214,6 +236,50 @@
             this.gbMovXY.TabIndex = 4;
             this.gbMovXY.TabStop = false;
             this.gbMovXY.Text = "Mov-XY";
+            // 
+            // lblYr
+            // 
+            this.lblYr.AutoSize = true;
+            this.lblYr.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblYr.ForeColor = System.Drawing.Color.Red;
+            this.lblYr.Location = new System.Drawing.Point(91, 112);
+            this.lblYr.Name = "lblYr";
+            this.lblYr.Size = new System.Drawing.Size(19, 13);
+            this.lblYr.TabIndex = 7;
+            this.lblYr.Text = "-Y";
+            // 
+            // lblYa
+            // 
+            this.lblYa.AutoSize = true;
+            this.lblYa.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblYa.ForeColor = System.Drawing.Color.Green;
+            this.lblYa.Location = new System.Drawing.Point(91, 10);
+            this.lblYa.Name = "lblYa";
+            this.lblYa.Size = new System.Drawing.Size(22, 13);
+            this.lblYa.TabIndex = 6;
+            this.lblYa.Text = "+Y";
+            // 
+            // lblXr
+            // 
+            this.lblXr.AutoSize = true;
+            this.lblXr.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblXr.ForeColor = System.Drawing.Color.Red;
+            this.lblXr.Location = new System.Drawing.Point(6, 59);
+            this.lblXr.Name = "lblXr";
+            this.lblXr.Size = new System.Drawing.Size(19, 13);
+            this.lblXr.TabIndex = 5;
+            this.lblXr.Text = "-X";
+            // 
+            // lblXa
+            // 
+            this.lblXa.AutoSize = true;
+            this.lblXa.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblXa.ForeColor = System.Drawing.Color.Green;
+            this.lblXa.Location = new System.Drawing.Point(176, 59);
+            this.lblXa.Name = "lblXa";
+            this.lblXa.Size = new System.Drawing.Size(22, 13);
+            this.lblXa.TabIndex = 4;
+            this.lblXa.Text = "+X";
             // 
             // btnMovXY_Der
             // 
@@ -991,72 +1057,6 @@
             this.toolStripContainer1.Size = new System.Drawing.Size(1149, 23);
             this.toolStripContainer1.TabIndex = 32;
             this.toolStripContainer1.Text = "toolStripContainer1";
-            // 
-            // lblXa
-            // 
-            this.lblXa.AutoSize = true;
-            this.lblXa.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblXa.ForeColor = System.Drawing.Color.Green;
-            this.lblXa.Location = new System.Drawing.Point(176, 59);
-            this.lblXa.Name = "lblXa";
-            this.lblXa.Size = new System.Drawing.Size(22, 13);
-            this.lblXa.TabIndex = 4;
-            this.lblXa.Text = "+X";
-            // 
-            // lblXr
-            // 
-            this.lblXr.AutoSize = true;
-            this.lblXr.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblXr.ForeColor = System.Drawing.Color.Red;
-            this.lblXr.Location = new System.Drawing.Point(6, 59);
-            this.lblXr.Name = "lblXr";
-            this.lblXr.Size = new System.Drawing.Size(19, 13);
-            this.lblXr.TabIndex = 5;
-            this.lblXr.Text = "-X";
-            // 
-            // lblYa
-            // 
-            this.lblYa.AutoSize = true;
-            this.lblYa.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblYa.ForeColor = System.Drawing.Color.Green;
-            this.lblYa.Location = new System.Drawing.Point(91, 10);
-            this.lblYa.Name = "lblYa";
-            this.lblYa.Size = new System.Drawing.Size(22, 13);
-            this.lblYa.TabIndex = 6;
-            this.lblYa.Text = "+Y";
-            // 
-            // lblYr
-            // 
-            this.lblYr.AutoSize = true;
-            this.lblYr.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblYr.ForeColor = System.Drawing.Color.Red;
-            this.lblYr.Location = new System.Drawing.Point(91, 112);
-            this.lblYr.Name = "lblYr";
-            this.lblYr.Size = new System.Drawing.Size(19, 13);
-            this.lblYr.TabIndex = 7;
-            this.lblYr.Text = "-Y";
-            // 
-            // lblZr
-            // 
-            this.lblZr.AutoSize = true;
-            this.lblZr.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblZr.ForeColor = System.Drawing.Color.Red;
-            this.lblZr.Location = new System.Drawing.Point(32, 112);
-            this.lblZr.Name = "lblZr";
-            this.lblZr.Size = new System.Drawing.Size(19, 13);
-            this.lblZr.TabIndex = 8;
-            this.lblZr.Text = "-Z";
-            // 
-            // lblZa
-            // 
-            this.lblZa.AutoSize = true;
-            this.lblZa.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblZa.ForeColor = System.Drawing.Color.Green;
-            this.lblZa.Location = new System.Drawing.Point(27, 12);
-            this.lblZa.Name = "lblZa";
-            this.lblZa.Size = new System.Drawing.Size(22, 13);
-            this.lblZa.TabIndex = 9;
-            this.lblZa.Text = "+Z";
             // 
             // Principal
             // 

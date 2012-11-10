@@ -12,11 +12,11 @@
     <LargoSeccion>0.5</LargoSeccion>
     <VelocidadMovimiento>60</VelocidadMovimiento>
     <AlturaAscenso>1</AlturaAscenso>
-    <GradosPasoX>12</GradosPasoX>
-    <TamVueltaX>1</TamVueltaX>
-    <GradosPasoY>12</GradosPasoY>
-    <TamVueltaY>1.33</TamVueltaY>
-    <GradosPasoZ>2.1</GradosPasoZ>
-    <TamVueltaZ>10</TamVueltaZ>
+    <GradosPasoX>1.8</GradosPasoX>
+    <TamVueltaX>1.75</TamVueltaX>
+    <GradosPasoY>1.8</GradosPasoY>
+    <TamVueltaY>1.5</TamVueltaY>
+    <GradosPasoZ>1.8</GradosPasoZ>
+    <TamVueltaZ>1.15</TamVueltaZ>
   </configuracion>
 </DocumentElement>

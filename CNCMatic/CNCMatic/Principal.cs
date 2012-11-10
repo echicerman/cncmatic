@@ -702,6 +702,15 @@ namespace CNCMatic
 
             SetDefaultViews();
             Properties.Settings.Default.Virgin = false;
+
+
+            (new ToolTip()).SetToolTip(btnInicio, "Mueve la punta al inicio");
+            (new ToolTip()).SetToolTip(btnStop2, "Detiene la ejecucion actual");
+            (new ToolTip()).SetToolTip(btnPause, "Pausa el envio de comandos");
+            (new ToolTip()).SetToolTip(btnConnect, "Inicia la conexion con el CNC");
+            (new ToolTip()).SetToolTip(btnPlay, "Inicia el envio de las instrucciones al CNC");
+            (new ToolTip()).SetToolTip(btnRestart, "Reinicia el CNC");
+            (new ToolTip()).SetToolTip(btnLimpiar, "Limpia las instrucciones del editor");
         }
 
         private void guardarComoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1237,8 +1246,8 @@ namespace CNCMatic
         }
         private void btnMovZ_Arr_MouseDown(object sender, MouseEventArgs e)
         {
-            //avanzamos en Z
-            MoverLibre(CNC.CNC_Mensajes_Send.Zavance);
+            //avanzamos en Z (es al reves en el CNC)
+            MoverLibre(CNC.CNC_Mensajes_Send.Zretroc);
         }
         private void btnMovZ_Arr_MouseUp(object sender, MouseEventArgs e)
         {
@@ -1247,8 +1256,8 @@ namespace CNCMatic
         }
         private void btnMovZ_Aba_MouseDown(object sender, MouseEventArgs e)
         {
-            //retrocedemos en Z
-            MoverLibre(CNC.CNC_Mensajes_Send.Zretroc);
+            //retrocedemos en Z (es al reves en el CNC)
+            MoverLibre(CNC.CNC_Mensajes_Send.Zavance);
         }
         private void btnMovZ_Aba_MouseUp(object sender, MouseEventArgs e)
         {

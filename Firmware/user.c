@@ -139,13 +139,13 @@ bool_t ValidateCommandReceived(char type, char code[], char result[], char* g, c
 			// CHEQUEAR QUE PASA SI SE SOBREPASA DEL TAMAÑO DEL ARRAY
 			if( (cmd < gCodesCount) && (gCodes[cmd] != NULL) )
 			{
-				strcpypgm2ram(result, (const rom char far *)"CMDS");
+				strcpypgm2ram(result, (const rom char far *)"CMDS|");
 				*g = cmd;
 				return true;
 			}
 			else
 			{
-				strcpypgm2ram(result, (const rom char far *)"ERR:CMDNS");
+				strcpypgm2ram(result, (const rom char far *)"ERR:CMDNS|");
 				return false;
 			}
 		}
@@ -154,13 +154,13 @@ bool_t ValidateCommandReceived(char type, char code[], char result[], char* g, c
 			// CHEQUEAR QUE PASA SI SE SOBREPASA DEL TAMAÑO DEL ARRAY
 			if( (cmd < mCodesCount) && (mCodes[cmd] != NULL) )
 			{
-				strcpypgm2ram(result, (const rom char far *)"CMDS");
+				strcpypgm2ram(result, (const rom char far *)"CMDS|");
 				*m = cmd;
 				return true;
 			}
 			else
 			{
-				strcpypgm2ram(result, (const rom char far *)"ERR:CMDNS");
+				strcpypgm2ram(result, (const rom char far *)"ERR:CMDNS|");
 				return false;
 			}
 		}
@@ -168,11 +168,11 @@ bool_t ValidateCommandReceived(char type, char code[], char result[], char* g, c
 	// to handle custom g code
 	if( (type == 'G') && (atoi(code) == -1) )
 	{
-		strcpypgm2ram(result, (const rom char far *)"CMDS");
+		strcpypgm2ram(result, (const rom char far *)"CMDS|");
 		*g = atoi(code);
 		return true;
 	}
-	strcpypgm2ram(result, (const rom char far *)"ERR:CMDE");
+	strcpypgm2ram(result, (const rom char far *)"ERR:CMDE|");
 	return false;
 }
 
@@ -593,7 +593,7 @@ void user(void)
 			// RETURN CURRENTSTEPS POSITION
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"position"))
 			{
-				sprintf(message, (const rom char far *)"X%ld Y%ld Z%ld", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
+				sprintf(message, (const rom char far *)"X%ld Y%ld Z%ld|", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
 				putUSBUSART(message, strlen(message));
 				goto endUser;
 			}
@@ -602,7 +602,7 @@ void user(void)
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"reset"))
 			{
 				limitSensorX = limitSensorY = limitSensorZ = programPaused = false; //configured = programPaused = false;
-				strcpypgm2ram(message, (const rom char far *)"CNCR");
+				strcpypgm2ram(message, (const rom char far *)"CNCR|");
 				putUSBUSART(message, strlen(message));
 				machineState = SERIALPORTCONNECTED;
 				goto endUser;
@@ -611,7 +611,7 @@ void user(void)
 			// RETURN CNC STATE
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"status"))
 			{
-				sprintf(message, (const rom char far *)"CNCS:%d", machineState);
+				sprintf(message, (const rom char far *)"CNCS:%d|", machineState);
 				putUSBUSART(message, strlen(message));
 				goto endUser;
 			}
@@ -621,7 +621,7 @@ void user(void)
 			{
 				if(programPaused)
 				{
-					strcpypgm2ram(message, (const rom char far *)"ERR:PP");
+					strcpypgm2ram(message, (const rom char far *)"ERR:PP|");
 					putUSBUSART(message, strlen(message));
 					goto endUser;
 				}
@@ -631,12 +631,12 @@ void user(void)
 					
 					if(machineState == EMERGENCYSTOP)
 					{
-						sprintf(message, (const rom char far *)"ERR:PE");
+						sprintf(message, (const rom char far *)"ERR:PE|");
 						machineState = SERIALPORTCONNECTED;
 					}
 					else
 					{
-						strcpypgm2ram(message, (const rom char far *)"PO");
+						strcpypgm2ram(message, (const rom char far *)"PO|");
 						machineState = WAITINGCOMMAND;
 					}
 					
@@ -650,7 +650,7 @@ void user(void)
 			{
 				if(programPaused)
 				{
-					strcpypgm2ram(message, (const rom char far *)"ERR:PP");
+					strcpypgm2ram(message, (const rom char far *)"ERR:PP|");
 					putUSBUSART(message, strlen(message));
 					goto endUser;
 				}
@@ -659,12 +659,12 @@ void user(void)
 					freeCode = GetFreeCode(USB_In_Buffer);
 					if(freeCode != -2)
 					{
-						strcpypgm2ram(message, (const rom char far *)"CNCFM");
+						strcpypgm2ram(message, (const rom char far *)"CNCFM|");
 						machineState = FREEMOVES;
 					}
 					else
 					{
-						strcpypgm2ram(message, (const rom char far *)"ERR:CNCFM");
+						strcpypgm2ram(message, (const rom char far *)"ERR:CNCFM|");
 					}
 					putUSBUSART(message, strlen(message));
 					goto endUser;
@@ -675,7 +675,7 @@ void user(void)
 			if( (machineState == FREEMOVES) && (!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"stop")) )
 			{
 				freeCode = -2;
-				sprintf(message, (const rom char far *)"CNCSFM_X%ld Y%ld Z%ld", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
+				sprintf(message, (const rom char far *)"CNCSFM_X%ld Y%ld Z%ld|", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
 				putUSBUSART(message, strlen(message));
 				machineState = WAITINGCOMMAND;
 				goto endUser;
@@ -685,7 +685,7 @@ void user(void)
 			{
 				case SERIALPORTCONNECTED:
 					// Count characters received and send this number to PC
-					sprintf(message, (const rom char far *)"%d", numBytesRead);
+					sprintf(message, (const rom char far *)"%d|", numBytesRead);
 					putUSBUSART(message, strlen(message));
 					machineState = HANDSHAKEACKRECEIVED;
 					break;
@@ -694,12 +694,12 @@ void user(void)
 					// Compare confirmation message.
 					if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"ok"))
 					{
-						strcpypgm2ram(message, (const rom char far *)"MC");
+						strcpypgm2ram(message, (const rom char far *)"MC|");
 						machineState = CNCMATICCONNECTED;
 					}
 					else
 					{
-						strcpypgm2ram(message, (const rom char far *)"ERR:MNC");
+						strcpypgm2ram(message, (const rom char far *)"ERR:MNC|");
 						machineState = SERIALPORTCONNECTED;
 					}
 						
@@ -750,7 +750,7 @@ void user(void)
 						{
 							freeCode = -2;
 							limitSensorX = limitSensorY = limitSensorZ = false;
-							sprintf(message, (const rom char far *)"ERR:SFC_X%ld Y%ld Z%ld", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
+							sprintf(message, (const rom char far *)"ERR:SFC_X%ld Y%ld Z%ld|", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
 							putUSBUSART(message, strlen(message));
 							machineState = WAITINGCOMMAND;
 						}						
@@ -764,12 +764,12 @@ void user(void)
 					MoveToOrigin();
 					if(machineState == EMERGENCYSTOP)
 					{
-						sprintf(message, (const rom char far *)"ERR:PE");
+						sprintf(message, (const rom char far *)"ERR:PE|");
 						machineState = SERIALPORTCONNECTED;
 					}
 					else
 					{
-						strcpypgm2ram(message, (const rom char far *)"PO");
+						strcpypgm2ram(message, (const rom char far *)"PO|");
 						machineState = WAITINGCOMMAND;
 					}
 					
@@ -802,15 +802,15 @@ void user(void)
 					if(machineState == LIMITSENSOR)
 					{
 						limitSensorX = limitSensorY = limitSensorZ = false;
-						sprintf(message, (const rom char far *)"ERR:SFC_X%ld Y%ld Z%ld", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
+						sprintf(message, (const rom char far *)"ERR:SFC_X%ld Y%ld Z%ld|", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
 					}
 					else if(machineState == EMERGENCYSTOP)
 					{
-						sprintf(message, (const rom char far *)"ERR:PE_X%ld Y%ld Z%ld", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
+						sprintf(message, (const rom char far *)"ERR:PE_X%ld Y%ld Z%ld|", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
 					}
 					else
 					{
-						sprintf(message, (const rom char far *)"CMDDONE_X%ld Y%ld Z%ld", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
+						sprintf(message, (const rom char far *)"CMDDONE_X%ld Y%ld Z%ld|", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
 					}
 					putUSBUSART(message, strlen(message));
 					

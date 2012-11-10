@@ -147,6 +147,9 @@ namespace CNCMatic
         {
             try
             {
+                //cambiamos el cursor a waiting
+                Cursor.Current = Cursors.WaitCursor;
+
                 string xmlPath = ConfigurationManager.AppSettings["xmlDbPath"];
                 XMLdb x = new XMLdb(xmlPath);
                 bool actualiza = false;
@@ -234,9 +237,16 @@ namespace CNCMatic
                 ConfigurationManager.RefreshSection("appSettings");
 
                 //CargaConfiguracionGeneral();
+
+                //cambiamos el cursor al normal
+                Cursor.Current = Cursors.Default;
+                
             }
             catch (Exception ex)
             {
+                //cambiamos el cursor al normal
+                Cursor.Current = Cursors.Default;
+                
                 throw (ex);
                 //MessageBox.Show("Se ha producido un error: " + ex.Message, "Alta Configuracion", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

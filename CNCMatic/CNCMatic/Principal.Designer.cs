@@ -113,6 +113,12 @@
             this.CodeTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnLimpiar = new System.Windows.Forms.Button();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
+            this.lblXa = new System.Windows.Forms.Label();
+            this.lblXr = new System.Windows.Forms.Label();
+            this.lblYa = new System.Windows.Forms.Label();
+            this.lblYr = new System.Windows.Forms.Label();
+            this.lblZr = new System.Windows.Forms.Label();
+            this.lblZa = new System.Windows.Forms.Label();
             this.gbMovZ.SuspendLayout();
             this.gbMovXY.SuspendLayout();
             this.menu.SuspendLayout();
@@ -153,6 +159,8 @@
             // 
             // gbMovZ
             // 
+            this.gbMovZ.Controls.Add(this.lblZa);
+            this.gbMovZ.Controls.Add(this.lblZr);
             this.gbMovZ.Controls.Add(this.btnMovZ_Aba);
             this.gbMovZ.Controls.Add(this.btnMovZ_Arr);
             this.gbMovZ.Enabled = false;
@@ -168,7 +176,7 @@
             // 
             this.btnMovZ_Aba.BackColor = System.Drawing.Color.White;
             this.btnMovZ_Aba.Image = global::CNCMatic.Properties.Resources.flecha_ABA;
-            this.btnMovZ_Aba.Location = new System.Drawing.Point(17, 73);
+            this.btnMovZ_Aba.Location = new System.Drawing.Point(17, 68);
             this.btnMovZ_Aba.Name = "btnMovZ_Aba";
             this.btnMovZ_Aba.Size = new System.Drawing.Size(49, 45);
             this.btnMovZ_Aba.TabIndex = 1;
@@ -180,7 +188,7 @@
             // 
             this.btnMovZ_Arr.BackColor = System.Drawing.Color.White;
             this.btnMovZ_Arr.Image = global::CNCMatic.Properties.Resources.flecha_ARR;
-            this.btnMovZ_Arr.Location = new System.Drawing.Point(17, 19);
+            this.btnMovZ_Arr.Location = new System.Drawing.Point(17, 25);
             this.btnMovZ_Arr.Name = "btnMovZ_Arr";
             this.btnMovZ_Arr.Size = new System.Drawing.Size(48, 43);
             this.btnMovZ_Arr.TabIndex = 0;
@@ -190,15 +198,19 @@
             // 
             // gbMovXY
             // 
+            this.gbMovXY.Controls.Add(this.lblYr);
+            this.gbMovXY.Controls.Add(this.lblYa);
+            this.gbMovXY.Controls.Add(this.lblXr);
+            this.gbMovXY.Controls.Add(this.lblXa);
             this.gbMovXY.Controls.Add(this.btnMovXY_Der);
             this.gbMovXY.Controls.Add(this.btnMovXY_Izq);
             this.gbMovXY.Controls.Add(this.btnMovXY_Aba);
             this.gbMovXY.Controls.Add(this.btnMovXY_Arr);
             this.gbMovXY.Enabled = false;
             this.gbMovXY.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbMovXY.Location = new System.Drawing.Point(32, 102);
+            this.gbMovXY.Location = new System.Drawing.Point(26, 102);
             this.gbMovXY.Name = "gbMovXY";
-            this.gbMovXY.Size = new System.Drawing.Size(181, 128);
+            this.gbMovXY.Size = new System.Drawing.Size(202, 128);
             this.gbMovXY.TabIndex = 4;
             this.gbMovXY.TabStop = false;
             this.gbMovXY.Text = "Mov-XY";
@@ -207,7 +219,7 @@
             // 
             this.btnMovXY_Der.BackColor = System.Drawing.Color.White;
             this.btnMovXY_Der.Image = global::CNCMatic.Properties.Resources.flecha_DER;
-            this.btnMovXY_Der.Location = new System.Drawing.Point(119, 43);
+            this.btnMovXY_Der.Location = new System.Drawing.Point(130, 43);
             this.btnMovXY_Der.Name = "btnMovXY_Der";
             this.btnMovXY_Der.Size = new System.Drawing.Size(46, 50);
             this.btnMovXY_Der.TabIndex = 2;
@@ -219,7 +231,7 @@
             // 
             this.btnMovXY_Izq.BackColor = System.Drawing.Color.White;
             this.btnMovXY_Izq.Image = global::CNCMatic.Properties.Resources.flecha_IZQ;
-            this.btnMovXY_Izq.Location = new System.Drawing.Point(20, 43);
+            this.btnMovXY_Izq.Location = new System.Drawing.Point(31, 43);
             this.btnMovXY_Izq.Name = "btnMovXY_Izq";
             this.btnMovXY_Izq.Size = new System.Drawing.Size(44, 50);
             this.btnMovXY_Izq.TabIndex = 0;
@@ -231,7 +243,7 @@
             // 
             this.btnMovXY_Aba.BackColor = System.Drawing.Color.White;
             this.btnMovXY_Aba.Image = global::CNCMatic.Properties.Resources.flecha_ABA;
-            this.btnMovXY_Aba.Location = new System.Drawing.Point(69, 72);
+            this.btnMovXY_Aba.Location = new System.Drawing.Point(81, 67);
             this.btnMovXY_Aba.Name = "btnMovXY_Aba";
             this.btnMovXY_Aba.Size = new System.Drawing.Size(44, 45);
             this.btnMovXY_Aba.TabIndex = 3;
@@ -243,7 +255,7 @@
             // 
             this.btnMovXY_Arr.BackColor = System.Drawing.Color.White;
             this.btnMovXY_Arr.Image = global::CNCMatic.Properties.Resources.flecha_ARR;
-            this.btnMovXY_Arr.Location = new System.Drawing.Point(70, 16);
+            this.btnMovXY_Arr.Location = new System.Drawing.Point(81, 22);
             this.btnMovXY_Arr.Name = "btnMovXY_Arr";
             this.btnMovXY_Arr.Size = new System.Drawing.Size(44, 46);
             this.btnMovXY_Arr.TabIndex = 1;
@@ -980,6 +992,72 @@
             this.toolStripContainer1.TabIndex = 32;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
+            // lblXa
+            // 
+            this.lblXa.AutoSize = true;
+            this.lblXa.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblXa.ForeColor = System.Drawing.Color.Green;
+            this.lblXa.Location = new System.Drawing.Point(176, 59);
+            this.lblXa.Name = "lblXa";
+            this.lblXa.Size = new System.Drawing.Size(22, 13);
+            this.lblXa.TabIndex = 4;
+            this.lblXa.Text = "+X";
+            // 
+            // lblXr
+            // 
+            this.lblXr.AutoSize = true;
+            this.lblXr.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblXr.ForeColor = System.Drawing.Color.Red;
+            this.lblXr.Location = new System.Drawing.Point(6, 59);
+            this.lblXr.Name = "lblXr";
+            this.lblXr.Size = new System.Drawing.Size(19, 13);
+            this.lblXr.TabIndex = 5;
+            this.lblXr.Text = "-X";
+            // 
+            // lblYa
+            // 
+            this.lblYa.AutoSize = true;
+            this.lblYa.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblYa.ForeColor = System.Drawing.Color.Green;
+            this.lblYa.Location = new System.Drawing.Point(91, 10);
+            this.lblYa.Name = "lblYa";
+            this.lblYa.Size = new System.Drawing.Size(22, 13);
+            this.lblYa.TabIndex = 6;
+            this.lblYa.Text = "+Y";
+            // 
+            // lblYr
+            // 
+            this.lblYr.AutoSize = true;
+            this.lblYr.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblYr.ForeColor = System.Drawing.Color.Red;
+            this.lblYr.Location = new System.Drawing.Point(91, 112);
+            this.lblYr.Name = "lblYr";
+            this.lblYr.Size = new System.Drawing.Size(19, 13);
+            this.lblYr.TabIndex = 7;
+            this.lblYr.Text = "-Y";
+            // 
+            // lblZr
+            // 
+            this.lblZr.AutoSize = true;
+            this.lblZr.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblZr.ForeColor = System.Drawing.Color.Red;
+            this.lblZr.Location = new System.Drawing.Point(32, 112);
+            this.lblZr.Name = "lblZr";
+            this.lblZr.Size = new System.Drawing.Size(19, 13);
+            this.lblZr.TabIndex = 8;
+            this.lblZr.Text = "-Z";
+            // 
+            // lblZa
+            // 
+            this.lblZa.AutoSize = true;
+            this.lblZa.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblZa.ForeColor = System.Drawing.Color.Green;
+            this.lblZa.Location = new System.Drawing.Point(27, 12);
+            this.lblZa.Name = "lblZa";
+            this.lblZa.Size = new System.Drawing.Size(22, 13);
+            this.lblZa.TabIndex = 9;
+            this.lblZa.Text = "+Z";
+            // 
             // Principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1005,7 +1083,9 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Principal_FormClosing);
             this.ResizeEnd += new System.EventHandler(this.Principal_ResizeEnd);
             this.gbMovZ.ResumeLayout(false);
+            this.gbMovZ.PerformLayout();
             this.gbMovXY.ResumeLayout(false);
+            this.gbMovXY.PerformLayout();
             this.menu.ResumeLayout(false);
             this.menu.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
@@ -1115,6 +1195,12 @@
         private System.Windows.Forms.Button btnRestart;
         private System.Windows.Forms.ToolStripMenuItem salirMenuItem;
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;
+        private System.Windows.Forms.Label lblYr;
+        private System.Windows.Forms.Label lblYa;
+        private System.Windows.Forms.Label lblXr;
+        private System.Windows.Forms.Label lblXa;
+        private System.Windows.Forms.Label lblZa;
+        private System.Windows.Forms.Label lblZr;
     }
 }
 

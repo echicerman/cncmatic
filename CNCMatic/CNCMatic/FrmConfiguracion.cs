@@ -191,8 +191,8 @@ namespace CNCMatic
                 config.GradosPasoY = decimal.Parse(txtGradosY.Text);
                 config.GradosPasoZ = decimal.Parse(txtGradosZ.Text);
                 config.TamVueltaX = decimal.Parse(txtVueltasX.Text);
-                config.TamVueltaY = decimal.Parse(txtVueltasX.Text);
-                config.TamVueltaZ = decimal.Parse(txtVueltasX.Text);
+                config.TamVueltaY = decimal.Parse(txtVueltasY.Text);
+                config.TamVueltaZ = decimal.Parse(txtVueltasZ.Text);
 
                 if (rbtAbsoluta.Checked)
                     config.TipoProg = "abs";

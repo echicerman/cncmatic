@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -155,7 +156,7 @@
     </None>
     <None Include="ClassDiagram1.cd" />
     <None Include="img\flecha_IZQ.jpg" />
-    <Content Include="config.xml">
+	<Content Include="config.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\Lathe.xml">
@@ -178,6 +179,9 @@
     <None Include="Resources\Cancel-icon2.png" />
     <None Include="Resources\Captura2.png" />
     <None Include="Resources\Captura21.png" />
+    <Content Include="log4net.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Color.bmp" />
     <Content Include="Resources\DisplayOpts.bmp" />
     <Content Include="Resources\EditInformation.bmp" />
@@ -236,4 +240,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(ProjectDir)CNCmatic.Logger.Config.xml" "$(TargetDir)config\" /i /y</PostBuildEvent>
+  </PropertyGroup>
 </Project>

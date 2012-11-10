@@ -458,15 +458,16 @@ int main(void)
 	
 	//********************************************	
 	TRISA = 0x00;	// pines de A son salida - eje X
-	PORTA = 0x00;
+	LATA = 0x00;
     TRISC = 0x00;	// pines de C son salida - eje Y
-    PORTC = 0x00;
+    LATC = 0x00;
 	TRISD = 0x00;	// pines de D son salida - eje Z
-    PORTD = 0x00;
+    LATD = 0x00;
 	TRISEbits.RE2 = 0;	// pin 2 de puerto E es salida - habilita motores
-    PORTEbits.RE2 = 0;
+    LATEbits.LATE2 = 0;
 	
-	TRISB = 0b01001111;	// pines <0>,<1>,<2>,<3>,<6> de B son entrada - parada de emergencia, sensores, encender punta
+	TRISB = 0b00001111;	// pines <0>,<1>,<2>,<3> de B son entrada - parada de emergencia, sensores
+	LATBbits.LATB6 = 1;
 	//********************************************
 
     while(1)

@@ -568,7 +568,7 @@ void MoveToOrigin()
 void user(void)
 {
 	BYTE numBytesRead;
-	char message[54];
+	char message[64];
 	char movementCommandCode[3], movementCommandType;
 	double stepDegrees, distancePerRevolution;
 	
@@ -616,7 +616,7 @@ void user(void)
 				goto endUser;
 			}
 			
-			// MODE TO ORIGIN: absolute 0,0,0
+			// MOVE TO ORIGIN: absolute 0,0,0
 			if(!strcmppgm2ram(USB_In_Buffer, (const rom char far *)"origin"))
 			{
 				if(programPaused)
@@ -772,14 +772,6 @@ void user(void)
 						strcpypgm2ram(message, (const rom char far *)"PO|");
 						machineState = WAITINGCOMMAND;
 					}
-					
-					/*
-					limitSensorX = limitSensorY = limitSensorZ = false;
-					currentStepsPosition = CreateStepsPosition(0, 0, 0);
-					strcpypgm2ram(message, (const rom char far *)"PO");
-					machineState = WAITINGCOMMAND;
-					*/
-					
 					putUSBUSART(message, strlen(message));
 					break;
 					
@@ -803,26 +795,25 @@ void user(void)
 					{
 						limitSensorX = limitSensorY = limitSensorZ = false;
 						sprintf(message, (const rom char far *)"ERR:SFC_X%ld Y%ld Z%ld|", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
+						machineState = SERIALPORTCONNECTED;
 					}
 					else if(machineState == EMERGENCYSTOP)
 					{
 						sprintf(message, (const rom char far *)"ERR:PE_X%ld Y%ld Z%ld|", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
+						machineState = SERIALPORTCONNECTED;
 					}
 					else
 					{
 						sprintf(message, (const rom char far *)"CMDDONE_X%ld Y%ld Z%ld|", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
+						if(mCode != 2) machineState = WAITINGCOMMAND;
 					}
 					putUSBUSART(message, strlen(message));
-					
-					if(mCode != 2) machineState = WAITINGCOMMAND;
-					
 					// reseteamos variables de comando
 					gCode = mCode = -2;
 					break;
 						
 				default:
-					break;
-				
+					break;	
 			}
 		}
 	}

@@ -59,7 +59,7 @@ namespace CommandPreprocessor
         #region Private Methods
         private double GetValueParameter(char parameterName, string command)
         {
-            foreach(string parameter in command.Split(' '))
+            foreach(string parameter in command.ToUpper().Split(' '))
             {
                 if (parameter[0] == parameterName)
                 { 
@@ -70,7 +70,7 @@ namespace CommandPreprocessor
         }
         private bool HasValueParameter(char parameterName, string command)
         {
-            return command.IndexOf(parameterName) != -1;
+            return command.ToUpper().IndexOf(parameterName) != -1;
         }
 
         private UnitsPosition GetFinalPosition(string command)

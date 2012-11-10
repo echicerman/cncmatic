@@ -47,7 +47,7 @@ namespace CNCMatic
                     //traemos la instancia de la maquina
                     var cnc = CNC.CNC.Cnc;
 
-                    if (cnc.EstadoActual != CNC_Estados.EsperandoComando && cnc.EstadoActual != CNC_Estados.EsperandoComando)
+                    if (cnc.EstadoActual != CNC_Estados.EsperandoComando)
                     {//si no esta esperando comando -> conectamos
 
                         cnc.Label = lblEstado;
@@ -80,11 +80,23 @@ namespace CNCMatic
                         cnc.CargaLoteInstrucciones(loteInstrucciones);
 
                         //iniciamos la transmision
-                        resultado = cnc.IniciarTransmision();
-                        if (!resultado)
+                        int result =cnc.IniciarTransmision();
+                        
+                        if (result == -1)
                         {
-                            MessageBox.Show("No se ha podido establecer la conexión", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            resultado = false;
+                            MessageBox.Show("Error de comunicación con la máquina CNC", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
+
+                        if (result == 0)
+                        {
+                            resultado = false;
+                            MessageBox.Show("No hay instrucciones para ser enviadas a la máquina CNC", "Envío instrucciones", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+
+                        //volvemos para atras el mensaje
+                        if(!resultado)
+                            lblEstado.Text = "Conectando (paso 3 de 3): Conexión establecida";
                     }
                     return resultado;
                 }
@@ -197,7 +209,7 @@ namespace CNCMatic
                 var cnc = CNC.CNC.Cnc;
 
 
-                cnc.ReiniciarCNC();
+                cnc.ReiniciarCNC(true);
 
             }
             catch (Exception ex)

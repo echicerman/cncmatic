@@ -36,7 +36,7 @@ namespace CNCMatic
             log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo(AppDomain.CurrentDomain.BaseDirectory + @"config\CNCmatic.Logger.Config.xml"));
             logFile = log4net.LogManager.GetLogger("CNCmatic");
             logFile.Info("Iniciando Aplicación.");
-
+            
             InitializeComponent();
 
             //cargamos informacion en la barra de estado
@@ -1139,7 +1139,7 @@ namespace CNCMatic
 
 
                 //sino esta en un estado válido para continuar...
-                if (lblEstado.Text != "Conexión OK (3/3): Conexión establecida" && lblEstado.Text != "Fin del procesamiento" && !pausado)
+                if (lblEstado.Text != "Conectando (paso 3 de 3): Conexión establecida" && lblEstado.Text != "Fin del programa" && !pausado)
                 {
                     //ver que hacemos...
                 }
@@ -1333,7 +1333,7 @@ namespace CNCMatic
         private void lblEstado_TextChanged(object sender, EventArgs e)
         {
             //se termina de establecer la conexion, entones se liberan los controles
-            if (sender.ToString() == "Conexión OK (3/3): Conexión establecida" || sender.ToString() == "Error enviando configuración. Se ha llegado al maximo de intentos.")
+            if (sender.ToString() == "Conectando (paso 3 de 3): Conexión establecida" )
             {
                 LimpiarControlesSafe();
 
@@ -1354,7 +1354,7 @@ namespace CNCMatic
             }
 
             //si hubo error en el handshake, liberamos la pantalla
-            if (sender.ToString() == "Conexión (2/3): error en el handshake. Intente nuevamente.")
+            if (sender.ToString() == "Conectando (paso 2 de 3): error al iniciar conexión. Intente nuevamente.")
             {
                 LimpiarControlesSafe();
 
@@ -1372,7 +1372,7 @@ namespace CNCMatic
             }
 
             //se finaliza la ejecucion de las instrucciones, entones se liberan los controles
-            if (sender.ToString() == "Fin del procesamiento")
+            if (sender.ToString() == "Fin del programa")
             {
                 LimpiarControlesSafe();
 
@@ -1391,7 +1391,7 @@ namespace CNCMatic
             }
 
             //reiniciado
-            if (sender.ToString() == "CNC restarted")
+            if (sender.ToString() == "Máquina CNC reiniciada")
             {
                 LimpiarControlesSafe();
 
@@ -1407,14 +1407,22 @@ namespace CNCMatic
                 //habilitamos el menu de configuracion
                 configuracionToolStripMenuItem.Enabled = true;
 
-                //intentamos conectar nuevamente
-                ConectarCNC();
-
+                //si el reset no fue solicitado por el usuario
+                if (!resetPresionado)
+                {
+                    //intentamos conectar nuevamente
+                    ConectarCNC();
+                }
+                else
+                {
+                    //reiniciamos el flag
+                    resetPresionado = false;
+                }
                 return;
             }
 
             //stop de emergencia yendo al inicio
-            if (sender.ToString() == "Parada de Emergencia presionado")
+            if (sender.ToString().Contains("Parada de Emergencia presionado") || sender.ToString() == "Error de comunicación con máquina CNC")
             {
 
                 LimpiarControlesSafe();
@@ -1434,7 +1442,7 @@ namespace CNCMatic
                 return;
             }
         }
-
+        bool resetPresionado = false;
         //For ThreadSafe called to edit components
         private delegate void SetControlPropertyThreadSafeDelegate(Control control, string propertyName, object propertyValue);
         public static void SetControlPropertyThreadSafe(Control control, string propertyName, object propertyValue)
@@ -1516,6 +1524,9 @@ namespace CNCMatic
             {
                 //limipiamos el estado
                 this.lblEstado.Text = "";
+
+                //seteamos el flag para que no vuelva a intentar conectarse
+                resetPresionado = true;
 
                 Interfaz.ReiniciarCNC();
             }

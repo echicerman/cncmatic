@@ -154,6 +154,40 @@ namespace CNCMatic.XML
             }
         }
 
+        public void EliminarConfiguracion(XML_Config config)
+        {
+            try
+            {
+                //leemos nuevamente las configuraciones en un dataset, y agregamos
+                DataSet ds = new DataSet();
+                ds.ReadXml(this.filePath);
+
+                DataTable dt = ds.Tables["configuracion"];
+               
+                //buscamos la configuracion a borrar
+                DataRow dr=null; 
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (Convert.ToInt32(row["Id"]) == config.Id)
+                    {
+                        dr = row;
+                        break;
+                    }
+                }
+                //si la encontramos, la borramos y grabamos los cambios
+                if (dr!=null)
+                {
+                    dt.Rows.Remove(dr);
+
+                    ds.WriteXml(this.filePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+
         //public void GrabaConfiguracionMatMot(int idConfig, List<XML_ConfigMatMot> configs)
         //{
         //    try

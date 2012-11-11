@@ -188,6 +188,51 @@ namespace CNCMatic.XML
             }
         }
 
+        public void GrabaConfiguracionGral(XML_Gral config)
+        {
+            try
+            {
+                //leemos nuevamente las configuraciones en un dataset, y agregamos
+                //un nuevo datarow con la nueva configuracion y luego grabamos el xml
+                DataSet ds = new DataSet();
+                ds.ReadXml(this.filePath);
+
+                DataTable dt = ds.Tables["configuracionGral"];
+
+                DataRow dr;
+
+                //en caso que no exista la tabla, la creamos
+                if (dt != null)
+                {
+                    dt.Rows[0]["IdLastConfig"] = config.IdLastConfig;
+                }
+                else
+                {
+                    DataColumn dc;
+
+                    dt = new DataTable("configuracionGral");
+
+                    dc = new DataColumn("IdLastConfig");
+                    dt.Columns.Add(dc);
+
+                    dr = dt.NewRow();
+
+                    dr["IdLastConfig"] = config.IdLastConfig;
+
+                    dt.Rows.Add(dr);
+
+                    ds.Tables.Add(dt);
+                }
+
+                ds.WriteXml(this.filePath);
+                
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+
         //public void GrabaConfiguracionMatMot(int idConfig, List<XML_ConfigMatMot> configs)
         //{
         //    try
@@ -451,6 +496,27 @@ namespace CNCMatic.XML
             return cs;
         }
 
+        public XML_Gral LeeConfiguracionGral()
+        {
+            DataSet ds = new DataSet();
+            ds.ReadXml(this.filePath);
+
+            DataTable dtConfig = ds.Tables["configuracionGral"];
+
+            XML_Gral c = new XML_Gral(); ;
+            
+            if (dtConfig != null)
+            {
+                foreach (DataRow dr in dtConfig.Rows)
+                {
+                    //leemos la configuracion general
+                    c.IdLastConfig = Convert.ToInt32(dr["IdLastConfig"]);
+                }
+            }
+
+            return c;
+        }
+
         //public List<XML_Material> LeerMateriales()
         //{
         //    //seteamos el tipo de culture para grabar bien los decimales
@@ -552,28 +618,6 @@ namespace CNCMatic.XML
                         c.TamVueltaX = decimal.Parse(dr["TamVueltaX"].ToString());
                         c.TamVueltaY = decimal.Parse(dr["TamVueltaY"].ToString());
                         c.TamVueltaZ = decimal.Parse(dr["TamVueltaZ"].ToString());
-
-                        //c.ConfigMatMot = new List<XML_ConfigMatMot>();
-
-                        //if (dtConfigMatMot != null)
-                        //{
-                        //    XML_ConfigMatMot configMatMot;
-                        //    foreach (DataRow dr2 in dtConfigMatMot.Rows)
-                        //    {
-                        //        if (dr2["IdConfig"].ToString() == c.Id.ToString())
-                        //        {
-                        //            configMatMot = new XML_ConfigMatMot();
-
-                        //            configMatMot.IdConfigMatMot = Convert.ToInt32(dr2["Id"]);
-                        //            configMatMot.IdMaterial = Convert.ToInt32(dr2["IdMaterial"]);
-                        //            configMatMot.IdMotor = Convert.ToInt32(dr2["IdMotor"]);
-                        //            configMatMot.GradosPaso = Convert.ToDecimal(dr2["GradosPaso"]);
-                        //            configMatMot.TamVuelta = Convert.ToDecimal(dr2["TamVuelta"]);
-
-                        //            c.ConfigMatMot.Add(configMatMot);
-                        //        }
-                        //    }
-                        //}
                     }
                 }
             }

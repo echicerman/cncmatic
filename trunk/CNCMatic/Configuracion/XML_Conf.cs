@@ -125,6 +125,27 @@ namespace Configuracion
         
     }
 
+    public class XML_Gral
+    {
+        private int idLastConfig;
+
+        public int IdLastConfig
+        {
+            get { return idLastConfig; }
+            set { idLastConfig = value; }
+        }
+
+        public XML_Gral(int idLastConfig)
+        {
+            this.idLastConfig = idLastConfig;
+        }
+
+        public XML_Gral()
+        {
+           
+        }
+    }
+
     //public class XML_ConfigMatMot
     //{
     //    private int idConfigMatMot;

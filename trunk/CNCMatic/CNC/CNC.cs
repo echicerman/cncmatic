@@ -851,14 +851,14 @@ namespace CNC
                                 actualizarPosicionActual(posicion);
                             }
 
-                            //queda en CNCMATICCONNECTED
-                            this.estadoActual = CNC_Estados.Conectado;
+                            //queda en SERIALPORTCONNECTED
+                            this.estadoActual = CNC_Estados.SerialPortConectado;
 
                             //vemos que hacemos...
                             this.Label.Text = "Parada de Emergencia presionado.  Programa cancelado.";
 
                             //salimos con reset
-                            this.ReiniciarCNC(true);
+                            this.ReiniciarCNC(false);
                         }
                         else if (respuesta == CNC_Mensajes_Recep.SensorFinCarrera)
                         {
@@ -869,14 +869,15 @@ namespace CNC
                                 //actualizamos la posicion actual del CNC
                                 actualizarPosicionActual(posicion);
                             }
-                            //queda en CNCMATICCONNECTED
-                            this.estadoActual = CNC_Estados.Conectado;
+
+                            //queda en SERIALPORTCONNECTED
+                            this.estadoActual = CNC_Estados.SerialPortConectado;
 
                             //vemos que hacemos...
                             this.Label.Text = "Limite de eje alcanzado. Programa cancelado.";
 
                             //salimos con reset
-                            this.ReiniciarCNC(true);
+                            this.ReiniciarCNC(false);
                         }
 
                         continue;

@@ -9,7 +9,6 @@ using System.Configuration;
 using Configuracion;
 using System.Globalization;
 using System.Threading;
-using log4net;
 
 namespace CNCMatic
 {

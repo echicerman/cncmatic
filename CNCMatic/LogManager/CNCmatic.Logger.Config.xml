@@ -1,8 +1,19 @@
 <log4net>
+	<!--
+	  Log levels:
+	  ALL
+	  DEBUG
+	  INFO
+	  WARN
+	  ERROR
+	  FATAL
+	  OFF
+	-->
 	<logger name="CNCmatic">
 		<level value="INFO" />
 		<appender-ref ref="CNCmaticLog" />
 	</logger>
+	
 	<appender name="CNCmaticLog" type="log4net.Appender.RollingFileAppender">
 		<file value="logs\CNCmaticLog.log" />
 		<appendToFile value="true" />

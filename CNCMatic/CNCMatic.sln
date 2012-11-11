@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+# Visual C# Express 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CNCMatic", "CNCMatic\CNCMatic.csproj", "{82640008-6199-49DE-8924-F0449C5FA89E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{DF3CE024-D6B5-433F-9DF2-70AB8BA66F92} = {DF3CE024-D6B5-433F-9DF2-70AB8BA66F92}
@@ -28,6 +28,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandPreprocessorTest", "CommandPreprocessorTest\CommandPreprocessorTest.csproj", "{717A2B67-7A4E-4C0B-9905-9E6369CBCBDA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeControls", "SafeControls\SafeControls.csproj", "{3088B7FF-A274-4D3D-BB08-3FCCA2F11D13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogManager", "LogManager\LogManager.csproj", "{BE0C8A9E-297B-46A4-B07E-C6DE28150BD1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +81,10 @@ Global
 		{3088B7FF-A274-4D3D-BB08-3FCCA2F11D13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3088B7FF-A274-4D3D-BB08-3FCCA2F11D13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3088B7FF-A274-4D3D-BB08-3FCCA2F11D13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE0C8A9E-297B-46A4-B07E-C6DE28150BD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE0C8A9E-297B-46A4-B07E-C6DE28150BD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE0C8A9E-297B-46A4-B07E-C6DE28150BD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE0C8A9E-297B-46A4-B07E-C6DE28150BD1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

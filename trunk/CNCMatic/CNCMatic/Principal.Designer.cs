@@ -1074,6 +1074,7 @@
             this.Controls.Add(this.txtPreview);
             this.Controls.Add(this.menu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1165, 727);
             this.MinimumSize = new System.Drawing.Size(1165, 726);
             this.Name = "Principal";

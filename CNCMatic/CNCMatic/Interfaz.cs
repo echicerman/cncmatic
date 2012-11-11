@@ -17,11 +17,13 @@ namespace CNCMatic
             try
             { //cargamos la configuracion por default
                 string xmlPath = ConfigurationManager.AppSettings["xmlDbPath"];
-                string ultConfigId = ConfigurationManager.AppSettings["idLastConfig"];
+                //string ultConfigId = ConfigurationManager.AppSettings["idLastConfig"];
 
                 XMLdb x = new XMLdb(xmlPath);
-                XML_Config config = x.LeeConfiguracionActual(Convert.ToInt32(ultConfigId));
+                string ultConfigId = x.LeeConfiguracionGral().IdLastConfig.ToString();
 
+                XML_Config config = x.LeeConfiguracionActual(Convert.ToInt32(ultConfigId));
+                
                 return config;
             }
             catch (Exception ex)

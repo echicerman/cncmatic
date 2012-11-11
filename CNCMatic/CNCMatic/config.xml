@@ -19,4 +19,7 @@
     <GradosPasoZ>1.8</GradosPasoZ>
     <TamVueltaZ>1.15</TamVueltaZ>
   </configuracion>
+  <configuracionGral>
+    <IdLastConfig>0</IdLastConfig>
+  </configuracionGral>
 </DocumentElement>

@@ -174,7 +174,8 @@ namespace CNCMatic
 
 
             //seleccionamos ls ultima configuracion
-            string ultConfigId = ConfigurationManager.AppSettings["idLastConfig"];
+            //string ultConfigId = ConfigurationManager.AppSettings["idLastConfig"];
+            string ultConfigId = x.LeeConfiguracionGral().IdLastConfig.ToString();
             cmbConfiguracion.SelectedValue = Convert.ToInt32(ultConfigId);
             cmbConfiguracion_SelectedValueChanged(this, null);
 
@@ -300,20 +301,12 @@ namespace CNCMatic
 
                 //grabamos en la configuracion que esta es la ultima configuracion seleccionada
                 //ConfigurationManager.AppSettings["idLastConfig"]=config.Id.ToString();
-                log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo(AppDomain.CurrentDomain.BaseDirectory + @"config\CNCmatic.Logger.Config.xml"));
-                ILog logFile;
-                logFile = log4net.LogManager.GetLogger("CNCmatic");
-                logFile.Info("Abriendo seccion");
                 
-                Configuration appconfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                logFile.Info("Seteando valor");
-                appconfig.AppSettings.Settings["idLastConfig"].Value = config.Id.ToString();
-                logFile.Info("grabando valor");
-                appconfig.Save(ConfigurationSaveMode.Modified, true);
-                logFile.Info("actualizando seccion");
-                ConfigurationManager.RefreshSection("appSettings");
-                logFile.Info("seccion actualizada");
-
+                //Configuration appconfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                //appconfig.AppSettings.Settings["idLastConfig"].Value = config.Id.ToString();
+                //appconfig.Save(ConfigurationSaveMode.Modified, true);
+                //ConfigurationManager.RefreshSection("appSettings");
+                x.GrabaConfiguracionGral((new XML_Gral(config.Id)));
                 //CargaConfiguracionGeneral();
 
                 //cambiamos el cursor al normal

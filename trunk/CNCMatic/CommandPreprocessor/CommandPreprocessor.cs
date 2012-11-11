@@ -8,6 +8,8 @@ namespace CommandPreprocessor
     public class CommandPreprocessor
     {
         #region Properties
+        private static readonly log4net.ILog logger = LogManager.LogManager.GetLogger();
+
         private WorkingPlane workingPlane;
         private UnitsPosition currentPosition;
         private UnitsPosition referencePosition; // Origen de la pieza a fresar
@@ -123,7 +125,10 @@ namespace CommandPreprocessor
                     cat1 = Math.Sqrt(cat1x * cat1x + cat1y * cat1y);
 
                     if (cat1 > Math.Abs(r))
+                    {
+                        logger.Error("Imposible realizar arco: " + command + ". (Distancia media entre punto inicial y final es mayor al radio)");
                         throw new Exception("Imposible realizar arco: " + command + ". (Distancia media entre punto inicial y final es mayor al radio)");
+                    }
 
                     cat2 = Math.Sqrt(r * r - cat1 * cat1);
                     cat2x = cat1y * cat2 / cat1;
@@ -146,7 +151,10 @@ namespace CommandPreprocessor
                     cat1 = Math.Sqrt(cat1x * cat1x + cat1z * cat1z);
 
                     if (cat1 > Math.Abs(r))
+                    {
+                        logger.Error("Imposible realizar arco: " + command + ". (Distancia media entre punto inicial y final es mayor al radio)");
                         throw new Exception("Imposible realizar arco: " + command + ". (Distancia media entre punto inicial y final es mayor al radio)");
+                    }
 
                     cat2 = Math.Sqrt(r * r - cat1 * cat1);
                     cat2x = cat1z * cat2 / cat1;
@@ -168,8 +176,11 @@ namespace CommandPreprocessor
                 case WorkingPlane.YZ:
                     cat1 = Math.Sqrt(cat1y * cat1y + cat1z * cat1z);
 
-                    if (cat1 > Math.Abs(r)) 
+                    if (cat1 > Math.Abs(r))
+                    {
+                        logger.Error("Imposible realizar arco: " + command + ". (Distancia media entre punto inicial y final es mayor al radio)");
                         throw new Exception("Imposible realizar arco: " + command + ". (Distancia media entre punto inicial y final es mayor al radio)");
+                    }
 
                     cat2 = Math.Sqrt(r * r - cat1 * cat1);
                     cat2y = cat1z * cat2 / cat1;
@@ -250,6 +261,7 @@ namespace CommandPreprocessor
 
                 if ((sectionPosition.X < 0) || (sectionPosition.Y < 0) || (sectionPosition.Z < 0))
                 {
+                    logger.Error("Underflow procesando: " + code + ".");
                     throw new Exception("Underflow procesando: " + code + ". (PuntoDestino: X" + sectionPosition.X + " Y" + sectionPosition.Y + " Z" + sectionPosition.Z);
                 }
                 
@@ -298,6 +310,7 @@ namespace CommandPreprocessor
 
                 if ((sectionPosition.X < 0) || (sectionPosition.Y < 0) || (sectionPosition.Z < 0))
                 {
+                    logger.Error("Underflow procesando: " + code + ".");
                     throw new Exception("Underflow procesando: " + code + ".");
                 }
 
@@ -345,6 +358,7 @@ namespace CommandPreprocessor
 
                 if ((sectionPosition.X < 0) || (sectionPosition.Y < 0) || (sectionPosition.Z < 0))
                 {
+                    logger.Error("Underflow procesando: " + code + ".");
                     throw new Exception("Underflow procesando: " + code + ".");
                 }
 
@@ -382,12 +396,15 @@ namespace CommandPreprocessor
             if (HasValueParameter('G', command))
             {
                 code = Convert.ToInt32(GetValueParameter('G', command));
+                string finalLine;
                 switch (code)
                 {
                     case 0:
                     case 1:
                         UnitsPosition line = this.GetFinalPosition(command);
-                        result.Add( line.ToStepsPosition(CurrentPosition, feedRate).ToString(-1) );
+                        finalLine = line.ToStepsPosition(CurrentPosition, feedRate).ToString(-1);
+                        logger.Debug("Resultado Linea: " + finalLine);
+                        result.Add(finalLine);
                         CurrentPosition = line;
                         break;
 
@@ -397,7 +414,9 @@ namespace CommandPreprocessor
 
                         foreach (UnitsPosition curveLine in curveLines)
                         {
-                            result.Add( curveLine.ToStepsPosition(CurrentPosition, feedRate).ToString(-1) );
+                            finalLine = curveLine.ToStepsPosition(CurrentPosition, feedRate).ToString(-1);
+                            logger.Debug("Resultado Sección de Curva: " + finalLine);
+                            result.Add(finalLine);
                             CurrentPosition = curveLine;
                         }
                         break;
@@ -435,12 +454,13 @@ namespace CommandPreprocessor
                         break;
 
                     default:
+                        logger.Error("Comando no soportado: " + command + ".");
                         throw new Exception("Comando no soportado: " + command + ".");
                 }
             }
             else if (HasValueParameter('M', command))
             {
-                code = Convert.ToInt32(GetValueParameter('G', command));
+                code = Convert.ToInt32(GetValueParameter('M', command));
                 switch(code)
                 {
                     case 0:
@@ -452,6 +472,7 @@ namespace CommandPreprocessor
                         break;
 
                     default:
+                        logger.Error("Comando no soportado: " + command + ".");
                         throw new Exception("Comando no soportado: " + command + ".");
                 }
             }
@@ -463,6 +484,12 @@ namespace CommandPreprocessor
             List<string> result = new List<string>();
             try
             {
+                logger.Info("Iniciando Preprocesamiento de programa. Parametros:" + Environment.NewLine +
+                                "Programación Absoluta: " + Configuration.absoluteProgamming + Environment.NewLine +
+                                "Programación en Milímetros: " + Configuration.millimetersProgramming + Environment.NewLine +
+                                "Milímetros de Sección Curva: " + Configuration.millimetersCurveSection + Environment.NewLine +
+                                "Milímetros por Minuto (default): " + Configuration.defaultFeedrate);
+
                 this.MaxZ = 0;
                 // Get max Z looking into every command
                 foreach (string cmd in program)
@@ -477,6 +504,7 @@ namespace CommandPreprocessor
                 // Process every command in the program
                 foreach (string cmd in program)
                 {
+                    logger.Info("Procesando comando: " + cmd);
                     if (!string.IsNullOrEmpty(cmd))
                     {
                         result.AddRange(this.ProcessCommand(cmd));

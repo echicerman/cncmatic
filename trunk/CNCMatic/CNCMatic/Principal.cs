@@ -15,12 +15,13 @@ using MacGen;
 using DXF.Objetos;
 using Configuracion;
 using System.Reflection;
-using log4net;
 
 namespace CNCMatic
 {
     public partial class Principal : Form
     {
+        private static readonly log4net.ILog logger = LogManager.LogManager.GetLogger();
+
         //Boolean flag = true;
         //int i = 0;
         private string mCncFile;
@@ -29,13 +30,10 @@ namespace CNCMatic
         private MG_CS_BasicViewer mViewer;
         public bool pausado = false;
 
-        public ILog logFile;
-
         public Principal()
         {
-            log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo(AppDomain.CurrentDomain.BaseDirectory + @"config\CNCmatic.Logger.Config.xml"));
-            logFile = log4net.LogManager.GetLogger("CNCmatic");
-            logFile.Info("Iniciando Aplicación.");
+            
+            logger.Info("Iniciando Aplicación.");
             
             InitializeComponent();
 
@@ -56,7 +54,7 @@ namespace CNCMatic
             mSetup.LoadAllMachines(System.IO.Directory.GetCurrentDirectory() + "\\Data");
             mProcessor.Init(mSetup.Machine);
 
-            logFile.Info("Aplicación Iniciada.");
+            logger.Info("Aplicación Iniciada.");
         }
 
         private void btnInicio_Click(object sender, EventArgs e)

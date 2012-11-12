@@ -11,34 +11,52 @@ namespace G.Servicios
     {
         public static string LevantaPunta()
         {
+            return LevantaPunta(0.1000f);
+        }
+        public static string LevantaPunta(float nivelZ)
+        {
             G00_Avance mov = new G00_Avance();
-            mov.Z = 0.1000f;
+            if (nivelZ != 0) //sino estamos en el nivel base
+                mov.Z = nivelZ;
+            else //sino tomamos el z de la configuracion
+                mov.Z = 0.100f;
             return mov.ToString();
         }
 
         public static string BajaPunta()
         {
-            G01_Lineal mov = new G01_Lineal();
-            mov.Fin.Z = 0.0000f;
-            return mov.ToString();
+            return BajaPunta(0.0000f);
+        }
+        
+        public static string BajaPunta(float nivelZ)
+        {
+            //G01_Lineal mov = new G01_Lineal();
+            G00_Avance mov = new G00_Avance();
+            mov.Z = nivelZ;
+            //return mov.ToString();
+            return "G00 Z" + mov.Z.ToString();
         }
 
         public static string IrA(float x, float y, float z)
         {
             string s = "";
-            //levantar la punta
-            s += (LevantaPunta() + Environment.NewLine);
+            //levantar la punta hasta el nivel de Z que hay que ir
+            s += (LevantaPunta(z) + Environment.NewLine);
 
             //crear el mov de avance
             G00_Avance mov = new G00_Avance();
             mov.X = x;
             mov.Y = y;
-            mov.Z = z;
+
+            if (z == 0)
+                mov.Z = 0.100f; //este lo tendriamos que tomar de la config
+            else
+                mov.Z = z;
 
             s += (mov.ToString() + Environment.NewLine);
 
             //bajamos la punta
-            s += BajaPunta();
+            s += BajaPunta(z);
 
             return s;
         }

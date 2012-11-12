@@ -292,11 +292,11 @@ namespace G.Traducciones
 
                     mov.Inicio.X = v.Location.X;
                     mov.Inicio.Y = v.Location.Y;
-                    mov.Inicio.Z = 0;
+                    mov.Inicio.Z = pi.Elevation;
 
                     mov.Fin.X = v.Location.X;
                     mov.Fin.Y = v.Location.Y;
-                    mov.Fin.Z = 0;
+                    mov.Fin.Z = pi.Elevation;
 
                     if (i == 0)
                     {
@@ -309,13 +309,27 @@ namespace G.Traducciones
                     }
                     else
                     {
-                        movs.Add(Metodos.IrA(pi.Vertexes[i - 1].Location.X, pi.Vertexes[i - 1].Location.Y, 0));
+                        movs.Add(Metodos.IrA(pi.Vertexes[i - 1].Location.X, pi.Vertexes[i - 1].Location.Y, pi.Elevation));
                         movs.Add(mov.ToString());
                     }
                     i++;
                 }
 
+                if (pi.IsClosed) //si es cerrado, adicionalmente agregamos ir al inicio
+                {
+                    mov = new G01_Lineal();
 
+                    mov.Inicio.X = pi.Vertexes[0].Location.X;
+                    mov.Inicio.Y = pi.Vertexes[0].Location.Y;
+                    mov.Inicio.Z = pi.Elevation;
+
+                    mov.Fin.X = pi.Vertexes[0].Location.X;
+                    mov.Fin.Y = pi.Vertexes[0].Location.Y;
+                    mov.Fin.Z = pi.Elevation;
+
+                    movs.Add(Metodos.IrA(pi.Vertexes[i - 1].Location.X, pi.Vertexes[i - 1].Location.Y, pi.Elevation));
+                    movs.Add(mov.ToString());
+                }
 
 
 

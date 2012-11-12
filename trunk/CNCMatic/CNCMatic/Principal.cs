@@ -180,11 +180,11 @@ namespace CNCMatic
                     doc.Cargar(importaDXF.FileName);
 
                     //Analizamos las figuras
-                    //if (!doc.AnalizarFiguras(Interfaz.ConfiguracionActual()))
-                    //{
-                    //    MessageBox.Show("Error: Se han encontrado figuras que superan el área de trabajo definido", "Importar DXF", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    //    return;
-                    //}
+                    if (!doc.AnalizarFiguras(Interfaz.ConfiguracionActual()))
+                    {
+                        MessageBox.Show("Error: Se han encontrado figuras que superan el área de trabajo definido", "Importar DXF", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
 
                     //Realizamos la traduccion de las figuras a código G
                     List<string> sl = new List<string>();
@@ -384,9 +384,9 @@ namespace CNCMatic
         private Vector3d ObtenerDoubleTresDecimales(Vector3d num)
         {
             Vector3d d = new Vector3d();
-            d.X = (double)(int)(num.X * 1000) / 1000;
-            d.Y = (double)(int)(num.Y * 1000) / 1000;
-            d.Z = (double)(int)(num.Z * 1000) / 1000;
+            d.X = Math.Round(num.X, 3);
+            d.Y = Math.Round(num.Y, 3);
+            d.Z = Math.Round(num.Z, 3);
             return d;
         }
 
@@ -397,7 +397,7 @@ namespace CNCMatic
 
             string linea;
             string[] valoresZ;
-            int valorZ;
+            double valorZ;
             if (newList != null)
             {
                 if (newList.Count > 0)
@@ -409,7 +409,7 @@ namespace CNCMatic
                         if (lineaG.Substring(0, 3).Equals("G00"))
                         {
                             valoresZ = lineaG.Split('Z');
-                            valorZ = Convert.ToInt32(valoresZ[1]);
+                            valorZ = Convert.ToDouble(valoresZ[1]);
                             linea = "G00 Z" + Convert.ToString(valorZ + deltaSubida) + Environment.NewLine + valoresZ[0] + "Z" +
                                 Convert.ToString(valorZ + deltaSubida) + Environment.NewLine + "G00 Z" + Convert.ToString(valorZ);
                         }

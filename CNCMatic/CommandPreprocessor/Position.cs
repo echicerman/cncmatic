@@ -60,7 +60,7 @@ namespace CommandPreprocessor
         #endregion
     
         #region Conversor
-        public StepsPosition ToStepsPosition(UnitsPosition current, double feedrate)//, double curveLength)
+        public StepsPosition ToStepsPosition(UnitsPosition current, double feedrate, bool fastMovement = false)
         {
             // Delta Position & Delta Steps -> with this movement
             double xDelta = Math.Abs(this.X - current.X);
@@ -71,6 +71,13 @@ namespace CommandPreprocessor
                             Convert.ToInt64(Math.Ceiling(this.X * Configuration.configValueX)),
                             Convert.ToInt64(Math.Ceiling(this.Y * Configuration.configValueY)),
                             Convert.ToInt64(Math.Ceiling(this.Z * Configuration.configValueZ)));
+
+            if (fastMovement)
+            {
+                lineSteps.Delay = 1;
+                return lineSteps;
+            }
+
             // delay parameters
             double totalDistance = Math.Sqrt(xDelta * xDelta + yDelta * yDelta + zDelta * zDelta);
             //if (curveLength == -1) curveLength = totalDistance * totalDistance; // To handle lines and curveSections

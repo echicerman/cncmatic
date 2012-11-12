@@ -402,7 +402,7 @@ namespace CommandPreprocessor
                     case 0:
                     case 1:
                         UnitsPosition line = this.GetFinalPosition(command);
-                        finalLine = line.ToStepsPosition(CurrentPosition, feedRate).ToString(-1);
+                        finalLine = line.ToStepsPosition(CurrentPosition, feedRate, code == 0).ToString(-1);
                         logger.Debug("Resultado Linea: " + finalLine);
                         result.Add(finalLine);
                         CurrentPosition = line;

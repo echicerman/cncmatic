@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\LogManager\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -60,6 +64,10 @@
     <ProjectReference Include="..\Configuracion\Configuracion.csproj">
       <Project>{5FB8E387-D096-4A98-8158-368D43664730}</Project>
       <Name>Configuracion</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LogManager\LogManager.csproj">
+      <Project>{BE0C8A9E-297B-46A4-B07E-C6DE28150BD1}</Project>
+      <Name>LogManager</Name>
     </ProjectReference>
     <ProjectReference Include="..\SafeControls\SafeControls.csproj">
       <Project>{3088B7FF-A274-4D3D-BB08-3FCCA2F11D13}</Project>

@@ -33,6 +33,8 @@ namespace CNCMatic.XML
         {
             try
             {
+                CultureInfo invCult = CultureInfo.InvariantCulture;
+
                 //leemos nuevamente las configuraciones en un dataset, y agregamos
                 //un nuevo datarow con la nueva configuracion y luego grabamos el xml
                 DataSet ds = new DataSet();
@@ -127,18 +129,18 @@ namespace CNCMatic.XML
                 dr["PuertoCom"] = config.PuertoCom;
                 dr["UnidadMedida"] = config.UnidadMedida;
                 dr["TipoProg"] = config.TipoProg;
-                dr["MaxX"] = config.MaxX.ToString();
-                dr["MaxY"] = config.MaxY.ToString();
-                dr["MaxZ"] = config.MaxZ.ToString();
-                dr["VelocidadMovimiento"] = config.VelocidadMovimiento.ToString();
-                dr["LargoSeccion"] = config.LargoSeccion.ToString();
-                dr["AlturaAscenso"] = config.AltoAscenso.ToString();
-                dr["TamVueltaX"] = config.TamVueltaX.ToString();
-                dr["TamVueltaY"] = config.TamVueltaY.ToString();
-                dr["TamVueltaZ"] = config.TamVueltaZ.ToString();
-                dr["GradosPasoX"] = config.GradosPasoX.ToString();
-                dr["GradosPasoY"] = config.GradosPasoY.ToString();
-                dr["GradosPasoZ"] = config.GradosPasoZ.ToString();
+                dr["MaxX"] = config.MaxX.ToString(invCult);
+                dr["MaxY"] = config.MaxY.ToString(invCult);
+                dr["MaxZ"] = config.MaxZ.ToString(invCult);
+                dr["VelocidadMovimiento"] = config.VelocidadMovimiento.ToString(invCult);
+                dr["LargoSeccion"] = config.LargoSeccion.ToString(invCult);
+                dr["AlturaAscenso"] = config.AltoAscenso.ToString(invCult);
+                dr["TamVueltaX"] = config.TamVueltaX.ToString(invCult);
+                dr["TamVueltaY"] = config.TamVueltaY.ToString(invCult);
+                dr["TamVueltaZ"] = config.TamVueltaZ.ToString(invCult);
+                dr["GradosPasoX"] = config.GradosPasoX.ToString(invCult);
+                dr["GradosPasoY"] = config.GradosPasoY.ToString(invCult);
+                dr["GradosPasoZ"] = config.GradosPasoZ.ToString(invCult);
 
                 if (!actualiza)
                     dt.Rows.Add(dr);
@@ -163,9 +165,9 @@ namespace CNCMatic.XML
                 ds.ReadXml(this.filePath);
 
                 DataTable dt = ds.Tables["configuracion"];
-               
+
                 //buscamos la configuracion a borrar
-                DataRow dr=null; 
+                DataRow dr = null;
                 foreach (DataRow row in dt.Rows)
                 {
                     if (Convert.ToInt32(row["Id"]) == config.Id)
@@ -175,7 +177,7 @@ namespace CNCMatic.XML
                     }
                 }
                 //si la encontramos, la borramos y grabamos los cambios
-                if (dr!=null)
+                if (dr != null)
                 {
                     dt.Rows.Remove(dr);
 
@@ -225,7 +227,7 @@ namespace CNCMatic.XML
                 }
 
                 ds.WriteXml(this.filePath);
-                
+
             }
             catch (Exception ex)
             {
@@ -428,8 +430,9 @@ namespace CNCMatic.XML
         {
 
             //seteamos el tipo de culture para grabar bien los decimales
-            CultureInfo actual = Thread.CurrentThread.CurrentCulture;
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("es-AR");
+            //CultureInfo actual = Thread.CurrentThread.CurrentCulture;
+            CultureInfo invCult = CultureInfo.InvariantCulture;
+            //Thread.CurrentThread.CurrentCulture = new CultureInfo("es-AR");
 
             DataSet ds = new DataSet();
             ds.ReadXml(this.filePath);
@@ -451,18 +454,18 @@ namespace CNCMatic.XML
                     c.PuertoCom = dr["PuertoCom"].ToString();
                     c.UnidadMedida = dr["UnidadMedida"].ToString();
                     c.TipoProg = dr["TipoProg"].ToString();
-                    c.MaxX = float.Parse(dr["MaxX"].ToString());
+                    c.MaxX = float.Parse(dr["MaxX"].ToString(), invCult);
                     c.MaxY = float.Parse(dr["MaxY"].ToString());
                     c.MaxZ = float.Parse(dr["MaxZ"].ToString());
-                    c.VelocidadMovimiento = dr["VelocidadMovimiento"].ToString();
-                    c.LargoSeccion = dr["LargoSeccion"].ToString();
-                    c.AltoAscenso = dr["AlturaAscenso"].ToString();
-                    c.GradosPasoX = decimal.Parse(dr["GradosPasoX"].ToString());
-                    c.GradosPasoY = decimal.Parse(dr["GradosPasoY"].ToString());
-                    c.GradosPasoZ = decimal.Parse(dr["GradosPasoZ"].ToString());
-                    c.TamVueltaX = decimal.Parse(dr["TamVueltaX"].ToString());
-                    c.TamVueltaY = decimal.Parse(dr["TamVueltaY"].ToString());
-                    c.TamVueltaZ = decimal.Parse(dr["TamVueltaZ"].ToString());
+                    c.VelocidadMovimiento = decimal.Parse(dr["VelocidadMovimiento"].ToString(), invCult);
+                    c.LargoSeccion = decimal.Parse(dr["LargoSeccion"].ToString(), invCult);
+                    c.AltoAscenso = decimal.Parse(dr["AlturaAscenso"].ToString(), invCult);
+                    c.GradosPasoX = decimal.Parse(dr["GradosPasoX"].ToString(), invCult);
+                    c.GradosPasoY = decimal.Parse(dr["GradosPasoY"].ToString(), invCult);
+                    c.GradosPasoZ = decimal.Parse(dr["GradosPasoZ"].ToString(), invCult);
+                    c.TamVueltaX = decimal.Parse(dr["TamVueltaX"].ToString(), invCult);
+                    c.TamVueltaY = decimal.Parse(dr["TamVueltaY"].ToString(), invCult);
+                    c.TamVueltaZ = decimal.Parse(dr["TamVueltaZ"].ToString(), invCult);
 
                     //c.ConfigMatMot = new List<XML_ConfigMatMot>();
 
@@ -491,7 +494,7 @@ namespace CNCMatic.XML
             }
 
             //devolvemos al thread el formato actual
-            Thread.CurrentThread.CurrentCulture = actual;
+            //Thread.CurrentThread.CurrentCulture = actual;
 
             return cs;
         }
@@ -503,8 +506,8 @@ namespace CNCMatic.XML
 
             DataTable dtConfig = ds.Tables["configuracionGral"];
 
-            XML_Gral c = new XML_Gral(); ;
-            
+            XML_Gral c = new XML_Gral();
+
             if (dtConfig != null)
             {
                 foreach (DataRow dr in dtConfig.Rows)
@@ -578,52 +581,20 @@ namespace CNCMatic.XML
 
         public XML_Config LeeConfiguracionActual(int idConfig)
         {
-
-            //seteamos el tipo de culture para grabar bien los decimales
-            CultureInfo actual = Thread.CurrentThread.CurrentCulture;
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("es-AR");
-
-            DataSet ds = new DataSet();
-            ds.ReadXml(this.filePath);
-
-            DataTable dtConfig = ds.Tables["configuracion"];
-            //DataTable dtConfigMatMot = ds.Tables["configuracionMatMot"];
-
             XML_Config c = null;
 
-            if (dtConfig != null)
+            //traigo todas las configs
+            List<XML_Config> configs = LeeConfiguracion();
+
+            foreach (XML_Config config in configs)
             {
-                foreach (DataRow dr in dtConfig.Rows)
+                //leemos la configuracion general
+                if (config.Id == idConfig)
                 {
-                    //leemos la configuracion general
-                    if (Convert.ToInt32(dr["Id"]) == idConfig)
-                    {
-
-                        c = new XML_Config();
-
-                        c.Id = Convert.ToInt32(dr["Id"]);
-                        c.Descripcion = dr["Descripcion"].ToString();
-                        c.PuertoCom = dr["PuertoCom"].ToString();
-                        c.UnidadMedida = dr["UnidadMedida"].ToString();
-                        c.TipoProg = dr["TipoProg"].ToString();
-                        c.MaxX = float.Parse(dr["MaxX"].ToString());
-                        c.MaxY = float.Parse(dr["MaxY"].ToString());
-                        c.MaxZ = float.Parse(dr["MaxZ"].ToString());
-                        c.VelocidadMovimiento = dr["VelocidadMovimiento"].ToString();
-                        c.LargoSeccion = dr["LargoSeccion"].ToString();
-                        c.AltoAscenso = dr["AlturaAscenso"].ToString();
-                        c.GradosPasoX = decimal.Parse(dr["GradosPasoX"].ToString());
-                        c.GradosPasoY = decimal.Parse(dr["GradosPasoY"].ToString());
-                        c.GradosPasoZ = decimal.Parse(dr["GradosPasoZ"].ToString());
-                        c.TamVueltaX = decimal.Parse(dr["TamVueltaX"].ToString());
-                        c.TamVueltaY = decimal.Parse(dr["TamVueltaY"].ToString());
-                        c.TamVueltaZ = decimal.Parse(dr["TamVueltaZ"].ToString());
-                    }
+                    c = config;
+                    break;
                 }
             }
-
-            //devolvemos al thread el formato actual
-            Thread.CurrentThread.CurrentCulture = actual;
 
             return c;
         }

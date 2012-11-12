@@ -88,22 +88,25 @@ namespace CNCMatic
         {
             this.lblEstado.Text = "Conexión cancelada por el usuario";
 
-            Interfaz.DetenerCNC();
+            //sino estaba en ejecución
+            if (Interfaz.DetenerCNC() == 0)
+            {
 
-            //Habilita todas las funciones
-            LimpiarControles();
-            btnStop2.Enabled = false;
-            btnConnect.Enabled = true;
-            btnConnect.Visible = true;
-            btnPause.Enabled = false;
+                //Habilita todas las funciones
+                LimpiarControles();
+                btnStop2.Enabled = false;
+                btnConnect.Enabled = true;
+                btnConnect.Visible = true;
+                btnPause.Enabled = false;
 
-            //habilitamos nuevamente el menu de configuracion
-            configuracionToolStripMenuItem.Enabled = true;
+                //habilitamos nuevamente el menu de configuracion
+                configuracionToolStripMenuItem.Enabled = true;
 
-            btnRestart.Enabled = false;
+                btnRestart.Enabled = false;
 
-            //reiniciamos la barra
-            prgBar.Value = 0;
+                //reiniciamos la barra
+                prgBar.Value = 0;
+            }
         }
 
         private void LimpiarControles()

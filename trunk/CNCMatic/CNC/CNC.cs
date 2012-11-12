@@ -183,6 +183,8 @@ namespace CNC
     {
         private static CNC instancia;
 
+        private static readonly log4net.ILog logger = LogManager.LogManager.GetLogger();
+        
         private CNC() { }
 
         public static CNC Cnc
@@ -217,14 +219,14 @@ namespace CNC
         private List<string> colaMensajes = new List<string>();
 
         private List<string> loteInstrucciones = new List<string>();
-        private int proximaInstruccion;
+        //private int proximaInstruccion;
 
         private List<string> loteInstruccionesTemp = new List<string>();
         private int proximaInstruccionTemp;
 
         public UnitsPosition PosicionActual { get; set; }
 
-        private int cantReenviosConfig = 0;
+        //private int cantReenviosConfig = 0;
 
         public SafeControls.SafeToolStripStatusLabel Label { get; set; }
         public SafeControls.SafeToolStripStatusLabel LblPosicionActual { get; set; }
@@ -234,7 +236,7 @@ namespace CNC
         private bool pausarTransmision = false;
 
         //variable para guardar el primer movimiento libre a enviar luego de ingresar en FREEMOVES
-        private string movimientoLibrePendiente;
+        //private string movimientoLibrePendiente;
 
         private string estadoActual;
         public string EstadoActual
@@ -250,83 +252,6 @@ namespace CNC
         public string UltimoMensajeSend { get; set; }
         public string UltimoMensajeRecep { get; set; }
         public string PuertoConexion { get; set; }
-
-        //esta propiedad establece si la maquina recibio configuracion
-        //private bool configurada = false;
-
-        //private bool EnviarConfiguracion()
-        //{
-        //    try
-        //    {
-        //        //si la maquina esta READYTOCOFIGURE espera la configuracion
-        //        if (estadoActual == CNC_Estados.EsperandoConfig)
-        //        {
-        //            string stringConfiguracion = "";
-        //            decimal GxP, TamV, Valor;
-
-        //            for (int i = 0; i < 3; i++)
-        //            {
-        //                GxP = this.configuracion.ConfigMatMot[i].GradosPaso;
-        //                TamV = this.configuracion.ConfigMatMot[i].TamVuelta;
-        //                Valor = 360 / (GxP * TamV);
-        //                switch (i)
-        //                {
-        //                    case 0: stringConfiguracion += Valor.ToString().Replace(",", ".") + ";"; break;
-        //                    case 1: stringConfiguracion += Valor.ToString().Replace(",", ".") + ";"; break;
-        //                    case 2: stringConfiguracion += Valor.ToString().Replace(",", "."); break;
-        //                }
-        //            }
-
-        //            //enviamos el string de configuracion
-        //            enviar(stringConfiguracion);
-
-        //            //aumentamos la cantidad de veces enviada
-        //            cantReenviosConfig++;
-
-        //            return true;
-
-        //        }
-        //        else
-        //        {
-        //            return false;
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw (new Exception("CNC.EnviarConfiguracion: " + ex.Message));
-        //    }
-
-
-        //}
-
-        //private void PedirEstadoCNC()
-        //{
-        //    try
-        //    {
-        //        //conectamos y pedimos estatus
-        //        //CNC_Mensajes_Send.Status;
-        //        string recep = "";
-
-        //        switch (Convert.ToInt32(recep.Trim()))
-        //        {
-        //            case 0: estadoActual = CNC_Estados.SerialPortConectado; break; //SERIALPORTCONNECTED
-        //            case 1: estadoActual = CNC_Estados.HandShakeRecibido; break; //HANDSHAKERECEIVED
-        //            case 2: estadoActual = CNC_Estados.Conectado; break; //CNCMATICCONNECTED
-        //            case 3: estadoActual = CNC_Estados.Configurado; break; //CONFIGURED
-        //            case 4: estadoActual = CNC_Estados.EsperandoComando; break; //WAITINGCOMMAND
-        //            case 5: estadoActual = CNC_Estados.ProcesandoComando; break; //PROCESSINGCOMMAND
-        //            case 8: estadoActual = CNC_Estados.MovimientoLibre; break; //FREEMOVES
-
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw (new Exception("CNC.PedirEstadoCNC: " + ex.Message));
-        //    }
-
-        //}
 
         public bool EstablecerConexion()
         {
@@ -936,7 +861,7 @@ namespace CNC
         public void CargaLoteInstrucciones(List<string> loteInstrucciones)
         {
             //lote global de instrucciones
-            this.proximaInstruccion = 0;
+            //this.proximaInstruccion = 0;
             this.loteInstrucciones = loteInstrucciones;
 
             //lote temporal para cada preprocesamiento de las instrucciones globales
@@ -1006,7 +931,7 @@ namespace CNC
                 //iniciamos la barra
                 this.BarraProgreso.Value = 0;
 
-                this.cantReenviosConfig = 0;
+                //this.cantReenviosConfig = 0;
 
                 //iniciamos la transmision
                 return this.Transmision();
@@ -1208,7 +1133,7 @@ namespace CNC
             }
         }
 
-        public void Detener()
+        public int Detener()
         {
             try
             {
@@ -1220,10 +1145,14 @@ namespace CNC
                 {
                     //enviamos M02 mientras este en ejecucion
                     enviar(CNC_Mensajes_Send.G_Stop);
+
+                    return 1;
                 }
                 else
                 {
                     this.estadoActual = CNC_Estados.SerialPortConectado;
+
+                    return 0;
                 }
 
             }

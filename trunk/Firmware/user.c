@@ -255,7 +255,7 @@ void ProcessLinearMovement(stepsPosition_t targetStepsPosition, long delay)
 	while( (targetStepsPosition.x != currentStepsPosition.x) || (targetStepsPosition.y != currentStepsPosition.y) || (targetStepsPosition.z != currentStepsPosition.z) )
 	{
 		// emergency stop
-		if( PORTBbits.RB0 ) { goto emergencyStop; }
+		//if( PORTBbits.RB0 ) { goto emergencyStop; }
 		
 		if(targetStepsPosition.x != currentStepsPosition.x)
 		{
@@ -385,9 +385,9 @@ void limitSensorAxisXHandler()
 	{
 		// tiro un paso
 		LATDbits.LATD4 = 1;
-		Delay1MSx(2);
+		Delay1MSx(1);
 		LATDbits.LATD4 = 0;
-		Delay1MSx(2);
+		Delay1MSx(1);
 		
 		if(machineState != CNCMATICCONNECTED)
 		{
@@ -400,7 +400,6 @@ void limitSensorAxisXHandler()
 }
 void limitSensorAxisYHandler()
 {
-	char mesage[2];
 	// invierto el sentido de giro
 	if(LATCbits.LATC1)
 	{
@@ -415,9 +414,9 @@ void limitSensorAxisYHandler()
 	{
 		// tiro un paso
 		LATCbits.LATC2 = 1;
-		Delay1MSx(2);
+		Delay1MSx(1);
 		LATCbits.LATC2 = 0;
-		Delay1MSx(2);
+		Delay1MSx(1);
 		
 		if(machineState != CNCMATICCONNECTED)
 		{
@@ -444,9 +443,9 @@ void limitSensorAxisZHandler()
 	{
 		// tiro un paso
 		LATAbits.LATA2 = 1;
-		Delay1MSx(2);
+		Delay1MSx(1);
 		LATAbits.LATA2 = 0;
-		Delay1MSx(2);
+		Delay1MSx(1);
 		
 		if(machineState != CNCMATICCONNECTED)
 		{

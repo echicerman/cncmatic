@@ -94,6 +94,8 @@ namespace CommandPreprocessor
                 result.Z = HasValueParameter('Z', command) ? this.MaxZ - GetValueParameter('Z', command) + this.CurrentPosition.Z : CurrentPosition.Z;
             }
 
+            logger.Info("voy a ir al Z " + result.Z);
+
             // If the values are in inches, convert to millimeters
             if (!Configuration.millimetersProgramming)
             {
@@ -491,7 +493,7 @@ namespace CommandPreprocessor
                                 "Milímetros por Minuto (default): " + Configuration.defaultFeedrate);
                 this.CurrentPosition = this.ReferencePosition;
 
-                this.MaxZ = 0;
+                this.MaxZ = this.CurrentPosition.Z;
                 // Get max Z looking into every command
                 foreach (string cmd in program)
                 {
@@ -501,6 +503,8 @@ namespace CommandPreprocessor
                         this.MaxZ = newZ > this.MaxZ ? newZ : this.MaxZ;
                     }
                 }
+
+                logger.InfoFormat("MaxZ: {0} - Reference.Z: {1}", MaxZ, ReferencePosition.Z);
 
                 // Process every command in the program
                 foreach (string cmd in program)

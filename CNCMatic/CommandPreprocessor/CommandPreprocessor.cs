@@ -489,6 +489,7 @@ namespace CommandPreprocessor
                                 "Programación en Milímetros: " + Configuration.millimetersProgramming + Environment.NewLine +
                                 "Milímetros de Sección Curva: " + Configuration.millimetersCurveSection + Environment.NewLine +
                                 "Milímetros por Minuto (default): " + Configuration.defaultFeedrate);
+                this.CurrentPosition = this.ReferencePosition;
 
                 this.MaxZ = 0;
                 // Get max Z looking into every command

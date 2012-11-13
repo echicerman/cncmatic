@@ -751,7 +751,6 @@ void user(void)
 							limitSensorX = limitSensorY = limitSensorZ = false;
 							sprintf(message, (const rom char far *)"ERR:SFC_X%ld Y%ld Z%ld|", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
 							putUSBUSART(message, strlen(message));
-							machineState = WAITINGCOMMAND;
 						}						
 					
 						// seteo a 0 el enable de los motores

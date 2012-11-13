@@ -3,12 +3,12 @@
   <configuracion>
     <Id>0</Id>
     <Descripcion>PerfilPorDefault</Descripcion>
-    <PuertoCom>COM3</PuertoCom>
+    <PuertoCom>COM5</PuertoCom>
     <UnidadMedida>mm</UnidadMedida>
     <TipoProg>abs</TipoProg>
-    <MaxX>100</MaxX>
-    <MaxY>100</MaxY>
-    <MaxZ>100</MaxZ>
+    <MaxX>410</MaxX>
+    <MaxY>320</MaxY>
+    <MaxZ>71</MaxZ>
     <LargoSeccion>0.5</LargoSeccion>
     <VelocidadMovimiento>60</VelocidadMovimiento>
     <AlturaAscenso>1</AlturaAscenso>

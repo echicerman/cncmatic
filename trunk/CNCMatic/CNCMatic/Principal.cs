@@ -32,9 +32,9 @@ namespace CNCMatic
 
         public Principal()
         {
-            
+
             logger.Info("Iniciando Aplicación.");
-            
+
             InitializeComponent();
 
             //cargamos informacion en la barra de estado
@@ -188,6 +188,9 @@ namespace CNCMatic
 
                     //Realizamos la traduccion de las figuras a código G
                     List<string> sl = new List<string>();
+                    //--cargamos el alto de ascenso configurado
+                    Metodos.altoAscenso = Interfaz.ConfiguracionActual().AltoAscenso;
+
                     sl.AddRange(Traduce.Lineas(doc.Lineas));
                     sl.AddRange(Traduce.Arcos(doc.Arcos));
                     sl.AddRange(Traduce.Circulos(doc.Circulos));
@@ -403,26 +406,87 @@ namespace CNCMatic
                 if (newList.Count > 0)
                 {
                     List<string> lista = new List<string>();
-                    foreach (string lineaG in newList)
+                    string lineaG;
+                    double valorZproxNivel, xActual, yActual, xDestino, yDestino;
+                    bool avanza = true;
+                    for (int i = 0; i < newList.Count(); i++)
                     {
+                        lineaG = newList[i];
 
                         if (lineaG.Substring(0, 3).Equals("G00"))
                         {
-                            valoresZ = lineaG.Split('Z');
-                            valorZ = Convert.ToDouble(valoresZ[1]);
-                            linea = "G00 Z" + Convert.ToString(valorZ + deltaSubida) + Environment.NewLine + valoresZ[0] + "Z" +
-                                Convert.ToString(valorZ + deltaSubida) + Environment.NewLine + "G00 Z" + Convert.ToString(valorZ);
+                            avanza = true;
+
+                            if (i > 0)
+                            {
+                                //tenemos que revisar si es necesario avanzar (puede ser que el punto al que queremos ir
+                                //es el mismo donde estamos
+                                xActual = -999; yActual = -999; xDestino = -999; yDestino = -999;
+
+                                if (HasValueParameter('X', newList[i - 1]))
+                                    xActual = GetValueParameter('X', newList[i - 1]);
+                                if (HasValueParameter('Y', newList[i - 1]))
+                                    yActual = GetValueParameter('Y', newList[i - 1]);
+
+                                if (HasValueParameter('X', lineaG))
+                                    xDestino = GetValueParameter('X', lineaG);
+                                if (HasValueParameter('Y', lineaG))
+                                    yDestino = GetValueParameter('Y', lineaG);
+
+                                //si se cargaron los valores
+                                if (xActual != -999 && yActual != -999 && xDestino != -999 && yDestino != -999)
+                                {
+                                    //como el punto de destino es el mismo que el actual, no generamos avance
+                                    if (xActual == xDestino && yActual == yDestino)
+                                        avanza = false;
+                                }
+                            }
+
+                            if (avanza)
+                            {
+                                valoresZ = lineaG.Split('Z');
+
+                                valorZ = GetValueParameter('Z', lineaG);
+
+                                valorZproxNivel = GetValueParameter('Z',newList[i + 1]);
+
+                                /*linea = "G00 Z" + Convert.ToString(valorZ + deltaSubida) + Environment.NewLine + valoresZ[0] + "Z" +
+                                    Convert.ToString(valorZ + deltaSubida) + Environment.NewLine + "G00 Z" + Convert.ToString(valorZ);*/
+                                linea = "G00 Z" + Convert.ToString(deltaSubida) + Environment.NewLine +
+                                        valoresZ[0] + Environment.NewLine +
+                                        "G00 Z" + Convert.ToString(valorZproxNivel);
+                            }
+                            else
+                                continue;
+                            
                         }
                         else
                         {
                             linea = lineaG;
                         }
+
                         lista.Add(linea);
                     }
                     return lista;
                 }
             }
             return null;
+        }
+
+        private double GetValueParameter(char parameterName, string command)
+        {
+            foreach (string parameter in command.ToUpper().Split(' '))
+            {
+                if (parameter[0] == parameterName)
+                {
+                    return double.Parse(parameter.Substring(1));
+                }
+            }
+            return 0;
+        }
+        private bool HasValueParameter(char parameterName, string command)
+        {
+            return command.ToUpper().IndexOf(parameterName) != -1;
         }
 
         private string movimiento(string lineaG)
@@ -813,6 +877,9 @@ namespace CNCMatic
 
                 //mandamos a desconectar el puerto
                 Interfaz.DesconectarCNC();
+
+                //logueamos la salida
+                logger.Info("Cerrando aplicación");
             }
             catch (Exception ex)
             {
@@ -1334,7 +1401,7 @@ namespace CNCMatic
         private void lblEstado_TextChanged(object sender, EventArgs e)
         {
             //se termina de establecer la conexion, entones se liberan los controles
-            if (sender.ToString() == "Conectando (paso 3 de 3): Conexión establecida" )
+            if (sender.ToString() == "Conectando (paso 3 de 3): Conexión establecida")
             {
                 LimpiarControlesSafe();
 

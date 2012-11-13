@@ -459,7 +459,7 @@ namespace CNCMatic.XML
                     c.MaxZ = float.Parse(dr["MaxZ"].ToString());
                     c.VelocidadMovimiento = decimal.Parse(dr["VelocidadMovimiento"].ToString(), invCult);
                     c.LargoSeccion = decimal.Parse(dr["LargoSeccion"].ToString(), invCult);
-                    c.AltoAscenso = decimal.Parse(dr["AlturaAscenso"].ToString(), invCult);
+                    c.AltoAscenso = float.Parse(dr["AlturaAscenso"].ToString(), invCult);
                     c.GradosPasoX = decimal.Parse(dr["GradosPasoX"].ToString(), invCult);
                     c.GradosPasoY = decimal.Parse(dr["GradosPasoY"].ToString(), invCult);
                     c.GradosPasoZ = decimal.Parse(dr["GradosPasoZ"].ToString(), invCult);

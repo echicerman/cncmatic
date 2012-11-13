@@ -139,7 +139,7 @@ namespace G.Traducciones
 
         public static List<string> Elipses(ReadOnlyCollection<Elipse> elipses)
         {
-            G03_ArcoA mov;
+            //G03_ArcoA mov;
             List<string> movs = new List<string>();
 
             foreach (Elipse e in elipses)
@@ -170,6 +170,7 @@ namespace G.Traducciones
 
             return movs;
         }
+        
         public static void calculaElipse(Elipse elip, int precision)
         {
             float angulo = elip.AnguloInicio;
@@ -198,7 +199,6 @@ namespace G.Traducciones
             return;
 
         }
-
 
         //public static List<string> calculaElipse(float xc, float yc, float xr, float yr, float rotacion, int precision)
         //{

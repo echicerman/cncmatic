@@ -9,9 +9,12 @@ namespace G.Servicios
 {
     public static class Metodos
     {
+        public static float altoAscenso;
+        
         public static string LevantaPunta()
         {
-            return LevantaPunta(0.1000f);
+            //return LevantaPunta(0.1000f);
+            return LevantaPunta(altoAscenso);
         }
         public static string LevantaPunta(float nivelZ)
         {
@@ -19,7 +22,7 @@ namespace G.Servicios
             if (nivelZ != 0) //sino estamos en el nivel base
                 mov.Z = nivelZ;
             else //sino tomamos el z de la configuracion
-                mov.Z = 0.100f;
+                mov.Z = altoAscenso;
             return mov.ToString();
         }
 
@@ -49,7 +52,7 @@ namespace G.Servicios
             mov.Y = y;
 
             if (z == 0)
-                mov.Z = 0.100f; //este lo tendriamos que tomar de la config
+                mov.Z = altoAscenso ; //este lo tendriamos que tomar de la config
             else
                 mov.Z = z;
 

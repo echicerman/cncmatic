@@ -296,6 +296,8 @@ namespace CNC
                     Port.OpenConnection(this.PuertoConexion);
                     Port.Label = this.Label;
                     Port.DataReceivedCallback = new Port.DataReceivedCallbackDelegate(atenderPuerto);
+
+                    logger.Info("Serial Port Conectado");
                 }
             }
             catch (Exception ex)
@@ -328,6 +330,9 @@ namespace CNC
 
                 //guardamos el ultimo mensaje enviado
                 this.UltimoMensajeSend = texto;
+
+                //logueamos el mensaje enviado
+                logger.Info("Mensaje enviado: " + texto);
 
                 Port.Write(texto);
             }
@@ -908,6 +913,9 @@ namespace CNC
                 //guardamos el ultimo mensaje recibido
                 this.UltimoMensajeRecep = mensaje;
 
+                //logueamos el mensaje recibido
+                logger.Info("Mensaje recibido: " + mensaje);
+
                 return mensaje;
             }
             catch (Exception ex)
@@ -1189,6 +1197,7 @@ namespace CNC
             {
                 this.desconectarSerialPort();
 
+                logger.Info("Serial Port Desconectado");
             }
             catch (Exception ex)
             {

@@ -60,7 +60,11 @@ namespace CommandPreprocessor
         #endregion
     
         #region Conversor
-        public StepsPosition ToStepsPosition(UnitsPosition current, double feedrate, bool fastMovement = false)
+        public StepsPosition ToStepsPosition(UnitsPosition current, double feedrate)
+        {
+            return ToStepsPosition(current, feedrate, false);
+        }
+        public StepsPosition ToStepsPosition(UnitsPosition current, double feedrate, bool fastMovement)
         {
             // Delta Position & Delta Steps -> with this movement
             double xDelta = Math.Abs(this.X - current.X);

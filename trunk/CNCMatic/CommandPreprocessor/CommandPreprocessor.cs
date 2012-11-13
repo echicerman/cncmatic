@@ -87,7 +87,7 @@ namespace CommandPreprocessor
             }
 
             logger.Info("voy a ir al Z " + result.Z);
-            if (result.Z < 0) throw new Exception("Movimiento Inválido. (Z < 0)");
+            if (result.Z < 0) throw new Exception("Movimiento Inválido. (Eje Z sobrepasa límite superior)");
 
             // If the values are in inches, convert to millimeters
             if (!Configuration.millimetersProgramming)

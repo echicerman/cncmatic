@@ -13,7 +13,6 @@ namespace CommandPreprocessor
         private WorkingPlane workingPlane;
         private UnitsPosition currentPosition;
         private UnitsPosition referencePosition; // Origen de la pieza a fresar
-        private double maxZ;
         #endregion
 
         #region Constructor
@@ -23,7 +22,6 @@ namespace CommandPreprocessor
             this.workingPlane = WorkingPlane.XY;
             this.currentPosition = new UnitsPosition(0, 0, 0);
             this.referencePosition = new UnitsPosition(0, 0, 0);
-            this.maxZ = 0;
         }
         public static CommandPreprocessor GetInstance()
         {
@@ -51,11 +49,6 @@ namespace CommandPreprocessor
             get { return this.referencePosition; }
             set { this.referencePosition = value; }
         }
-        public double MaxZ
-        {
-            get { return this.maxZ; }
-            set { this.maxZ = value; }
-        }
         #endregion
 
         #region Private Methods
@@ -79,22 +72,22 @@ namespace CommandPreprocessor
         {
             UnitsPosition result = new UnitsPosition();
 
-            // Restar a MaxZ invierte las alturas... el techo pasa a ser 0
             if (Configuration.absoluteProgamming)
             {
                 result.X = HasValueParameter('X', command) ? GetValueParameter('X', command) + this.ReferencePosition.X : CurrentPosition.X;
                 result.Y = HasValueParameter('Y', command) ? GetValueParameter('Y', command) + this.ReferencePosition.Y : CurrentPosition.Y;
-                result.Z = HasValueParameter('Z', command) ? this.MaxZ - GetValueParameter('Z', command) + this.ReferencePosition.Z : CurrentPosition.Z;
+                result.Z = HasValueParameter('Z', command) ? this.ReferencePosition.Z - GetValueParameter('Z', command) : CurrentPosition.Z;
             }
             else
             {
                 // Translate to relative programming mode
                 result.X = HasValueParameter('X', command) ? GetValueParameter('X', command) + this.CurrentPosition.X : CurrentPosition.X;
                 result.Y = HasValueParameter('Y', command) ? GetValueParameter('Y', command) + this.CurrentPosition.Y : CurrentPosition.Y;
-                result.Z = HasValueParameter('Z', command) ? this.MaxZ - GetValueParameter('Z', command) + this.CurrentPosition.Z : CurrentPosition.Z;
+                result.Z = HasValueParameter('Z', command) ? this.CurrentPosition.Z - GetValueParameter('Z', command) : CurrentPosition.Z;
             }
 
             logger.Info("voy a ir al Z " + result.Z);
+            if (result.Z < 0) throw new Exception("Movimiento Inválido. (Z < 0)");
 
             // If the values are in inches, convert to millimeters
             if (!Configuration.millimetersProgramming)
@@ -109,6 +102,7 @@ namespace CommandPreprocessor
         private UnitsPosition GetFromRadius(double r, string command)
         {
             double midX, midY, midZ, cat1x, cat1y, cat1z, cat1, cat2x, cat2y, cat2z, cat2;
+            logger.Info("Get from radius");
             UnitsPosition final = GetFinalPosition(command);
             UnitsPosition centerPosition = new UnitsPosition();
 
@@ -229,6 +223,7 @@ namespace CommandPreprocessor
             double feedRate = HasValueParameter('F', code) ? GetValueParameter('F', code) : Configuration.defaultFeedrate; // Ver qué valor va cuando no hay valor - CONFIGURACION? -
 
             UnitsPosition startPosition = this.CurrentPosition;
+            logger.Info("procesando curva XY");
             UnitsPosition finalPosition = this.GetFinalPosition(code);
             UnitsPosition centerPosition = this.GetCenterPosition(code);
             int gCode = Convert.ToInt32(GetValueParameter('G', code));
@@ -259,7 +254,7 @@ namespace CommandPreprocessor
                 int step = clockwise ? steps - s : s;
                 sectionPosition.X = centerPosition.X + radius * Math.Cos(angleA + angle * ((float)step / steps));
                 sectionPosition.Y = centerPosition.Y + radius * Math.Sin(angleA + angle * ((float)step / steps));
-                sectionPosition.Z = (finalPosition.Z - startPosition.Z) * ((float)s / steps);
+                sectionPosition.Z = (finalPosition.Z - startPosition.Z) * ((float)s / steps) + this.ReferencePosition.Z;
 
                 if ((sectionPosition.X < 0) || (sectionPosition.Y < 0) || (sectionPosition.Z < 0))
                 {
@@ -493,19 +488,6 @@ namespace CommandPreprocessor
                                 "Milímetros por Minuto (default): " + Configuration.defaultFeedrate);
                 this.CurrentPosition = this.ReferencePosition;
 
-                this.MaxZ = this.CurrentPosition.Z;
-                // Get max Z looking into every command
-                foreach (string cmd in program)
-                {
-                    if (!string.IsNullOrEmpty(cmd))
-                    {
-                        double newZ = GetValueParameter('Z', cmd);
-                        this.MaxZ = newZ > this.MaxZ ? newZ : this.MaxZ;
-                    }
-                }
-
-                logger.InfoFormat("MaxZ: {0} - Reference.Z: {1}", MaxZ, ReferencePosition.Z);
-
                 // Process every command in the program
                 foreach (string cmd in program)
                 {
@@ -513,6 +495,7 @@ namespace CommandPreprocessor
                     if (!string.IsNullOrEmpty(cmd))
                     {
                         result.AddRange(this.ProcessCommand(cmd));
+                        logger.Info("actualizando currentPosition");
                         this.CurrentPosition = this.GetFinalPosition(cmd);
                     }
                 }

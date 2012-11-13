@@ -189,7 +189,7 @@ namespace CNCMatic
                 config.MaxZ = float.Parse(txtMaxZ.Text, cultAR);
                 config.LargoSeccion = decimal.Parse(txtLargoSeccion.Text, cultAR);
                 config.VelocidadMovimiento = decimal.Parse(txtVelocMov.Text, cultAR);
-                config.AltoAscenso = decimal.Parse(txtAltura.Text, cultAR);
+                config.AltoAscenso = float.Parse(txtAltura.Text, cultAR);
                 config.GradosPasoX = decimal.Parse(txtGradosX.Text, cultAR);
                 config.GradosPasoY = decimal.Parse(txtGradosY.Text, cultAR);
                 config.GradosPasoZ = decimal.Parse(txtGradosZ.Text, cultAR);

@@ -202,7 +202,7 @@ namespace CNCMatic
                     sl = OptimizarCodigoG(sl);
 
                     //Ajustamos los niveles de Z para ajustarlo al CNC
-                    sl = AcomodarZfigurasImportadas(sl);
+                    //sl = AcomodarZfigurasImportadas(sl);
 
                     //Mostramos el G en pantalla y previsualizamos
                     if (sl != null)

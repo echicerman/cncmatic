@@ -302,6 +302,7 @@ namespace DXF.Entidades
                 {
                     return false;
                 }
+                //sacamos la validacion sobre Z para permitir los valores negativos
                 //    if (v.Location.Z > config.MaxZ || v.Location.Z < 0)
                 //{
                 //    return false;
@@ -1089,7 +1090,8 @@ namespace DXF.Entidades
                 {
                     return false;
                 }
-                //    if (v.Location.Z > config.MaxZ || v.Location.Z < 0)
+                //sacamos la validacion sobre Z para permitir los valores negativos
+                //if (v.Location.Z > config.MaxZ || v.Location.Z < 0)
                 //{
                 //    return false;
                 //}

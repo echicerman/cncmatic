@@ -189,10 +189,11 @@ namespace DXF.Entidades
             {
                 return false;
             }
-            if (this.puntoInicio.Z > config.MaxZ || this.puntoInicio.Z < 0)
-            {
-                return false;
-            }
+            //sacamos la validacion sobre Z para permitir los valores negativos
+            //if (this.puntoInicio.Z > config.MaxZ || this.puntoInicio.Z < 0)
+            //{
+            //    return false;
+            //}
 
             if (this.puntoFin.X > config.MaxX || this.puntoFin.X < 0)
             {
@@ -202,10 +203,10 @@ namespace DXF.Entidades
             {
                 return false;
             }
-            if (this.puntoFin.Z > config.MaxZ || this.puntoFin.Z < 0)
-            {
-                return false;
-            }
+            //if (this.puntoFin.Z > config.MaxZ || this.puntoFin.Z < 0)
+            //{
+            //    return false;
+            //}
 
             return resultado;
         }

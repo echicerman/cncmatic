@@ -110,10 +110,11 @@ namespace DXF.Entidades
             {
                 return false;
             }
-            if (this.Ubicacion.Z > config.MaxZ || this.Ubicacion.Z < 0)
-            {
-                return false;
-            }
+            //sacamos la validacion sobre Z para permitir los valores negativos
+            //if (this.Ubicacion.Z > config.MaxZ || this.Ubicacion.Z < 0)
+            //{
+            //    return false;
+            //}
             return resultado;
         }
 

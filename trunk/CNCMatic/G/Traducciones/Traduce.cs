@@ -271,7 +271,10 @@ namespace G.Traducciones
         {
             G01_Lineal mov;
             List<string> movs = new List<string>();
-            movs.Add("<polilinea>" + Environment.NewLine);
+            
+            if(polilineas.Count() > 0)
+                movs.Add("<polilinea>" + Environment.NewLine);
+
             foreach (IPolilinea p in polilineas)
             {
                 Polilinea pi = new Polilinea();
@@ -332,9 +335,12 @@ namespace G.Traducciones
                 }
 
 
-
+                
             }
-            movs.Add("</polilinea>" + Environment.NewLine);
+
+            if(movs.Count() > 0)
+                movs.Add("</polilinea>" + Environment.NewLine);
+            
             return movs;
         }
 

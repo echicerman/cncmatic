@@ -177,7 +177,7 @@
             this.lblZa.AutoSize = true;
             this.lblZa.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblZa.ForeColor = System.Drawing.Color.Green;
-            this.lblZa.Location = new System.Drawing.Point(27, 12);
+            this.lblZa.Location = new System.Drawing.Point(29, 112);
             this.lblZa.Name = "lblZa";
             this.lblZa.Size = new System.Drawing.Size(22, 13);
             this.lblZa.TabIndex = 9;
@@ -188,7 +188,7 @@
             this.lblZr.AutoSize = true;
             this.lblZr.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblZr.ForeColor = System.Drawing.Color.Red;
-            this.lblZr.Location = new System.Drawing.Point(32, 112);
+            this.lblZr.Location = new System.Drawing.Point(31, 12);
             this.lblZr.Name = "lblZr";
             this.lblZr.Size = new System.Drawing.Size(19, 13);
             this.lblZr.TabIndex = 8;

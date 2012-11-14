@@ -10,7 +10,8 @@ namespace G.Objetos
         #region propiedades privadas
         private Punto inicio;
         private Punto fin;
-        private float radio;
+        private Punto centro;
+        //private float radio;
         #endregion
 
         #region constructores
@@ -22,7 +23,8 @@ namespace G.Objetos
         {
             this.inicio = new Punto(0, 0, 0);
             this.fin = new Punto(0, 0, 0);
-            this.radio = 0;
+            this.centro = new Punto(0, 0, 0);
+            //this.radio = 0;
             this._moveCode = MovesCodes.circuloHorario;
             
         }
@@ -63,6 +65,24 @@ namespace G.Objetos
             set { this.Fin.Z = value; }
         }
 
+        public float Centro_X
+        {
+            get { return this.centro.X; }
+            set { this.centro.X = value; }
+        }
+
+        public float Centro_Y
+        {
+            get { return this.centro.Y; }
+            set { this.centro.Y = value; }
+        }
+
+        public float Centro_Z
+        {
+            get { return this.centro.Z; }
+            set { this.centro.Z = value; }
+        }
+
         #endregion
 
         #region propiedades publicas
@@ -85,13 +105,22 @@ namespace G.Objetos
         }
 
         /// <summary>
+        /// Punto de centro
+        /// </summary>
+        public Punto Centro
+        {
+            get { return this.centro; }
+            set { this.centro = value; }
+        }
+
+        /// <summary>
         /// Valor del radio
         /// </summary>
-        public float Radio
-        {
-            get { return this.radio; }
-            set { this.radio = value; }
-        }
+        //public float Radio
+        //{
+        //    get { return this.radio; }
+        //    set { this.radio = value; }
+        //}
         #endregion
 
         #region metodos publicos
@@ -106,13 +135,32 @@ namespace G.Objetos
         public override string ToString()
         {
             string s = "";
+            //Voy al punto de de inicio
+            s += "G00 X" + this.Inicio.X.ToString();
+            s += " Y" + this.Inicio.Y.ToString();
+            s += " Z" + this.inicio.Z.ToString() + Environment.NewLine;
+            
             //Dibujo el Arco
             s += this.MoveCode;
             s += " X" + this.Fin.X.ToString();
             s += " Y" + this.Fin.Y.ToString();
             s += " Z" + this.Fin_Z.ToString();
-            s += " R" + this.radio.ToString();
-            
+            //s += " R" + this.radio.ToString();
+            if (this.Inicio_X > this.Centro.X)
+                s += " I-" + (this.Inicio_X - this.Centro.X).ToString();
+            else
+                s += " I" + (this.Centro.X - this.Inicio_X).ToString();
+
+            if (this.Inicio_Y > this.Centro.Y)
+                s += " J-" + (this.Inicio_Y - this.Centro.Y).ToString();
+            else
+                s += " J" + (this.Centro.Y - this.Inicio_Y).ToString();
+
+            if (this.Inicio_Z > this.Centro.Z)
+                s += " K-" + (this.Inicio_Z - this.Centro.Z).ToString();
+            else
+                s += " K" + (this.Centro.Z - this.Inicio_Z).ToString();
+
 
             return s;
         }

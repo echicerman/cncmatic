@@ -201,6 +201,9 @@ namespace CNCMatic
                     //Optimizamos las líneas de código G
                     sl = OptimizarCodigoG(sl);
 
+                    //Ajustamos los niveles de Z para ajustarlo al CNC
+                    sl = AcomodarZfigurasImportadas(sl);
+
                     //Mostramos el G en pantalla y previsualizamos
                     if (sl != null)
                     {
@@ -393,6 +396,45 @@ namespace CNCMatic
             return d;
         }
 
+        private List<string> AcomodarZfigurasImportadas(List<string> lista)
+        {
+            try
+            {
+                if (lista == null)
+                    return null;
+
+                if (lista.Count == 0)
+                    return new List<string>();
+
+                double maxZ=0;
+                foreach (string mov in lista)
+                {
+                    if (HasValueParameter('Z', mov) && GetValueParameter('Z', mov) > maxZ)
+                        maxZ = GetValueParameter('Z', mov);
+                }
+
+                List<string> nuevaLista = new List<string>();
+                string tempMov = "";
+                foreach (string mov in lista)
+                {
+                    tempMov = "";
+
+                    if (HasValueParameter('Z', mov))
+                        tempMov = SetValueParameter('Z', mov, GetValueParameter('Z', mov) - maxZ );
+                    else
+                        tempMov = mov;
+
+                    nuevaLista.Add(tempMov);
+                }
+
+                return nuevaLista;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error reorganizando niveles Z:" + ex.Message);
+            }
+        }
+
         private List<string> AgregarAccionesAG00(List<string> newList)
         {
             //double deltaSubida = 0.5;
@@ -452,9 +494,13 @@ namespace CNCMatic
 
                                 /*linea = "G00 Z" + Convert.ToString(valorZ + deltaSubida) + Environment.NewLine + valoresZ[0] + "Z" +
                                     Convert.ToString(valorZ + deltaSubida) + Environment.NewLine + "G00 Z" + Convert.ToString(valorZ);*/
-                                linea = "G00 Z" + Convert.ToString(deltaSubida) + Environment.NewLine +
-                                        valoresZ[0] + Environment.NewLine +
-                                        "G00 Z" + Convert.ToString(valorZproxNivel);
+                                //linea = "G00 Z" + Convert.ToString(deltaSubida) + Environment.NewLine +
+                                //        valoresZ[0] + Environment.NewLine +
+                                //        "G00 Z" + Convert.ToString(valorZproxNivel);
+                                
+                                lista.Add("G00 Z" + Convert.ToString(deltaSubida));
+                                lista.Add(valoresZ[0]);
+                                lista.Add("G00 Z" + Convert.ToString(valorZproxNivel));
                             }
                             else
                                 continue;
@@ -462,10 +508,11 @@ namespace CNCMatic
                         }
                         else
                         {
-                            linea = lineaG;
+                            //linea = lineaG;
+                            lista.Add(lineaG);
                         }
 
-                        lista.Add(linea);
+                        
                     }
                     return lista;
                 }
@@ -488,7 +535,17 @@ namespace CNCMatic
         {
             return command.ToUpper().IndexOf(parameterName) != -1;
         }
-
+        private string SetValueParameter(char parameterName, string command, double value)
+        {
+            foreach (string parameter in command.ToUpper().Split(' '))
+            {
+                if (parameter[0] == parameterName)
+                {
+                    return command.Replace(parameterName + parameter.Substring(1), parameterName + value.ToString());
+                }
+            }
+            return "";
+        }
         private string movimiento(string lineaG)
         {
             return lineaG.Substring(0, 3);

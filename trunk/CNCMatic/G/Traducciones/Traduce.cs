@@ -273,7 +273,7 @@ namespace G.Traducciones
             List<string> movs = new List<string>();
             
             if(polilineas.Count() > 0)
-                movs.Add("<polilinea>" + Environment.NewLine);
+                //movs.Add("<polilinea>" + Environment.NewLine);
 
             foreach (IPolilinea p in polilineas)
             {
@@ -338,8 +338,8 @@ namespace G.Traducciones
                 
             }
 
-            if(movs.Count() > 0)
-                movs.Add("</polilinea>" + Environment.NewLine);
+            //if(movs.Count() > 0)
+                //movs.Add("</polilinea>" + Environment.NewLine);
             
             return movs;
         }

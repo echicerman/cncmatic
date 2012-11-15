@@ -271,12 +271,11 @@ namespace G.Traducciones
         {
             G01_Lineal mov;
             List<string> movs = new List<string>();
-            
-            if(polilineas.Count() > 0)
-                //movs.Add("<polilinea>" + Environment.NewLine);
 
             foreach (IPolilinea p in polilineas)
             {
+                //movs.Add("<polilinea>");
+
                 Polilinea pi = new Polilinea();
 
                 if (p.Tipo == EntidadTipo.Polilinea)
@@ -330,16 +329,12 @@ namespace G.Traducciones
                     mov.Fin.Y = pi.Vertexes[0].Location.Y;
                     mov.Fin.Z = pi.Elevation;
 
-                    movs.Add(Metodos.IrA(pi.Vertexes[i - 1].Location.X, pi.Vertexes[i - 1].Location.Y, pi.Elevation));
+                    //movs.Add(Metodos.IrA(pi.Vertexes[i - 1].Location.X, pi.Vertexes[i - 1].Location.Y, pi.Elevation));
                     movs.Add(mov.ToString());
                 }
-
-
                 
+                //movs.Add("</polilinea>");
             }
-
-            //if(movs.Count() > 0)
-                //movs.Add("</polilinea>" + Environment.NewLine);
             
             return movs;
         }

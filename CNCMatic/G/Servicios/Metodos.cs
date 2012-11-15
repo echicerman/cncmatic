@@ -64,6 +64,43 @@ namespace G.Servicios
             return s;
         }
 
+        public static List<string> IrAL(Punto p)
+        {
+            List<string> s = new List<string>();
+            //levantar la punta hasta el nivel de Z que hay que ir
+            s.Add("G00 Z" + altoAscenso);
+            //crear el mov de avance
+            s.Add("G00 X" + p.X.ToString() + " Y" + p.Y.ToString());
+            //bajamos la punta
+            s.Add("G00 Z" + p.Z.ToString());
+
+            return s;
+        }
+
+        public static List<string> IrAL(float x, float y, float z)
+        {
+            List<string> s = new List<string>();
+            //levantar la punta hasta el nivel de Z que hay que ir
+            s.Add(LevantaPunta(z));
+
+            //crear el mov de avance
+            G00_Avance mov = new G00_Avance();
+            mov.X = x;
+            mov.Y = y;
+
+            if (z == 0)
+                mov.Z = altoAscenso; //este lo tendriamos que tomar de la config
+            else
+                mov.Z = z;
+
+            s.Add(mov.ToString());
+
+            //bajamos la punta
+            s.Add(BajaPunta(z));
+
+            return s;
+        }
+
         public static string Avance(float x, float y, float z)
         {
             G00_Avance mov = new G00_Avance();

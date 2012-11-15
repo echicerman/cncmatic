@@ -7,6 +7,7 @@ using CNC;
 using Configuracion;
 using CNCMatic.XML;
 using System.Windows.Forms;
+using G.Objetos;
 
 namespace CNCMatic
 {
@@ -289,6 +290,23 @@ namespace CNCMatic
             catch (Exception ex)
             {
                 throw (new Exception("Interfaz.ReiniciarCNC: " + ex.Message));
+            }
+        }
+
+        public static Punto PosicionActual()
+        {
+            try
+            {
+                //maquina
+                var cnc = CNC.CNC.Cnc;
+
+
+                return new Punto(cnc.PosicionActual_X,cnc.PosicionActual_Y,cnc.PosicionActual_Z);
+
+            }
+            catch (Exception ex)
+            {
+                throw (new Exception("Interfaz.PosicionActual: " + ex.Message));
             }
         }
     }

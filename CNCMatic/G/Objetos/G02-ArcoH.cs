@@ -164,6 +164,43 @@ namespace G.Objetos
 
             return s;
         }
+
+        public string ToString2()
+        {
+            string s = "";
+            //Voy al punto de de inicio
+            s += "G00 Z" + G.Servicios.Metodos.altoAscenso.ToString() + Environment.NewLine;
+            
+            s += "G00 X" + this.Inicio.X.ToString();
+            s += " Y" + this.Inicio.Y.ToString() + Environment.NewLine;
+
+            s += "G00 Z" + this.Inicio.Z.ToString() + Environment.NewLine;
+
+            //Dibujo el Arco
+            s += this.MoveCode;
+            s += " X" + this.Fin.X.ToString();
+            s += " Y" + this.Fin.Y.ToString();
+            s += " Z" + this.Fin_Z.ToString();
+            //s += " R" + this.radio.ToString();
+            if (this.Inicio_X > this.Centro.X)
+                s += " I-" + (this.Inicio_X - this.Centro.X).ToString();
+            else
+                s += " I" + (this.Centro.X - this.Inicio_X).ToString();
+
+            if (this.Inicio_Y > this.Centro.Y)
+                s += " J-" + (this.Inicio_Y - this.Centro.Y).ToString();
+            else
+                s += " J" + (this.Centro.Y - this.Inicio_Y).ToString();
+
+            if (this.Inicio_Z > this.Centro.Z)
+                s += " K-" + (this.Inicio_Z - this.Centro.Z).ToString();
+            else
+                s += " K" + (this.Centro.Z - this.Inicio_Z).ToString();
+
+
+            return s;
+        }
+
         #endregion
     }
 }

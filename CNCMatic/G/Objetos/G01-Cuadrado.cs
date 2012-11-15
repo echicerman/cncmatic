@@ -79,8 +79,13 @@ namespace G.Objetos
             {
                 string s = "";
 
-                //Se mueve al putno inicial
-                s += G.Servicios.Metodos.IrA(this.Inicio.X, this.inicio.Y, this.inicio.Z) + Environment.NewLine;
+                //subimos la punta
+                s += "G00 Z" + G.Servicios.Metodos.altoAscenso + Environment.NewLine;
+                //avanzamos al inicio
+                s += "G00 X" + this.Inicio_X.ToString() + " Y" + this.Inicio_Y.ToString() + Environment.NewLine;
+                //bajamos la punta
+                s += "G00 Z" + this.Inicio_Z.ToString() + Environment.NewLine;
+
 
                 //Dibuja un lado
                 s += this.MoveCode;

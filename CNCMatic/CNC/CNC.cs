@@ -7,6 +7,7 @@ using VirtualSerial;
 using CommandPreprocessor;
 using SafeControls;
 
+
 namespace CNC
 {
     /// <summary>
@@ -252,7 +253,18 @@ namespace CNC
         public string UltimoMensajeSend { get; set; }
         public string UltimoMensajeRecep { get; set; }
         public string PuertoConexion { get; set; }
-
+        public float PosicionActual_X
+        {
+            get{return float.Parse(this.PosicionActual.X.ToString());}
+        }
+        public float PosicionActual_Y
+        {
+            get { return float.Parse(this.PosicionActual.Y.ToString()); }
+        }
+        public float PosicionActual_Z
+        {
+            get { return float.Parse(this.PosicionActual.Z.ToString()); }
+        }
         public bool EstablecerConexion()
         {
             try

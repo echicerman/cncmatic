@@ -20,6 +20,18 @@ namespace CNCMatic
         //object _g;
         public bool modificado = false;
 
+        public FrmDibujoParams(ref Punto p)
+        {
+            InitializeComponent();
+
+            //p = new Punto();
+
+            propiedades.SelectedObject = p;
+
+            this.Text = "Punto de Referencia";
+            this.lblMensaje.Text = "Ingrese el punto de referencia desde donde iniciar la operación:";
+        }
+
         public FrmDibujoParams(out G01_Lineal g)
         {
             InitializeComponent();

@@ -119,6 +119,24 @@ namespace G.Objetos
 
             return s;
         }
+
+        public string ToString2()
+        {
+            string s = "";
+
+            //subimos la punta
+            s += "G00 Z" + G.Servicios.Metodos.altoAscenso + Environment.NewLine;
+            //avanzamos al inicio
+            s += "G00 X" + this.Inicio_X.ToString() + " Y" + this.Inicio_Y.ToString() + Environment.NewLine;
+            //bajamos la punta
+            s += "G00 Z" + this.Inicio_Z.ToString() + Environment.NewLine;
+
+            s += "G01 X" + this.Fin.X.ToString();
+            s += " Y" + this.Fin.Y.ToString();
+            s += " Z" + this.Fin.Z.ToString() + Environment.NewLine;
+
+            return s;
+        }
         #endregion
 
     }

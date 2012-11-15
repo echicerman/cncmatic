@@ -188,9 +188,7 @@ namespace CNCMatic
 
                     //Realizamos la traduccion de las figuras a código G
                     List<string> sl = new List<string>();
-                    //--cargamos el alto de ascenso configurado
-                    Metodos.altoAscenso = Interfaz.ConfiguracionActual().AltoAscenso;
-
+                   
                     sl.AddRange(Traduce.Lineas(doc.Lineas));
                     sl.AddRange(Traduce.Arcos(doc.Arcos));
                     sl.AddRange(Traduce.Circulos(doc.Circulos));
@@ -273,6 +271,19 @@ namespace CNCMatic
 
             while (list.Count > 0)
             {
+                //if (list[0] == "<polilinea>")
+                //{
+                //    while (list[0] != "</polilinea>")
+                //    {
+                //        newList.Add(list[0]);
+                //        list.RemoveAt(0);
+                //    }
+                    
+                //    newList.Add(list[0]);
+                //    list.RemoveAt(0);
+                //    continue;
+                //}
+                
                 auxiliar1 = list[0];
                 posAux = 0;
                 tempFig = list[1];
@@ -328,8 +339,21 @@ namespace CNCMatic
         private List<string> QuitartMovimientos(List<string> list)
         {
             List<string> lista = new List<string>();
-            foreach (string lineaG in list)
+            for (int i = 0; i < list.Count();i++ )
             {
+                string lineaG = list[i];
+
+                //if (lineaG == "<polilinea>")
+                //{
+                //    while (list[i] != "</polilinea>")
+                //    {
+                //        lista.Add(list[i]);
+                //        i++;
+                //    }
+                //    lista.Add(list[i]);
+                //    continue;
+                //}
+
                 string subcadena;
 
                 string[] partes = lineaG.Split('G');
@@ -355,16 +379,35 @@ namespace CNCMatic
 
                 List<string> lista = new List<string>();
                 Vector3d punto1 = new Vector3d(0, 0, 0);
-                Vector3d punto2 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[0])), Convert.ToDouble(PuntoInicioY(newList[0])), Convert.ToDouble(PuntoInicioZ(newList[0])));
+                Vector3d punto2;
+
+                //if (newList[0] == "<polilinea>")
+                //    punto2 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[1])), Convert.ToDouble(PuntoInicioY(newList[1])), Convert.ToDouble(PuntoInicioZ(newList[1])));
+                
+                //else
+                    punto2 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[0])), Convert.ToDouble(PuntoInicioY(newList[0])), Convert.ToDouble(PuntoInicioZ(newList[0])));
+                                
                 if (!(ObtenerDoubleTresDecimales(punto1) == ObtenerDoubleTresDecimales(punto2)))
                 {
-                    lista.Add(newList[0]);
+                    //if (newList[0] != "<polilinea>")
+                        lista.Add(newList[0]);
                 }
 
                 int i = 1;
-
                 while (i < newList.Count - 1)
                 {
+                    //if (newList[i-1] == "<polilinea>")
+                    //{
+                    //    lista.Add(newList[i-1]);
+                    //    while (newList[i] != "</polilinea>")
+                    //    {
+                    //        lista.Add(newList[i]);
+                    //        i++;
+                    //    }
+                    //    lista.Add(newList[i]);
+                    //    i=i+2;
+                    //    continue;
+                    //}
                     punto1 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[i])), Convert.ToDouble(PuntoInicioY(newList[i])), Convert.ToDouble(PuntoInicioZ(newList[i])));
                     punto2 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[i + 1])), Convert.ToDouble(PuntoInicioY(newList[i + 1])), Convert.ToDouble(PuntoInicioZ(newList[i + 1])));
 
@@ -379,8 +422,8 @@ namespace CNCMatic
                     }
                     i = i + 2;
                 }
-
-                lista.Add(newList[i]);
+                //if(i<newList.Count-1)
+                    lista.Add(newList[i]);
 
                 return lista;
             }
@@ -440,7 +483,6 @@ namespace CNCMatic
             //double deltaSubida = 0.5;
             double deltaSubida = Convert.ToDouble(Interfaz.ConfiguracionActual().AltoAscenso);
 
-            string linea;
             string[] valoresZ;
             double valorZ;
             if (newList != null)
@@ -453,6 +495,26 @@ namespace CNCMatic
                     bool avanza = true;
                     for (int i = 0; i < newList.Count(); i++)
                     {
+                        //if (newList[i] == "<polilinea>")
+                        //{
+                        //    valoresZ = newList[i+1].Split('Z');
+
+                        //    valorZ = GetValueParameter('Z', newList[i + 1]);
+
+                        //    lista.Add("G00 Z" + Convert.ToString(deltaSubida));
+                        //    lista.Add(valoresZ[0]);
+                        //    lista.Add("G00 Z" + Convert.ToString(valorZ));
+                            
+                        //    i++;
+
+                        //    while (newList[i] != "</polilinea>")
+                        //    {
+                        //        lista.Add(newList[i]);
+                        //        i++;
+                        //    }
+                            
+                        //    continue;
+                        //}
                         lineaG = newList[i];
 
                         if (lineaG.Substring(0, 3).Equals("G00"))
@@ -751,7 +813,7 @@ namespace CNCMatic
 
             if (dibujoParams.modificado)
             {
-                AgregaTextoEditor(false, g.ToString());
+                AgregaTextoEditor(false, g.ToString2());
 
                 //Muestra figura en el previsualizador
                 PrevisualizarFigurasManual();
@@ -767,7 +829,7 @@ namespace CNCMatic
 
             if (dibujoParams.modificado)
             {
-                AgregaTextoEditor(false, g.ToString());
+                AgregaTextoEditor(false, g.ToString2());
 
                 //Muestra figura en el previsualizador
                 PrevisualizarFigurasManual();
@@ -808,6 +870,8 @@ namespace CNCMatic
         {
             (new FrmConfiguracion()).ShowDialog();
 
+            //--cargamos el alto de ascenso configurado
+            Metodos.altoAscenso = Interfaz.ConfiguracionActual().AltoAscenso;
         }
 
         private void Principal_Load(object sender, EventArgs e)
@@ -833,6 +897,9 @@ namespace CNCMatic
             (new ToolTip()).SetToolTip(btnPlay, "Inicia el envio de las instrucciones al CNC");
             (new ToolTip()).SetToolTip(btnRestart, "Reinicia el CNC");
             (new ToolTip()).SetToolTip(btnLimpiar, "Limpia las instrucciones del editor");
+
+            //--cargamos el alto de ascenso configurado
+            Metodos.altoAscenso = Interfaz.ConfiguracionActual().AltoAscenso;
         }
 
         private void guardarComoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1226,7 +1293,7 @@ namespace CNCMatic
 
                 foreach (string linea in lineas)
                 {
-                    if (Char.ToUpper(linea[0]) != 'G' && Char.ToUpper(linea[0]) != 'M' && Char.ToUpper(linea[0]) != 'T')
+                    if (Char.ToUpper(linea[0]) != 'G' && Char.ToUpper(linea[0]) != 'M')
                     {
                         ////limpiamos el enter ingresado
                         //e.KeyChar = new char();
@@ -1276,6 +1343,16 @@ namespace CNCMatic
                         DialogResult dr = MessageBox.Show("Se iniciará el envío de las instrucciones al CNC." + Environment.NewLine + "¿Desea Continuar?", "Transferencia CNC", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
                         if (dr == DialogResult.Yes)
                         {
+                            Punto p = Interfaz.PosicionActual();
+                            
+                            FrmDibujoParams f = new FrmDibujoParams(ref p);
+                            f.ShowDialog();
+
+                            if (p.X != Interfaz.PosicionActual().X || p.Y != Interfaz.PosicionActual().Y || p.Z != Interfaz.PosicionActual().Z)
+                            {
+                                loteInstrucciones.InsertRange(0,Metodos.IrAL(p));
+                            }
+
                             if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual, ref this.prgBar))
                             {
                                 //bloqueamos controles

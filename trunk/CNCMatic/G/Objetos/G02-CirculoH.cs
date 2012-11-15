@@ -118,9 +118,10 @@ namespace G.Objetos
             string s = "";
 
             //Voy al punto de de inicio (que coincide con el de fin)
+            s += "G00 Z" + G.Servicios.Metodos.altoAscenso.ToString() + Environment.NewLine;
             s += "G00 X" + this.Inicio.X.ToString();
-            s += " Y" + this.Inicio.Y.ToString();
-            s += " Z" + this.inicio.Z.ToString() + Environment.NewLine;
+            s += " Y" + this.Inicio.Y.ToString() + Environment.NewLine;
+            s += "G00 Z" + this.inicio.Z.ToString() + Environment.NewLine;
             //Dibujo el Circulo
             s += this.MoveCode;
             s += " X" + this.Inicio.X.ToString();

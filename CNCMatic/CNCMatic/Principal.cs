@@ -701,12 +701,15 @@ namespace CNCMatic
                     MessageBox.Show("Instrucción \"" + linea + "\" no válida, por favor corregir", "Ingreso manual de instrucciones", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                else if (!Char.IsNumber(linea[1]))
+                else if (linea.Length > 1)
                 {
-                    ////limpiamos el enter ingresado
-                    //e.KeyChar = new char();
-                    MessageBox.Show("Instrucción \"" + linea + "\" no válida, por favor corregir", "Ingreso manual de instrucciones", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    if (!Char.IsNumber(linea[1]))
+                    {
+                        ////limpiamos el enter ingresado
+                        //e.KeyChar = new char();
+                        MessageBox.Show("Instrucción \"" + linea + "\" no válida, por favor corregir", "Ingreso manual de instrucciones", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                 }
 
                 AgregaTextoEditor(false, this.txtLineaManual.Text.Trim());
@@ -749,12 +752,15 @@ namespace CNCMatic
                         MessageBox.Show("Instrucción \"" + linea + "\" no válida, por favor corregir", "Ingreso manual de instrucciones", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    else if (!Char.IsNumber(linea[1]))
+                    else if (linea.Length > 1)
                     {
-                        ////limpiamos el enter ingresado
-                        //e.KeyChar = new char();
-                        MessageBox.Show("Instrucción \"" + linea + "\" no válida, por favor corregir", "Ingreso manual de instrucciones", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
+                        if (!Char.IsNumber(linea[1]))
+                        {
+                            ////limpiamos el enter ingresado
+                            //e.KeyChar = new char();
+                            MessageBox.Show("Instrucción \"" + linea + "\" no válida, por favor corregir", "Ingreso manual de instrucciones", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
                     }
                 }
 
@@ -1220,7 +1226,14 @@ namespace CNCMatic
             catch (Exception ex)
             {
                 lblStatus.Text = "";
-                MessageBox.Show("Se ha producido un error:" + ex.Message, "Previsualizar comandos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (ex.Message == "clsProcessor.ProcessFile:clsProcessor.ProcessSubWords:La cadena de entrada no tiene el formato correcto.")
+                {
+                    MessageBox.Show("Existen instrucciones G ingresadas no válidas. Por favor corregir.", "Previsualizar comandos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("Se ha producido un error:" + ex.Message, "Previsualizar comandos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

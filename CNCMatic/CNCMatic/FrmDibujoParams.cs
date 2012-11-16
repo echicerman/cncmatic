@@ -16,7 +16,7 @@ namespace CNCMatic
         {
             InitializeComponent();
         }
-        
+
         //object _g;
         public bool modificado = false;
 
@@ -29,7 +29,7 @@ namespace CNCMatic
             propiedades.SelectedObject = p;
 
             this.Text = "Punto de Referencia";
-            this.lblMensaje.Text = "Ingrese el punto de referencia desde donde iniciar la operación:";
+            this.lblMensaje.Text = "Ingrese el punto de referencia desde donde" + Environment.NewLine + "iniciar la operación:";
         }
 
         public FrmDibujoParams(out G01_Lineal g)
@@ -61,7 +61,7 @@ namespace CNCMatic
             InitializeComponent();
 
             g = new G02_ArcoH();
-            
+
             propiedades.SelectedObject = g;
 
             this.Text = "Parametros Arco";
@@ -101,6 +101,7 @@ namespace CNCMatic
 
             this.Close();
         }
+
 
     }
 }

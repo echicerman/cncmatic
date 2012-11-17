@@ -58,14 +58,17 @@ void M02(char code[])
 void M03(char code[])
 {
 	LATBbits.LATB6 = 1;
+	LATBbits.LATB7 = 1;
 }
 void M04(char code[])
 {
 	LATBbits.LATB6 = 1;
+	LATBbits.LATB7 = 1;
 }
 void M05(char code[])
 {
 	LATBbits.LATB6 = 0;
+	LATBbits.LATB7 = 0;
 }
 // function array of MCode commands
 _func mCodes[6] = {	M00,	NULL,	M02,	M03,	M04,	M05 };
@@ -751,6 +754,7 @@ void user(void)
 							limitSensorX = limitSensorY = limitSensorZ = false;
 							sprintf(message, (const rom char far *)"ERR:SFC_X%ld Y%ld Z%ld|", currentStepsPosition.x, currentStepsPosition.y, currentStepsPosition.z);
 							putUSBUSART(message, strlen(message));
+							machineState = FREEMOVES;
 						}						
 					
 						// seteo a 0 el enable de los motores

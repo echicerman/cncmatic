@@ -467,7 +467,8 @@ int main(void)
     LATEbits.LATE2 = 0;
 	
 	TRISB = 0b00001111;	// pines <0>,<1>,<2>,<3> de B son entrada - parada de emergencia, sensores
-	LATBbits.LATB6 = 1;
+	LATBbits.LATB6 = 0;
+	LATBbits.LATB7 = 0;
 	//********************************************
 
     while(1)

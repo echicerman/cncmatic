@@ -199,7 +199,15 @@ namespace DXF.Entidades
         {
             get { return TIPO; }
         }
+        public Vector3f PInicial
+        { get { return new Vector3f(); } set { } }
 
+
+        public Vector3f PFinal
+        { get { return new Vector3f(); } set { } }
+        public bool Invertido
+        { get { return false; } set { } }
+        public void InvertirPuntos() { }
         ///// <summary>
         ///// Gets or sets the entity <see cref="netDxf.AciColor">color</see>.
         ///// </summary>

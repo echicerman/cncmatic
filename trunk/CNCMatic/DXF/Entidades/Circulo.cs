@@ -25,6 +25,7 @@ namespace DXF.Entidades
         //private AciColor color;
         //private LineType lineType;
         private Vector3f normal;
+        private bool invertido;
         //private Dictionary<ApplicationRegistry, XData> xData;
 
         #endregion
@@ -207,6 +208,22 @@ namespace DXF.Entidades
         //    get { return this.xData; }
         //    set { this.xData = value; }
         //}
+
+        public Vector3f PInicial
+        {
+            get { return this.inicio; }
+            set { this.inicio = value; }
+        }
+
+        public Vector3f PFinal
+        {
+            get { return this.inicio; }
+            set { this.inicio = value; }
+        }
+        public void InvertirPuntos() { this.invertido = true; }
+
+        public bool Invertido
+        { get { return this.invertido; } set { this.invertido = value; } }
 
         #endregion
 

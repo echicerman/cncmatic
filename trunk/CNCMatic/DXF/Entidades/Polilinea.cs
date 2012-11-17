@@ -32,6 +32,7 @@ namespace DXF.Entidades
         //private LineType lineType;
         private Vector3f normal;
         private float elevation;
+        private bool invertido;
         //private float thickness;
         //private Dictionary<ApplicationRegistry, XData> xData;
 
@@ -187,7 +188,28 @@ namespace DXF.Entidades
         {
             get { return TIPO; }
         }
+        public Vector3f PInicial
+        {
+            get { return new Vector3f(this.vertexes[0].Location.X, this.vertexes[0].Location.Y, this.elevation); }
+            set { this.vertexes[0].Location = new Vector2f(value.X, value.Y); }
+        }
 
+        public Vector3f PFinal
+        {
+            get { if (this.isClosed) return this.PInicial;
+                else return new Vector3f(this.vertexes[this.vertexes.Count - 1].Location.X, this.vertexes[this.vertexes.Count - 1].Location.Y, this.elevation); }
+            set { this.vertexes[this.vertexes.Count - 1].Location = new Vector2f(value.X, value.Y); }
+        }
+        public void InvertirPuntos()
+        {
+            if (!this.isClosed)
+            {
+                this.vertexes.Reverse();
+                this.invertido = true;
+            }
+        }
+        public bool Invertido
+        { get { return this.invertido; } set { this.invertido = value; } }
         /// <summary>
         /// Gets or sets the entity <see cref="netDxf.AciColor">color</see>.
         /// </summary>
@@ -520,7 +542,16 @@ namespace DXF.Entidades
         {
             get { return TIPO; }
         }
+        public Vector3f PInicial
+        { get { return new Vector3f(); } set { } }
 
+
+        public Vector3f PFinal
+        { get { return new Vector3f(); } set { } }
+
+        public void InvertirPuntos() { }
+        public bool Invertido
+        { get { return false; } set { } }
         /// <summary>
         /// Gets or sets the entity <see cref="netDxf.AciColor">color</see>.
         /// </summary>
@@ -762,6 +793,22 @@ namespace DXF.Entidades
         //    set { this.xData = value; }
         //}
 
+        public Vector3f PInicial
+        {
+            get { return this.vertexes[0].Location; }
+            set { this.vertexes[0].Location = value; }
+        }
+
+        public Vector3f PFinal
+        {
+            get { return this.vertexes[this.vertexes.Count-1].Location; }
+            set { this.vertexes[this.vertexes.Count - 1].Location = value; }
+        }
+        public void InvertirPuntos() { }
+        
+        public bool Invertido
+        { get { return false; } set { } }
+
         #endregion
 
         #region overrides
@@ -823,6 +870,7 @@ namespace DXF.Entidades
         private Vector3f normal;
         private float elevation;
         private float thickness;
+        private bool invertido;
         //private Dictionary<ApplicationRegistry, XData> xData;
 
         #endregion
@@ -969,7 +1017,32 @@ namespace DXF.Entidades
         {
             get { return TIPO; }
         }
+        public Vector3f PInicial
+        {
+            get { return new Vector3f(this.vertexes[0].Location.X, this.vertexes[0].Location.Y, this.elevation); }
+            set { this.vertexes[0].Location = new Vector2f(value.X, value.Y); }
+        }
 
+        public Vector3f PFinal
+        {
+            get
+            {
+                if (this.isClosed) return this.PInicial;
+                else return new Vector3f(this.vertexes[this.vertexes.Count - 1].Location.X, this.vertexes[this.vertexes.Count - 1].Location.Y, this.elevation);
+            }
+            set { this.vertexes[this.vertexes.Count - 1].Location = new Vector2f(value.X, value.Y); }
+        }
+        public void InvertirPuntos()
+        {
+            if (!this.isClosed)
+            {
+                //vamos a invertir todos los vertices
+                this.vertexes.Reverse();
+                this.invertido = true;
+            }
+        }
+        public bool Invertido
+        { get { return this.invertido; } set { this.invertido = value; } }
         /// <summary>
         /// Gets or sets the entity <see cref="netDxf.AciColor">color</see>.
         /// </summary>

@@ -25,6 +25,8 @@ namespace DXF.Entidades
         private Vector3f puntoFin;
         //private float thickness;
         private Vector3f normal;
+        private char sentido;
+        private bool invertido;
         //private AciColor color;
         // private Layer layer;
         // private LineType lineType;
@@ -139,6 +141,12 @@ namespace DXF.Entidades
             set { this.anguloFin = value; }
         }
 
+        public char Sentido
+        {
+            get { return this.sentido; }
+            set { this.sentido = value; }
+        }
+
         /// <summary>
         /// Gets or sets the arc thickness.
         /// </summary>
@@ -245,6 +253,32 @@ namespace DXF.Entidades
         //    set { this.xData = value; }
         //}
 
+        public Vector3f PInicial
+        {
+            get { return this.puntoInicio; }
+            set { this.puntoInicio = value; }
+        }
+
+        public Vector3f PFinal
+        {
+            get { return this.puntoFin; }
+            set { this.puntoFin = value; }
+        }
+        public void InvertirPuntos()
+        {
+            //invierto los puntos
+            Vector3f ptoTemp = this.puntoInicio;
+            this.puntoInicio = this.puntoFin;
+            this.puntoFin = ptoTemp;
+
+            //e invierto el sentido del arco
+            if (this.sentido == 'A') this.sentido = 'H';
+            else this.sentido = 'A';
+            
+            this.invertido = true;
+        }
+        public bool Invertido
+        { get { return this.invertido; } set { this.invertido = value; } }
         #endregion
 
         #region metodos publicos

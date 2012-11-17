@@ -18,6 +18,7 @@ namespace DXF.Entidades
         private const EntidadTipo TIPO = EntidadTipo.Linea;
         private Vector3f puntoInicio;
         private Vector3f puntoFin;
+        private bool invertido;
         //private float thickness;
         //private AciColor color;
         //private Layer layer;
@@ -119,6 +120,25 @@ namespace DXF.Entidades
             get { return TIPO; }
         }
 
+        public Vector3f PInicial
+        {
+            get { return this.puntoInicio; }
+            set { this.puntoInicio = value; }
+        }
+
+        public Vector3f PFinal
+        {
+            get { return this.puntoFin; }
+            set { this.puntoFin = value; }
+        }
+        public void InvertirPuntos() {
+            Vector3f ptoTemp = this.puntoInicio;
+            this.puntoInicio = this.puntoFin;
+            this.puntoFin = ptoTemp;
+            this.invertido = true;
+        }
+        public bool Invertido
+        { get { return this.invertido; } set { this.invertido = value; } }
         /// <summary>
         /// Gets or sets the entity <see cref="netDxf.AciColor">color</see>.
         /// </summary>

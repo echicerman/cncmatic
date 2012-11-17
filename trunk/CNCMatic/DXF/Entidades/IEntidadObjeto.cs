@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 //using DXF.Tables;
 
+using DXF.Objetos;
 namespace DXF.Entidades
 {
 
@@ -159,5 +160,12 @@ namespace DXF.Entidades
         /// Gets or sets the entity <see cref="XData">extended data</see.
         /// </summary>
         //Dictionary<ApplicationRegistry, XData> XData { get; set; }
+
+        Vector3f PInicial { get; set; }
+        Vector3f PFinal { get; set; }
+        bool Invertido { get; set; }
+
+        void InvertirPuntos();
+        
     }
 }

@@ -186,18 +186,19 @@ namespace CNCMatic
                         return;
                     }
 
-                    //Realizamos la traduccion de las figuras a código G
-                    List<string> sl = new List<string>();
-                   
-                    sl.AddRange(Traduce.Lineas(doc.Lineas));
-                    sl.AddRange(Traduce.Arcos(doc.Arcos));
-                    sl.AddRange(Traduce.Circulos(doc.Circulos));
-                    //sl.AddRange(Traduce.Elipses(doc.Elipses));
-                    sl.AddRange(Traduce.Puntos(doc.Puntos));
-                    sl.AddRange(Traduce.Polilineas(doc.Polilineas));
+
+                    //Realizamos la traduccion de las figuras optimizadas a código G
+                    List<string> sl = Traduce.TraducirFiguras(doc.OptimizarFiguras());
+
+                    //sl.AddRange(Traduce.Lineas(doc.Lineas));
+                    //sl.AddRange(Traduce.Arcos(doc.Arcos));
+                    //sl.AddRange(Traduce.Circulos(doc.Circulos));
+                    ////sl.AddRange(Traduce.Elipses(doc.Elipses));
+                    //sl.AddRange(Traduce.Puntos(doc.Puntos));
+                    //sl.AddRange(Traduce.Polilineas(doc.Polilineas));
 
                     //Optimizamos las líneas de código G
-                    sl = OptimizarCodigoG(sl);
+                    //sl = OptimizarCodigoG(sl);
 
                     //Ajustamos los niveles de Z para ajustarlo al CNC
                     //sl = AcomodarZfigurasImportadas(sl);
@@ -1325,8 +1326,8 @@ namespace CNCMatic
                 txtPreview.Select(txtPreview.Text.Length, 0);
 
                 //Muestra figura en el previsualizador
-                this.LimpiarPrevisualizador();
-                PrevisualizarFigurasManual();
+                //this.LimpiarPrevisualizador(); <<--sacamos la previsualizacion de nuevo
+                //PrevisualizarFigurasManual();  <<--porque en figuras grandes tardaba mucho
 
                 //---validamos que haya instrucciones para ser enviadas
                 //obtenemos las lineas del previsualizador y removemos los blancos

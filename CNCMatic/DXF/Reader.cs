@@ -1131,7 +1131,6 @@ namespace DXF
             arco.Centro = centro;
             arco.Normal = normal;
 
-
             Vector3f PuntoInicio = Vector3f.Nulo;
             Vector3f PuntoFin = Vector3f.Nulo;
 
@@ -1147,6 +1146,9 @@ namespace DXF
 
             arco.PuntoInicio = PuntoInicio;
             arco.PuntoFin = PuntoFin;
+
+            //por defecto lo ponemos en antihorario
+            arco.Sentido = 'A';
 
             return arco;
         }

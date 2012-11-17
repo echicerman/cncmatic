@@ -135,11 +135,6 @@ namespace G.Objetos
         public override string ToString()
         {
             string s = "";
-            //Voy al punto de de inicio
-            s += "G00 X" + this.Inicio.X.ToString();
-            s += " Y" + this.Inicio.Y.ToString();
-            s += " Z" + this.inicio.Z.ToString() + Environment.NewLine;
-            
             //Dibujo el Arco
             s += this.MoveCode;
             s += " X" + this.Fin.X.ToString();
@@ -160,7 +155,6 @@ namespace G.Objetos
                 s += " K-" + (this.Inicio_Z - this.Centro.Z).ToString();
             else
                 s += " K" + (this.Centro.Z - this.Inicio_Z).ToString();
-
 
             return s;
         }

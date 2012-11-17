@@ -23,7 +23,7 @@ namespace DXF.Entidades
         //private LineType lineType;
         private Vector3f normal;
         //private Dictionary<ApplicationRegistry, XData> xData;
-
+        private bool invertido;
         #endregion
 
         #region constructores
@@ -130,6 +130,20 @@ namespace DXF.Entidades
             get { return TIPO; }
         }
 
+        public Vector3f PInicial
+        {
+            get { return this.ubicacion; }
+            set { this.ubicacion = value; }
+        }
+
+        public Vector3f PFinal
+        {
+            get { return this.ubicacion; }
+            set { this.ubicacion = value; }
+        }
+        public void InvertirPuntos() { this.invertido = true; }
+        public bool Invertido
+        { get { return this.invertido; } set { this.invertido = value; } }
         /// <summary>
         /// Gets or sets the entity <see cref="netDxf.AciColor">color</see>.
         /// </summary>

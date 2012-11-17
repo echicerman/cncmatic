@@ -10,6 +10,7 @@ using DXF.Entidades;
 using DXF.Header;
 using DXF.Objetos;
 using Configuracion;
+
 //using Dxf.Tables;
 //using Attribute = DXF.Entidades.Attribute;
 
@@ -595,7 +596,7 @@ namespace DXF
 
         }
 
-        public bool AnalizarFiguras(XML_Config config )
+        public bool AnalizarFiguras(XML_Config config)
         {
 
             //analizamos los arcos del documento
@@ -644,6 +645,306 @@ namespace DXF
 
             return true;
         }
+
+        public List<IEntidadObjeto> OptimizarFiguras()
+        {
+            List<IEntidadObjeto> lista = GenerarPolilineas(this.Figuras());
+            List<IEntidadObjeto> listaOrdenada = new List<IEntidadObjeto>();
+            IEntidadObjeto obj;
+            int idSgteObjA, idSgteObjB, idSgteObjC, idSgteObjD, sgteId;
+
+            idSgteObjA = 0;
+
+            //buscamos el punto mas cercano al 0,0,0
+            for (int i = 0; i < lista.Count; i++)
+            {
+                if (Vector3f.Distance(lista[i].PInicial, new Vector3f(0, 0, 0)) <
+                   Vector3f.Distance(lista[idSgteObjA].PInicial, new Vector3f(0, 0, 0)))
+                    idSgteObjA = i;
+            }
+
+            //movemos la figura al inicio
+            IEntidadObjeto aux = lista[0];
+            lista[0] = lista[idSgteObjA];
+            lista[idSgteObjA] = aux;
+
+            sgteId = 0;
+
+            while (lista.Count > 0)
+            {
+                //---Vamos a buscar los proximos---
+                obj = lista[sgteId];
+
+                //lo removemos de la lista
+                lista.RemoveAt(sgteId);
+                if (lista.Count == 0)
+                {
+                    //agregamos el objeto actual y salimos
+                    listaOrdenada.Add(obj);
+                    break;
+                }
+                idSgteObjA = lista.Count - 1;
+                idSgteObjB = lista.Count - 1;
+                idSgteObjC = lista.Count - 1;
+                idSgteObjD = lista.Count - 1;
+
+                //1. Privilegio la figura mas cercana al ptoI y al ptoF.
+                for (int j = 0; j < lista.Count; j++)
+                {
+                    //buscamos el mas proximo (pto inicio) al punto de inicio de la figura actual
+                    if (Vector3f.Distance(obj.PInicial, lista[j].PInicial) <
+                       Vector3f.Distance(obj.PInicial, lista[idSgteObjA].PInicial))
+                        idSgteObjA = j;
+
+                    //buscamos el mas proximo (pto inicio) al punto de fin de la figura actual
+                    if (Vector3f.Distance(obj.PFinal, lista[j].PInicial) <
+                       Vector3f.Distance(obj.PFinal, lista[idSgteObjB].PInicial))
+                        idSgteObjB = j;
+
+                    //buscamos el mas proximo (pto final) al punto de inicio de la figura actual
+                    if (Vector3f.Distance(obj.PInicial, lista[j].PFinal) <
+                       Vector3f.Distance(obj.PInicial, lista[idSgteObjC].PFinal))
+                        idSgteObjC = j;
+
+                    //buscamos el mas proximo (pto final) al punto de fin de la figura actual
+                    if (Vector3f.Distance(obj.PFinal, lista[j].PFinal) <
+                       Vector3f.Distance(obj.PFinal, lista[idSgteObjD].PFinal))
+                        idSgteObjD = j;
+                }
+
+                //2. Vemos cual es mas cercana
+                switch (DistanciaMenor(obj, idSgteObjA, idSgteObjB, idSgteObjC, idSgteObjD, lista))
+                {
+                    case 'A'://menor distancia del pto inicial al inicial del prox
+                        {
+                            //"damos vuelta" la figura actual
+                            obj.InvertirPuntos();
+
+                            //agregamos el nuevo objeto siguiente
+                            //listaOrdenada.Add(lista[idSgteObjA]);
+                            sgteId = idSgteObjA;
+                        } break;
+                    case 'B'://menor distancia del pto final al inicial del prox
+                        {
+                            //agregamos el nuevo objeto siguiente
+                            //listaOrdenada.Add(lista[idSgteObjB]);
+                            sgteId = idSgteObjB;
+                        } break;
+                    case 'C'://menor distancia del pto inicial al final del prox
+                        {
+                            //"damos vuelta" la figura actual
+                            obj.InvertirPuntos();
+
+                            //agregamos el nuevo objeto siguiente
+                            //listaOrdenada.Add(lista[idSgteObjC]);
+                            sgteId = idSgteObjC;
+
+                        } break;
+                    case 'D'://menor distancia del pto final al final de la prox
+                        {
+                            //"damos vuelta" la figura sgte
+                            lista[idSgteObjD].InvertirPuntos();
+
+                            //agregamos el nuevo objeto siguiente
+                            //listaOrdenada.Add(lista[idSgteObjD]);
+                            sgteId = idSgteObjD;
+
+                        } break;
+                }
+
+                //agregamos la figura actual a la lista
+                listaOrdenada.Add(obj);
+
+            }
+
+            return listaOrdenada;
+        }
+
+        public List<IEntidadObjeto> GenerarPolilineas(List<IEntidadObjeto> lista)
+        {
+            List<IEntidadObjeto> nuevaLista = new List<IEntidadObjeto>();
+            List<IEntidadObjeto> lineas = new List<IEntidadObjeto>();
+
+            //pasamos directo todas las figuras que NO son lineas
+            for (int i = 0; i < lista.Count; i++)
+            {
+                if (lista[i].Tipo != EntidadTipo.Linea)
+                    nuevaLista.Add(lista[i]);
+                else
+                    lineas.Add(lista[i]);
+            }
+            int sgteId = 0;
+            int actualId;
+            bool encontre = false;
+
+            Polilinea poli = null;
+
+            while (lineas.Count > 0)
+            {
+                encontre = false;
+
+                actualId = sgteId;
+
+                IEntidadObjeto linea = lineas[actualId];
+
+                lineas.RemoveAt(actualId);
+
+                //buscamos otra "pegada"
+                for (int i = 0; i < lineas.Count; i++)
+                {
+                    if (Vector3f.Distance(linea.PFinal, lineas[i].PInicial) == 0)
+                    {//si el final de la linea coincide con el inicio de otra
+                        sgteId = i;
+                        encontre = true;
+                        break;
+                    }
+                    if(Vector3f.Distance(linea.PFinal, lineas[i].PFinal) == 0)
+                    {//si el final de la linea coincide con el fin de otra
+                        sgteId = i;
+                        encontre = true;
+                        //la "damos vuelta"
+                        lineas[sgteId].InvertirPuntos();
+                        break;
+                    }
+                }
+
+                if (!encontre)
+                {//sino encontramos otra linea "pegada"
+                    if (poli != null)
+                    {//si estabamos recorriendo una polilinea, entonces llegue al final
+                        //uso la polilinea y le agrego un vertice
+                        poli.Vertexes.Add(new PolylineVertex(linea.PInicial.X, linea.PInicial.Y));
+                        poli.Vertexes.Add(new PolylineVertex(linea.PFinal.X, linea.PFinal.Y));
+
+                        //si punto de inicio y fin coinciden, cerramos la polilinea
+                        if(Vector3f.Distance(new Vector3f(poli.Vertexes[0].Location.X,poli.Vertexes[0].Location.Y,poli.Elevation),
+                                             new Vector3f(poli.Vertexes[poli.Vertexes.Count-1].Location.X,poli.Vertexes[poli.Vertexes.Count-1].Location.Y,poli.Elevation)
+                                             ) == 0)
+                            poli.IsClosed=true;
+
+                        //agregamos la poli y la limpiamos
+                        nuevaLista.Add(poli);
+
+                        poli = null;
+                    }
+                    else
+                    {//es una linea aislada, la pasamos directo
+                        nuevaLista.Add(linea);
+                    }
+                    sgteId = 0;
+                }
+                else
+                {//si encuentro otra linea "pegada"
+                    if (poli == null)
+                    {//creo una nueva polilinea
+                        poli = new Polilinea();
+                        poli.Elevation = linea.PInicial.Z;
+                    }
+                    
+                    //uso la polilinea y le agrego un vertice
+                    poli.Vertexes.Add(new PolylineVertex(linea.PInicial.X, linea.PInicial.Y));
+                }
+
+                
+            }
+
+            return nuevaLista;
+        }
+
+        public char DistanciaMenor(IEntidadObjeto obj, int idA, int idB, int idC, int idD, List<IEntidadObjeto> lista)
+        {
+            //si es un objeto que ya fue invertido antes,
+            //no podemos utilizar las alternativas que lo vuelven a invertir (A y C)
+            if (obj.Invertido)
+            {
+                //vamos a priorizar primero si tengo una figurada "pegada"
+                //en el orden correcto ptoFin->ptoInicial
+                if (Vector3f.Distance(obj.PFinal, lista[idB].PInicial) == 0)
+                    return 'B';
+
+                if (Vector3f.Distance(obj.PInicial, lista[idB].PInicial) <
+                           Vector3f.Distance(obj.PFinal, lista[idD].PFinal)
+                           ) return 'B';
+                else return 'D';
+            }
+            else
+            {
+                //vamos a priorizar primero si tengo una figurada "pegada"
+                //en el orden correcto ptoFin->ptoInicial
+                if (Vector3f.Distance(obj.PFinal, lista[idB].PInicial) == 0)
+                    return 'B';
+
+                if (Vector3f.Distance(obj.PInicial, lista[idA].PInicial) == 0)
+                    return 'A';
+
+                //vemos el A
+                if (Vector3f.Distance(obj.PInicial, lista[idA].PInicial) <
+                   Vector3f.Distance(obj.PFinal, lista[idB].PInicial)
+                   )
+                {
+                    if (Vector3f.Distance(obj.PInicial, lista[idA].PInicial) <
+                         Vector3f.Distance(obj.PInicial, lista[idC].PFinal)
+                         )
+                    {
+                        if (Vector3f.Distance(obj.PInicial, lista[idA].PInicial) <
+                           Vector3f.Distance(obj.PFinal, lista[idD].PFinal)
+                           ) return 'A';
+                        else return 'D';
+                    }
+                    else
+                    {//C mas chico que A
+                        if (Vector3f.Distance(obj.PInicial, lista[idC].PFinal) <
+                           Vector3f.Distance(obj.PFinal, lista[idD].PFinal)
+                           ) return 'C';
+                        else return 'D';
+
+                    }
+                }
+                else
+                {//B mas chico que A
+                    if (Vector3f.Distance(obj.PFinal, lista[idB].PInicial) <
+                         Vector3f.Distance(obj.PInicial, lista[idC].PFinal)
+                         )
+                    {
+                        if (Vector3f.Distance(obj.PInicial, lista[idB].PInicial) <
+                           Vector3f.Distance(obj.PFinal, lista[idD].PFinal)
+                           ) return 'B';
+                        else return 'D';
+                    }
+                    else
+                    {//C mas chico que B
+                        if (Vector3f.Distance(obj.PInicial, lista[idC].PFinal) <
+                           Vector3f.Distance(obj.PFinal, lista[idD].PFinal)
+                           ) return 'C';
+                        else return 'D';
+
+                    }
+                }
+            }
+        }
+
+        public List<IEntidadObjeto> Figuras()
+        {
+            List<IEntidadObjeto> lista = new List<IEntidadObjeto>();
+
+            foreach (IEntidadObjeto o in this.arcos)
+                lista.Add(o);
+
+            foreach (IEntidadObjeto o in this.circulos)
+                lista.Add(o);
+
+            foreach (IEntidadObjeto o in this.lineas)
+                lista.Add(o);
+
+            foreach (IEntidadObjeto o in this.polilineas)
+                lista.Add(o);
+
+            foreach (IEntidadObjeto o in this.puntos)
+                lista.Add(o);
+
+            return lista;
+        }
+
 
         #endregion
     }

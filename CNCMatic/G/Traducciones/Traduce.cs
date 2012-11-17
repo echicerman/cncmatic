@@ -37,6 +37,26 @@ namespace G.Traducciones
             return movs;
         }
 
+        public static List<string> Linea(Linea l)
+        {
+            G01_Lineal mov;
+            List<string> movs = new List<string>();
+
+            mov = new G01_Lineal();
+
+            mov.Inicio.X = l.PuntoInicio.X;
+            mov.Inicio.Y = l.PuntoInicio.Y;
+            mov.Inicio.Z = l.PuntoInicio.Z;
+
+            mov.Fin.X = l.PuntoFinal.X;
+            mov.Fin.Y = l.PuntoFinal.Y;
+            mov.Fin.Z = l.PuntoFinal.Z;
+
+            movs.Add(mov.ToString());
+
+            return movs;
+        }
+
         public static List<string> Puntos(ReadOnlyCollection<DXF.Entidades.Punto> puntos)
         {
             G01_Lineal mov;
@@ -62,32 +82,31 @@ namespace G.Traducciones
             return movs;
         }
 
+        public static List<string> Punto(DXF.Entidades.Punto p)
+        {
+            G01_Lineal mov;
+            List<string> movs = new List<string>();
+
+            mov = new G01_Lineal();
+
+            mov.Inicio.X = p.Ubicacion.X;
+            mov.Inicio.Y = p.Ubicacion.Y;
+            mov.Inicio.Z = p.Ubicacion.Z;
+
+            mov.Fin.X = p.Ubicacion.X;
+            mov.Fin.Y = p.Ubicacion.Y;
+            mov.Fin.Z = p.Ubicacion.Z;
+
+            movs.Add(mov.ToString());
+            return movs;
+        }
+
         public static List<string> Arcos(ReadOnlyCollection<Arco> arcos)
         {
-            //G02_ArcoH mov;
             List<string> movs = new List<string>();
 
             foreach (Arco a in arcos)
             {
-                //if (a.AnguloInicio > a.AnguloFin)
-                //{
-                //    G02_ArcoH mov = new G02_ArcoH();
-                //    mov.Inicio.X = a.PuntoInicio.X;
-                //    mov.Inicio.Y = a.PuntoInicio.Y;
-                //    mov.Inicio.Z = a.PuntoInicio.Z;
-
-                //    mov.Fin.X = a.PuntoFin.X;
-                //    mov.Fin.Y = a.PuntoFin.Y;
-                //    mov.Fin.Z = a.PuntoFin.Z;
-
-
-                //    mov.Radio = a.Radio;
-
-                //    movs.Add(Metodos.IrA(mov.Inicio.X, mov.Inicio.Y, mov.Inicio.Z));
-                //    movs.Add(mov.ToString());
-                //}
-                //if (a.AnguloInicio<a.AnguloFin)
-                //{
                 G03_ArcoA mov = new G03_ArcoA();
                 mov.Inicio.X = a.PuntoInicio.X;
                 mov.Inicio.Y = a.PuntoInicio.Y;
@@ -97,18 +116,54 @@ namespace G.Traducciones
                 mov.Fin.Y = a.PuntoFin.Y;
                 mov.Fin.Z = a.PuntoFin.Z;
 
-
                 mov.Centro = new G.Objetos.Punto(a.Centro);
 
                 mov.Radio = a.Radio;
 
                 movs.Add(Metodos.IrA(mov.Inicio.X, mov.Inicio.Y, mov.Inicio.Z));
                 movs.Add(mov.ToString());
+            }
 
-                //}
+            return movs;
+        }
 
+        public static List<string> Arco(Arco a)
+        {
+            List<string> movs = new List<string>();
+            
+            if (a.Sentido == 'H')
+            {
+                G02_ArcoH mov = new G02_ArcoH();
 
+                mov.Inicio.X = a.PuntoInicio.X;
+                mov.Inicio.Y = a.PuntoInicio.Y;
+                mov.Inicio.Z = a.PuntoInicio.Z;
 
+                mov.Fin.X = a.PuntoFin.X;
+                mov.Fin.Y = a.PuntoFin.Y;
+                mov.Fin.Z = a.PuntoFin.Z;
+
+                mov.Centro = new G.Objetos.Punto(a.Centro);
+
+                movs.Add(mov.ToString());
+            }
+            else
+            {
+                G03_ArcoA mov = new G03_ArcoA();
+
+                mov.Inicio.X = a.PuntoInicio.X;
+                mov.Inicio.Y = a.PuntoInicio.Y;
+                mov.Inicio.Z = a.PuntoInicio.Z;
+
+                mov.Fin.X = a.PuntoFin.X;
+                mov.Fin.Y = a.PuntoFin.Y;
+                mov.Fin.Z = a.PuntoFin.Z;
+
+                mov.Centro = new G.Objetos.Punto(a.Centro);
+
+                mov.Radio = a.Radio;
+
+                movs.Add(mov.ToString());
             }
 
             return movs;
@@ -137,6 +192,24 @@ namespace G.Traducciones
             return movs;
         }
 
+        public static List<string> Circulo(Circulo a)
+        {
+            G03_CirculoA mov;
+            List<string> movs = new List<string>();
+
+            mov = new G03_CirculoA();
+
+            mov.Inicio.X = a.Inicio.X;
+            mov.Inicio.Y = a.Inicio.Y;
+            mov.Inicio.Z = a.Inicio.Z;
+
+            mov.Radio = a.Radio;
+
+            movs.Add(mov.ToString());
+
+            return movs;
+        }
+
         public static List<string> Elipses(ReadOnlyCollection<Elipse> elipses)
         {
             //G03_ArcoA mov;
@@ -161,7 +234,7 @@ namespace G.Traducciones
                 //movs = calculaEsfera(0,0,40,15,1000);
                 //movs = calculaEsfera2(40, 0.1, 10);
                 //movs.InsertRange(0, calculaElipse(e.Centro.X, e.Centro.Y, e.EjeMenor, e.EjeMayor, e.Rotacion, 1000));
-                calculaElipse(e,95);
+                calculaElipse(e, 95);
 
                 //movs.Add(Metodos.IrA(mov.Inicio.X, mov.Inicio.Y, mov.Inicio.Z));
                 //movs.Add(mov.ToString());
@@ -170,18 +243,18 @@ namespace G.Traducciones
 
             return movs;
         }
-        
+
         public static void calculaElipse(Elipse elip, int precision)
         {
             float angulo = elip.AnguloInicio;
-            Vector2d pi = ElipsePunto(elip.Centro.X, elip.Centro.Y, elip.EjeMayor/2, elip.EjeMenor / 2, angulo, elip.Rotacion);
+            Vector2d pi = ElipsePunto(elip.Centro.X, elip.Centro.Y, elip.EjeMayor / 2, elip.EjeMenor / 2, angulo, elip.Rotacion);
             double phi = ElipseTang(elip.EjeMayor / 2, elip.EjeMenor / 2, angulo, elip.Rotacion);
-            
+
             List<Vector2d> puntos = new List<Vector2d>();
             List<double> tans = new List<double>();
 
             puntos.Insert(0, pi);
-            tans.Insert(0,phi);
+            tans.Insert(0, phi);
 
             int i = 1;
             float theta = elip.AnguloFin - elip.AnguloInicio;
@@ -192,8 +265,8 @@ namespace G.Traducciones
 
                 angulo += theta / precision;
 
-                puntos.Insert(i, ElipsePunto(elip.Centro.X, elip.Centro.Y, elip.EjeMayor/2, elip.EjeMenor/2, angulo, elip.Rotacion));
-                tans.Insert(i, ElipseTang(elip.EjeMayor/2, elip.EjeMenor/2, angulo, elip.Rotacion));
+                puntos.Insert(i, ElipsePunto(elip.Centro.X, elip.Centro.Y, elip.EjeMayor / 2, elip.EjeMenor / 2, angulo, elip.Rotacion));
+                tans.Insert(i, ElipseTang(elip.EjeMayor / 2, elip.EjeMenor / 2, angulo, elip.Rotacion));
                 i++;
             }
             return;
@@ -258,7 +331,7 @@ namespace G.Traducciones
             double Px = a * Math.Cos(angulo) * Math.Cos(rotacion) - b * Math.Sin(angulo) * Math.Sin(rotacion);
             double Py = a * Math.Cos(angulo) * Math.Sin(rotacion) + b * Math.Sin(angulo) * Math.Cos(rotacion);
 
-            return new Vector2d(xc+Px, yc+Py);
+            return new Vector2d(xc + Px, yc + Py);
         }
 
         public static double ElipseTang(float a, float b, float angulo, float rotacion)
@@ -332,13 +405,107 @@ namespace G.Traducciones
                     //movs.Add(Metodos.IrA(pi.Vertexes[i - 1].Location.X, pi.Vertexes[i - 1].Location.Y, pi.Elevation));
                     movs.Add(mov.ToString());
                 }
-                
+
                 //movs.Add("</polilinea>");
             }
-            
+
             return movs;
         }
 
+        public static List<string> Polilinea(IPolilinea p)
+        {
+            G01_Lineal mov;
+            List<string> movs = new List<string>();
+
+            Polilinea pi = new Polilinea();
+
+            if (p.Tipo == EntidadTipo.Polilinea)
+            {
+                pi = (Polilinea)p;
+            }
+            if (p.Tipo == EntidadTipo.LightWeightPolyline)
+            {
+                pi = ((LightWeightPolyline)p).ToPolilinea();
+            }
+
+            foreach (PolylineVertex v in pi.Vertexes)
+            {
+                mov = new G01_Lineal();
+
+                mov.Inicio.X = v.Location.X;
+                mov.Inicio.Y = v.Location.Y;
+                mov.Inicio.Z = pi.Elevation;
+
+                mov.Fin.X = v.Location.X;
+                mov.Fin.Y = v.Location.Y;
+                mov.Fin.Z = pi.Elevation;
+
+                movs.Add(mov.ToString());
+
+            }
+
+            if (pi.IsClosed) //si es cerrado, adicionalmente agregamos ir al inicio
+            {
+                mov = new G01_Lineal();
+
+                mov.Inicio.X = pi.Vertexes[pi.Vertexes.Count - 1].Location.X;
+                mov.Inicio.Y = pi.Vertexes[pi.Vertexes.Count - 1].Location.Y;
+                mov.Inicio.Z = pi.Elevation;
+
+                mov.Fin.X = pi.Vertexes[0].Location.X;
+                mov.Fin.Y = pi.Vertexes[0].Location.Y;
+                mov.Fin.Z = pi.Elevation;
+
+                movs.Add(mov.ToString());
+            }
+            return movs;
+        }
+
+        public static List<string> TraducirFiguras(List<IEntidadObjeto> objetos)
+        {
+            try
+            {
+                List<string> movimientos = new List<string>();
+                bool avance = false;
+
+                for (int i = 0; i < objetos.Count; i++)
+                {
+                    avance = false;
+
+                    if (i == 0)
+                    {
+                        if (Vector3f.Distance(objetos[i].PInicial, new Vector3f(0, 0, 0)) != 0)
+                            avance = true;
+                    }
+                    else
+                    {
+                        if (Vector3f.Distance(objetos[i].PInicial, objetos[i - 1].PFinal) != 0)
+                            avance = true;
+                    }
+
+                    if (avance)
+                        movimientos.AddRange(Metodos.IrAL(objetos[i].PInicial));
+
+                    switch (objetos[i].Tipo)
+                    {
+                        case EntidadTipo.Arco: movimientos.AddRange(Arco((Arco)objetos[i])); break;
+                        case EntidadTipo.Circulo: movimientos.AddRange(Circulo((Circulo)objetos[i])); break;
+                        case EntidadTipo.Linea: movimientos.AddRange(Linea((Linea)objetos[i])); break;
+                        case EntidadTipo.LightWeightPolyline: movimientos.AddRange(Polilinea((IPolilinea)objetos[i])); break;
+                        case EntidadTipo.Polilinea: movimientos.AddRange(Polilinea((IPolilinea)objetos[i])); break;
+                        case EntidadTipo.Punto: movimientos.AddRange(Punto((DXF.Entidades.Punto)objetos[i])); break;
+                    }
+                }
+
+                return movimientos;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("TraducirFiguras:" + ex.Message);
+            }
+
+
+        }
     }
 
 

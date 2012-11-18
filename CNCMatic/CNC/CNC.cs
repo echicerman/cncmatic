@@ -185,7 +185,7 @@ namespace CNC
         private static CNC instancia;
 
         private static readonly log4net.ILog logger = LogManager.LogManager.GetLogger();
-        
+
         private CNC() { }
 
         public static CNC Cnc
@@ -220,6 +220,7 @@ namespace CNC
         private List<string> colaMensajes = new List<string>();
 
         private List<string> loteInstrucciones = new List<string>();
+        private List<string> loteInstruccionesAlOrigen = new List<string>();
         //private int proximaInstruccion;
 
         private List<string> loteInstruccionesTemp = new List<string>();
@@ -235,6 +236,9 @@ namespace CNC
 
         //variable que indica si en una transmision debe pausar el envio de comandos al cnc
         private bool pausarTransmision = false;
+
+        //variable que indica si tenemos que primero iniciar el programa yendo al origen
+        private bool iniciaPrograma = false;
 
         //variable para guardar el primer movimiento libre a enviar luego de ingresar en FREEMOVES
         //private string movimientoLibrePendiente;
@@ -255,7 +259,7 @@ namespace CNC
         public string PuertoConexion { get; set; }
         public float PosicionActual_X
         {
-            get{return float.Parse(this.PosicionActual.X.ToString());}
+            get { return float.Parse(this.PosicionActual.X.ToString()); }
         }
         public float PosicionActual_Y
         {
@@ -875,20 +879,18 @@ namespace CNC
 
         }
 
-        public void CargaLoteInstrucciones(List<string> loteInstrucciones)
+        public void CargaLoteInstrucciones(List<string> loteInstrucciones, List<string> loteInstruccionesAlOrigen)
         {
             //lote global de instrucciones
-            //this.proximaInstruccion = 0;
             this.loteInstrucciones = loteInstrucciones;
+            this.loteInstruccionesAlOrigen = loteInstruccionesAlOrigen;
+
+            if (loteInstruccionesAlOrigen != null)
+                iniciaPrograma = true;
 
             //lote temporal para cada preprocesamiento de las instrucciones globales
             this.loteInstruccionesTemp = new List<string>();
             this.proximaInstruccionTemp = 0;
-
-            ////propiedades de la barra
-            //this.BarraProgreso.Maximum = this.loteInstrucciones.Count;
-            //this.BarraProgreso.Minimum = 0;
-            //this.BarraProgreso.Step = 1;
         }
         private bool hayMensaje()
         {
@@ -940,7 +942,15 @@ namespace CNC
         {
             try
             {
-                this.Label.Text = "Analizando programa a ejecutar...";
+                if (this.iniciaPrograma)
+                {
+                    this.Label.Text = "Analizando programa a ejecutar...";
+
+                    //como tenemos que movernos al origen seteado por el usuario, y es absoluto, "truchamos" al 
+                    //0 absoluto como la posicion actual...
+                    this.PosicionActual = new UnitsPosition(0, 0, 0);
+
+                }
 
                 //aca actualizamos el cero de la pieza, con la posicion actual
                 PrepararCommandPreprocessor();
@@ -1011,12 +1021,21 @@ namespace CNC
                     }
                     else
                     {
-                        //no hay mas instrucciones para enviar
-                        this.Label.Text = "Fin del programa";
+                        if (iniciaPrograma)
+                        {
+                            //si estabamos enviando el programa de movimiento inicial
+                            iniciaPrograma = false;
+                            proximaInstruccionTemp = 0;
+                            return IniciarTransmision();
+                        }
+                        else
+                        {
+                            //no hay mas instrucciones para enviar
+                            this.Label.Text = "Fin del programa";
 
-                        return -1;
+                            return -1;
+                        }
                     }
-
                 }
             }
             catch (Exception ex)
@@ -1084,22 +1103,31 @@ namespace CNC
         {
             try
             {
-                this.loteInstruccionesTemp = CommandPreprocessor.CommandPreprocessor.GetInstance().ProcessProgram(this.loteInstrucciones);
-
-                //si hay instrucciones
-                if (this.loteInstruccionesTemp.Count > 0)
+                if (iniciaPrograma)
                 {
-                    //si el primer comando a enviar no es M03 lo agregamos
-                    if (this.loteInstruccionesTemp.First() != CNC_Mensajes_Send.G_ToolOn)
-                        this.loteInstruccionesTemp.Insert(0, CNC_Mensajes_Send.G_ToolOn);
+                    //procesamos las instrucciones que van al origen
+                    this.loteInstruccionesTemp = CommandPreprocessor.CommandPreprocessor.GetInstance().ProcessProgram(this.loteInstruccionesAlOrigen);
+                }
+                else
+                {
+                    //procesamos el programa relativo al origen
+                    this.loteInstruccionesTemp = CommandPreprocessor.CommandPreprocessor.GetInstance().ProcessProgram(this.loteInstrucciones);
 
-                    //si el ultimo comando a enviar no es M05 lo agregamos
-                    if (this.loteInstruccionesTemp.Last() != CNC_Mensajes_Send.G_ToolOff)
-                        this.loteInstruccionesTemp.Add(CNC_Mensajes_Send.G_ToolOff);
+                    //si hay instrucciones
+                    if (this.loteInstruccionesTemp.Count > 0)
+                    {
+                        //si el primer comando a enviar no es M03 lo agregamos
+                        if (this.loteInstruccionesTemp.First() != CNC_Mensajes_Send.G_ToolOn)
+                            this.loteInstruccionesTemp.Insert(0, CNC_Mensajes_Send.G_ToolOn);
 
-                    //si el ultimo comando a enviar no es M02 lo agregamos
-                    if (this.loteInstruccionesTemp.Last() != CNC_Mensajes_Send.G_Stop)
-                        this.loteInstruccionesTemp.Add(CNC_Mensajes_Send.G_Stop);
+                        //si el ultimo comando a enviar no es M05 lo agregamos
+                        if (this.loteInstruccionesTemp.Last() != CNC_Mensajes_Send.G_ToolOff)
+                            this.loteInstruccionesTemp.Add(CNC_Mensajes_Send.G_ToolOff);
+
+                        //si el ultimo comando a enviar no es M02 lo agregamos
+                        if (this.loteInstruccionesTemp.Last() != CNC_Mensajes_Send.G_Stop)
+                            this.loteInstruccionesTemp.Add(CNC_Mensajes_Send.G_Stop);
+                    }
                 }
             }
             catch (Exception ex)

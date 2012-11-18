@@ -38,7 +38,7 @@ namespace CNCMatic
             }
         }
 
-        public static bool ConectarCNC(ref SafeControls.SafeToolStripStatusLabel lblEstado, List<string> loteInstrucciones, ref SafeControls.SafeToolStripStatusLabel lblPosicActual, ref SafeControls.SafeToolStripProgressBar pgrBar)
+        public static bool ConectarCNC(ref SafeControls.SafeToolStripStatusLabel lblEstado, List<string> loteInstrucciones, ref SafeControls.SafeToolStripStatusLabel lblPosicActual, ref SafeControls.SafeToolStripProgressBar pgrBar, List<string> loteInstruccionesAlOrigen)
         {
             try
             {
@@ -67,8 +67,9 @@ namespace CNCMatic
                         cnc.LblPosicionActual = lblPosicActual;
                         cnc.BarraProgreso = pgrBar;
 
+
                         //ya cargamos el lote de instrucciones del CNC
-                        cnc.CargaLoteInstrucciones(loteInstrucciones);
+                        cnc.CargaLoteInstrucciones(loteInstrucciones, loteInstruccionesAlOrigen);
 
                         //1: establecemos conexion    
                         resultado = cnc.EstablecerConexion();
@@ -90,7 +91,7 @@ namespace CNCMatic
                         cnc.BarraProgreso = pgrBar;
 
                         //ya cargamos el lote de instrucciones del CNC
-                        cnc.CargaLoteInstrucciones(loteInstrucciones);
+                        cnc.CargaLoteInstrucciones(loteInstrucciones, loteInstruccionesAlOrigen);
 
                         logger.Info("Lote de instrucciones cargados");
 

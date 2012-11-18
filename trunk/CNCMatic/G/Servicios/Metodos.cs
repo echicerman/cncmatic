@@ -80,12 +80,8 @@ namespace G.Servicios
         public static List<string> IrAL(Punto p)
         {
             List<string> s = new List<string>();
-            //levantar la punta hasta el nivel de Z que hay que ir
-            s.Add("G00 Z" + altoAscenso);
             //crear el mov de avance
-            s.Add("G00 X" + p.X.ToString() + " Y" + p.Y.ToString());
-            //bajamos la punta
-            s.Add("G00 Z" + p.Z.ToString());
+            s.Add("G00 X" + p.X.ToString() + " Y" + p.Y.ToString() + " Z" + p.Z.ToString());
 
             return s;
         }

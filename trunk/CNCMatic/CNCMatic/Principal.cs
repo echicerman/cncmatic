@@ -1294,7 +1294,7 @@ namespace CNCMatic
                 //validamos los comandos    
                 //removemos los blancos
                 List<string> lineas = txtPreview.Lines.ToList();
-                while (lineas.Contains(""))
+                /*while (lineas.Contains(""))
                 {
                     lineas.Remove("");
                 }
@@ -1324,7 +1324,7 @@ namespace CNCMatic
                 }
 
                 txtPreview.Select(txtPreview.Text.Length, 0);
-
+                */
                 //Muestra figura en el previsualizador
                 //this.LimpiarPrevisualizador(); <<--sacamos la previsualizacion de nuevo
                 //PrevisualizarFigurasManual();  <<--porque en figuras grandes tardaba mucho
@@ -1332,10 +1332,10 @@ namespace CNCMatic
                 //---validamos que haya instrucciones para ser enviadas
                 //obtenemos las lineas del previsualizador y removemos los blancos
                 List<string> loteInstrucciones = txtPreview.Lines.ToList();
-                while (loteInstrucciones.Contains(""))
+                /*while (loteInstrucciones.Contains(""))
                 {
                     loteInstrucciones.Remove("");
-                }
+                }*/
 
                 if (loteInstrucciones.Count == 0)
                 {
@@ -1359,15 +1359,20 @@ namespace CNCMatic
                         {
                             Punto p = Interfaz.PosicionActual();
                             
+                            List<string> loteInstruccionesAlOrigen = null;
+
                             FrmDibujoParams f = new FrmDibujoParams(ref p);
                             f.ShowDialog();
 
                             if (p.X != Interfaz.PosicionActual().X || p.Y != Interfaz.PosicionActual().Y || p.Z != Interfaz.PosicionActual().Z)
                             {
-                                loteInstrucciones.InsertRange(0,Metodos.IrAL(p));
+                                p.Z = 0 - p.Z;
+                                loteInstruccionesAlOrigen=Metodos.IrAL(p);
                             }
+                            else
+                                p = null;
 
-                            if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual, ref this.prgBar))
+                            if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual, ref this.prgBar, loteInstruccionesAlOrigen))
                             {
                                 //bloqueamos controles
                                 btnPlay.Enabled = false;
@@ -1709,7 +1714,7 @@ namespace CNCMatic
             //obtenemos las lineas del previsualizador y removemos los blancos
             List<string> loteInstrucciones = new List<string>();
 
-            if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual, ref this.prgBar))
+            if (Interfaz.ConectarCNC(ref lblEstado, loteInstrucciones, ref lblPosicionActual, ref this.prgBar, null))
             {
 
                 //bloqueamos controles

@@ -70,7 +70,12 @@ namespace G.Objetos
             s += " X" + this.Inicio.X.ToString();
             s += " Y" + this.Inicio.Y.ToString();
             s += " Z" + this.Inicio.Z.ToString();
-            s += " R" + (this.radio).ToString();
+            //s += " R" + this.radio.ToString();
+            s += " I-" + this.Radio.ToString();
+
+            //s += " J-" + (this.Inicio.Y - this.Radio).ToString();
+
+            //s += " K-" + (this.Inicio.Z - this.Radio).ToString();
 
             return s;
         }

@@ -172,6 +172,8 @@ namespace VirtualSerial
         {
             try
             {
+                if (!connected)
+                    OpenConnection("COM5");
                 VirtualPort.Write(text);
             }
             catch (Exception ex)

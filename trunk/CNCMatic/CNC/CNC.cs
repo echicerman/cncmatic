@@ -765,7 +765,8 @@ namespace CNC
                                     this.Label.Text = "Fin del programa";
 
                                     //actualizamos la barra, indicando avance en el comando ejecutado
-                                    this.BarraProgreso.Value = (100 / loteInstruccionesTemp.Count) * (this.proximaInstruccionTemp);
+                                    //this.BarraProgreso.Value = (100 / loteInstruccionesTemp.Count) * (this.proximaInstruccionTemp);
+                                    this.BarraProgreso.Value=this.BarraProgreso.Maximo;
                                 }
                                 else
                                 {
@@ -782,7 +783,7 @@ namespace CNC
                             //actualizamos la barra, indicando avance en el comando ejecutado
                             //this.BarraProgreso.Value = (100 / loteInstruccionesTemp.Count) * (this.proximaInstruccionTemp);
                             this.BarraProgreso.Value++;
-                            //this.BarraProgreso.PerformStep();
+
                             if (!this.pausarTransmision)
                                 //continuamos la transmision
                                 this.Transmision();
@@ -962,9 +963,9 @@ namespace CNC
                 this.BarraProgreso.Value = 0;
 
                 if (this.iniciaPrograma)
-                    this.BarraProgreso.Maximo(this.loteInstruccionesAlOrigen.Count);
+                    this.BarraProgreso.Maximo=this.loteInstruccionesAlOrigen.Count;
                 else
-                    this.BarraProgreso.Maximo(this.loteInstruccionesTemp.Count);
+                    this.BarraProgreso.Maximo=this.loteInstruccionesTemp.Count;
 
                 //this.cantReenviosConfig = 0;
 

@@ -9,6 +9,7 @@ namespace SafeControls
     {
         delegate void SetValue(int value);
         delegate int GetValue();
+        delegate void SetMaximum(int value);
 
         public int Value
         {
@@ -62,6 +63,31 @@ namespace SafeControls
                 else
                     base.Value = value;
             }
+        }
+
+        public void Maximo(int value)
+        {
+            // Get from the container if Invoke is required
+                if ((base.Parent != null) &&        // Make sure that the container is already built
+                    (base.Parent.InvokeRequired))   // Is Invoke required?
+                {
+                    SetMaximum _max = delegate(int val)
+                    {
+                        base.Maximum = val;
+                    };
+
+                    try
+                    {
+                        // Invoke the Maximum operation from the Parent of the ToolStripProgressBar
+                        base.Parent.Invoke(_max, new object[] { value });
+                    }
+                    catch
+                    {
+                    }
+                }
+                else
+                    base.Maximum = value;
+
         }
     }
 

@@ -106,6 +106,7 @@ namespace CNCMatic
 
                 //reiniciamos la barra
                 prgBar.Value = 0;
+                prgBar.Maximum = 100;
             }
         }
 
@@ -149,13 +150,9 @@ namespace CNCMatic
         {
             //si no se se limpia sumamos el texto
             if (!limpia)
-                this.txtPreview.Text += text;
+                this.txtPreview.AppendText(text + Environment.NewLine);
             else
-                this.txtPreview.Text = text;
-
-            //si el texto no es blanco, sumamos una nueva linea
-            if (text != "")
-                this.txtPreview.Text += Environment.NewLine;
+                this.txtPreview.Text = text + Environment.NewLine;
         }
         /// <summary>
         /// Funcion que limpia el texto contenido sobre el editor visual
@@ -279,12 +276,12 @@ namespace CNCMatic
                 //        newList.Add(list[0]);
                 //        list.RemoveAt(0);
                 //    }
-                    
+
                 //    newList.Add(list[0]);
                 //    list.RemoveAt(0);
                 //    continue;
                 //}
-                
+
                 auxiliar1 = list[0];
                 posAux = 0;
                 tempFig = list[1];
@@ -340,7 +337,7 @@ namespace CNCMatic
         private List<string> QuitartMovimientos(List<string> list)
         {
             List<string> lista = new List<string>();
-            for (int i = 0; i < list.Count();i++ )
+            for (int i = 0; i < list.Count(); i++)
             {
                 string lineaG = list[i];
 
@@ -384,14 +381,14 @@ namespace CNCMatic
 
                 //if (newList[0] == "<polilinea>")
                 //    punto2 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[1])), Convert.ToDouble(PuntoInicioY(newList[1])), Convert.ToDouble(PuntoInicioZ(newList[1])));
-                
+
                 //else
-                    punto2 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[0])), Convert.ToDouble(PuntoInicioY(newList[0])), Convert.ToDouble(PuntoInicioZ(newList[0])));
-                                
+                punto2 = new Vector3d(Convert.ToDouble(PuntoInicioX(newList[0])), Convert.ToDouble(PuntoInicioY(newList[0])), Convert.ToDouble(PuntoInicioZ(newList[0])));
+
                 if (!(ObtenerDoubleTresDecimales(punto1) == ObtenerDoubleTresDecimales(punto2)))
                 {
                     //if (newList[0] != "<polilinea>")
-                        lista.Add(newList[0]);
+                    lista.Add(newList[0]);
                 }
 
                 int i = 1;
@@ -424,7 +421,7 @@ namespace CNCMatic
                     i = i + 2;
                 }
                 //if(i<newList.Count-1)
-                    lista.Add(newList[i]);
+                lista.Add(newList[i]);
 
                 return lista;
             }
@@ -450,7 +447,7 @@ namespace CNCMatic
                 if (lista.Count == 0)
                     return new List<string>();
 
-                double maxZ=0;
+                double maxZ = 0;
                 foreach (string mov in lista)
                 {
                     if (HasValueParameter('Z', mov) && GetValueParameter('Z', mov) > maxZ)
@@ -464,7 +461,7 @@ namespace CNCMatic
                     tempMov = "";
 
                     if (HasValueParameter('Z', mov))
-                        tempMov = SetValueParameter('Z', mov, GetValueParameter('Z', mov) - maxZ );
+                        tempMov = SetValueParameter('Z', mov, GetValueParameter('Z', mov) - maxZ);
                     else
                         tempMov = mov;
 
@@ -505,7 +502,7 @@ namespace CNCMatic
                         //    lista.Add("G00 Z" + Convert.ToString(deltaSubida));
                         //    lista.Add(valoresZ[0]);
                         //    lista.Add("G00 Z" + Convert.ToString(valorZ));
-                            
+
                         //    i++;
 
                         //    while (newList[i] != "</polilinea>")
@@ -513,7 +510,7 @@ namespace CNCMatic
                         //        lista.Add(newList[i]);
                         //        i++;
                         //    }
-                            
+
                         //    continue;
                         //}
                         lineaG = newList[i];
@@ -553,21 +550,21 @@ namespace CNCMatic
 
                                 valorZ = GetValueParameter('Z', lineaG);
 
-                                valorZproxNivel = GetValueParameter('Z',newList[i + 1]);
+                                valorZproxNivel = GetValueParameter('Z', newList[i + 1]);
 
                                 /*linea = "G00 Z" + Convert.ToString(valorZ + deltaSubida) + Environment.NewLine + valoresZ[0] + "Z" +
                                     Convert.ToString(valorZ + deltaSubida) + Environment.NewLine + "G00 Z" + Convert.ToString(valorZ);*/
                                 //linea = "G00 Z" + Convert.ToString(deltaSubida) + Environment.NewLine +
                                 //        valoresZ[0] + Environment.NewLine +
                                 //        "G00 Z" + Convert.ToString(valorZproxNivel);
-                                
+
                                 lista.Add("G00 Z" + Convert.ToString(deltaSubida));
                                 lista.Add(valoresZ[0]);
                                 lista.Add("G00 Z" + Convert.ToString(valorZproxNivel));
                             }
                             else
                                 continue;
-                            
+
                         }
                         else
                         {
@@ -575,7 +572,7 @@ namespace CNCMatic
                             lista.Add(lineaG);
                         }
 
-                        
+
                     }
                     return lista;
                 }
@@ -656,16 +653,18 @@ namespace CNCMatic
 
                 List<string> lineas = imp.leeGfile(importaG.FileName);
 
+                this.txtPreview.Text = "";
+
                 foreach (string s in lineas)
                 {
                     if (s.Equals("archivo no valido"))
                     {
-                        MessageBox.Show("El archivo importado no es válido", "Error de importación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("El archivo importado no es válido", "Error de importación", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                     else
                     {
-                        this.txtPreview.Text += (s + Environment.NewLine);
+                        this.AgregaTextoEditor(false, s);
                     }
                 }
 
@@ -741,11 +740,6 @@ namespace CNCMatic
                 txtPreview.Text = "";
                 foreach (string linea in lineas)
                 {
-                    txtPreview.Text += linea + Environment.NewLine;
-                }
-
-                foreach (string linea in lineas)
-                {
                     if (Char.ToUpper(linea[0]) != 'G' && Char.ToUpper(linea[0]) != 'M' && Char.ToUpper(linea[0]) != 'T')
                     {
                         ////limpiamos el enter ingresado
@@ -763,6 +757,8 @@ namespace CNCMatic
                             return;
                         }
                     }
+
+                    this.AgregaTextoEditor(false, linea.Trim());
                 }
 
                 txtPreview.Select(txtPreview.Text.Length, 0);
@@ -1358,7 +1354,7 @@ namespace CNCMatic
                         if (dr == DialogResult.Yes)
                         {
                             Punto p = Interfaz.PosicionActual();
-                            
+
                             List<string> loteInstruccionesAlOrigen = null;
 
                             FrmDibujoParams f = new FrmDibujoParams(ref p);
@@ -1367,7 +1363,7 @@ namespace CNCMatic
                             if (p.X != Interfaz.PosicionActual().X || p.Y != Interfaz.PosicionActual().Y || p.Z != Interfaz.PosicionActual().Z)
                             {
                                 p.Z = 0 - p.Z;
-                                loteInstruccionesAlOrigen=Metodos.IrAL(p);
+                                loteInstruccionesAlOrigen = Metodos.IrAL(p);
                             }
                             else
                                 p = null;
@@ -1553,6 +1549,30 @@ namespace CNCMatic
         //con esta funcion controlamos los cambios de estado para replicar comportamiento en el form
         private void lblEstado_TextChanged(object sender, EventArgs e)
         {
+            //si
+            if (sender.ToString().Contains("Movimiento Inválido. (Eje Z sobrepasa límite superior)"))
+            {
+                LimpiarControlesSafe();
+
+                SetControlPropertyThreadSafe(btnConnect, "Visible", false);
+                SetControlPropertyThreadSafe(btnStop2, "Enabled", false);
+                SetControlPropertyThreadSafe(btnPause, "Enabled", false);
+
+                SetControlPropertyThreadSafe(btnInicio, "Enabled", true);
+                SetControlPropertyThreadSafe(gbMovXY, "Enabled", true);
+                SetControlPropertyThreadSafe(gbMovZ, "Enabled", true);
+
+                lblEstado.Text= "Conectando (paso 3 de 3): Conexión establecida";
+                //MessageBox.Show("Conexión exitosa!", "Conexion CNC", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                //habilitamos el menu de configuracion
+                configuracionToolStripMenuItem.Enabled = true;
+
+                MessageBox.Show("Movimiento Inválido. (Eje Z sobrepasa límite superior)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return;
+            }
+
             //se termina de establecer la conexion, entones se liberan los controles
             if (sender.ToString() == "Conectando (paso 3 de 3): Conexión establecida")
             {
@@ -1571,6 +1591,8 @@ namespace CNCMatic
                 //habilitamos el menu de configuracion
                 configuracionToolStripMenuItem.Enabled = true;
 
+                prgBar.Value = prgBar.Maximum;
+
                 return;
             }
 
@@ -1585,6 +1607,7 @@ namespace CNCMatic
 
                 //reiniciamos la barra
                 prgBar.Value = 0;
+                prgBar.Maximum = 100;
 
                 //habilitamos el menu de configuracion
                 configuracionToolStripMenuItem.Enabled = true;
@@ -1624,6 +1647,7 @@ namespace CNCMatic
 
                 //reiniciamos la barra
                 prgBar.Value = 0;
+                prgBar.Maximum = 100;
 
                 //habilitamos el menu de configuracion
                 configuracionToolStripMenuItem.Enabled = true;
@@ -1656,6 +1680,7 @@ namespace CNCMatic
 
                 //reiniciamos la barra
                 prgBar.Value = 0;
+                prgBar.Maximum = 100;
 
                 //habilitamos el menu de configuracion
                 configuracionToolStripMenuItem.Enabled = true;

@@ -7,7 +7,6 @@ using VirtualSerial;
 using CommandPreprocessor;
 using SafeControls;
 
-
 namespace CNC
 {
     /// <summary>
@@ -781,8 +780,9 @@ namespace CNC
                             }
 
                             //actualizamos la barra, indicando avance en el comando ejecutado
-                            this.BarraProgreso.Value = (100 / loteInstruccionesTemp.Count) * (this.proximaInstruccionTemp);
-
+                            //this.BarraProgreso.Value = (100 / loteInstruccionesTemp.Count) * (this.proximaInstruccionTemp);
+                            this.BarraProgreso.Value++;
+                            //this.BarraProgreso.PerformStep();
                             if (!this.pausarTransmision)
                                 //continuamos la transmision
                                 this.Transmision();
@@ -937,7 +937,7 @@ namespace CNC
                 throw (new Exception("CNC.recibir: " + ex.Message));
             }
         }
-
+        
         public int IniciarTransmision()
         {
             try
@@ -949,7 +949,7 @@ namespace CNC
                     //como tenemos que movernos al origen seteado por el usuario, y es absoluto, "truchamos" al 
                     //0 absoluto como la posicion actual...
                     this.PosicionActual = new UnitsPosition(0, 0, 0);
-
+                    
                 }
 
                 //aca actualizamos el cero de la pieza, con la posicion actual
@@ -960,6 +960,11 @@ namespace CNC
 
                 //iniciamos la barra
                 this.BarraProgreso.Value = 0;
+
+                if (this.iniciaPrograma)
+                    this.BarraProgreso.Maximo(this.loteInstruccionesAlOrigen.Count);
+                else
+                    this.BarraProgreso.Maximo(this.loteInstruccionesTemp.Count);
 
                 //this.cantReenviosConfig = 0;
 

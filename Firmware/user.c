@@ -374,6 +374,8 @@ stepsPosition_t GetTargetStepsPosition(char code[])
 /********************************************************/
 void limitSensorAxisXHandler()
 {
+	int i;
+	
 	// invierto el sentido de giro
 	if(LATDbits.LATD2)
 	{
@@ -398,11 +400,22 @@ void limitSensorAxisXHandler()
 		}
 	} while( PORTBbits.RB1 );
 	
+	for(i = 0; i < 200; i++)
+	{
+		// tiro un paso
+		LATDbits.LATD4 = 1;
+		Delay1MSx(1);
+		LATDbits.LATD4 = 0;
+		Delay1MSx(1);
+	}
+	
 	machineState = LIMITSENSOR;
 	limitSensorX = true;
 }
 void limitSensorAxisYHandler()
 {
+	int i;
+	
 	// invierto el sentido de giro
 	if(LATCbits.LATC1)
 	{
@@ -426,12 +439,23 @@ void limitSensorAxisYHandler()
 			currentStepsPosition.y += LATCbits.LATC1 ? 1 : -1;
 		}
 	} while(PORTBbits.RB2);
+	
+	for(i = 0; i < 200; i++)
+	{
+		// tiro un paso
+		LATCbits.LATC2 = 1;
+		Delay1MSx(1);
+		LATCbits.LATC2 = 0;
+		Delay1MSx(1);
+	}
 
 	machineState = LIMITSENSOR;
 	limitSensorY = true;
 }
 void limitSensorAxisZHandler()
 {
+	int i;
+	
 	// invierto el sentido de giro
 	if(PORTAbits.RA1)
 	{
@@ -455,6 +479,15 @@ void limitSensorAxisZHandler()
 			currentStepsPosition.z += PORTAbits.RA1 ? -1 : 1;
 		}		
 	} while(PORTBbits.RB3);
+	
+	for(i = 0; i < 200; i++)
+	{
+		// tiro un paso
+		LATAbits.LATA2 = 1;
+		Delay1MSx(1);
+		LATAbits.LATA2 = 0;
+		Delay1MSx(1);
+	}
 
 	machineState = LIMITSENSOR;
 	limitSensorZ = true;
@@ -469,8 +502,6 @@ void emergencyStopHandler()
 /********************************************************/
 void StepOnX(int clockwise)
 {
-	char mesage[2];
-	
 	if(clockwise == 1) LATDbits.LATD2 = 1; else LATDbits.LATD2 = 0;
 	
 	// tiro un paso

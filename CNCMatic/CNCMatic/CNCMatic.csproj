@@ -180,9 +180,6 @@
     <Content Include="img\gear.ico" />
     <Content Include="img\logo teCNoC.jpg" />
     <Content Include="img\stop.png" />
-    <Content Include="RegionalSettings.reg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\Refresh-icon.png" />
     <None Include="Resources\brush-icon %281%29.png" />
     <None Include="Resources\Cancel-icon.png" />
